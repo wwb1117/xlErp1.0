@@ -1,4 +1,4 @@
-#星联贸易ERP myhome
+#星联贸易ERP myhomebug
 
 > A Vue.js project
 
