@@ -1,7 +1,9 @@
 <template>
   <div class="slider">
       <div class="silder_left">
-        <div class="slider_logo"></div>
+        <div class="slider_logo">
+            <img src="static/img/logo.png" alt="">
+        </div>
         <ul id="firstMenu_ul">
           <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.icon" :class="[item.icon, index == 1 ? 'active' : '']" v-text="item.name"></li>
         </ul>
@@ -71,6 +73,13 @@ export default {
     cursor: pointer;
     float: left;
   }
+  .slider_logo{
+      text-align: center;
+      width: 100%;
+      height: 90px;
+      line-height: 90px;
+
+  }
   .silder_left {
     width: 90px;
     height: 100%;
@@ -91,10 +100,6 @@ export default {
   }
   .silder_left li:last-child{
       margin-top: 50px;
-  }
-  .slider_logo{
-      width: 100%;
-      height: 90px;
   }
   .silder_right {
     width: 110px;
