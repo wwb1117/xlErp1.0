@@ -5,11 +5,12 @@ import home from '@/views/home/home'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: home
-    }
-  ]
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: home,
+            children: []
+        }
+    ]
 })
