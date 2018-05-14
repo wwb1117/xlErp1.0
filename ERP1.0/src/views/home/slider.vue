@@ -2,7 +2,7 @@
   <div class="slider">
       <div class="silder_left">
         <div class="slider_logo">
-            <img src="static/img/logo.png" alt="">
+            <img src="static/img/logo.png" alt="妈妈去哪儿">
         </div>
         <ul id="firstMenu_ul">
           <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.icon" :class="[item.icon, index == 1 ? 'active' : '']" v-text="item.name"></li>
