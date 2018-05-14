@@ -72,7 +72,7 @@ module.exports = {
     "linebreak-style": [0, "windows"],//换行风格
     "no-multi-spaces": 0,//不能用多余的空格
     "no-multi-str": 2,//字符串不能用\换行
-    // "no-multiple-empty-lines": [1, {"max": 3}],//空行最多不能超过2行
+    "no-multiple-empty-lines": [1, {"max": 3}],//空行最多不能超过2行
     "no-native-reassign": 2,//不能重写native对象
     "no-negated-in-lhs": 2,//in 操作符的左边不能有!
     "no-nested-ternary": 0,//禁止使用嵌套的三目运算
@@ -153,7 +153,7 @@ module.exports = {
     "guard-for-in": 0,//for in循环要用if语句过滤
     "handle-callback-err": 0,//nodejs 处理错误
     "id-length": 0,//变量名长度
-    "indent": [2, 2],//缩进风格  4个空格
+    "indent": [2, 4],//缩进风格  4个空格
     "init-declarations": 0,//声明时必须赋初值
     "key-spacing": [0, { "beforeColon": false, "afterColon": true }],//对象字面量中冒号的前后空格
     "lines-around-comment": 0,//行前/行后备注
