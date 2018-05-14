@@ -22,6 +22,13 @@ export default {
 };
 </script>
 <style scoped>
-
+    .app-content{
+        height: 100%;
+    }
+    .app-content-body{
+        height: 100%;
+        box-sizing: border-box;
+        padding-left: 200px;
+    }
 </style>
 

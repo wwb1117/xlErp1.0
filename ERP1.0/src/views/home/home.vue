@@ -18,11 +18,11 @@ export default {
         return {
             menuList: [
                 { name: "首页", icon: "fa fa-desktop" },
-                { name: "商品", icon: "1223" },
-                { name: "采购", icon: "1223" },
-                { name: "仓储", icon: "1223" },
-                { name: "审批", icon: "1223" },
-                { name: "系统", icon: "1223" }
+                { name: "商品", icon: "fa fa-th" },
+                { name: "采购", icon: "fa fa-file-text" },
+                { name: "仓储", icon: "fa fa-cubes" },
+                { name: "审批", icon: "fa fa-user-o" },
+                { name: "系统", icon: "fa fa-gear" }
             ],
             homeWidth: null,
             homeHeight: null

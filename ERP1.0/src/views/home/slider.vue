@@ -1,16 +1,17 @@
 <template>
   <div class="slider">
       <div class="silder_left">
-        <ul>
-          <li v-for="item in menuList" :key="item.icon" :class="item.icon" v-text="item.name"></li>
+        <div class="slider_logo"></div>
+        <ul id="firstMenu_ul">
+          <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.icon" :class="[item.icon, index == 1 ? 'active' : '']" v-text="item.name"></li>
         </ul>
       </div>
       <div class="silder_right">
         <div class="silder_right_top">
           <h4 :style="{textAlign: 'center', margin: '0', padding: '0', lineHeight: '45px', color: '#313131'}">商品</h4>
         </div>
-        <ul>
-          <li v-for="(item, index) in nextMenuList" :class="index == 0 ? 'active' : ''" :key="item.path" v-text="item.name"></li>
+        <ul id="secondMenu_ul">
+          <li @click="secondMenuClickEvent($event)" v-for="(item, index) in nextMenuList" :class="[index == 0 ? 'active' : '']" :key="item.path" v-text="item.name"></li>
         </ul>
       </div>
 
@@ -45,7 +46,20 @@ export default {
         };
     },
     computed: {},
-    methods: {},
+    methods: {
+        firstMenuClickEvent($event){
+            $('#firstMenu_ul>li').removeClass('active')
+            var tha = $event.currentTarget
+
+            $(tha).addClass('active')
+        },
+        secondMenuClickEvent($event){
+            $('#secondMenu_ul>li').removeClass('active')
+            var tha = $event.currentTarget
+
+            $(tha).addClass('active')
+        }
+    },
     created() {}
 };
 
@@ -55,6 +69,7 @@ export default {
     width: 200px;
     height: 100%;
     cursor: pointer;
+    float: left;
   }
   .silder_left {
     width: 90px;
@@ -62,6 +77,24 @@ export default {
     background: #2c303c;
     float: left;
     box-sizing: border-box;
+  }
+  .silder_left .active{
+    background: #f5f5f5;
+    color: #313131
+  }
+  .silder_left li{
+    text-align: center;
+    color: #dcdedc;
+    width: 100%;
+    padding: 10px 0px;
+    margin: 10px 0;
+  }
+  .silder_left li:last-child{
+      margin-top: 50px;
+  }
+  .slider_logo{
+      width: 100%;
+      height: 90px;
   }
   .silder_right {
     width: 110px;
@@ -95,10 +128,8 @@ export default {
     text-align: center;
     padding: 0
   }
-  .silder_left li{
-    text-align: center;
-    color: #dcdedc;
-    padding: 10px 20px;
+  .silder_left ::before{
+      margin-right: 10px;
   }
 
 </style>
