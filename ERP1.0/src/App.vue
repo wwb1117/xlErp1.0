@@ -6,15 +6,15 @@
 
 <script>
 export default {
-  name: 'App',
-  data(){
-      return {
-            
-      }
-  },
-  created() {
-      
-  }
+    name: 'App',
+    data(){
+        return {
+
+        }
+    },
+    created() {
+
+    }
 
 }
 </script>

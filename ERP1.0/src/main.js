@@ -34,9 +34,9 @@ var winwidth = document.documentElement.clientWidth;
 store.commit('setDevice', {width: winwidth, height: winheight});
 
 new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    store,
+    components: { App },
+    template: '<App/>'
 })

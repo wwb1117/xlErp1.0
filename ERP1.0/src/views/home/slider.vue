@@ -13,41 +13,41 @@
           <li v-for="(item, index) in nextMenuList" :class="index == 0 ? 'active' : ''" :key="item.path" v-text="item.name"></li>
         </ul>
       </div>
-      
+
   </div>
 </template>
 
 <script>
-  export default {
+export default {
     name: "slider",
     props: ["menuList"],
     data() {
-      return {
-        nextMenuList: [
-          {
-            name: '商品列表',
-            path: '1111'
-          },
-          {
-            name: '商品分类',
-            path: '1111'
-          },
-          {
-            name: '商品品牌',
-            path: '1111'
-          },
-          {
-            name: '商品规格',
-            path: '1111'
-          }
-          
-        ]
-      };
+        return {
+            nextMenuList: [
+                {
+                    name: '商品列表',
+                    path: '1111'
+                },
+                {
+                    name: '商品分类',
+                    path: '1111'
+                },
+                {
+                    name: '商品品牌',
+                    path: '1111'
+                },
+                {
+                    name: '商品规格',
+                    path: '1111'
+                }
+
+            ]
+        };
     },
     computed: {},
     methods: {},
     created() {}
-  };
+};
 
 </script>
 <style scoped>
