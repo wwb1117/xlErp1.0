@@ -9,7 +9,7 @@
                 <div class="login_input_wrap">
                     <el-input
                         placeholder="账号"
-                        v-model="userName"
+                        v-model="userInfo.userName"
                         :style="{width: '320px'}"
                         clearable>
                     </el-input>
@@ -17,7 +17,7 @@
                 <div class="login_input_wrap">
                     <el-input
                         placeholder="密码"
-                        v-model="userPssd"
+                        v-model="userInfo.userPssd"
                         :style="{width: '320px'}"
                         clearable>
                     </el-input>
@@ -38,8 +38,11 @@ export default {
     data() {
         return {
             isRemPwd: true,
-            userName: 'wwb',
-            userPssd: '666666'
+            userInfo: {
+                userName: 'wwb',
+                userPssd: '666666'
+            }
+
         }
     },
     computed: {},
@@ -61,6 +64,9 @@ export default {
                 });
                 return
             }
+
+            sessionStorage.setItem("user", JSON.stringify(this.userInfo))
+
             this.$router.push({
                 path: '/main'
             });
