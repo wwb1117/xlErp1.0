@@ -19,6 +19,7 @@ import './assets/css/animate.css'
 import './assets/css/font-awesome.min.css'
 import './assets/css/simple-line-icons.css'
 import './assets/css/font.css'
+import './assets/css/app.css'
 
 Vue.config.productionTip = false
 
