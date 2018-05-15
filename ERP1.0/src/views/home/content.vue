@@ -1,6 +1,6 @@
 <template>
     <div class="app-content">
-        <div class="app-content-body fade-in-up">
+        <div class="app-content-body fade-in-up" :class="[$store.state.home.isNextMenuShow ? 'nextmenushow' : 'nextmenuhide']">
             <transition name="custom-classes-transition" enter-active-class="fadeIn">
                 <keep-alive>
                     <router-view></router-view>
@@ -28,6 +28,11 @@ export default {
     .app-content-body{
         height: 100%;
         box-sizing: border-box;
+    }
+    .nextmenuhide{
+        padding-left: 90px;
+    }
+    .nextmenushow{
         padding-left: 200px;
     }
 </style>

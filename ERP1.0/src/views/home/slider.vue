@@ -5,12 +5,12 @@
             <img src="static/img/logo.png" alt="妈妈去哪儿">
         </div>
         <ul id="firstMenu_ul">
-          <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.name" :type="item.name" :class="[item.icon, index == 0 ? 'active' : '']" v-text="item.text"></li>
+          <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.name" :text="item.text" :type="item.name" :class="[item.icon, index == 0 ? 'active' : '']" v-text="item.text"></li>
         </ul>
       </div>
       <div v-show="$store.state.home.isNextMenuShow" class="silder_right">
         <div class="silder_right_top">
-          <h4 :style="{textAlign: 'center', margin: '0', padding: '0', lineHeight: '45px', color: '#313131'}">商品</h4>
+          <h4 :style="{textAlign: 'center', margin: '0', padding: '0', lineHeight: '45px', color: '#313131'}" v-text="nextMenuTitle"></h4>
         </div>
         <ul id="secondMenu_ul">
           <li @click="secondMenuClickEvent($event)" v-for="(item, index) in nextMenuList" :class="[index == 0 ? 'active' : '']" :key="item.path" v-text="item.name"></li>
@@ -26,25 +26,9 @@ export default {
     props: ["menuList"],
     data() {
         return {
-            nextMenuList: [
-                {
-                    name: '商品列表',
-                    path: '1111'
-                },
-                {
-                    name: '商品分类',
-                    path: '1111'
-                },
-                {
-                    name: '商品品牌',
-                    path: '1111'
-                },
-                {
-                    name: '商品规格',
-                    path: '1111'
-                }
-
-            ]
+            nextMenuList: [],
+            nextMenuMap:{},
+            nextMenuTitle: '商品'
         };
     },
     computed: {},
@@ -53,6 +37,7 @@ export default {
             $('#firstMenu_ul>li').removeClass('active')
             var tha = $event.currentTarget
             var type = $(tha).attr('type')
+            var text = $(tha).attr('text')
 
             $(tha).addClass('active')
             if (type == 'home'){
@@ -60,6 +45,8 @@ export default {
             } else {
                 this.$store.commit('setNextMenuShow', true)
             }
+            this.nextMenuList = this.nextMenuMap[type]
+            this.nextMenuTitle = text
 
         },
         secondMenuClickEvent($event){
@@ -69,7 +56,9 @@ export default {
             $(tha).addClass('active')
         }
     },
-    created() {}
+    created() {
+        this.nextMenuMap = this.$store.state.home.nextMenuMap
+    }
 };
 
 </script>

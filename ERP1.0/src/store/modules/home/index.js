@@ -13,7 +13,33 @@ export default {
             width: null,
             height: null
         },
-        iconArr: ["fa fa-cog", "fa fa-user-circle-o", "fa fa-pie-chart"]
+        nextMenuMap: {
+            home: [],
+            goods: [
+                {
+                    name: '商品列表',
+                    path: '/goodsList'
+                },
+                {
+                    name: '商品分类',
+                    path: '/goodsItems'
+                },
+                {
+                    name: '商品品牌',
+                    path: '/goodsBrand'
+                },
+                {
+                    name: '商品规格',
+                    path: '/goodsSpec'
+                },
+                {
+                    name: '商品类型',
+                    path: '/goodsTypes'
+                }
+            ]
+
+
+        }
     },
     mutations: {
         setDevice(state, value){
