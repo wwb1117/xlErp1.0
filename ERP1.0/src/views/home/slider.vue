@@ -5,10 +5,10 @@
             <img src="static/img/logo.png" alt="妈妈去哪儿">
         </div>
         <ul id="firstMenu_ul">
-          <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.icon" :class="[item.icon, index == 1 ? 'active' : '']" v-text="item.name"></li>
+          <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.name" :type="item.name" :class="[item.icon, index == 0 ? 'active' : '']" v-text="item.text"></li>
         </ul>
       </div>
-      <div class="silder_right">
+      <div v-show="$store.state.home.isNextMenuShow" class="silder_right">
         <div class="silder_right_top">
           <h4 :style="{textAlign: 'center', margin: '0', padding: '0', lineHeight: '45px', color: '#313131'}">商品</h4>
         </div>
@@ -52,8 +52,15 @@ export default {
         firstMenuClickEvent($event){
             $('#firstMenu_ul>li').removeClass('active')
             var tha = $event.currentTarget
+            var type = $(tha).attr('type')
 
             $(tha).addClass('active')
+            if (type == 'home'){
+                this.$store.commit('setNextMenuShow', false)
+            } else {
+                this.$store.commit('setNextMenuShow', true)
+            }
+
         },
         secondMenuClickEvent($event){
             $('#secondMenu_ul>li').removeClass('active')

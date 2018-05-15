@@ -8,6 +8,7 @@ export default {
         baseUrl: '',
         isFreshCarTree: false,
         timerArr: [],
+        isNextMenuShow: false, //二级菜单是否显示
         device: {
             width: null,
             height: null
@@ -19,6 +20,10 @@ export default {
             state.device.width = value.width
             state.device.height = value.height
             window.localStorage.setItem("device", JSON.stringify(state.device))
+        },
+        setNextMenuShow(state, value){
+            state.isNextMenuShow = value
         }
+
     }
 };

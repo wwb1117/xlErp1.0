@@ -17,12 +17,12 @@ export default {
     data() {
         return {
             menuList: [
-                { name: "首页", icon: "fa fa-desktop" },
-                { name: "商品", icon: "fa fa-th" },
-                { name: "采购", icon: "fa fa-file-text" },
-                { name: "仓储", icon: "fa fa-cubes" },
-                { name: "审批", icon: "fa fa-user-o" },
-                { name: "系统", icon: "fa fa-gear" }
+                { text: "首页", name: 'home', icon: "fa fa-desktop" },
+                { text: "商品", name: 'goods', icon: "fa fa-th" },
+                { text: "采购", name: 'purchase', icon: "fa fa-file-text" },
+                { text: "仓储", name: 'depot', icon: "fa fa-cubes" },
+                { text: "审批", name: 'review', icon: "fa fa-user-o" },
+                { text: "系统", name: 'system', icon: "fa fa-gear" }
             ],
             homeWidth: null,
             homeHeight: null
