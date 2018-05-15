@@ -42,6 +42,9 @@ export default {
             $(tha).addClass('active')
             if (type == 'home'){
                 this.$store.commit('setNextMenuShow', false)
+                this.$router.push({
+                    path: '/main'
+                });
             } else {
                 this.$store.commit('setNextMenuShow', true)
             }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/views/home/home'
-import hallo from '@/components/HelloWorld'
+import main from '@/views/home/main'
 import login from '@/views/login/login'
 import { Message } from 'element-ui';
 
@@ -15,7 +15,7 @@ var router = new Router({
             name: 'home',
             component: home,
             children: [
-                {name: "首页", path: '/main', component: hallo}
+                {name: "首页", path: '/main', component: main}
             ]
         },
         {
