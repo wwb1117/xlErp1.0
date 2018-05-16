@@ -8,7 +8,7 @@
           <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.name" :text="item.text" :type="item.name" :class="[item.icon, index == 0 ? 'active' : '']" v-text="item.text"></li>
         </ul>
       </div>
-      <div v-show="$store.state.home.isNextMenuShow" class="silder_right">
+      <div v-show="$store.state.home.isNextMenuShow" :style="{height: $store.state.home.modelContentHeight + 47 + 'px'}" class="silder_right">
         <div class="silder_right_top">
           <h4 :style="{textAlign: 'center', margin: '0', padding: '0', lineHeight: '45px', color: '#313131'}" v-text="nextMenuTitle"></h4>
         </div>
@@ -45,11 +45,17 @@ export default {
                 this.$router.push({
                     path: '/main'
                 });
+                return
             } else {
                 this.$store.commit('setNextMenuShow', true)
             }
             this.nextMenuList = this.nextMenuMap[type]
             this.nextMenuTitle = text
+
+            this.$router.push({
+                path: this.nextMenuList[0].path
+            });
+
 
         },
         secondMenuClickEvent($event){
@@ -101,12 +107,12 @@ export default {
   }
   .silder_right {
     width: 110px;
-    height: 100%;
     background: #ffffff;
     float: right;
     border: 1px solid #e4e8eb;
     color: #636365;
     box-sizing: border-box;
+    border-bottom: none;
   }
   .silder_right_top{
     width: 100%;

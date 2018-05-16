@@ -13,6 +13,7 @@ export default {
             width: null,
             height: null
         },
+        modelContentHeight: null,
         nextMenuMap: {
             home: [],
             goods: [
@@ -121,6 +122,10 @@ export default {
         },
         setNextMenuShow(state, value){
             state.isNextMenuShow = value
+        },
+        setModelContentHeight(state, value){
+            state.modelContentHeight = value
+            console.log(state.modelContentHeight)
         }
 
     }

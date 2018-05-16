@@ -33,6 +33,7 @@ var winheight = document.documentElement.clientHeight;
 var winwidth = document.documentElement.clientWidth;
 
 store.commit('setDevice', {width: winwidth, height: winheight});
+store.commit('setModelContentHeight', winheight - 100);
 
 new Vue({
     el: '#app',
