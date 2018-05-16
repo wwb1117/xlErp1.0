@@ -67,7 +67,6 @@ export default {
 </script>
 <style scoped>
   .slider{
-    width: 200px;
     height: 100%;
     cursor: pointer;
     float: left;
