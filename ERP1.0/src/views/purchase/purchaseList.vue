@@ -64,8 +64,9 @@
                         </el-form-item>
                         <el-form-item label="采购时间">
                             <el-date-picker
-                                v-model="purchaseDate"
+                                v-model="superFormData.purchaseDate"
                                 type="daterange"
+                                :editable="false"
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期">
