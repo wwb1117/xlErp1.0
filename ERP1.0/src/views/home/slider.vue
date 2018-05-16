@@ -118,7 +118,7 @@ export default {
     text-align: center;
     box-sizing: border-box;
     padding: 7px 0;
-    margin: 20px 0 40px 0;
+    margin: 13px 0 13px 0;
     margin-left: 7px;
     border-radius: 3px;
   }

@@ -36,6 +36,78 @@ export default {
                     name: '商品类型',
                     path: '/goodsTypes'
                 }
+            ],
+            purchase: [
+                {
+                    name: '采购单',
+                    path: '/purchaseList'
+                },
+                {
+                    name: '退货单',
+                    path: '/returnList'
+                },
+                {
+                    name: '供应商',
+                    path: '/supplier'
+                },
+                {
+                    name: '采购单位',
+                    path: '/purchaseCompany'
+                }
+            ],
+            depot: [
+                {
+                    name: '入库列表',
+                    path: '/inboundList'
+                },
+                {
+                    name: '入库列表',
+                    path: '/outboundList'
+                },
+                {
+                    name: '库存列表',
+                    path: '/repertoryList'
+                },
+                {
+                    name: '库存调拨',
+                    path: '/repertoryAllot'
+                },
+                {
+                    name: '库存盘点',
+                    path: '/repertoryCheck'
+                },
+                {
+                    name: '仓库管理',
+                    path: '/repertoryManage'
+                }
+            ],
+            review: [
+                {
+                    name: '待我审批',
+                    path: '/waitReview'
+                },
+                {
+                    name: '我发起的',
+                    path: '/Ilaunched'
+                },
+                {
+                    name: '我已审批',
+                    path: '/IReviewed'
+                }
+            ],
+            system: [
+                {
+                    name: '流程配置',
+                    path: '/workflowConfig'
+                },
+                {
+                    name: '权限管理',
+                    path: '/permissionManage'
+                },
+                {
+                    name: '用户管理',
+                    path: '/userManage'
+                }
             ]
 
 
