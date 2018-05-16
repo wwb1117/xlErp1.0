@@ -16,7 +16,6 @@
           <li @click="secondMenuClickEvent($event)" v-for="(item, index) in nextMenuList" :class="[index == 0 ? 'active' : '']" :key="item.path" v-text="item.name"></li>
         </ul>
       </div>
-
   </div>
 </template>
 

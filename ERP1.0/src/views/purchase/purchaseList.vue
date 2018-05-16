@@ -10,10 +10,10 @@
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="model_content_inner">
-                <el-card class="box_card">
+                <el-card v-show="isSupperBoxShow" class="box_card">
                     <div slot="header" class="clearfix">
                         <span :style="{fontSize: '16px'}">高级搜索</span>
-                        <i class="el-icon-close" style="float: right; padding: 3px 0"></i>
+                        <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0"></i>
                     </div>
                     <el-form :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
                         <el-form-item label="采购单号">
@@ -48,18 +48,34 @@
                             </el-select>
                         </el-form-item>
                         <br>
-                        <el-form-item label="采购员">
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入采购员"></el-input>
+                        <el-form-item label="入库状态">
+                            <el-select v-model="superFormData.inState" placeholder="请输入入库状态">
+                                <el-option label="全部" value=""></el-option>
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="审核状态">
+                            <el-select v-model="superFormData.reviewState" placeholder="请输入审核状态">
+                                <el-option label="全部" value=""></el-option>
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="采购时间">
+                            <el-date-picker
+                                v-model="purchaseDate"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
+                            </el-date-picker>
                         </el-form-item>
                         <br>
-                        <!-- <el-form-item label="采购员">
-                            <el-select v-model="superFormData.region" placeholder="请输入采购员">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item> -->
                         <el-form-item>
-                            <el-button type="primary" >查询</el-button>
+                            <el-button style="width: 90px" type="primary" >确定</el-button>
+                            <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
+                            <el-button type="text" style="width: 40px; color: #636365">清空</el-button>
                         </el-form-item>
                     </el-form>
                 </el-card>
@@ -72,7 +88,7 @@
                         v-model="serchText">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
-                    <span>高级搜索</span>
+                    <span @click="supperBoxShow">高级搜索</span>
                 </div>
                 <div v-show="isExportShow" class="purchaseList_exportWrap">
                     <ul>
@@ -190,6 +206,7 @@ export default {
             serchText: '',
             currentPage: 2,
             selectTableData: [],
+            isSupperBoxShow: false,
             superFormData: {
                 purchaseList: '7758521',
                 supplier: '',
@@ -203,7 +220,7 @@ export default {
                 reviewState: '已审核',
                 prop: ''
             },
-            isExportShow: true,
+            isExportShow: false,
             tableData: [
                 {
                     purchaseList: '7758521',
@@ -268,6 +285,9 @@ export default {
             } else {
                 this.isExportShow = false
             }
+        },
+        supperBoxShow(){
+            this.isSupperBoxShow = !this.isSupperBoxShow
         }
 
     },
@@ -309,11 +329,16 @@ export default {
     top: 0;
     width: 100%;
     height: 300px;
-    z-index: 9999;
+    z-index: 9;
 }
 .model_content_inner{
     position: relative;
 }
-
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+    width: 360px;
+}
+.el-form{
+    color: #636365;
+}
 
 </style>
