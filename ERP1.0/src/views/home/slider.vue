@@ -8,7 +8,7 @@
           <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.name" :text="item.text" :type="item.name" :class="[item.icon, index == 0 ? 'active' : '']" v-text="item.text"></li>
         </ul>
       </div>
-      <div v-show="$store.state.home.isNextMenuShow" :style="{height: $store.state.home.modelContentHeight + 47 + 'px'}" class="silder_right">
+      <div v-show="$store.state.home.isNextMenuShow" class="silder_right">
         <div class="silder_right_top">
           <h4 :style="{textAlign: 'center', margin: '0', padding: '0', lineHeight: '45px', color: '#313131'}" v-text="nextMenuTitle"></h4>
         </div>
@@ -73,7 +73,6 @@ export default {
 <style scoped>
   .slider{
     height: 100%;
-    cursor: pointer;
     float: left;
   }
   .slider_logo{
@@ -100,12 +99,14 @@ export default {
     width: 100%;
     padding: 10px 0px;
     margin: 10px 0;
+    cursor: pointer;
   }
   .silder_left li:last-child{
       margin-top: 50px;
   }
   .silder_right {
     width: 110px;
+    height: 100%;
     background: #ffffff;
     float: right;
     border: 1px solid #e4e8eb;
@@ -126,6 +127,10 @@ export default {
     margin: 13px 0 13px 0;
     margin-left: 7px;
     border-radius: 3px;
+    cursor: pointer;
+  }
+  .silder_right li:hover{
+      color: #409EFF
   }
   .silder_right .active{
     border: 1px solid #f4f4f4;

@@ -36,7 +36,7 @@ ul{
     padding-left: 25px;
     background: #ffffff;
     font-weight: 600;
-    margin-right: 10px;
+    padding-right: 10px;
 }
 .model_topcol>div{
     float: right;
@@ -51,9 +51,8 @@ ul{
 }
 /****************************各模块主体栏公共样式**************************************************/
 .model_content{
-    padding: 0 10px;
+    padding: 10px;
     background: #F5F5F5;
-    padding-top: 10px;
 }
 .model_content .model_content_inner{
     width: 100%;
