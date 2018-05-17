@@ -5,7 +5,7 @@
             <div>
                 <el-button size="small">作废记录</el-button>
                 <el-button size="small">导入采购单</el-button>
-                <el-button type="primary" size="small">新增采购单</el-button>
+                <el-button type="primary" @click="purchaseAddEvent" size="small">新增采购单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -13,7 +13,7 @@
                 <el-card v-show="isSupperBoxShow" class="box_card">
                     <div slot="header" class="clearfix">
                         <span :style="{fontSize: '16px'}">高级搜索</span>
-                        <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0"></i>
+                        <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
                     <el-form :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
                         <el-form-item label="采购单号">
@@ -107,6 +107,7 @@
 
                 <el-table
                     :data="tableData"
+                    :height="$store.state.home.modelContentHeight - 83"
                     ref="purchaseListTable"
                     @selection-change="handleSelectionChange"
                     style="width: 100%">
@@ -210,6 +211,7 @@ export default {
             currentPage: 2,
             selectTableData: [],
             isSupperBoxShow: false,
+            tableHeight: 500,
             superFormData: {
                 purchaseList: '7758521',
                 supplier: '',
@@ -292,6 +294,11 @@ export default {
         },
         supperBoxShow(){
             this.isSupperBoxShow = !this.isSupperBoxShow
+        },
+        purchaseAddEvent(){
+            this.$router.push({
+                path: '/addPurchaseList'
+            })
         }
 
     },

@@ -13,7 +13,7 @@
           <h4 :style="{textAlign: 'center', margin: '0', padding: '0', lineHeight: '45px', color: '#313131'}" v-text="nextMenuTitle"></h4>
         </div>
         <ul id="secondMenu_ul">
-          <li @click="secondMenuClickEvent($event)" v-for="(item, index) in nextMenuList" :class="[index == 0 ? 'active' : '']" :key="item.path" v-text="item.name"></li>
+          <li @click="secondMenuClickEvent($event)" v-for="(item, index) in nextMenuList" :class="[index == 0 ? 'active' : '']" :routerUrl="item.path" :key="item.path" v-text="item.name"></li>
         </ul>
       </div>
   </div>
@@ -60,8 +60,13 @@ export default {
         secondMenuClickEvent($event){
             $('#secondMenu_ul>li').removeClass('active')
             var tha = $event.currentTarget
+            var path = $(tha).attr('routerUrl')
 
             $(tha).addClass('active')
+            this.$router.push({
+                path: path
+            });
+
         }
     },
     created() {

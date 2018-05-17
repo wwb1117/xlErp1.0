@@ -4,6 +4,7 @@ import home from '@/views/home/home'
 import main from '@/views/home/main'
 import login from '@/views/login/login'
 import purchaseList from '@/views/purchase/purchaseList'
+import addPurchaseList from '@/views/purchase/addPurchaseList'
 import { Message } from 'element-ui';
 
 Vue.use(Router)
@@ -17,7 +18,8 @@ var router = new Router({
             component: home,
             children: [
                 {name: "首页", path: '/main', component: main},
-                {name: "采购单", path: '/purchaseList', component: purchaseList}
+                {name: "采购单", path: '/purchaseList', component: purchaseList},
+                {name: "新增采购单", path: '/addPurchaseList', component: addPurchaseList}
             ]
         },
         {
@@ -30,6 +32,7 @@ var router = new Router({
 
 router.beforeEach((to, from, next) => {
     // 登录拦截
+    console.log(to)
     if (to.fullPath == '/'){
         if (sessionStorage.getItem('user')){
             next({ path: '/main' })
