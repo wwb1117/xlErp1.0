@@ -45,7 +45,9 @@ export default {
 
         }
     },
-    computed: {},
+    computed: {
+
+    },
     methods: {
         loginEvent(){
             if (this.userName == ""){

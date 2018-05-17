@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :style="{width: homeWidth+'px', height: homeHeight+'px'}">
+  <div id="app" :style="{width: $store.state.home.device.width+'px', height: $store.state.home.device.height+'px'}">
     <router-view/>
   </div>
 </template>
@@ -9,13 +9,14 @@ export default {
     name: 'App',
     data(){
         return {
-            homeWidth: null,
-            homeHeight: null
+
         }
     },
     created() {
-        this.homeWidth = this.$store.state.home.device.width
-        this.homeHeight = this.$store.state.home.device.height
+
+    },
+    computed: {
+
     }
 
 }

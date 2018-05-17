@@ -1,5 +1,5 @@
 <template>
-    <div class="app" :style="{width: homeWidth+'px', height: homeHeight+'px'}">
+    <div class="app" :style="{width: $store.state.home.device.width+'px', height: $store.state.home.device.height+'px'}">
         <HQSilder :menuList = "menuList"></HQSilder>
         <HQContent></HQContent>
     </div>
@@ -23,16 +23,16 @@ export default {
                 { text: "仓储", name: 'depot', icon: "fa fa-cubes" },
                 { text: "审批", name: 'review', icon: "fa fa-user-o" },
                 { text: "系统", name: 'system', icon: "fa fa-gear" }
-            ],
-            homeWidth: null,
-            homeHeight: null
+            ]
+
         };
     },
-    computed: {},
+    computed: {
+
+    },
     methods: {},
     created() {
-        this.homeWidth = this.$store.state.home.device.width
-        this.homeHeight = this.$store.state.home.device.height
+
     }
 };
 </script>

@@ -15,7 +15,12 @@ export default {
         },
         modelContentHeight: null,
         nextMenuMap: {
-            home: [],
+            home: [
+                {
+                    name: '首页',
+                    path: '/main'
+                }
+            ],
             goods: [
                 {
                     name: '商品列表',

@@ -107,6 +107,7 @@
 
                 <el-table
                     :data="tableData"
+                    ref="purchaseListTable"
                     @selection-change="handleSelectionChange"
                     style="width: 100%">
                     <el-table-column
@@ -116,12 +117,12 @@
                     <el-table-column
                         prop="purchaseList"
                         label="采购单号"
-                        width="180">
+                        >
                     </el-table-column>
                     <el-table-column
                         prop="supplier"
                         label="供应商"
-                        width="180">
+                       >
                     </el-table-column>
                     <el-table-column
                         prop="purchaseCompany"
@@ -157,6 +158,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="prop"
+                        width="150"
                         label="操作">
                          <template slot-scope="scope">
                             <el-button
@@ -278,6 +280,7 @@ export default {
         },
         closeExportWrap(){
             this.isExportShow = false
+            this.$refs.purchaseListTable.clearSelection()
         },
         handleSelectionChange(val){
             this.selectTableData = val

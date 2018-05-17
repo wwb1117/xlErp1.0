@@ -42,3 +42,20 @@ new Vue({
     components: { App },
     template: '<App/>'
 })
+router.push({
+    path: '/main'
+});
+
+window.onresize = function(){
+    winheight = document.documentElement.clientHeight
+    winwidth = document.documentElement.clientWidth
+    if (winheight < 700){
+        winheight = 700
+    }
+    if (winwidth < 1360){
+        winwidth = 1360
+    }
+
+    store.commit('setDevice', {width: winwidth, height: winheight})
+    store.commit('setModelContentHeight', winheight - 100)
+}
