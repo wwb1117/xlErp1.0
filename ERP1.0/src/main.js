@@ -7,6 +7,7 @@ import ElementUI from 'element-ui';
 import store from './store'
 import 'vue2-animate/dist/vue2-animate.min.css'
 import 'jquery'
+import myBase from './utils/base'
 
 // 引入代码填充,解决浏览器兼容问题n
 import 'babel-polyfill'
@@ -26,6 +27,11 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 
 Vue.use(ElementUI)
+
+//自定义全局变量和函数
+Vue.prototype.GLOBAL = myBase
+
+myBase.backSpaceBiden()  //禁用浏览器返回键
 
 
 // 进入页面重新获取屏幕可视高度

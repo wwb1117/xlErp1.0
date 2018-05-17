@@ -32,7 +32,6 @@ var router = new Router({
 
 router.beforeEach((to, from, next) => {
     // 登录拦截
-    console.log(to)
     if (to.fullPath == '/'){
         if (sessionStorage.getItem('user')){
             next({ path: '/main' })
@@ -52,7 +51,7 @@ router.beforeEach((to, from, next) => {
         return
     } else {
         if (sessionStorage.getItem('user')){
-            next()
+            next();
             return
         } else {
             Message({

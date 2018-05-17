@@ -92,6 +92,7 @@ module.exports = {
     "no-process-exit": 0,//禁止使用process.exit()
     "no-proto": 2,//禁止使用__proto__属性
     "no-redeclare": 2,//禁止重复声明变量
+    "no-useless-escape":0,
     "no-regex-spaces": 2,//禁止在正则表达式字面量中使用多个空格 /foo bar/
     "no-restricted-modules": 0,//如果禁用了指定模块，使用就会报错
     "no-return-assign": 1,//return 语句中不能有赋值表达式
@@ -115,7 +116,7 @@ module.exports = {
     "no-unneeded-ternary": 2,//禁止不必要的嵌套 var isYes = answer === 1 ? true : false;
     "no-unreachable": 2,//不能有无法执行的代码
     "no-unused-expressions": 2,//禁止无用的表达式
-    "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],//不能有声明后未被使用的变量或参数
+    //"no-unused-vars": [2, {"vars": "all", "args": "after-used"}],//不能有声明后未被使用的变量或参数
     "no-use-before-define": 2,//未定义前不能使用
     "no-useless-call": 2,//禁止不必要的call和apply
     "no-void": 2,//禁用void操作符
