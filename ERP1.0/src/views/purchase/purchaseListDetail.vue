@@ -56,7 +56,7 @@ export default {
     height: 65px;
     line-height: 65px;
     padding-left: 20px;
-    font-size: 16px;
+    font-size: 15px;
 }
 .tab_title span{
     display: inline-block;
