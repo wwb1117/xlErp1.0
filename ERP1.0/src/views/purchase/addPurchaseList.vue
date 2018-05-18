@@ -5,7 +5,7 @@
             <span> - 新增采购单</span>
         </div>
         <div class="content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-            <el-form :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="90px">
+            <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="90px">
                 <div class="banner">
                     基本信息
                 </div>
@@ -284,6 +284,11 @@ export default {
 
 
             data.row.unitTotal = price * num
+        },
+        chooseGoodEvent(){
+            this.$router.push({
+                path: '/chooseGood'
+            });
         }
     },
     created(){},
