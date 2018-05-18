@@ -185,19 +185,25 @@
                 <li class="good_title">
                     <p>商品详情</p>
                 </li>
-                <div>
-
-                </div>
+                <!-- 富编辑器 -->
+                <li>
+                    <div style="padding:10px;background:white">
+                        <tinymce></tinymce>
+                    </div>
+                </li>
+                <!-- 控制步骤 -->
+                <li class="add_bottom">
+                    <el-button @click="reset" size='small'>重置</el-button>
+                    <el-button @click="next" size='small' type="primary">下一步</el-button>
+                </li>
             </ul>
-
         </section>
-        <!-- 控制步骤 -->
-        <!-- <div class="add_bottom">
-            <el-button @click="next">下一步</el-button>
-        </div> -->
+
     </section>
+
 </template>
 <script>
+import tinymce from '@/components/tinymce'
 export default {
     data () {
         return {
@@ -273,8 +279,14 @@ export default {
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
+        },
+        reset() {
+            this.$root.reload()
         }
 
+    },
+    components: {
+        tinymce
     }
 
 }
@@ -372,17 +384,11 @@ export default {
      background: white;
     padding: 10px 40px;
 }
-
-
 /* 控制步骤 */
 .add_bottom{
-    position: absolute;
-    bottom:0;
-    left: 0;
-    background: white;
-    border-top:1px solid #dcdfe6;
-    width: 100%;
-    height: 44px;
+    height: 50px;
+    padding: 10px 25px;
+    background: white
 }
 
 
