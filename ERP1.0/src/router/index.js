@@ -3,9 +3,17 @@ import Router from 'vue-router'
 import home from '@/views/home/home'
 import main from '@/views/home/main'
 import login from '@/views/login/login'
+import { Message } from 'element-ui'
+
+/**********************************首页  ******************************* */
+import main from '@/views/home/main'
+
+
+/**************************************************采购模块*********************************************/
 import purchaseList from '@/views/purchase/purchaseList'
 import addPurchaseList from '@/views/purchase/addPurchaseList'
 import chooseGood from '@/views/purchase/chooseGood'
+<<<<<<< HEAD
 import { Message } from 'element-ui'
 // 商品
 // 列表
@@ -13,6 +21,9 @@ import goods from '@/views/goods/list/goods'
 import add from '@/views/goods/list/add'
 import items from '@/views/goods/items'
 import brand from '@/views/goods/brand'
+=======
+import purchaseListDetail from '@/views/purchase/purchaseListDetail'
+>>>>>>> a99783b287020196aabe4908136989f0c80759c2
 
 Vue.use(Router)
 
@@ -25,6 +36,7 @@ var router = new Router({
             component: home,
             children: [
                 {name: "首页", path: '/main', component: main},
+<<<<<<< HEAD
                 {name: "采购单", path: '/purchaseList', component: purchaseList},
                 {name: "新增采购单", path: '/addPurchaseList', component: addPurchaseList},
                 {name: "选择商品", path: '/chooseGood', component: chooseGood},
@@ -32,6 +44,14 @@ var router = new Router({
                 {name: "新增商品", path: '/add', component: add},
                 {name: "新增商品", path: '/goodsItems', component: items},
                 {name: "新增商品", path: '/goodsBrand', component: brand}
+=======
+
+                /*采购模块 */
+                {name: "采购单", path: '/purchaseList', component: purchaseList},
+                {name: "新增采购单", path: '/addPurchaseList', component: addPurchaseList},
+                {name: "选择商品", path: '/chooseGood', component: chooseGood},
+                {name: "采购单详情", path: '/purchaseListDetail', component: purchaseListDetail}
+>>>>>>> a99783b287020196aabe4908136989f0c80759c2
             ]
         },
         {

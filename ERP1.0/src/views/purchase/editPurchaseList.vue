@@ -2,7 +2,7 @@
     <div>
         <div class="model_topcol">
             <span style="color: #409EFF">采购单</span>
-            <span> - 新增采购单</span>
+            <span> - 编辑采购单</span>
         </div>
         <div class="content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="90px">
