@@ -20,6 +20,8 @@ import './assets/css/animate.css'
 import './assets/css/font-awesome.min.css'
 import './assets/css/simple-line-icons.css'
 import './assets/css/font.css'
+
+// 自定义公共样式文件
 import './assets/css/app.css'
 
 Vue.config.productionTip = false
