@@ -15,7 +15,7 @@
                         <span :style="{fontSize: '16px'}">高级搜索</span>
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
-                    <el-form :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
+                    <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
                         <el-form-item label="采购单号">
                             <el-input v-model="superFormData.purchaseList" placeholder="请输入采购单号"></el-input>
                         </el-form-item>
