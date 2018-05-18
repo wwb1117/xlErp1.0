@@ -16,7 +16,7 @@
         </div>
         <div>
             <el-button size="small">导出商品</el-button>
-            <el-button type="primary" size="small">新增商品</el-button>
+            <el-button type="primary" size="small" @click='add'>新增商品</el-button>
         </div>
     </section>
 </template>
@@ -41,6 +41,9 @@ export default {
     methods: {
         // handleClick(tab,event) {
         // }
+        add() {
+            this.$router.push('add')
+        }
     }
 }
 </script>
