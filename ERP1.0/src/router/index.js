@@ -5,6 +5,7 @@ import main from '@/views/home/main'
 import login from '@/views/login/login'
 import purchaseList from '@/views/purchase/purchaseList'
 import addPurchaseList from '@/views/purchase/addPurchaseList'
+import chooseGood from '@/views/purchase/chooseGood'
 import { Message } from 'element-ui';
 
 Vue.use(Router)
@@ -19,7 +20,8 @@ var router = new Router({
             children: [
                 {name: "首页", path: '/main', component: main},
                 {name: "采购单", path: '/purchaseList', component: purchaseList},
-                {name: "新增采购单", path: '/addPurchaseList', component: addPurchaseList}
+                {name: "新增采购单", path: '/addPurchaseList', component: addPurchaseList},
+                {name: "选择商品", path: '/chooseGood', component: chooseGood}
             ]
         },
         {

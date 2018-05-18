@@ -70,7 +70,7 @@
                                 >
                                 </el-autocomplete>
 
-                                <span class="el-icon-more"></span>
+                                <span @click="chooseGoodEvent" class="el-icon-more"></span>
                             </div>
                             <div v-if="scope.row.selfNum !== ''">
                                 <span v-text="scope.row.selfNum"></span>
@@ -217,6 +217,15 @@ export default {
                 ],
                 purchaseCompany: [
                     { required: true, message: '请选择采购单位', trigger: 'blur' }
+                ],
+                purchaseDate: [
+                    { required: true, message: '请选择采购时间', trigger: 'blur' }
+                ],
+                purchaseList: [
+                    { required: true, message: '请输入采购单号', trigger: 'blur' }
+                ],
+                makeListMan: [
+                    { required: true, message: '请输入制单人', trigger: 'blur' }
                 ]
             }
         }
