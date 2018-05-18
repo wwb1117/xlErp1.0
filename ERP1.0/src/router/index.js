@@ -6,20 +6,22 @@ import login from '@/views/login/login'
 import { Message } from 'element-ui'
 
 /**********************************首页  ******************************* */
-import main from '@/views/home/main'
+
 
 
 /**************************************************采购模块*********************************************/
 import purchaseList from '@/views/purchase/purchaseList'
 import addPurchaseList from '@/views/purchase/addPurchaseList'
 import chooseGood from '@/views/purchase/chooseGood'
-import { Message } from 'element-ui'
+
+
 // 商品
 // 列表
 import goods from '@/views/goods/list/goods'
 import add from '@/views/goods/list/add'
 import items from '@/views/goods/items'
 import brand from '@/views/goods/brand'
+
 
 Vue.use(Router)
 
