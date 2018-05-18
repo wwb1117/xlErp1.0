@@ -415,7 +415,7 @@ export default {
 }
 #k .bottom .block{
     position: absolute;
-    right: 5%;
+    right: 30px;
     top:0
 }
 #k .bottom .el-pagination{

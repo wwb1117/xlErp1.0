@@ -81,4 +81,25 @@ ul{
     line-height: 40px;
     border-bottom: 1px solid #d1e5f1;
 }
+.items_top input[type="file"] {
+    display: none;
+}
+.items_top .el-upload--picture-card{
+    width: 100px;
+    height: 100px;
+    line-height: 100px
+}
+.brand_top input[type="file"] {
+    display: none;
+}
+.brand_top .el-upload--picture-card{
+    width: 100px;
+    height: 100px;
+    line-height: 100px
+}
+.updata_box .el-upload--picture-card{
+    width: 100px;
+    height: 100px;
+    line-height: 100px
+}
 

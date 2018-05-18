@@ -11,8 +11,8 @@ import { Message } from 'element-ui'
 // 列表
 import goods from '@/views/goods/list/goods'
 import add from '@/views/goods/list/add'
-// 分类
 import items from '@/views/goods/items'
+import brand from '@/views/goods/brand'
 
 Vue.use(Router)
 
@@ -30,7 +30,8 @@ var router = new Router({
                 {name: "选择商品", path: '/chooseGood', component: chooseGood},
                 {name: "商品", path: '/goodsList', component: goods},
                 {name: "新增商品", path: '/add', component: add},
-                {name: "新增商品", path: '/goodsItems', component: items}
+                {name: "新增商品", path: '/goodsItems', component: items},
+                {name: "新增商品", path: '/goodsBrand', component: brand}
             ]
         },
         {
