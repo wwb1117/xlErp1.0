@@ -17,6 +17,9 @@
                             <span class="title_title">采购时间 : </span>
                             <span class="title_data">2018-05-18 16:34</span>
                         </div>
+                        <div class="banner">
+                            商品信息
+                        </div>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}" label="入库记录" name="inrepos">
@@ -75,5 +78,11 @@ export default {
 .title_data{
     color: #5f6264;
     margin-right: 40px;
+}
+.banner{
+    background: #f5f5f5;
+    height: 40px;
+    line-height: 40px;
+
 }
 </style>
