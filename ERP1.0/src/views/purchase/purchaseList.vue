@@ -175,13 +175,13 @@
                             size="small">
                             编辑
                             </el-button>
-                            <el-dropdown trigger="click">
+                            <el-dropdown :hide-timeout="50" @command="dropdownSelectEvent" trigger="click">
                                 <span class="el-dropdown-link">
                                     更多<i class="el-icon-arrow-down el-icon--right"></i>
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item>查看</el-dropdown-item>
-                                    <el-dropdown-item>打印</el-dropdown-item>
+                                    <el-dropdown-item command="1">查看</el-dropdown-item>
+                                    <el-dropdown-item command="4">打印</el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
                         </template>
@@ -299,6 +299,13 @@ export default {
             this.$router.push({
                 path: '/addPurchaseList'
             })
+        },
+        dropdownSelectEvent(command){
+            if (command == 1){
+                this.$router.push({
+                    path: '/purchaseListDetail'
+                })
+            }
         }
 
     },
