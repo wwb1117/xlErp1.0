@@ -6,9 +6,9 @@
             <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:30px;margin-top:-3px">新增表单</el-button>
             <!-- 新增表单内容 -->
             <el-dialog title="新增分类" :visible.sync="dialogFormVisible">
-                <el-form :model="form">
+                <el-form :model="msg">
                     <el-form-item label="分类名称" required :label-width="formLabelWidth">
-                        <el-input v-model="form.name" type='text' suffix-text='0/15'></el-input>
+                        <el-input v-model="msg.name" type='text' suffix-text='0/15'></el-input>
                     </el-form-item>
                     <el-form-item label="分类图片" :label-width="formLabelWidth">
                         <el-upload
@@ -24,7 +24,7 @@
                         </el-dialog>
                     </el-form-item>
                     <el-form-item label="排序" required :label-width="formLabelWidth">
-                        <el-input v-model="form.name" placeholder="数值越大越靠前"></el-input>
+                        <el-input v-model="msg.name" placeholder="数值越大越靠前"></el-input>
                     </el-form-item>
                     <el-form-item label="是否显示" required :label-width="formLabelWidth">
                         <el-switch
@@ -44,18 +44,48 @@
         <section class="item_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="item_box">
                 <ul class="item_box_list">
-                    <li style="width:540px;text-indent:15px">分类名称</li>
-                    <li style="width:180px;text-indent:12px">分类图片</li>
-                    <li style="width:180px;text-indent:9px">是否显示</li>
-                    <li style="width:110px;text-indent:9px">排序</li>
-                    <li style="width:170px;text-indent:9px">操作</li>
+                    <li style="width:540px;">分类名称</li>
+                    <li style="width:180px;">分类图片</li>
+                    <li style="width:180px;">是否显示</li>
+                    <li style="width:110px;">排序</li>
+                    <li style="width:170px">操作</li>
                 </ul>
                 <el-tree
                     :data="form"
-                    :props="defaultProps"
+                    show-checkbox
+                    node-key="id"
                     default-expand-all
-                    :expand-on-click-node="false"
-                    :render-content="renderContent">
+                    :expand-on-click-node="false">
+                    <ul class="item_box_conent custom-tree-node"  slot-scope="{ node, data }">
+                        <li>{{ node.label }}</li>
+                        <li style="width:540px"></li>
+                        <li style="width:180px;">
+                            <div style='width:28px;height:28px;background:black;margin-top:6px'></div>
+                        </li>
+                        <li style="width:180px">
+                            <el-switch
+                                v-model="value2"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949">
+                            </el-switch>
+                        </li>
+                        <li style="width:110px">12</li>
+                        <li style="width:170px">
+                            <el-button type='text'>编辑</el-button>
+                            <el-button type="text" @click="del = true">删除</el-button>
+                            <el-dialog
+                                title="温馨提示"
+                                :visible.sync="del"
+                                width="30%"
+                                :before-close="handleClose">
+                                <span>此操作将永久删除该项</span>
+                                <span slot="footer" class="dialog-footer">
+                                    <el-button @click="del = false">取 消</el-button>
+                                    <el-button type="primary" @click="del = false">确 定</el-button>
+                                </span>
+                            </el-dialog>
+                        </li>
+                    </ul>
                 </el-tree>
             </div>
         </section>
@@ -63,7 +93,7 @@
         <footer class="item_footer">
             <div class="block">
                 <el-pagination
-                    :current-page="currentPage4"
+                    :current-page="currentPage6"
                     :page-sizes="[100, 200, 300, 400]"
                     :page-size="100"
                     layout="total, sizes, prev, pager, next, jumper"
@@ -78,55 +108,59 @@
 <script>
 export default {
     data() {
+
+        const items =
+
+        [
+            {
+                label: '一级 1',
+                children: [
+                    {
+                        label: '二级 1-1',
+                        children: [
+                            {
+                                label: '三级 1-1-1'
+                            },
+                            {
+                                label: '三级 1-1-2'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                label: '一级 2',
+                children: [
+                    {
+                        label: '二级 2-1'
+                    },
+                    {
+                        label: '二级 2-2'
+                    }
+                ]
+            },
+            {
+                label: '一级 3',
+                children: [
+                    {
+                        label: '二级 3-1'
+                    },
+                    {
+                        label: '二级 3-2'
+                    }
+                ]
+            }
+        ];
+
         return {
-            form: [
-                {
-                    label: '一级 1',
-                    children: [
-                        {
-                            label: '二级 1-1',
-                            children: [
-                                {
-                                    label: '三级 1-1-1'
-                                },
-                                {
-                                    label: '三级 1-1-2'
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    label: '一级 2',
-                    children: [
-                        {
-                            label: '二级 2-1'
-                        },
-                        {
-                            label: '二级 2-2'
-                        }
-                    ]
-                },
-                {
-                    label: '一级 3',
-                    children: [
-                        {
-                            label: '二级 3-1'
-                        },
-                        {
-                            label: '二级 3-2'
-                        }
-                    ]
-                }
-            ],
+            form: JSON.parse(JSON.stringify(items)),
             defaultProps: {
                 children: 'children',
                 label: 'label'
             },
-            name: '124',
             value1: true,
             value2: true,
-            currentPage4: 1,
+            currentPage6: 1,
             // 新增
             msg: {
                 name: '',
@@ -142,32 +176,11 @@ export default {
             formLabelWidth: '120px',
             // 上传
             dialogImageUrl: '',
-            dialogVisible: false
+            dialogVisible: false,
+            del: false
         }
     },
     methods: {
-        renderContent(h, { node, data, store }) {
-            let that = this;
-
-            // <Image v-model=''></Image>
-            return (
-                <ul class="item_box_conent">
-                    <li style="width:540px">{that.name}</li>
-                    <li style="width:180px;">
-                        <div style='width:28px;height:28px;background:black;margin-top:6px'></div>
-                    </li>
-                    <li style="width:180px">
-                        <el-switch
-                            v-model="value2"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
-                        </el-switch>
-                    </li>
-                    <li style="width:110px">12</li>
-                    <li style="width:170px">操作</li>
-                </ul>
-            )
-        },
         // 上传
         handleRemove(file, fileList) {
             console.log(file, fileList);
@@ -175,7 +188,17 @@ export default {
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
+        },
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                })
+                .catch(_ => {});
         }
+    },
+    created(){
+        console.log(this.form)
     }
 
 }
@@ -234,5 +257,9 @@ export default {
 .items_top .el-input{
     width: 40%;
 }
+.item_box_conent {
 
+    display: flex;
+    flex: 1;
+}
 </style>

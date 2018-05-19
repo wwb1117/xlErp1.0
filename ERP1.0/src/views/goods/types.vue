@@ -1,50 +1,24 @@
 <template>
     <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
         <!-- 顶部 -->
-        <header class="brand_top">
-            <p class='brand_title'>商品品牌</p>
-            <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:30px;margin-top:-3px">新增品牌</el-button>
+        <header class="types_top">
+            <p class='types_title'>商品类型</p>
+            <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:30px;margin-top:-3px">新增类型</el-button>
             <!-- 新增表单内容 -->
-            <el-dialog title="新增品牌" :visible.sync="dialogFormVisible">
+            <el-dialog title="新增包装类型" :visible.sync="dialogFormVisible">
                 <el-form :model="msg">
-                    <el-form-item label="品牌名称" required :label-width="formLabelWidth">
+                    <el-form-item label="包装类型" required :label-width="formLabelWidth">
                         <el-input v-model="msg.name" type='text' suffix-text='0/15'></el-input>
                     </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth">
-                        <el-select v-model="value" placeholder="请选择">
-                            <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                            </el-option>
-                        </el-select>
+                    <el-form-item label="规格值" required :label-width="formLabelWidth">
+
                     </el-form-item>
-                    <el-form-item label="品牌LOGO" :label-width="formLabelWidth">
-                        <el-upload
-                            action=""
-                            list-type="picture-card"
-                            :on-preview="handlePictureCardPreview"
-                            :on-remove="handleRemove">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                        <!-- action上传地址 -->
-                        <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="dialogImageUrl" alt="">
-                        </el-dialog>
-                    </el-form-item>
-                    <el-form-item label="排序" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" placeholder="数值越大越靠前"></el-input>
-                    </el-form-item>
-                    <el-form-item  label="控货品牌" :label-width="formLabelWidth">
-                        <el-checkbox v-model="checked">勾选为控货品牌</el-checkbox>
-                    </el-form-item>
-                    <el-form-item label="是否推荐" required :label-width="formLabelWidth">
-                        <el-switch
-                            v-model="value2"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
-                        </el-switch>
+                    <el-form-item label="备注" :label-width="formLabelWidth">
+                        <el-input
+                            type="textarea"
+                            :rows="3"
+                            v-model="textarea">
+                        </el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -53,8 +27,8 @@
                 </div>
             </el-dialog>
         </header>
-        <section class="brand_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-            <div class="brand_box">
+        <section class="types_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+            <div class="types_box">
                 <div class='box_top'>
                      <el-input
                         size="medium"
@@ -64,31 +38,17 @@
                     </el-input>
                     <el-button type="primary" size='medium' style="margin-left:10px">搜索</el-button>
                 </div>
-                <ul class="brand_list">
-                    <li style="width:200px">品牌名称</li>
-                    <li style="width:170px">分类</li>
-                    <li style="width:150px">技术服务费率</li>
-                    <li style="width:190px">品牌LOGO</li>
-                    <li style="width:180px">是否推荐</li>
-                    <li style="width:110px">排序</li>
-                    <li style="width:130px">操作</li>
+                <ul class="types_list">
+                    <li style="width:210px">包装名称</li>
+                    <li style="width:500px">规格值</li>
+                    <li style="width:300px">备注</li>
+                    <li style="width:110px">操作</li>
                 </ul>
-                <ul class="brand_list brand_conent">
-                    <li style="width:200px">maxsun</li>
-                    <li style="width:170px">孕婴用品</li>
-                    <li style="width:150px">40%</li>
-                    <li style="width:190px">
-                        <img src="" alt="">
-                    </li>
-                    <li style="width:180px">
-                        <el-switch
-                            v-model="value2"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
-                        </el-switch>
-                    </li>
-                    <li style="width:110px">1</li>
-                    <li style="width:130px">
+                <ul class="types_list types_conent">
+                    <li style="width:210px">罐装</li>
+                    <li style="width:500px">2.4.6.8罐</li>
+                    <li style="width:300px">这是备注信息</li>
+                    <li style="width:110px">
                         <el-button type='text'>编辑</el-button>
                         <el-button type="text" @click="del = true">删除</el-button>
                         <el-dialog
@@ -106,10 +66,10 @@
                 </ul>
             </div>
         </section>
-        <footer class="brand_footer">
+        <footer class="types_footer">
             <div class="block">
                 <el-pagination
-                    :current-page="currentPage5"
+                    :current-page="currentPage4"
                     :page-sizes="[100, 200, 300, 400]"
                     :page-size="100"
                     layout="total, sizes, prev, pager, next, jumper"
@@ -137,14 +97,12 @@ export default {
             },
             dialogFormVisible: false,
             formLabelWidth: '120px',
-            // 上传
-            dialogImageUrl: '',
-            dialogVisible: false,
             value1: true,
             value2: true,
-            // 分页
-            currentPage5: 1,
-            // 搜索
+            textarea: '',
+
+            currentPage4: 1,
+
             input: '',
             // 关联分类
             options: [
@@ -173,6 +131,7 @@ export default {
             checked: false,
             // 删除
             del: false
+
         }
     },
     methods: {
@@ -196,29 +155,29 @@ export default {
 </script>
 <style scoped>
 /* 顶部 */
-.brand_top{
+.types_top{
     display: flex;
     justify-content: space-between;
     height: 46px;
     padding: 10px;
     border-bottom: 1px solid #e5e8e8
 }
-.brand_title{
+.types_title{
     height: 25px;
     line-height: 25px;
     margin-left: 20px;
     font-size: 15px;
     color: #5e6161
 }
-.brand_top .el-input{
+.types_top .el-input{
     width: 40%;
 }
 /* 内容 */
-.brand_conent{
+.types_conent{
     padding: 10px;
     background: #f5f5f5
 }
-.brand_box{
+.types_box{
     border: 1px solid #e6e9eb;
     color: #5e6161
 }
@@ -230,7 +189,7 @@ export default {
 .box_top .el-input{
     width: 35%;
 }
-.brand_list{
+.types_list{
     display: flex;
     justify-content: space-between;
     height: 40px;
@@ -241,19 +200,18 @@ export default {
     border-bottom: 1px solid #e5e8e8;
     background: #f5f5f5
 }
-.brand_conent{
+.types_conent{
     font-weight: 500;
     border-color:  #d6e3ec;
     background: white
 }
 /* 底部 */
-.brand_footer{
+.types_footer{
     border-top:1px solid #e5e8e8;
     position: relative;
 }
-.brand_footer .block{
+.types_footer .block{
     position: absolute;
     right: 30px;
 }
 </style>
-
