@@ -12,6 +12,7 @@ import main from '@/views/home/main'
 import purchaseList from '@/views/purchase/purchaseList'
 import addPurchaseList from '@/views/purchase/addPurchaseList'
 import chooseGood from '@/views/purchase/chooseGood'
+import purchaseListDetail from '@/views/purchase/purchaseListDetail'
 
 
 // 商品
@@ -38,6 +39,7 @@ var router = new Router({
                 {name: "采购单", path: '/purchaseList', component: purchaseList},
                 {name: "新增采购单", path: '/addPurchaseList', component: addPurchaseList},
                 {name: "选择商品", path: '/chooseGood', component: chooseGood},
+                {name: "商品详情", path: '/purchaseListDetail', component: purchaseListDetail},
 
                 /*************************** 商品模块*************************************/
                 {name: "商品", path: '/goodsList', component: goods},
