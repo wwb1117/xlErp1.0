@@ -1,3 +1,6 @@
+import { MessageBox } from 'element-ui';
+import { Message } from 'element-ui';
+
 export default {
     backSpaceBiden(){ //禁止返回键
         function doKey(e){
@@ -14,6 +17,33 @@ export default {
 
         //禁止后退键  作用于IE、Chrome
         document.onkeydown = doKey;
+    },
+    confirmDelet(text, success, cancel){
+        MessageBox.confirm(text, '温馨提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then( () => {
+            if (success){
+                success()
+            }
+            Message.success({
+                type: 'success',
+                showClose: true,
+                duration: 1500,
+                message: '删除成功!'
+            })
+        }).catch(() => {
+            if (cansel){
+                cancel()
+            }
+            Message.info({
+              type: 'info',
+              duration: 1500,
+              showClose: true,
+              message: '已取消删除'
+            });
+        });
     }
 
 

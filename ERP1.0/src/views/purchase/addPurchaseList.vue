@@ -39,6 +39,7 @@
                     <el-table
                         :data="goodsInfoData"
                         :span-method="arraySpanMethod"
+                        show-summary
                         border
                     style="width: 100%">
                         <el-table-column
@@ -172,7 +173,7 @@
         </div>
         <div class="model_footer">
             <el-button style="width: 90px" type="primary" size="small">保存</el-button>
-            <el-button @click="canselBtnEvent" style="width: 90px" size="small">取消</el-button>
+            <el-button style="width: 90px" size="small">取消</el-button>
         </div>
     </div>
 </template>
@@ -255,6 +256,8 @@ export default {
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
+            console.log(rowIndex)
+            console.log(this.goodsInfoData.length)
             if (columnIndex === 2) {
                 if (row.selfNum == ""){
                     return [1, 3];

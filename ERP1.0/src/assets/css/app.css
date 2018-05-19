@@ -38,12 +38,20 @@ ul{
     top: 30%;
 }
 /****************************elementUI表格样式自定义**************************************************/
-.el-table__header{
+.el-table__header th, .el-table__header tr{
     color: #606266;
+    background: #F5F5F5;
 }
 .el-table__body{
     font-size: 12px;
     color: #606266;
+}
+.el-table__footer-wrapper tbody td{
+    background: #ffffff
+}
+/* 采购商品详情 */
+#purchaseDetail_wrap .el-table--border .el-table__header th{
+    border-right: none;
 }
 /****************************elementUI分页样式自定义**************************************************/
 .el-pagination{
@@ -53,6 +61,9 @@ ul{
 /****************************elementUI表单样式自定义**************************************************/
 /* 自定义form宽度 需加类名 myForm */
 .myForm .el-form-item__content input{
+    width: 194px;
+}
+.myForm .el-date-editor{
     width: 194px;
 }
 /****************************各模块头部栏公共样式**************************************************/
