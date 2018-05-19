@@ -129,4 +129,12 @@ ul{
     height: 100px;
     line-height: 100px
 }
-
+.supply_check .el-tag .el-tag__close{
+    top:-20px;
+    right: 10px;
+    background: #C2C6CC;
+    color: white
+}
+.supply_check .el-tag .el-tag__close:hover{
+    font-size: 12px
+}

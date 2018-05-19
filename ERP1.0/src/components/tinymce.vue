@@ -1,8 +1,7 @@
 <template>
- <div class='tinymce'>
-  <editor id='tinymce' v-model='tinymceHtml' :init='init'></editor>
-
- </div>
+    <div class='tinymce'>
+        <editor id='tinymce' v-model='tinymceHtml' :init='init'></editor>
+    </div>
 </template>
 
 <script>
