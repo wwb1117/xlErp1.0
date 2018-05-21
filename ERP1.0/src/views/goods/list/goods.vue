@@ -42,7 +42,7 @@ export default {
         // handleClick(tab,event) {
         // }
         add() {
-            this.$router.push('add')
+            this.$router.push('addGoods')
         }
     }
 }
