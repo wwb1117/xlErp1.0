@@ -69,8 +69,8 @@
             </div>
             <!-- 列表顶部隐藏对话框   有问题需要改动/消失隐藏没有判断 -->
             <ul class="conent_hidden" v-show="hidden_show">
-                <li @click='hidden_show=false'><i class="el-icon-close"></i></li>
-                <li>已选择 <span style="color:#3f9fff">1</span> 项</li>
+                <li @click='isHidden'><i class="el-icon-close"></i></li>
+                <li >已选择 <span style="color:#3f9fff" v-text="selectTableData.length">1</span> 项</li>
                 <li>
                     <el-button type="text" @click="open">停止报价</el-button>
                 </li>
@@ -95,58 +95,87 @@
             </el-dialog>
             <!-- 商品列表内容 -->
             <div class="center">
-                <!-- 商品列表分类选择 -->
-                <ul class="goods_list display ">
-                    <li style="width:80px;">
-                        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">商品</el-checkbox>
-                    </li>
-                    <li style="width:60px;margin-left:-50px"></li>
-                    <li style="width:200px">商品名称</li>
-                    <li>条码</li>
-                    <li>编号</li>
-                    <li>规格 - SKU</li>
-                    <li>分类</li>
-                    <li>品牌</li>
-                    <li style="text-indent:10px">操作</li>
-                </ul>
-                <!-- 商品 -->
-                <div class="good_box">
-                    <ul class="display goods_conent "  v-for="good in goods"  :key="good">
-                        <li style="width:80px;">
-                            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                                <el-checkbox :label="good"></el-checkbox>
-                            </el-checkbox-group>
-                        </li>
-                        <li style='width:60px;height:60px;background:black;margin-left:-50px'>
-                            <img src="" alt="">
-                        </li>
-                        <li style="width:200px;" class="text_color">商品名称</li>
-                        <li>6231621654613216854</li>
-                        <li>02010001</li>
-                        <li class="text_color">
+                <el-table
+                    :data="goodData"
+                    :height="$store.state.home.modelContentHeight"
+                    ref="goodTable"
+                    @selection-change="handleSelectionChange"
+                    style="width: 100%">
+                    <!-- check -->
+                    <el-table-column
+                        type="selection"
+                        width="30">
+                    </el-table-column>
+                    <!-- 商品图片 -->
+                    <el-table-column
+                        prop="goodimg"
+                        label="商品"
+                        >
+                        <template slot-scope="scope" class="goodimgbox">
+                            <div style="width:60px;height:60px;background: black;"></div>
+                            <!-- <img :src="goodimg" alt=""> -->
+                        </template>
+                    </el-table-column>
+                    <!-- 商品内容 -->
+                    <el-table-column
+                        prop='goodconent'
+                        width="300"
+                        >
+                    </el-table-column>
+                    <!-- 条码 -->
+                    <el-table-column
+                        prop="goodcode"
+                        label="条码"
+                       >
+                    </el-table-column>
+                    <!-- 编号 -->
+                    <el-table-column
+                        prop="goodnum"
+                        label="编号"
+                        >
+                    </el-table-column>
+                    <!-- 规格 -->
+                    <el-table-column
+                        label="规格-SKU"
+                        >
+                        <template slot-scope="scope">
                             <el-button type="text" @click="dialogTableVisible = true">查看</el-button>
-                        </li>
-                        <li>尿不湿-纸尿裤</li>
-                        <li>MUYUKU</li>
-                        <li class="text_color">
-                            <dl class="operation display">
-                                <dd>编辑</dd>
-                                <dd>删除</dd>
-                                <dd>更多<i class="el-icon-caret-bottom"></i></dd>
-                            </dl>
-                        </li>
-                    </ul>
-                </div>
+                            <el-dialog title="规格明细" :visible.sync="dialogTableVisible">
+                                <el-table :data="gridData">
+                                    <el-table-column property="specification" label="规格" width="320"></el-table-column>
+                                    <el-table-column property="coding" label="SKU编码" width="600"></el-table-column>
+                                </el-table>
+                                <div class="small_pagination">
+                                    <el-pagination small layout="prev, pager, next" :total="50"></el-pagination>
+                                </div>
+                            </el-dialog>
+                        </template>
+                    </el-table-column>
+                    <!-- 分类 -->
+                    <el-table-column
+                        prop="goodtype"
+                        label="分类"
+                        >
+                    </el-table-column>
+                    <!-- 品牌 -->
+                    <el-table-column
+                        prop="goodlogo"
+                        label="品牌"
+                        >
+                    </el-table-column>
+                    <!-- 操作 -->
+                    <el-table-column
+                        label="操作"
+                        >
+                        <template slot-scope="scope">
+                            <el-button type="text">编辑</el-button>
+                            <el-button type="text">删除</el-button>
+                            <el-button type="text">更多 <i class="el-icon-caret-bottom"></i> </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
                 <!-- 查看弹出框 -->
-                <el-dialog title="规格明细" :visible.sync="dialogTableVisible">
-                    <el-table :data="gridData">
-                        <el-table-column property="specification" label="规格" width="320"></el-table-column>
-                        <el-table-column property="coding" label="SKU编码" width="600"></el-table-column>
-                    </el-table>
-                    <div class="small_pagination">
-                        <el-pagination small layout="prev, pager, next" :total="50"></el-pagination>
-                    </div>
-                </el-dialog>
+
             </div>
         </div>
         <!-- 商品分页 -->
@@ -227,24 +256,26 @@ export default {
                 }
             ],
             // 底部分页数
-            currentPage4: 1
+            currentPage4: 1,
+
+            // 商品列表内容
+            goodData: [
+                {
+                    goodimg: '',
+                    goodconent: '英国三只切纸尿裤',
+                    goodcode: '6232135465123165',
+                    goodnum: '02010001',
+                    goodtype: '尿不湿-纸尿裤',
+                    goodlogo: 'MYKIYU'
+                }
+            ],
+            selectTableData: []
         }
     },
     methods: {
-        // 判断商品全选按钮/选中显示顶部隐藏对话框
-        handleCheckAllChange(val) {
-            this.checkedCities = val ? agoods : [];
-            this.isIndeterminate = false;
-            this.hidden_show = !this.hidden_show
-        },
-        // 单选商品，全选选中全选/单选选中显示顶部隐藏对话框
-        handleCheckedCitiesChange(value) {
-            // 获取商品选中数量
-            let checkedCount = value.length;
-
-            this.checkAll = checkedCount === this.goods.length;
-            this.isIndeterminate = checkedCount > 0 && checkedCount < this.goods.length;
-            this.hidden_show = !this.hidden_show
+        isHidden() {
+            this.hidden_show = false;
+            this.$refs.goodTable.clearSelection()
         },
         // 高级搜索表单清除选项
         clear() {
@@ -269,12 +300,20 @@ export default {
                     message: '已取消操作'
                 });
             });
-        }
+        },
         // 底部分页函数
         // handleSizeChange(val) {
         // },
         // handleCurrentChange(val) {
         // }
+        handleSelectionChange(val){
+            this.selectTableData = val
+            if (this.selectTableData.length > 0){
+                this.hidden_show = true
+            } else {
+                this.hidden_show = false
+            }
+        }
     }
 }
 </script>
@@ -381,7 +420,7 @@ export default {
 #k .text_y .el-dialog{
     left: 5.2%;
     width: 88.5%;
-    top:-130px;
+    top:-86px;
 }
 #k .text_y .el-form{
     display: flex;
@@ -426,6 +465,12 @@ export default {
 }
 #k .bottom .el-pagination{
     padding: 12px
+}
+#k .el-icon-close:hover{
+    font-size: 14px
+}
+.goodimgbox{
+    height: 60px;
 }
 </style>
 
