@@ -435,7 +435,7 @@ export default {
             this.dialogVisible = true;
         },
         reset() {
-            this.reload()
+            this.$router.reload()
         },
 
         add() {
