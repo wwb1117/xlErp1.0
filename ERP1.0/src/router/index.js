@@ -14,6 +14,7 @@ import addPurchaseList from '@/views/purchase/addPurchaseList'
 import chooseGood from '@/views/purchase/chooseGood'
 import purchaseListDetail from '@/views/purchase/purchaseListDetail'
 import invalidRecord from '@/views/purchase/invalidRecord'
+import importPurchase from '@/views/purchase/importPurchaseList'
 
 
 // 商品
@@ -44,6 +45,7 @@ var router = new Router({
                 {name: "选择商品", path: '/chooseGood', component: chooseGood},
                 {name: "商品详情", path: '/purchaseListDetail', component: purchaseListDetail},
                 {name: "作废记录", path: '/invalidRecord', component: invalidRecord},
+                {name: "导入采购单", path: '/importPurchase', component: importPurchase},
 
                 /*************************** 商品模块*************************************/
                 {name: "商品列表", path: '/goodsList', component: goods},

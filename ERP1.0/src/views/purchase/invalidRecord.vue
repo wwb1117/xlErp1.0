@@ -109,6 +109,11 @@
                     <el-checkbox v-model="totalChecked">全选</el-checkbox>
                 </div>
 
+                <div :style="{height: $store.state.home.modelContentHeight-124 + 'px'}" class="invalidRecord_wrap">
+                    <item-record></item-record>
+                    <item-record></item-record>
+                </div>
+
 
             </div>
         </div>
@@ -119,7 +124,11 @@
 </template>
 
 <script>
+import itemRecord from 'views/purchase/childComponents/invalidRecord'
 export default {
+    components: {
+        itemRecord
+    },
     data(){
         return {
             serchText: '',
@@ -240,5 +249,10 @@ export default {
 .checkBox_wrap{
     height: 40px;
     background: #f5f5f5;
+    line-height: 40px;
+    padding-left: 17px;
+}
+.invalidRecord_wrap{
+    overflow: auto;
 }
 </style>

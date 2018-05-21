@@ -4,7 +4,7 @@
             <span>采购单</span>
             <div>
                 <el-button size="small">作废记录</el-button>
-                <el-button size="small">导入采购单</el-button>
+                <el-button @click="importEvent" size="small">导入采购单</el-button>
                 <el-button type="primary" @click="purchaseAddEvent" size="small">新增采购单</el-button>
             </div>
         </div>
@@ -306,6 +306,11 @@ export default {
                     path: '/purchaseListDetail'
                 })
             }
+        },
+        importEvent(){
+            this.$router.push({
+                path: '/importPurchase'
+            })
         }
 
     },
