@@ -33,6 +33,9 @@ ul{
 #purchaseDetail_wrap .el-tabs__header{
     margin: 0;
 }
+input[type="file"] {
+    display: none;
+}
 /****************************elementUI消息弹框位置修改**************************************************/
 .el-message{
     top: 30%;
