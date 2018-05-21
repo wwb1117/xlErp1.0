@@ -22,6 +22,10 @@
                         <el-button style="margin-left: 10px; width: 90px" size="small" type="primary">导入</el-button>
                     </el-upload>
                 </div>
+                <div class="info_wrap">
+                    <i class="el-icon-warning"></i>
+                    <span>商品小计和应付金额不需要填写,采购时间默认为导入时间</span>
+                </div>
             </div>
         </div>
         <div class="model_footer">
@@ -71,5 +75,11 @@ export default {
     text-align: center;
     padding-top: 150px
 }
-
+.el-icon-warning{
+    color: #f7b65d;
+}
+.info_wrap{
+    color: #b1b1b2;
+    margin-top: 30px;
+}
 </style>
