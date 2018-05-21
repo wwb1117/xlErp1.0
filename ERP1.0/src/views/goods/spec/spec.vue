@@ -3,31 +3,7 @@
         <!-- 顶部 -->
         <header class="spec_top">
             <p class='spec_title'>商品规格</p>
-            <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:30px;margin-top:-3px">新增规格</el-button>
-            <!-- 新增表单内容 -->
-            <el-dialog title="新增规格" :visible.sync="dialogFormVisible">
-                <el-form :model="msg">
-                    <el-form-item label="规格名称" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" type='text' suffix-text='0/15' size='small'></el-input>
-                    </el-form-item>
-                    <el-form-item label="规格值" required :label-width="formLabelWidth">
-
-                    </el-form-item>
-                    <el-form-item label="备注" :label-width="formLabelWidth" >
-                        <el-input
-                            type="textarea"
-                            :rows="3"
-                            v-model="textarea"
-                            size='small'
-                            >
-                        </el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false" size='medium'>取 消</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false" size='medium'>保 存</el-button>
-                </div>
-            </el-dialog>
+            <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='openAddspec'>新增规格</el-button>
         </header>
         <section class="spec_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="spec_box">
@@ -87,21 +63,10 @@
 export default {
     data() {
         return {
-            msg: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            dialogFormVisible: false,
-            formLabelWidth: '120px',
+
             value1: true,
             value2: true,
-            textarea: '',
+
 
             currentPage4: 1,
 
@@ -151,6 +116,9 @@ export default {
                     done();
                 })
                 .catch(_ => {});
+        },
+        openAddspec() {
+            this.$router.push('addSpec')
         }
     }
 }
