@@ -5,8 +5,8 @@
             <p class='spec_title'>商品规格</p>
             <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='openAddspec'>新增规格</el-button>
         </header>
-        <section class="spec_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-            <div class="spec_box">
+        <section class="spec_conent" >
+            <div class="spec_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
                 <div class='box_top'>
                      <el-input
                         size="small"
@@ -22,7 +22,7 @@
                     <li style="width:300px">备注</li>
                     <li style="width:110px">操作</li>
                 </ul>
-                <ul class="spec_list spec_conent">
+                <ul class="spec_list spec_text">
                     <li style="width:210px">尺码</li>
                     <li style="width:500px">sm,xl,l</li>
                     <li style="width:300px">这是备注信息</li>
@@ -149,7 +149,8 @@ export default {
 }
 .spec_box{
     border: 1px solid #e6e9eb;
-    color: #5e6161
+    color: #5e6161;
+    background: white
 }
 .box_top{
     display: flex;
@@ -170,7 +171,7 @@ export default {
     border-bottom: 1px solid #e5e8e8;
     background: #f5f5f5
 }
-.spec_conent{
+.spec_text{
     font-weight: 500;
     border-color:  #d6e3ec;
     background: white
@@ -179,10 +180,14 @@ export default {
 .spec_footer{
     border-top:1px solid #e5e8e8;
     position: relative;
+    margin-top: -23px;
+    background: white;
+    padding: 11px 30px;
 }
 .spec_footer .block{
     position: absolute;
     right: 30px;
+    top:15px
 }
 </style>
 

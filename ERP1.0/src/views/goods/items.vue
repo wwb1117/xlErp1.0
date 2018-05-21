@@ -41,8 +41,8 @@
             </el-dialog>
         </header>
         <!-- 内容 -->
-        <section class="item_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-            <div class="item_box">
+        <section class="item_conent" >
+            <div class="item_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
                 <ul class="item_box_list">
                     <li style="width:540px;">分类名称</li>
                     <li style="width:180px;">分类图片</li>
@@ -236,7 +236,8 @@ export default {
 }
 .item_box{
     border: 1px solid #e6e9eb;
-    color: #5e6161
+    color: #5e6161;
+    background: white
 }
 .item_box ul{
     display: flex;
@@ -258,6 +259,9 @@ export default {
 .item_footer{
     border-top:1px solid #e5e8e8;
     position: relative;
+    margin-top: -23px;
+    background: white;
+    padding: 11px 30px;
 }
 .item_footer .block{
     position: absolute;

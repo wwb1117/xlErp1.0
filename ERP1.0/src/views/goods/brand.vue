@@ -53,8 +53,8 @@
                 </div>
             </el-dialog>
         </header>
-        <section class="brand_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-            <div class="brand_box">
+        <section class="brand_conent" >
+            <div class="brand_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
                 <div class='box_top'>
                      <el-input
                         size="small"
@@ -73,7 +73,7 @@
                     <li style="width:110px">排序</li>
                     <li style="width:130px">操作</li>
                 </ul>
-                <ul class="brand_list brand_conent">
+                <ul class="brand_list brand_text">
                     <li style="width:200px">maxsun</li>
                     <li style="width:170px">孕婴用品</li>
                     <li style="width:150px">40%</li>
@@ -220,7 +220,8 @@ export default {
 }
 .brand_box{
     border: 1px solid #e6e9eb;
-    color: #5e6161
+    color: #5e6161;
+    background: white
 }
 .box_top{
     display: flex;
@@ -241,7 +242,7 @@ export default {
     border-bottom: 1px solid #e5e8e8;
     background: #f5f5f5
 }
-.brand_conent{
+.brand_text{
     font-weight: 500;
     border-color:  #d6e3ec;
     background: white
@@ -250,6 +251,9 @@ export default {
 .brand_footer{
     border-top:1px solid #e5e8e8;
     position: relative;
+    margin-top: -23px;
+    background: white;
+    padding: 11px 30px;
 }
 .brand_footer .block{
     position: absolute;

@@ -1,12 +1,12 @@
 <template>
     <section id='add' >
         <!-- 顶部面包屑 -->
-        <div class="add_top">
-            <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height:45px">
-                <el-breadcrumb-item :to="{ path: '/goods' }">商品列表</el-breadcrumb-item>
+        <header class="add_top">
+            <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height:45px;font-size:15px">
+                <el-breadcrumb-item :to="{ path: '/addGoods' }">商品列表</el-breadcrumb-item>
                 <el-breadcrumb-item>新增商品</el-breadcrumb-item>
             </el-breadcrumb>
-        </div>
+        </header>
         <!-- 主体内容 -->
         <section class="add_conent" >
             <div class="conent_box">
@@ -322,7 +322,6 @@
                     </li>
                 </ul>
             </div>
-
         </section>
     </section>
 
@@ -495,7 +494,7 @@ export default {
 .add_top{
     height: 45px;
     width: 100%;
-    padding: 0 15px;
+    padding: 0 30px;
 }
 /* 主体 */
 .add_conent{
