@@ -38,9 +38,7 @@ export default {
     },
     created(){},
     mounted(){
-        setTimeout(() => {
-            this.currentStep = 2
-        }, 3000)
+
     }
 }
 </script>
