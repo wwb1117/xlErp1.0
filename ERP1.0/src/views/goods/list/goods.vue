@@ -1,9 +1,9 @@
 <template>
     <section class="nav" id='k_'>
-        <div style="width:100%" class="navdiv">
+        <div style="width:100%" class="navdiv" >
             <el-tabs v-model="activeName">
                 <!-- @tab-click="handleClick"  -->
-                <el-tab-pane label="实物类商品" name="first">
+                <el-tab-pane label="实物类商品" name="first" >
                     <first></first>
                 </el-tab-pane>
                 <el-tab-pane label="服务类商品" name="second">
@@ -66,7 +66,7 @@ export default {
     margin: 0;
 }
 #k_ .navdiv .el-tabs__nav-wrap{
-    padding-left: 15px
+    padding-left: 30px
 }
 #k_ .navdiv .el-tabs__nav-wrap::after {
     height: 1px;

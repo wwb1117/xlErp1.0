@@ -66,9 +66,9 @@
                                 </el-form-item>
                             </el-form>
                             <div slot="footer" class="dialog-footer">
-                                <el-button @click="dialogFormVisible = false" size="small">取 消</el-button>
                                 <el-button type="primary" @click="dialogFormVisible = false" size="small">确 定</el-button>
-                                <el-button @click="clear" size="small">清 空</el-button>
+                                <el-button @click="dialogFormVisible = false" size="small">取 消</el-button>
+                                <el-button @click="clear" size="small" type='text' style="color:black">清 空</el-button>
                             </div>
                         </el-dialog>
                     </li>
@@ -203,9 +203,6 @@
 </template>
 
 <script>
-// 暂定义商品数量
-const agoods = ['1'];
-
 export default {
     name : 'first',
 
@@ -219,7 +216,6 @@ export default {
             // 商品列表全选及数量
             checkAll: false,
             checkedCities: [],
-            goods: agoods,
             isIndeterminate: true,
 
             // 弹出框状态  查看规格/高级搜索表单/更改供应商
@@ -398,6 +394,15 @@ export default {
     left: 5.2%;
     width: 88.5%;
     top:-86px;
+    height: 300px
+}
+#k .text_y .dialog-footer{
+    position: absolute;
+    left: 20px;
+    bottom:30px
+}
+#k .text_y .el-dialog__body{
+    padding: 0 20px
 }
 #k .text_y .el-form{
     display: flex;
