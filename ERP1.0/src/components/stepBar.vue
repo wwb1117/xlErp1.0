@@ -59,11 +59,11 @@ export default {
 <style scoped>
 .step-container {
     margin: 0;
-    padding: 10px;
+    padding: 0px;
     width: 90%;
 }
 .step-container li {
-    display: inline-block;
+    float: left;
     position: relative;
     margin: 0;
     padding: 0;
