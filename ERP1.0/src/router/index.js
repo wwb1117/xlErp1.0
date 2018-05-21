@@ -20,11 +20,12 @@ import importPurchase from '@/views/purchase/importPurchaseList'
 // 商品
 // 列表
 import goods from '@/views/goods/list/goods'
-import addgoods from '@/views/goods/list/addgoods'
+import addGoods from '@/views/goods/list/addGoods'
 import items from '@/views/goods/items'
 import brand from '@/views/goods/brand'
 import spec from '@/views/goods/spec/spec'
 import types from '@/views/goods/types/types'
+import addSpec from '@/views/goods/spec/addSpec'
 
 
 Vue.use(Router)
@@ -49,10 +50,11 @@ var router = new Router({
 
                 /*************************** 商品模块*************************************/
                 {name: "商品列表", path: '/goodsList', component: goods},
-                {name: "新增商品", path: '/addGoods', component: addgoods},
+                {name: "新增商品", path: '/addGoods', component: addGoods},
                 {name: "商品分类", path: '/goodsItems', component: items},
                 {name: "商品品牌", path: '/goodsBrand', component: brand},
                 {name: "商品规格", path: '/goodsSpec', component: spec},
+                {name: "商品类型", path: '/addSpec', component: addSpec},
                 {name: "商品类型", path: '/goodsTypes', component: types}
             ]
         },

@@ -11,10 +11,7 @@
         <section class="add_conent" >
             <div class="conent_box">
                 <div class="step">
-                    <el-steps :active="active" finish-status="success" simple style="background:#f5f5f5">
-                        <el-step title="1.编辑基本信息" ></el-step>
-                        <el-step title="2.设置商品参数" ></el-step>
-                    </el-steps>
+                    <bar :step-texts="testText" :step-nums="stepNums" :current-step="currentStep"></bar>
                 </div>
                 <ul style='margin:0' v-if='conent1'>
                     <!-- 商品title -->
@@ -332,6 +329,7 @@
 </template>
 <script>
 import tinymce from '@/components/tinymce'
+import bar from '@/components/stepBar'
 
 let goodAttr =
 
@@ -343,6 +341,12 @@ let goodAttr =
 export default {
     data () {
         return {
+
+            // 步骤条
+            testText: ['1. 编辑基本信息', '2. 设置商品参数'],
+            stepNums: 2,
+            currentStep: 1,
+
             // 内容
             conent1: true,
             conent2: false,
@@ -423,15 +427,13 @@ export default {
     methods:{
         // 下一步
         next() {
-            if (this.active++ > 1) {
-                this.active = 1
-            }
+            this.currentStep = 2
             this.conent1 = false
             this.conent2 = true
             window.scroll(0, 0)
         },
         prev() {
-            this.active = 1
+            this.currentStep = 1
             this.conent1 = true
             this.conent2 = false
             window.scroll(0, 0)
@@ -465,7 +467,8 @@ export default {
 
     },
     components: {
-        tinymce
+        tinymce,
+        bar
     }
 
 }
