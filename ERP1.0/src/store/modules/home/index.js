@@ -49,8 +49,8 @@ export default {
                     path: '/purchaseList'
                 },
                 {
-                    name: '退货单',
-                    path: '/returnList'
+                    name: '采购退货',
+                    path: '/purchaseReject'
                 },
                 {
                     name: '供应商',

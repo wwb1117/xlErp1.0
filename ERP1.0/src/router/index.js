@@ -15,6 +15,11 @@ import chooseGood from '@/views/purchase/chooseGood'
 import purchaseListDetail from '@/views/purchase/purchaseListDetail'
 import invalidRecord from '@/views/purchase/invalidRecord'
 import importPurchase from '@/views/purchase/importPurchaseList'
+import purchaseReject from '@/views/purchase/purchaseReject'
+import addPurchaseReject from '@/views/purchase/addPurchaseReject'
+import chooseRelePurchaseList from '@/views/purchase/chooseRelePurchaseList'
+import addPurchaseRejectSuccess from '@/views/purchase/addPurchaseRejectSuccess'
+
 
 
 // 商品
@@ -47,6 +52,11 @@ var router = new Router({
                 {name: "商品详情", path: '/purchaseListDetail', component: purchaseListDetail},
                 {name: "作废记录", path: '/invalidRecord', component: invalidRecord},
                 {name: "导入采购单", path: '/importPurchase', component: importPurchase},
+                {name: "采购退货", path: '/purchaseReject', component: purchaseReject},
+                {name: "新增退货单", path: '/addPurchaseReject', component: addPurchaseReject},
+                {name: "选择关联采购单", path: '/chooseRelePurchaseList', component: chooseRelePurchaseList},
+                {name: "已完成退货单", path: '/addPurchaseRejectSuccess', component: addPurchaseRejectSuccess},
+
 
                 /*************************** 商品模块*************************************/
                 {name: "商品列表", path: '/goodsList', component: goods},

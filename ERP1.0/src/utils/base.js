@@ -18,6 +18,28 @@ export default {
         //禁止后退键  作用于IE、Chrome
         document.onkeydown = doKey;
     },
+    confirm(text, success, cancel){
+        MessageBox.confirm(text, '温馨提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then( () => {
+            if (success){
+                success()
+            }
+
+        }).catch(() => {
+            if (cansel){
+                cancel()
+            }
+            Message.info({
+              type: 'info',
+              duration: 1500,
+              showClose: true,
+              message: '已取消操作'
+            });
+        });
+    },
     confirmDelet(text, success, cancel){
         MessageBox.confirm(text, '温馨提示', {
             confirmButtonText: '确定',
