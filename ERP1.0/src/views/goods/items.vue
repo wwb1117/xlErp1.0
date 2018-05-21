@@ -8,7 +8,7 @@
             <el-dialog title="新增分类" :visible.sync="dialogFormVisible">
                 <el-form :model="msg">
                     <el-form-item label="分类名称" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" type='text' suffix-text='0/15'></el-input>
+                        <el-input v-model="msg.name" type='text' suffix-text='0/15' size='small'></el-input>
                     </el-form-item>
                     <el-form-item label="分类图片" :label-width="formLabelWidth">
                         <el-upload
@@ -24,7 +24,7 @@
                         </el-dialog>
                     </el-form-item>
                     <el-form-item label="排序" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" placeholder="数值越大越靠前"></el-input>
+                        <el-input v-model="msg.name" placeholder="数值越大越靠前"  size='small'></el-input>
                     </el-form-item>
                     <el-form-item label="是否显示" required :label-width="formLabelWidth">
                         <el-switch
@@ -58,7 +58,7 @@
                     :expand-on-click-node="false">
                     <ul class="item_box_conent custom-tree-node"  slot-scope="{ node, data }">
                         <li>{{ node.label }}</li>
-                        <li style="width:540px"></li>
+                        <li :class="data.class"></li>
                         <li style="width:180px;">
                             <div style='width:28px;height:28px;background:black;margin-top:6px'></div>
                         </li>
@@ -114,15 +114,19 @@ export default {
         [
             {
                 label: '一级 1',
+                class: 'a',
                 children: [
                     {
                         label: '二级 1-1',
+                        class: 'b',
                         children: [
                             {
-                                label: '三级 1-1-1'
+                                label: '三级 1-1-1',
+                                class: 'c'
                             },
                             {
-                                label: '三级 1-1-2'
+                                label: '三级 1-1-2',
+                                class: 'c'
                             }
                         ]
                     }
@@ -130,23 +134,29 @@ export default {
             },
             {
                 label: '一级 2',
+                class: 'a',
                 children: [
                     {
-                        label: '二级 2-1'
+                        label: '二级 2-1',
+                        class: 'b'
                     },
                     {
-                        label: '二级 2-2'
+                        label: '二级 2-2',
+                        class: 'b'
                     }
                 ]
             },
             {
                 label: '一级 3',
+                class: 'a',
                 children: [
                     {
-                        label: '二级 3-1'
+                        label: '二级 3-1',
+                        class: 'b'
                     },
                     {
-                        label: '二级 3-2'
+                        label: '二级 3-2',
+                        class: 'b'
                     }
                 ]
             }
@@ -262,4 +272,14 @@ export default {
     display: flex;
     flex: 1;
 }
+.item_box_conent .a{
+    width: 380px;
+}
+.item_box_conent .b{
+    width: 350px;
+}
+.item_box_conent .c{
+    width: 320px;
+}
+
 </style>

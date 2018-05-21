@@ -135,10 +135,12 @@ ul{
     height: 100px;
     line-height: 100px
 }
-.updata_box .el-upload--picture-card{
-    width: 100px;
-    height: 100px;
-    line-height: 100px
+.pic_up .el-upload--picture-card{
+    width: 108px;
+    height: 108px;
+    line-height: 108px;
+    margin-left: 100px;
+    margin-bottom: 40px
 }
 .supply_check .el-tag .el-tag__close{
     top:-20px;
@@ -149,3 +151,30 @@ ul{
 .supply_check .el-tag .el-tag__close:hover{
     font-size: 12px
 }
+.share .el-upload--picture-card{
+    width: 78px;
+    height: 78px;
+    line-height: 78px;
+}
+.other .el-tag{
+    background: none;
+    color: black;
+    border: none;
+    font-size: 14px
+}
+.other .el-icon-close{
+    background: #c0c4ca;
+    color: white;
+    width: 18px;
+    height: 18px;
+    line-height: 18px
+}
+.other .el-icon-close:hover{
+    font-size: 6px;
+    background: #c0c4ca;
+}
+.share .el-form-item {
+    margin-bottom: 0;
+    height: 140px;
+}
+

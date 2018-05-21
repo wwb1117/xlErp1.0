@@ -6,10 +6,17 @@
             <div style="display:flex;justify-content: space-between">
                 <ul class="conent_list">
                     <li class="input">
-                        <i class="el-icon-search icon"></i>
-                        <input type="text" placeholder="请输入搜索内容">
+                        <el-input
+                            size="small"
+                            placeholder="请输入采购单号/供应商名称/采购单位"
+                            prefix-icon="el-icon-search"
+                            :style="{width: '378px'}"
+                            v-model="serchText">
+                        </el-input>
                     </li>
-                    <li class="find">搜索</li>
+                    <li class="find">
+                        <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    </li>
                     <!-- 高级搜索表单 -->
                     <li class="morefind">
                         <el-button type="text" @click="dialogFormVisible = true">高级搜索</el-button>
@@ -204,6 +211,8 @@ export default {
 
     data(){
         return {
+            // 搜索框内容
+            serchText: '',
             // 隐藏商品顶部弹出框
             hidden_show:false,
 
@@ -349,30 +358,6 @@ export default {
 #k .conent_hidden>li{
     margin-left: 30px
 }
-#k .input>input{
-    width: 378px;
-    height: 30px;
-    line-height: 30px;
-    text-indent: 30px;
-    border-radius: 8px;
-    border: 1px solid#dcdfe6;
-    outline: none
-}
-#k .input>input[type="text"]:focus{
-    border:1px solid #11c7ff;
-    border-radius: 8px
-}
-#k .find{
-    width: 60px;
-    height: 32px;
-    text-align: center;
-    line-height: 32px;
-    background: #11c7ff;
-    color: white;
-    margin-left: 20px;
-    border-radius: 8px;
-    cursor: pointer
-}
 #k .morefind{
     margin-left: 20px;
     height: 32px;
@@ -407,14 +392,6 @@ export default {
     height: 40px;
     line-height: 40px;
     margin: 0
-}
-#k .input{
-    position: relative
-}
-#k .input>.icon{
-    position: absolute;
-    left: 10px;
-    top:8px
 }
 /* 商品弹出框样式 */
 #k .text_y .el-dialog{

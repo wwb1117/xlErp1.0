@@ -3,15 +3,15 @@
         <!-- 顶部 -->
         <header class="brand_top">
             <p class='brand_title'>商品品牌</p>
-            <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:30px;margin-top:-3px">新增品牌</el-button>
+            <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:32px;margin-top:-3px">新增品牌</el-button>
             <!-- 新增表单内容 -->
             <el-dialog title="新增品牌" :visible.sync="dialogFormVisible">
                 <el-form :model="msg">
                     <el-form-item label="品牌名称" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" type='text' suffix-text='0/15'></el-input>
+                        <el-input v-model="msg.name" type='text' suffix-text='0/15'  size='small'></el-input>
                     </el-form-item>
                     <el-form-item label="关联分类" required :label-width="formLabelWidth">
-                        <el-select v-model="value" placeholder="请选择">
+                        <el-select v-model="value" placeholder="请选择"  size='small' style="width:320px">
                             <el-option
                             v-for="item in options"
                             :key="item.value"
@@ -34,7 +34,7 @@
                         </el-dialog>
                     </el-form-item>
                     <el-form-item label="排序" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" placeholder="数值越大越靠前"></el-input>
+                        <el-input v-model="msg.name" placeholder="数值越大越靠前"  size='small' ></el-input>
                     </el-form-item>
                     <el-form-item  label="控货品牌" :label-width="formLabelWidth">
                         <el-checkbox v-model="checked">勾选为控货品牌</el-checkbox>
@@ -57,12 +57,12 @@
             <div class="brand_box">
                 <div class='box_top'>
                      <el-input
-                        size="medium"
+                        size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
                         v-model="input">
                     </el-input>
-                    <el-button type="primary" size='medium' style="margin-left:10px">搜索</el-button>
+                    <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
                 </div>
                 <ul class="brand_list">
                     <li style="width:200px">品牌名称</li>

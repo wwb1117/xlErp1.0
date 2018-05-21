@@ -8,16 +8,18 @@
             <el-dialog title="新增规格" :visible.sync="dialogFormVisible">
                 <el-form :model="msg">
                     <el-form-item label="规格名称" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" type='text' suffix-text='0/15'></el-input>
+                        <el-input v-model="msg.name" type='text' suffix-text='0/15' size='small'></el-input>
                     </el-form-item>
                     <el-form-item label="规格值" required :label-width="formLabelWidth">
 
                     </el-form-item>
-                    <el-form-item label="备注" :label-width="formLabelWidth">
+                    <el-form-item label="备注" :label-width="formLabelWidth" >
                         <el-input
                             type="textarea"
                             :rows="3"
-                            v-model="textarea">
+                            v-model="textarea"
+                            size='small'
+                            >
                         </el-input>
                     </el-form-item>
                 </el-form>
@@ -31,12 +33,12 @@
             <div class="spec_box">
                 <div class='box_top'>
                      <el-input
-                        size="medium"
+                        size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
                         v-model="input">
                     </el-input>
-                    <el-button type="primary" size='medium' style="margin-left:10px">搜索</el-button>
+                    <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
                 </div>
                 <ul class="spec_list">
                     <li style="width:210px">规格名称</li>

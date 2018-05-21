@@ -31,12 +31,12 @@
             <div class="types_box">
                 <div class='box_top'>
                      <el-input
-                        size="medium"
+                        size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
                         v-model="input">
                     </el-input>
-                    <el-button type="primary" size='medium' style="margin-left:10px">搜索</el-button>
+                    <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
                 </div>
                 <ul class="types_list">
                     <li style="width:210px">包装名称</li>
