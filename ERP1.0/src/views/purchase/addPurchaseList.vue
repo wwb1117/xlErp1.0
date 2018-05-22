@@ -166,7 +166,7 @@
                     </el-form-item>
                     <br>
                     <el-form-item class="marker" :style="{width: '100%'}" prop="maker" label="备注">
-                        <el-input type="textarea" :rows="4" v-model="addFormData.maker" placeholder="请输入制单人"></el-input>
+                        <el-input type="textarea" :rows="4" v-model="addFormData.maker" placeholder="请输入备注"></el-input>
                     </el-form-item>
                 </div>
             </el-form>
