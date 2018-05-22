@@ -186,4 +186,9 @@ input[type="file"] {
 .AEgoods_box .el-table th{
     padding: 0;
 }
-
+.more_img .el-tabs__item{
+    font-size: 16px;
+}
+.more_img .el-tabs__active-bar{
+    width: 65px;
+}
