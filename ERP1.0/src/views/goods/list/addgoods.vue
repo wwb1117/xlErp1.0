@@ -1,20 +1,17 @@
 <template>
     <section id='add' >
         <!-- 顶部面包屑 -->
-        <div class="add_top">
-            <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height:45px">
-                <el-breadcrumb-item :to="{ path: '/goods' }">商品列表</el-breadcrumb-item>
+        <header class="add_top">
+            <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height:45px;font-size:15px">
+                <el-breadcrumb-item :to="{ path: '/addGoods' }">商品列表</el-breadcrumb-item>
                 <el-breadcrumb-item>新增商品</el-breadcrumb-item>
             </el-breadcrumb>
-        </div>
+        </header>
         <!-- 主体内容 -->
         <section class="add_conent" >
             <div class="conent_box">
                 <div class="step">
-                    <el-steps :active="active" finish-status="success" simple style="background:#f5f5f5">
-                        <el-step title="1.编辑基本信息" ></el-step>
-                        <el-step title="2.设置商品参数" ></el-step>
-                    </el-steps>
+                    <bar :step-texts="testText" :step-nums="stepNums" :current-step="currentStep"></bar>
                 </div>
                 <ul style='margin:0' v-if='conent1'>
                     <!-- 商品title -->
@@ -48,7 +45,7 @@
                     <li class="msg_conent">
                         <el-form ref="form" :model="form" label-width="100px">
                             <el-form-item label="商品名称" required>
-                                <el-input v-model="form.name" size="small" placeholder="长度<64" style="width:700px"></el-input>
+                                <el-input v-model="form.name" size="small" placeholder="长度<64" style="width:688px"></el-input>
                             </el-form-item>
                             <el-form-item label="商品卖点" style="margin-bottom:35px">
                                 <el-input type="textarea" v-model="form.name" size="small" placeholder="长度<300" rows='2'></el-input>
@@ -56,53 +53,61 @@
                             <el-form-item label="购买提醒" style="margin-bottom:35px">
                                 <el-input type="textarea" v-model="form.name" size="small" placeholder="长度<300" rows='2'></el-input>
                             </el-form-item>
-                            <el-col :span='10'>
-                                <el-form-item label="商品条码" required >
-                                    <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
-                                </el-form-item>
+                            <el-col :span='24'>
+                                <el-col :span='6'>
+                                    <el-form-item label="商品条码" required >
+                                        <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span='6' style="margin-left:25px">
+                                    <el-form-item label="商品编码" required >
+                                        <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
+                                    </el-form-item>
+                                </el-col>
                             </el-col>
-                            <el-col :span='10'>
-                                <el-form-item label="商品条码" required >
-                                    <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
-                                </el-form-item>
+                            <el-col :span='24'>
+                                <el-col :span='6'>
+                                    <el-form-item label="商品品牌" required >
+                                        <el-select v-model="value" placeholder="请选择"  size='small'>
+                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span='6' style="margin-left:25px">
+                                    <el-form-item label="商品分类" required >
+                                        <el-select v-model="value" placeholder="请选择"  size='small'>
+                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
                             </el-col>
-                            <el-col :span='10'>
-                                <el-form-item label="商品品牌" required >
-                                    <el-select v-model="value" placeholder="请选择"  size='small'>
-                                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </el-form-item>
+                            <el-col :span='24'>
+                                <el-col :span='6'>
+                                    <el-form-item label="贸易类型" required >
+                                        <el-select v-model="value" placeholder="请选择"  size='small'>
+                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span='6' style="margin-left:25px">
+                                    <el-form-item label="建议零售价"  class="money">
+                                        <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
+                                    </el-form-item>
+                                </el-col>
                             </el-col>
-                            <el-col :span='10'>
-                                <el-form-item label="商品分类" required >
-                                    <el-select v-model="value" placeholder="请选择"  size='small'>
-                                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span='10'>
-                                <el-form-item label="贸易类型" required >
-                                    <el-select v-model="value" placeholder="请选择"  size='small'>
-                                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span='10'>
-                                <el-form-item label="建议零售价"  class="money">
-                                    <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span='10'>
-                                <el-form-item label="单位" >
-                                    <el-select v-model="value" placeholder="请选择"  size='small'>
-                                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span='10'>
-                                <el-form-item label="保质期" required >
-                                    <el-input v-model="form.name" size="small" placeholder="长度<64" suffix="月"></el-input>
-                                </el-form-item>
+                            <el-col :span='24'>
+                                <el-col :span='6'>
+                                    <el-form-item label="单位" >
+                                        <el-select v-model="value" placeholder="请选择"  size='small'>
+                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span='6' style="margin-left:25px">
+                                    <el-form-item label="保质期" required >
+                                        <el-input v-model="form.name" size="small" placeholder="长度<64" suffix="月"></el-input>
+                                    </el-form-item>
+                                </el-col>
                             </el-col>
                         </el-form>
                     </li>
@@ -145,19 +150,21 @@
                     <!-- 商品属性 -->
                     <li class="good_attr">
                         <div class="add_attr">
-                            <el-form ref="attr" :model="attr" label-width="100px" >
+                            <el-form ref="attr" label-width="100px" >
                                 <el-form-item label="商品规格">
-                                    <el-col :span="6">
-                                        <el-input v-model="attr.name" size="small" placeholder="长度<64" style="width:700px"></el-input>
-                                    </el-col>
-                                    <el-col :span="18">
-                                        <el-input v-model="attr.name" size="small" placeholder="长度<64" style="width:700px"></el-input>
+                                    <el-col :span="24"  v-for='(attrnum,index) in attr' :key="index" >
+                                        <el-col :span="2">
+                                            <el-input size="small" placeholder="属性名" v-model="attrnum.name" ref="input"></el-input>
+                                        </el-col>
+                                        <el-col :span="21   " style="margin-left:10px">
+                                            <el-input size="small" placeholder="属性值" v-model="attrnum.region" ></el-input>
+                                        </el-col>
                                     </el-col>
                                 </el-form-item>
                             </el-form>
                         </div>
                         <div class="add_button">
-                            <el-button type="text">添加属性</el-button>
+                            <el-button type="text" @click="pushAttr">添加属性</el-button>
                         </div>
                     </li>
                     <!-- 商品主图 -->
@@ -253,16 +260,16 @@
                                         list-type="picture-card"
                                         :on-preview="handlePictureCardPreview"
                                         :on-remove="handleRemove">
-                                        <i class="el-icon-plus"></i>
+                                        <i class="el-icon-plus" style="font-size:16px"></i>
                                     </el-upload>
                                     <!-- action上传地址 -->
                                     <el-dialog :visible.sync="dialogVisible">
                                         <img width="100%" :src="dialogImageUrl" alt="">
                                     </el-dialog>
                                 </div>
-                                <p>最多上传9张图片，建议尺寸为：640px X 640px</p>
+                                <p style="color:#a1a4a4">最多上传9张图片，建议尺寸为：640px X 640px</p>
                             </el-form-item>
-                            <el-form-item label="分享内容" style="margin-top:120px">
+                            <el-form-item label="分享内容">
                                 <div style="background:white">
                                     <tinymce></tinymce>
                                 </div>
@@ -289,8 +296,8 @@
                             <el-form-item >
                                 <el-tag size="small" closable>供应商分组</el-tag>
                             </el-form-item>
-                            <el-form-item label="商品热度">
-                                <el-input v-model="goodhot" size='small'></el-input>
+                            <el-form-item label="商品热度" >
+                                <el-input v-model="goodhot" size='small' style="width:215px"></el-input>
                             </el-form-item>
                             <el-form-item label="减库存设置">
                                 <el-radio v-model="delnum" label="1">下单减库存</el-radio>
@@ -315,17 +322,30 @@
                     </li>
                 </ul>
             </div>
-
         </section>
     </section>
 
 </template>
 <script>
 import tinymce from '@/components/tinymce'
+import bar from '@/components/stepBar'
+
+let goodAttr =
+
+{
+    name: '',
+    region: ''
+}
 
 export default {
     data () {
         return {
+
+            // 步骤条
+            testText: ['1. 编辑基本信息', '2. 设置商品参数'],
+            stepNums: 2,
+            currentStep: 1,
+
             // 内容
             conent1: true,
             conent2: false,
@@ -373,16 +393,12 @@ export default {
                 desc: ''
             },
             // 属性表单
-            attr: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
+            attr: [
+                {
+                    name: '',
+                    region: ''
+                }
+            ],
             // 商品主图
             dialogImageUrl: '',
             dialogVisible: false,
@@ -410,15 +426,13 @@ export default {
     methods:{
         // 下一步
         next() {
-            if (this.active++ > 1) {
-                this.active = 1
-            }
+            this.currentStep = 2
             this.conent1 = false
             this.conent2 = true
             window.scroll(0, 0)
         },
         prev() {
-            this.active = 1
+            this.currentStep = 1
             this.conent1 = true
             this.conent2 = false
             window.scroll(0, 0)
@@ -435,9 +449,8 @@ export default {
             this.dialogVisible = true;
         },
         reset() {
-            this.reload()
+            this.$router.reload()
         },
-
         add() {
             this.shu.push('1')
         },
@@ -446,11 +459,15 @@ export default {
                 this.shu.splice(index, 1)
             }
 
+        },
+        pushAttr() {
+            this.attr.push(goodAttr);
         }
 
     },
     components: {
-        tinymce
+        tinymce,
+        bar
     }
 
 }
@@ -477,7 +494,7 @@ export default {
 .add_top{
     height: 45px;
     width: 100%;
-    padding: 0 15px;
+    padding: 0 30px;
 }
 /* 主体 */
 .add_conent{
@@ -513,11 +530,17 @@ export default {
     padding: 10px 40px;
     height: 480px
 }
-.el-form-item{
+.msg_conent .el-form-item{
     height: 40px;
 }
-.el-textarea{
-    width: 620px;
+.msg_conent .el-textarea{
+    width: 688px;
+}
+.msg_conent .el-input{
+    width: 258px;
+}
+.msg_conent .el-select{
+    width: 258px;
 }
 /* 商品规格 */
 .standard{
@@ -531,7 +554,8 @@ export default {
     padding: 10px;
 }
 .add_small_standard{
-    background: #f5f5f5
+    background: #f5f5f5;
+    height: 65px
 }
 .el-upload__input{
     display: none
@@ -551,7 +575,7 @@ export default {
 }
 /* 商品主图 */
 .pic_up{
-     background: white;
+    background: white;
     padding: 10px 40px;
 }
 /* 控制步骤 */
@@ -586,5 +610,32 @@ export default {
     padding: 10px 40px;
     height: 400px
 }
+.share .el-upload--picture-card{
+    width: 78px;
+    height: 78px;
+    line-height: 78px;
+}
+.other .el-tag{
+    background: none;
+    color: black;
+    border: none;
+    font-size: 14px
+}
+.other .el-icon-close{
+    background: #c0c4ca;
+    color: white;
+    width: 18px;
+    height: 18px;
+    line-height: 18px
+}
+.other .el-icon-close:hover{
+    font-size: 6px;
+    background: #c0c4ca;
+}
+.share .el-form-item {
+    margin-bottom: 0;
+    height: 140px;
+}
+
 </style>
 

@@ -1,28 +1,21 @@
 <template>
     <div>
          <div class="model_topcol">
-            <span style="color: #409EFF">采购单</span>
-            <span> - 新增采购单</span>
+            <span style="color: #409EFF">采购退货</span>
+            <span> - 新增退货单</span>
         </div>
         <div class="head color_gray">
-            选择商品
+            选择关联采购单
             <i style="float: right; line-height: 60px" class="el-icon-close"></i>
         </div>
         <div class="banner">
             <el-form :inline="true" :model="searchData" label-position="right" size="small" label-width="80px">
-                <el-form-item label="商品分类">
-                    <el-select v-model="searchData.goodsType" placeholder="请输入商品分类">
-                        <el-option label="全部" value=""></el-option>
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item>
                     <el-input
                         size="small"
-                        placeholder="请输入采购单号/供应商名称/采购单位"
+                        placeholder="请输入采购单号"
                         prefix-icon="el-icon-search"
-                        :style="{width: '378px'}"
+                        :style="{width: '378px', marginLeft: '17px'}"
                         v-model="serchText">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
@@ -78,7 +71,7 @@
             </el-table>
         </div>
         <div class="model_footer">
-            <el-button style="width: 90px" type="primary" size="small">确定</el-button>
+            <el-button @click="saveBtnEvent" style="width: 90px" type="primary" size="small">确定</el-button>
             <el-button @click="canselBtnEvent" style="width: 90px" size="small">取消</el-button>
             <el-pagination
                 @size-change="handleSizeChange"
@@ -101,6 +94,7 @@ export default {
                 goodsType: '',
                 serchText: ''
             },
+            currentPage: 2,
             tableData: [
                 {
                     good: {
@@ -133,7 +127,18 @@ export default {
     methods:{
         mountFormat(data){
             data.row.mount = data.row.mount.replace(/[^\d\.]/g, '')
+        },
+        handleSizeChange(){
+
+        },
+        handleCurrentChange(){
+
+        },
+        saveBtnEvent(){
+
         }
+
+
     },
     created(){},
     mounted(){}

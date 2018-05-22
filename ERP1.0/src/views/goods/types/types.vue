@@ -27,16 +27,16 @@
                 </div>
             </el-dialog>
         </header>
-        <section class="types_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-            <div class="types_box">
+        <section class="types_conent" >
+            <div class="types_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
                 <div class='box_top'>
                      <el-input
-                        size="medium"
+                        size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
                         v-model="input">
                     </el-input>
-                    <el-button type="primary" size='medium' style="margin-left:10px">搜索</el-button>
+                    <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
                 </div>
                 <ul class="types_list">
                     <li style="width:210px">包装名称</li>
@@ -44,7 +44,7 @@
                     <li style="width:300px">备注</li>
                     <li style="width:110px">操作</li>
                 </ul>
-                <ul class="types_list types_conent">
+                <ul class="types_list types_text">
                     <li style="width:210px">罐装</li>
                     <li style="width:500px">2.4.6.8罐</li>
                     <li style="width:300px">这是备注信息</li>
@@ -175,11 +175,12 @@ export default {
 /* 内容 */
 .types_conent{
     padding: 10px;
-    background: #f5f5f5
+    background: #f5f5f5;
 }
 .types_box{
     border: 1px solid #e6e9eb;
-    color: #5e6161
+    color: #5e6161;
+    background: white
 }
 .box_top{
     display: flex;
@@ -200,18 +201,22 @@ export default {
     border-bottom: 1px solid #e5e8e8;
     background: #f5f5f5
 }
-.types_conent{
+.types_text{
+    background: white;
     font-weight: 500;
     border-color:  #d6e3ec;
-    background: white
 }
 /* 底部 */
 .types_footer{
     border-top:1px solid #e5e8e8;
     position: relative;
+    padding: 11px 30px;
+    margin-top: -23px;
+    background: white;
 }
 .types_footer .block{
     position: absolute;
     right: 30px;
+    top:15px
 }
 </style>

@@ -14,7 +14,7 @@
             <div style="float: right">
                 <el-button size="small" :style="{width: '90px'}">导出</el-button>
                 <el-button size="small" :style="{width: '90px'}">打印</el-button>
-                <el-button size="small" :style="{width: '90px'}" type="primary">作废</el-button>
+                <el-button size="small" @click="invalidBtnEvent" :style="{width: '90px'}" type="primary">作废</el-button>
             </div>
         </div>
         <div class="banner">
@@ -99,6 +99,29 @@
                 <span class="title_data">2018-05-18 16:34</span> -->
             </div>
         </div>
+        <el-dialog
+            title="作废记录"
+            :visible.sync="dialogVisible"
+            :close-on-click-modal="false"
+            width="30%"
+            >
+
+            <div>
+                <el-input
+                    type="textarea"
+                    placeholder="请填写作废原因,最多200字"
+                    :maxlength="200"
+                    v-model="invalidRecord">
+                </el-input>
+            </div>
+
+
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="dialogSureEvent">确 定</el-button>
+            </span>
+       </el-dialog>
+
 
 
     </div>
@@ -108,6 +131,8 @@
 export default {
     data(){
         return {
+            dialogVisible: false,
+            invalidRecord: '',
             formData: {
                 inrepository: '',
                 purchaseCom: '',
@@ -137,6 +162,15 @@ export default {
     methods:{
         unitTatalEvent (data){
             data.row.itemRepositoryNum = data.row.itemRepositoryNum.replace(/[^\d\.]/g, '')
+        },
+        invalidBtnEvent(){
+            this.dialogVisible = true
+        },
+        dialogSureEvent(){
+            this.$router.push({
+                path: '/invalidRecord'
+            })
+            this.dialogVisible = false
         }
     },
     created(){},

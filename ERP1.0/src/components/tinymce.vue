@@ -27,7 +27,7 @@ export default {
                 language: 'zh_CN',
                 skin_url: '../static/tinymce/skins/lightgray',
                 height: 300,
-                plugins: 'link lists image code table colorpicker textcolor wordcount contextmenu',
+                plugins: ' lists image code table colorpicker textcolor wordcount contextmenu',
                 toolbar:
                 'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | undo redo | link unlink image code | removeformat',
                 branding: false
@@ -40,3 +40,8 @@ export default {
     components: {Editor}
 }
 </script>
+<style>
+
+
+</style>
+

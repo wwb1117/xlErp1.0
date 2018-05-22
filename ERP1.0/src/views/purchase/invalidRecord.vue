@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="model_topcol">
-            <span>采购单</span>
+            <span style="color: #409EFF">采购单</span>
+            <span> - 作废记录</span>
             <div>
-                <el-button @click="invalidRecordEvent" size="small">作废记录</el-button>
-                <el-button @click="importEvent" size="small">导入采购单</el-button>
-                <el-button type="primary" @click="purchaseAddEvent" size="small">新增采购单</el-button>
+                <el-button style="width: 90px" size="small">导出</el-button>
+                <el-button style="width: 90px" size="small">打印</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -62,7 +62,7 @@
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="采购时间">
+                        <el-form-item label="作废时间">
                             <el-date-picker
                                 v-model="superFormData.purchaseDate"
                                 type="daterange"
@@ -105,106 +105,30 @@
                     </ul>
                 </div>
 
-                <el-table
-                    :data="tableData"
-                    :height="$store.state.home.modelContentHeight - 83"
-                    ref="purchaseListTable"
-                    @selection-change="handleSelectionChange"
-                    style="width: 100%">
-                    <el-table-column
-                        type="selection"
-                        width="55">
-                    </el-table-column>
-                    <el-table-column
-                        prop="purchaseList"
-                        label="采购单号"
-                        >
-                    </el-table-column>
-                    <el-table-column
-                        prop="supplier"
-                        label="供应商"
-                       >
-                    </el-table-column>
-                    <el-table-column
-                        prop="purchaseCompany"
-                        label="采购单位">
-                    </el-table-column>
-                    <el-table-column
-                        prop="inRepository"
-                        label="入库仓库">
-                    </el-table-column>
-                    <el-table-column
-                        prop="purchaseRMB"
-                        label="采购金额">
-                    </el-table-column>
-                    <el-table-column
-                        prop="makeListMan"
-                        label="制单人">
-                    </el-table-column>
-                    <el-table-column
-                        prop="purchaseMan"
-                        label="采购员">
-                    </el-table-column>
-                    <el-table-column
-                        prop="purchaseDate"
-                        label="采购时间">
-                    </el-table-column>
-                    <el-table-column
-                        prop="inState"
-                        label="入库状态">
-                    </el-table-column>
-                    <el-table-column
-                        prop="reviewState"
-                        label="审核状态">
-                    </el-table-column>
-                    <el-table-column
-                        prop="prop"
-                        width="150"
-                        label="操作">
-                         <template slot-scope="scope">
-                            <el-button
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            入库
-                            </el-button>
-                            <el-button
-                            :style="{marginRight: '10px'}"
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            编辑
-                            </el-button>
-                            <el-dropdown :hide-timeout="50" @command="dropdownSelectEvent" trigger="click">
-                                <span class="el-dropdown-link">
-                                    更多<i class="el-icon-arrow-down el-icon--right"></i>
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item command="1">查看</el-dropdown-item>
-                                    <el-dropdown-item command="4">打印</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <div class="checkBox_wrap">
+                    <el-checkbox v-model="totalChecked">全选</el-checkbox>
+                </div>
+
+                <div :style="{height: $store.state.home.modelContentHeight-124 + 'px'}" class="invalidRecord_wrap">
+                    <item-record></item-record>
+                    <item-record></item-record>
+                </div>
+
+
             </div>
         </div>
         <div class="model_footer">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
-            </el-pagination>
+            <el-button size="small" style="width: 90px; margin-left: 25px;">返 回</el-button>
         </div>
     </div>
 </template>
 
 <script>
+import itemRecord from 'views/purchase/childComponents/invalidRecord'
 export default {
+    components: {
+        itemRecord
+    },
     data(){
         return {
             serchText: '',
@@ -225,48 +149,8 @@ export default {
                 reviewState: '已审核',
                 prop: ''
             },
-            isExportShow: false,
-            tableData: [
-                {
-                    purchaseList: '7758521',
-                    supplier: '布加迪',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '888,000,00',
-                    makeListMan: '李明珠',
-                    purchaseMan: '官人',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                },
-                {
-                    purchaseList: '6969996',
-                    supplier: '迈巴赫',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '874,000,00',
-                    makeListMan: '张作霖',
-                    purchaseMan: '客官',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                },
-                {
-                    purchaseList: '5555587',
-                    supplier: '法拉利',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '562,000,00',
-                    makeListMan: '段祺瑞',
-                    purchaseMan: '小二',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                }
-            ]
+            isExportShow: false
+
         }
     },
     computed:{},
@@ -306,16 +190,6 @@ export default {
                     path: '/purchaseListDetail'
                 })
             }
-        },
-        importEvent(){
-            this.$router.push({
-                path: '/importPurchase'
-            })
-        },
-        invalidRecordEvent(){
-            this.$router.push({
-                path: '/invalidRecord'
-            })
         }
 
     },
@@ -363,10 +237,22 @@ export default {
     position: relative;
 }
 .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-    width: 390px;
+    width: 360px;
 }
 .el-form{
     color: #636365;
 }
-
+.model_footer{
+    text-align: left;
+    padding-top: 10px;
+}
+.checkBox_wrap{
+    height: 40px;
+    background: #f5f5f5;
+    line-height: 40px;
+    padding-left: 17px;
+}
+.invalidRecord_wrap{
+    overflow: auto;
+}
 </style>

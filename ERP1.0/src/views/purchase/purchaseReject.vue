@@ -1,11 +1,9 @@
 <template>
     <div>
         <div class="model_topcol">
-            <span>采购单</span>
+            <span>采购退货</span>
             <div>
-                <el-button @click="invalidRecordEvent" size="small">作废记录</el-button>
-                <el-button @click="importEvent" size="small">导入采购单</el-button>
-                <el-button type="primary" @click="purchaseAddEvent" size="small">新增采购单</el-button>
+                <el-button type="primary" @click="addRejectEvent" size="small">新增退货单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -16,14 +14,14 @@
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
                     <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
-                        <el-form-item label="采购单号">
-                            <el-input v-model="superFormData.purchaseList" placeholder="请输入采购单号"></el-input>
+                        <el-form-item label="退货单号">
+                            <el-input v-model="superFormData.rejectNo" placeholder="请输入采购单号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="经办人">
+                            <el-input v-model="superFormData.leaderMan" placeholder="请输入经办人"></el-input>
                         </el-form-item>
                         <el-form-item label="制单人">
                             <el-input v-model="superFormData.makeListMan" placeholder="请输入制单人"></el-input>
-                        </el-form-item>
-                        <el-form-item label="采购员">
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入采购员"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item label="供应商">
@@ -40,7 +38,7 @@
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="入库仓库">
+                        <el-form-item label="退货仓库">
                             <el-select v-model="superFormData.inRepository" placeholder="请输入入库仓库">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
@@ -48,13 +46,6 @@
                             </el-select>
                         </el-form-item>
                         <br>
-                        <el-form-item label="入库状态">
-                            <el-select v-model="superFormData.inState" placeholder="请输入入库状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item>
                         <el-form-item label="审核状态">
                             <el-select v-model="superFormData.reviewState" placeholder="请输入审核状态">
                                 <el-option label="全部" value=""></el-option>
@@ -83,7 +74,7 @@
                 <div v-show="!isExportShow" class="purchaseList_title">
                     <el-input
                         size="small"
-                        placeholder="请输入采购单号/供应商名称/采购单位"
+                        placeholder="请输入退货单号"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
                         v-model="serchText">
@@ -117,7 +108,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="purchaseList"
-                        label="采购单号"
+                        label="退货单号"
                         >
                     </el-table-column>
                     <el-table-column
@@ -131,11 +122,11 @@
                     </el-table-column>
                     <el-table-column
                         prop="inRepository"
-                        label="入库仓库">
+                        label="退货仓库">
                     </el-table-column>
                     <el-table-column
                         prop="purchaseRMB"
-                        label="采购金额">
+                        label="退货金额">
                     </el-table-column>
                     <el-table-column
                         prop="makeListMan"
@@ -143,15 +134,11 @@
                     </el-table-column>
                     <el-table-column
                         prop="purchaseMan"
-                        label="采购员">
+                        label="经办人">
                     </el-table-column>
                     <el-table-column
                         prop="purchaseDate"
-                        label="采购时间">
-                    </el-table-column>
-                    <el-table-column
-                        prop="inState"
-                        label="入库状态">
+                        label="退货时间">
                     </el-table-column>
                     <el-table-column
                         prop="reviewState"
@@ -175,15 +162,12 @@
                             size="small">
                             编辑
                             </el-button>
-                            <el-dropdown :hide-timeout="50" @command="dropdownSelectEvent" trigger="click">
-                                <span class="el-dropdown-link">
-                                    更多<i class="el-icon-arrow-down el-icon--right"></i>
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item command="1">查看</el-dropdown-item>
-                                    <el-dropdown-item command="4">打印</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
+                            <el-button
+                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
+                            type="text"
+                            size="small">
+                            查看
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -219,7 +203,7 @@ export default {
                 inRepository: '402',
                 purchaseRMB: '888,000,00',
                 makeListMan: '李明珠',
-                purchaseMan: '官人',
+                leaderMan: '官人',
                 purchaseDate: '2018-05-16',
                 inState: '已入库',
                 reviewState: '已审核',
@@ -307,14 +291,9 @@ export default {
                 })
             }
         },
-        importEvent(){
+        addRejectEvent(){
             this.$router.push({
-                path: '/importPurchase'
-            })
-        },
-        invalidRecordEvent(){
-            this.$router.push({
-                path: '/invalidRecord'
+                path: '/addPurchaseReject'
             })
         }
 

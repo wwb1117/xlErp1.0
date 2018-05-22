@@ -127,6 +127,7 @@
         <el-dialog
             title="入库确认"
             :visible.sync="dialogVisible"
+            :close-on-click-modal="false"
             width="30%"
             >
 
