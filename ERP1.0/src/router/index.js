@@ -19,7 +19,11 @@ import purchaseReject from '@/views/purchase/purchaseReject'
 import addPurchaseReject from '@/views/purchase/addPurchaseReject'
 import chooseRelePurchaseList from '@/views/purchase/chooseRelePurchaseList'
 import addPurchaseRejectSuccess from '@/views/purchase/addPurchaseRejectSuccess'
-
+import purchaseCompany from '@/views/purchase/purchaseCompany'
+import editPurchaseCompany from '@/views/purchase/editPurchaseCompany'
+import addPurchaseCompany from '@/views/purchase/addPurchaseCompany'
+import lookPurchaseCompany from '@/views/purchase/lookPurchaseCompany'
+import purchaseSupplier from '@/views/purchase/purchaseSupplier'
 
 
 // 商品
@@ -56,6 +60,12 @@ var router = new Router({
                 {name: "新增退货单", path: '/addPurchaseReject', component: addPurchaseReject},
                 {name: "选择关联采购单", path: '/chooseRelePurchaseList', component: chooseRelePurchaseList},
                 {name: "已完成退货单", path: '/addPurchaseRejectSuccess', component: addPurchaseRejectSuccess},
+                {name: "采购单位", path: '/purchaseCompany', component: purchaseCompany},
+                {name: "新增采购单位", path: '/addPurchaseCompany', component: addPurchaseCompany},
+                {name: "编辑采购单位", path: '/editPurchaseCompany', component: editPurchaseCompany},
+                {name: "采购单位详情", path: '/lookPurchaseCompany', component: lookPurchaseCompany},
+                {name: "供应商", path: '/purchaseSupplier', component: purchaseSupplier},
+
 
 
                 /*************************** 商品模块*************************************/

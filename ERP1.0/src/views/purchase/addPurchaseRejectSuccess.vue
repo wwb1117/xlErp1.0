@@ -28,7 +28,7 @@
                 <div class="banner">
                     商品信息
                 </div>
-                <div class="table_wrap" :style="{height: $store.state.home.modelContentHeight - 125 + 'px'}">
+                <div class="table_wrap" :style="{height: $store.state.home.modelContentHeight - 145 + 'px'}">
                     <el-table
                         :data="goodsInfoData"
                         show-summary
@@ -161,5 +161,19 @@ export default {
 .table_wrap{
     padding: 10px;
     overflow: auto;
+}
+.table_bottom{
+    margin-top: 20px;
+}
+.table_bottom_item{
+    height: 35px;
+    line-height: 35px;
+    font-weight: 600;
+    color: #606365;
+}
+.table_bottom_title{
+    display: inline-block;
+    width: 70px;
+    text-align: right;
 }
 </style>
