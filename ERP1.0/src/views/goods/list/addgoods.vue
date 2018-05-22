@@ -10,7 +10,7 @@
         <!-- 主体内容 -->
         <section class="add_conent" >
             <div class="conent_box">
-                <div class="step">
+                <div class="step" style="height:80px">
                     <bar :step-texts="testText" :step-nums="stepNums" :current-step="currentStep"></bar>
                 </div>
                 <ul style='margin:0' v-if='conent1'>
@@ -170,7 +170,8 @@
                                                 title="选择图片"
                                                 :visible.sync="updata"
                                                 width="30%"
-                                                :before-close="handleClose">
+                                                >
+                                                <!-- :before-close="handleClose" -->
                                                 <el-button type="primary" @click="updata = false">确 定</el-button>
                                                 <el-button @click="updata = false">取 消</el-button>
                                             </el-dialog>
@@ -480,22 +481,27 @@ export default {
             ],
             specmore:[
                 {
+                    id: '',
                     color: 'blue',
                     size: 'xl'
                 },
                 {
+                    id: '',
                     color: 'red',
                     size: 'xl'
                 },
                 {
+                    id: '',
                     color: 'blue',
                     size: 'xll'
                 },
                 {
+                    id: '',
                     color: 'yellow',
                     size: 'xlll'
                 },
                 {
+                    id: '',
                     color: 'yellow',
                     size: 'xlll'
                 }
@@ -574,14 +580,18 @@ export default {
                 name: '红色',
                 age: '',
                 region: '',
-                data: ''
+                data: '',
+                color: 'blue'
             }
+
+            // // 添加规格的时候，循环添加的对象，如果有和当前已经有的对象相同熟悉。那么添加到当前已经有的对象后面。如果没有直接添
 
             this.spec.push(obj)
         },
         // 规格明细
         objectSpanMethod({ row, column, rowIndex, columnIndex }) {
             console.log(row.color)
+
         }
     },
     components: {
@@ -697,7 +707,7 @@ export default {
     display: none
 }
 .standard_p{
-    margin: -50px 0 30px 100px;
+    margin: -10px 0 30px 100px;
     color: #5f6264;
 }
 .updata{
