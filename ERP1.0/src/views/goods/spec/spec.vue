@@ -27,7 +27,7 @@
                     <li style="width:500px">sm,xl,l</li>
                     <li style="width:300px">这是备注信息</li>
                     <li style="width:110px">
-                        <el-button type='text'>编辑</el-button>
+                        <el-button type='text' @click='gotoEdit'>编辑</el-button>
                         <el-button type="text" @click="del = true">删除</el-button>
                         <el-dialog
                             title="温馨提示"
@@ -119,6 +119,9 @@ export default {
         },
         openAddspec() {
             this.$router.push('addSpec')
+        },
+        gotoEdit() {
+            this.$router.push('editSpec')
         }
     }
 }

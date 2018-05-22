@@ -2,30 +2,8 @@
     <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
         <!-- 顶部 -->
         <header class="types_top">
-            <p class='types_title'>商品类型</p>
-            <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:30px;margin-top:-3px">新增类型</el-button>
-            <!-- 新增表单内容 -->
-            <el-dialog title="新增包装类型" :visible.sync="dialogFormVisible">
-                <el-form :model="msg">
-                    <el-form-item label="包装类型" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" type='text' suffix-text='0/15'></el-input>
-                    </el-form-item>
-                    <el-form-item label="规格值" required :label-width="formLabelWidth">
-
-                    </el-form-item>
-                    <el-form-item label="备注" :label-width="formLabelWidth">
-                        <el-input
-                            type="textarea"
-                            :rows="3"
-                            v-model="textarea">
-                        </el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false" size='medium'>取 消</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false" size='medium'>保 存</el-button>
-                </div>
-            </el-dialog>
+            <p class='types_title'>包装类型</p>
+            <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='openAddtypes'>新增类型</el-button>
         </header>
         <section class="types_conent" >
             <div class="types_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -49,7 +27,7 @@
                     <li style="width:500px">2.4.6.8罐</li>
                     <li style="width:300px">这是备注信息</li>
                     <li style="width:110px">
-                        <el-button type='text'>编辑</el-button>
+                        <el-button type='text' @click='gotoEdit'>编辑</el-button>
                         <el-button type="text" @click="del = true">删除</el-button>
                         <el-dialog
                             title="温馨提示"
@@ -149,6 +127,12 @@ export default {
                     done();
                 })
                 .catch(_ => {});
+        },
+        openAddtypes() {
+            this.$router.push('addTypes')
+        },
+        gotoEdit() {
+            this.$router.push('editTypes')
         }
     }
 }

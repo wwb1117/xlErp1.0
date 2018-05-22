@@ -128,6 +128,9 @@
                         prop='goodconent'
                         width="300"
                         >
+                        <template slot-scope="scope">
+                            <div @click="openGoods(scope)">{{ scope.row.goodconent }}</div>
+                        </template>
                     </el-table-column>
                     <!-- 条码 -->
                     <el-table-column
@@ -272,6 +275,22 @@ export default {
                     goodnum: '02010001',
                     goodtype: '尿不湿-纸尿裤',
                     goodlogo: 'MYKIYU'
+                },
+                {
+                    goodimg: '',
+                    goodconent: '英国三只切纸尿裤',
+                    goodcode: '6232135465123165',
+                    goodnum: '02010001',
+                    goodtype: '尿不湿-纸尿裤',
+                    goodlogo: 'MYKIYU'
+                },
+                {
+                    goodimg: '',
+                    goodconent: '英国三只切纸尿裤',
+                    goodcode: '6232135465123165',
+                    goodnum: '02010001',
+                    goodtype: '尿不湿-纸尿裤',
+                    goodlogo: 'MYKIYU'
                 }
             ],
             selectTableData: []
@@ -318,6 +337,9 @@ export default {
             } else {
                 this.hidden_show = false
             }
+        },
+        openGoods(data) {
+            this.$router.push('goodsDetails')
         }
     }
 }

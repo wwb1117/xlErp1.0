@@ -1,20 +1,20 @@
 <template>
     <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
-        <header class="addTypes_header">
+        <header class="editTypes_header">
             <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height:45px;font-size:15px">
                 <el-breadcrumb-item :to="{ path: '/goodsTypes' }">商品规格</el-breadcrumb-item>
                 <el-breadcrumb-item>新增规格</el-breadcrumb-item>
             </el-breadcrumb>
         </header>
-        <section class="addTypes_conent" >
-            <div class="addTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-                <el-form ref="types" :model="types" label-width="100px">
+        <section class="editTypes_conent" >
+            <div class="editTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+                <el-form ref="types" :model="edit" label-width="100px">
                     <el-form-item label="规格名称" required>
-                        <el-input v-model="types.name" style="width:338px" size='small'></el-input>
+                        <el-input v-model="edit.name" style="width:338px" size='small'></el-input>
                     </el-form-item>
-                    <el-form-item label="规格值" required :style="{height: (typesNum.length)*50 + 'px'}">
+                    <el-form-item label="规格值" required :style="{height: (editNum.length)*50 + 'px'}">
                         <el-table
-                            :data='typesNum'
+                            :data='editNum'
                             border
                             style="width:658px"
                         >
@@ -22,20 +22,20 @@
                                 width='55'
                             >
                                 <template slot-scope="scope">
-                                    <div class="icon_box" style="height:50px;line-height:50px">
-                                        <i class="el-icon-plus" style="font-weight:700" @click="addTypesnum(scope)"></i>
-                                        <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(scope)"></i>
+                                    <div class="icon_box" style="height:50px;line-height:50px;margin-left:10px">
+                                        <i class="el-icon-plus" style="font-weight:700" @click="editTypesnum"></i>
+                                        <!-- <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(edit)"></i> -->
                                     </div>
                                 </template>
                             </el-table-column>
                             <!-- 规格值 -->
                             <el-table-column
-                                prop="typesname"
+                                prop="editname"
                                 label="规格值"
                                 width="410">
                                 <template slot-scope="scope">
                                     <div>
-                                        <el-input v-model="typesNum.typesname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
+                                        <el-input v-model="editNum.editname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -44,7 +44,7 @@
                                 prop="num"
                                 label="含商品数量">
                                 <template slot-scope="scope">
-                                    <el-input v-model="typesNum.num" size='small'></el-input>
+                                    <el-input v-model="editNum.num" size='small'></el-input>
                                 </template>
                             </el-table-column>
                             <!-- 是否启用 -->
@@ -54,7 +54,7 @@
                                 width="80">
                                 <template slot-scope="scope">
                                     <el-switch
-                                        v-model="typesNum.value2"
+                                        v-model="editNum.value2"
                                         active-color="#13ce66"
                                         inactive-color="#ff4949">
                                     </el-switch>
@@ -68,14 +68,14 @@
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                            v-model="types.text"
+                            v-model="edit.text"
                         >
                         </el-input>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
-        <footer class="addTypes_footer">
+        <footer class="editTypes_footer">
             <el-button type="primary" size='small'>保存</el-button>
             <el-button size='small' @click='returnPrev'>取消</el-button>
         </footer>
@@ -86,15 +86,15 @@ export default {
     data() {
         return {
             // 规格名称、备注
-            types: {
+            edit: {
                 name: '',
                 text: ''
             },
             // 规格值
 
-            typesNum: [
+            editNum: [
                 {
-                    typesname: '',
+                    editname: '',
                     bolean: '',
                     num: '',
                     value1: true,
@@ -105,22 +105,22 @@ export default {
         }
     },
     methods: {
-        addTypesnum() {
+        editTypesnum() {
             let obj = {
-                typesname: '',
+                editname: '',
                 bolean: '',
                 num: '',
                 value1: true,
                 value2: true
             }
 
-            this.typesNum.push(obj)
+            this.editNum.push(obj)
         },
-        removeTypesnum(data) {
-            if (this.typesNum.length > 1){
-                this.typesNum.splice(data.$index, 1)
-            }
-        },
+        // removeTypesnum(data) {
+        //     if (this.typesNum.length > 1){
+        //         this.typesNum.splice(data.$index, 1)
+        //     }
+        // },
         returnPrev() {
             this.$router.push('goodsTypes')
         }
@@ -130,34 +130,34 @@ export default {
 </script>
 <style scoped>
 /* 顶部 */
-.addTypes_header{
+.editTypes_header{
     height: 45px;
     width: 100%;
     padding: 0 30px;
 
 }
 /* 内容 */
-.addTypes_conent{
+.editTypes_conent{
     padding:10px;
     background: #f5f5f5;
     border-top:1px solid #e6e9e9
 }
-.addTypes_box{
+.editTypes_box{
     border: 1px solid #e6e9eb;
     color: #5e6161;
     background: white;
     padding: 30px;
 }
-.addTypes_box .el-form-item{
+.editTypes_box .el-form-item{
     height: 50px
 }
-.addTypes_box .el-form-item:nth-child(3){
+.editTypes_box .el-form-item:nth-child(3){
     margin-top:60px
 }
 
 
 /* 底部 */
-.addTypes_footer{
+.editTypes_footer{
     border-top:1px solid #e5e8e8;
     padding: 11px 30px;
     margin-top: -23px;

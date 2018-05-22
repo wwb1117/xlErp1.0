@@ -1,41 +1,40 @@
 <template>
     <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
-        <header class="addSpec_header">
+        <header class="edit_header">
             <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height:45px;font-size:15px">
                 <el-breadcrumb-item :to="{ path: '/goodsSpec' }">商品规格</el-breadcrumb-item>
-                <el-breadcrumb-item>新增规格</el-breadcrumb-item>
+                <el-breadcrumb-item>编辑规格</el-breadcrumb-item>
             </el-breadcrumb>
         </header>
-        <section class="addSpec_conent" >
-            <div class="addSpec_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-                <el-form ref="spec" :model="spec" label-width="100px">
+        <section class="edit_conent" >
+            <div class="edit_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+                <el-form ref="edit" :model="edit" label-width="100px">
                     <el-form-item label="规格名称" required>
-                        <el-input v-model="spec.name" style="width:338px" size='small'></el-input>
+                        <el-input v-model="edit.name" style="width:338px" size='small'></el-input>
                     </el-form-item>
-                    <el-form-item label="规格值" required :style="{height: (specNum.length)*50 + 'px'}">
+                    <el-form-item label="规格值" required :style="{height: (editNum.length)*50 + 'px'}">
                         <el-table
-                            :data='specNum'
+                            :data='editNum'
                             border
                             style="width:658px"
                         >
                             <el-table-column
                                 width='55'
-                                >
+                            >
                                 <template slot-scope="scope">
-                                    <div class="icon_box" style="height:50px;line-height:50px">
-                                        <i class="el-icon-plus" style="font-weight:700" @click="addSpecnum(scope)"></i>
-                                        <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeSpecnum(scope)"></i>
+                                    <div class="icon_box" style="height:50px;line-height:50px;margin-left:10px">
+                                        <i class="el-icon-plus" style="font-weight:700" @click="addEditnum"></i>
+                                        <!-- <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(edit)"></i> -->
                                     </div>
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="specname"
+                                prop="editname"
                                 label="规格值"
-                                width="460"
-                            >
+                                width="425">
                                 <template slot-scope="scope">
                                     <div>
-                                        <el-input v-model="specNum.specname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
+                                        <el-input v-model="editNum.editname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -45,7 +44,7 @@
                             >
                             <template slot-scope="scope">
                                 <el-switch
-                                    v-model="specNum.value2"
+                                    v-model="editNum.value2"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949">
                                 </el-switch>
@@ -65,7 +64,7 @@
                 </el-form>
             </div>
         </section>
-        <footer class="addSpec_footer">
+        <footer class="edit_footer">
             <el-button type="primary" size='small'>保存</el-button>
             <el-button size='small' @click='returnPrev'>取消</el-button>
         </footer>
@@ -76,15 +75,15 @@ export default {
     data() {
         return {
             // 规格、备注
-            spec: {
+            edit: {
                 name: '',
                 text: ''
             },
             // 规格值
 
-            specNum: [
+            editNum: [
                 {
-                    specname: '',
+                    editname: '',
                     bolean: '',
                     value1: true,
                     value2: true
@@ -94,22 +93,21 @@ export default {
         }
     },
     methods: {
-        addSpecnum() {
+        addEditnum() {
             let obj = {
-                specname: '',
+                editname: '',
                 bolean: '',
                 value1: true,
                 value2: true
             }
 
-            this.specNum.push(obj)
-
+            this.editNum.push(obj)
         },
-        removeSpecnum(data) {
-            if (this.specNum.length > 1){
-                this.specNum.splice(data.$index, 1)
-            }
-        },
+        // removeEditnum(data) {
+        //     if (this.editNum.length > 1){
+        //         this.editNum.splice(data.$index, 1)
+        //     }
+        // },
         returnPrev() {
             this.$router.push('goodsSpec')
         }
@@ -119,33 +117,33 @@ export default {
 </script>
 <style scoped>
 /* 顶部 */
-.addSpec_header{
+.edit_header{
     height: 45px;
     width: 100%;
     padding: 0 30px;
 
 }
 /* 内容 */
-.addSpec_conent{
+.edit_conent{
     padding:10px;
     background: #f5f5f5;
     border-top:1px solid #e6e9e9
 }
-.addSpec_box{
+.edit_box{
     border: 1px solid #e6e9eb;
     color: #5e6161;
     background: white;
     padding: 30px;
 }
-.addSpec_box .el-form-item{
+.edit_box .el-form-item{
     height: 50px
 }
-.addSpec_box .el-form-item:nth-child(3){
+.edit_box .el-form-item:nth-child(3){
     margin-top:60px
 }
 
 /* 底部 */
-.addSpec_footer{
+.edit_footer{
     border-top:1px solid #e5e8e8;
     padding: 11px 30px;
     margin-top: -23px;

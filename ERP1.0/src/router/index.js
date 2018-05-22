@@ -26,7 +26,10 @@ import brand from '@/views/goods/brand'
 import spec from '@/views/goods/spec/spec'
 import types from '@/views/goods/types/types'
 import addSpec from '@/views/goods/spec/addSpec'
-
+import editSpec from '@/views/goods/spec/editSpec'
+import addTypes from '@/views/goods/types/addTypes'
+import editTypes from '@/views/goods/types/editTypes'
+import dteails from '@/views/goods/details'
 
 Vue.use(Router)
 
@@ -51,11 +54,19 @@ var router = new Router({
                 /*************************** 商品模块*************************************/
                 {name: "商品列表", path: '/goodsList', component: goods},
                 {name: "新增商品", path: '/addGoods', component: addGoods},
+                {name: "商品详情", path: '/goodsDetails', component: dteails},
+
                 {name: "商品分类", path: '/goodsItems', component: items},
+
                 {name: "商品品牌", path: '/goodsBrand', component: brand},
+
                 {name: "商品规格", path: '/goodsSpec', component: spec},
-                {name: "商品类型", path: '/addSpec', component: addSpec},
-                {name: "商品类型", path: '/goodsTypes', component: types}
+                {name: "编辑规格", path: '/editSpec', component: editSpec},
+                {name: "新增规格", path: '/addSpec', component: addSpec},
+
+                {name: "包装类型", path: '/goodsTypes', component: types},
+                {name: "新增类型", path: '/addTypes', component: addTypes},
+                {name: "编辑类型", path: '/editTypes', component: editTypes}
             ]
         },
         {
