@@ -1,7 +1,7 @@
 <template>
     <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
         <header class="addSpec_header">
-            <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height:45px;font-size:15px">
+            <el-breadcrumb separator='-' style="line-height:45px;font-size:15px">
                 <el-breadcrumb-item :to="{ path: '/goodsSpec' }">商品规格</el-breadcrumb-item>
                 <el-breadcrumb-item>新增规格</el-breadcrumb-item>
             </el-breadcrumb>

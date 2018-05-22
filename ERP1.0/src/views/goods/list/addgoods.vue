@@ -2,7 +2,7 @@
     <section id='add' >
         <!-- 顶部面包屑 -->
         <header class="add_top">
-            <el-breadcrumb separator-class="el-icon-arrow-right" style="line-height:45px;font-size:15px">
+            <el-breadcrumb separator='-' style="line-height:45px;font-size:15px">
                 <el-breadcrumb-item :to="{ path: '/goodsList' }">商品列表</el-breadcrumb-item>
                 <el-breadcrumb-item>新增商品</el-breadcrumb-item>
             </el-breadcrumb>

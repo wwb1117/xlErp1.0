@@ -249,7 +249,7 @@ export default {
     height: 40px;
     background: #f5f5f5;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 40px
 }
 .item_box .item_box_conent{
