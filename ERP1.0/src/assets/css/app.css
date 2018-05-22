@@ -192,3 +192,9 @@ input[type="file"] {
 .more_img .el-tabs__active-bar{
     width: 65px;
 }
+.img .el-carousel__arrow{
+    height: 78px;
+    width: 18px;
+    border-radius: 0;
+    position: relative
+}

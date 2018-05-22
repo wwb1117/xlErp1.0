@@ -15,12 +15,32 @@
         <section class="details_conent">
             <div class="details_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
                 <div class="details_text">
-                    <div class="img">
-                        <div style="background:pink;width:418px;height:418px;border:1px soild:#cccccc">
+                    <!-- 轮播图 -->
+                    <div class="img_box">
+                        <div class="details_img" style="width:418px;height:418px;background:pink">
                             <img src="" alt="">
                         </div>
-                        <div style='background:pink;width:418px;height:78px;border:1px soild:#cccccc;margin-top:20px'></div>
+                        <div class="small_box smallpri_box">
+                            <div class="img_prev img_button" ></div>
+                            <!-- 小图 -->
+                                <dl class="small_box smallpri">
+                                    <dd style="width:78px;height:78px;background:pink">
+                                        <img src="" alt="">
+                                    </dd>
+                                    <dd style="width:78px;height:78px;background:pink">
+                                        <img src="" alt="">
+                                    </dd>
+                                    <dd style="width:78px;height:78px;background:pink">
+                                        <img src="" alt="">
+                                    </dd>
+                                    <dd style="width:78px;height:78px;background:pink">
+                                        <img src="" alt="">
+                                    </dd>
+                                </dl>
+                            <div class="img_next img_button"></div>
+                        </div>
                     </div>
+                    <!-- 右侧详细内容 -->
                     <ul class="recommend">
                         <li class="list_title"><h2>{{goods.name}}</h2></li>
                         <li class="list_recommend" style="margin-top:5px">{{goods.recommend}}</li>
@@ -99,6 +119,26 @@ export default {
 }
 </script>
 <style scoped>
+/* 轮播 */
+
+.small_box{
+    display: flex;
+    justify-content: space-between;
+}
+.smallpri_box{
+    margin-top: 10px
+}
+.img_button{
+    width: 18px;
+    height: 78px;
+    background:blue;
+}
+.smallpri dd{
+    margin-left: 15px
+}
+.smallpri dd:first-child{
+    margin-left: 0
+}
 /* 顶部 */
 .details_header{
     height: 45px;
