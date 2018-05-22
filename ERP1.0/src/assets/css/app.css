@@ -198,3 +198,16 @@ input[type="file"] {
     border-radius: 0;
     position: relative
 }
+.standard .el-table th{
+    background: white;
+    padding: 0;
+    text-align: center;
+    width: 100px;
+}
+.standard .el-table td{
+    padding: 0;
+    text-align: center;
+    height: 40px;
+    width: 100px;
+}
+
