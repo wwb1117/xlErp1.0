@@ -67,12 +67,16 @@ export default {
                     path: '/inboundList'
                 },
                 {
-                    name: '入库列表',
+                    name: '出库列表',
                     path: '/outboundList'
                 },
                 {
-                    name: '库存列表',
+                    name: '商品库存',
                     path: '/repertoryList'
+                },
+                {
+                    name: '出入库明细',
+                    path: '/inoutBound'
                 },
                 {
                     name: '库存调拨',
