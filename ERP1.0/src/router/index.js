@@ -28,9 +28,11 @@ import addPurchaseSupplier from '@/views/purchase/addPurchaseSupplier'
 import editPurchaseSupplier from '@/views/purchase/editPurchaseSupplier'
 import lookPurchaseSupplier from '@/views/purchase/lookPurchaseSupplier'
 
+
 /**************************************************审批模块*********************************************/
 import waitReview from '@/views/review/waitReview'
 import waitReviewRe from '@/views/review/waitReview_Re'
+import lookWaitReview from '@/views/review/waitReview_look'
 
 
 // 商品
@@ -82,7 +84,7 @@ var router = new Router({
                 /*************************** 审批模块*************************************/
                 {name: "待我审批", path: '/waitReview', component: waitReview},
                 {name: "待我审批-审批", path: '/waitReviewRe', component: waitReviewRe},
-
+                {name: "待我审批-查看订单", path: '/lookWaitReviewRe', component: lookWaitReview},
 
 
                 /*************************** 商品模块*************************************/

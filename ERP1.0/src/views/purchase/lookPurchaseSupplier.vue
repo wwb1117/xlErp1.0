@@ -125,8 +125,7 @@
             </div>
         </div>
         <div class="model_footer">
-            <el-button size="small" type="primary" style="width: 90px; margin-left: 25px;">保存</el-button>
-            <el-button size="small" style="width: 90px; margin-left: 25px;">取消</el-button>
+            <el-button size="small" style="width: 90px; margin-left: 25px;">返回</el-button>
         </div>
     </div>
 </template>

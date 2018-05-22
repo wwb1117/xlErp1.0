@@ -4,7 +4,7 @@
             <span style="color: #409EFF">待我审批</span>
             <span> - 审核</span>
             <div>
-                <el-button type="primary" size="small">查看订单</el-button>
+                <el-button @click="lookBtnEvent" type="primary" size="small">查看订单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -96,6 +96,30 @@
                             <span>意见已经反馈 </span>
                         </div>
                     </div>
+                    <div class="talkItem">
+                        <div class="talkItem_title">
+                            <el-badge value="2018-05-22"></el-badge>
+                            <span class="badge_circle"></span>
+                        </div>
+                        <div class="talkItem_item">
+                            <span class="talkItem_item_circle"></span>
+                            <span style="width: 50px">14:20</span>
+                            <span style="width: 60px">丹阳: </span>
+                            <span>好的 </span>
+                        </div>
+                        <div class="talkItem_item">
+                            <span class="talkItem_item_circle"></span>
+                            <span style="width: 50px">11:20</span>
+                            <span style="width: 60px">陈杰: </span>
+                            <span>下次在修改 </span>
+                        </div>
+                        <div class="talkItem_item">
+                            <span class="talkItem_item_circle"></span>
+                            <span style="width: 50px">9:20</span>
+                            <span style="width: 60px">锋哥: </span>
+                            <span>意见已经反馈 </span>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -129,6 +153,11 @@ export default {
     methods:{
         talkWindowEvent(){
             this.dialogVisible = true
+        },
+        lookBtnEvent(){
+            this.$router.push({
+                path: '/lookWaitReviewRe'
+            })
         }
 
     },
@@ -205,8 +234,14 @@ export default {
 .maincontent .item_wrap_curr{
     border-left: none;
 }
-.talkItem>div{
+.talkItem{
     border-left: 1px solid #E4E7ED;
+    margin-bottom: 5px;
+    padding-bottom: 10px;
+}
+.talkItem>div{
+    /* border-left: 1px solid #E4E7ED; */
+    margin-left: -9px;
 }
 .talkItem_title{
     position: relative;
@@ -241,5 +276,9 @@ export default {
     position: absolute;
     top: 9px;
     left: 5px;
+}
+.dialog_wrap{
+    padding: 10px;
+    overflow-y: auto;
 }
 </style>
