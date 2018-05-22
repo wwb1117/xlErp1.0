@@ -24,6 +24,9 @@ import editPurchaseCompany from '@/views/purchase/editPurchaseCompany'
 import addPurchaseCompany from '@/views/purchase/addPurchaseCompany'
 import lookPurchaseCompany from '@/views/purchase/lookPurchaseCompany'
 import purchaseSupplier from '@/views/purchase/purchaseSupplier'
+import addPurchaseSupplier from '@/views/purchase/addPurchaseSupplier'
+import editPurchaseSupplier from '@/views/purchase/editPurchaseSupplier'
+import lookPurchaseSupplier from '@/views/purchase/lookPurchaseSupplier'
 
 
 // 商品
@@ -68,6 +71,9 @@ var router = new Router({
                 {name: "编辑采购单位", path: '/editPurchaseCompany', component: editPurchaseCompany},
                 {name: "采购单位详情", path: '/lookPurchaseCompany', component: lookPurchaseCompany},
                 {name: "供应商", path: '/purchaseSupplier', component: purchaseSupplier},
+                {name: "新增供应商", path: '/addPurchaseSupplier', component: addPurchaseSupplier},
+                {name: "编辑供应商", path: '/editPurchaseSupplier', component: editPurchaseSupplier},
+                {name: "供应商详情", path: '/lookPurchaseSupplier', component: lookPurchaseSupplier},
 
 
 

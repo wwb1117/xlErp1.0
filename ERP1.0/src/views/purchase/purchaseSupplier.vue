@@ -1,20 +1,20 @@
 <template>
     <div>
         <div class="model_topcol">
-            <span>采购单位</span>
+            <span>供应商</span>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="model_content_inner">
                 <div class="purchaseList_title">
                     <el-input
                         size="small"
-                        placeholder="请输入要查询的关键词"
+                        placeholder="请输入供应商名称"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
                         v-model="serchText">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
-                    <el-button @click="addPurchaseComEvent" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
+                    <el-button @click="addPurchaseSupplierEvent" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
 
                 </div>
                 <el-table
@@ -30,47 +30,24 @@
                     </el-table-column>
                     <el-table-column
                         prop="purchaseCompanyNo"
-                        label="采购单位编号"
+                        label="供应商编号"
                         >
                     </el-table-column>
                     <el-table-column
                         prop="purchaseCompanyName"
-                        label="采购单位名称">
-                    </el-table-column>
-                    <el-table-column
-                        prop="leadMan"
-                        label="法定代表人">
-                    </el-table-column>
-                    <el-table-column
-                        prop="purchaseRMB"
-                        label="注册资本">
-                    </el-table-column>
-                    <el-table-column
-                        prop="makeListTime"
-                        label="成立时间">
-                    </el-table-column>
-                    <el-table-column
-                        prop="tlephone"
-                        label="电话">
-                    </el-table-column>
-                    <el-table-column
-                        prop="email"
-                        label="邮箱">
+                        label="供应商名称">
                     </el-table-column>
                     <el-table-column
                         prop="address"
-                        label="详细地址">
+                        label="地址">
                     </el-table-column>
                     <el-table-column
-                        prop="maker"
-                        label="备注">
+                        prop="leadMan"
+                        label="联系人">
                     </el-table-column>
                     <el-table-column
-                        prop="state"
-                        label="状态">
-                        <template slot-scope="scope">
-                            <el-switch active-value="1" v-model="scope.row.state"></el-switch>
-                        </template>
+                        prop="tlephone"
+                        label="联系方式">
                     </el-table-column>
                     <el-table-column
                         prop="prop"
@@ -176,21 +153,21 @@ export default {
         tablePropEvent(index, type){
             if (type == 1){
                 this.$router.push({
-                    path: '/lookPurchaseCompany'
+                    path: '/lookPurchaseSupplier'
                 })
             }
             if (type == 2){
                 this.$router.push({
-                    path: '/editPurchaseCompany'
+                    path: '/editPurchaseSupplier'
                 })
             }
         },
 
         handleSelectionChange(val){
         },
-        addPurchaseComEvent(){
+        addPurchaseSupplierEvent(){
             this.$router.push({
-                path: '/addPurchaseCompany'
+                path: '/addPurchaseSupplier'
             })
         }
 

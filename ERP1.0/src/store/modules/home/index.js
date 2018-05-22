@@ -54,7 +54,7 @@ export default {
                 },
                 {
                     name: '供应商',
-                    path: '/supplier'
+                    path: '/purchaseSupplier'
                 },
                 {
                     name: '采购单位',
