@@ -29,6 +29,20 @@ import editPurchaseSupplier from '@/views/purchase/editPurchaseSupplier'
 import lookPurchaseSupplier from '@/views/purchase/lookPurchaseSupplier'
 
 
+/**************************************************仓储模块*********************************************/
+import inboundList from '@/views/depot/inboundList'
+import outboundList from '@/views/depot/outboundList'
+import repertoryList from '@/views/depot/repertoryList'
+import repertoryAllot from '@/views/depot/repertoryAllot'
+import repertoryCheck from '@/views/depot/repertoryCheck'
+import repertoryManage from '@/views/depot/repertoryManage'
+import addInbound from '@/views/depot/addInbound'
+import boundDetail from '@/views/depot/boundDetail'
+import inoutBound from '@/views/depot/inoutBound'
+import addAllot from '@/views/depot/addAllot'
+import allotDetail from '@/views/depot/allotDetail'
+import addRepertory from '@/views/depot/addRepertory'
+
 /**************************************************审批模块*********************************************/
 import waitReview from '@/views/review/waitReview'
 import waitReviewRe from '@/views/review/waitReview_Re'
@@ -80,6 +94,19 @@ var router = new Router({
                 {name: "新增供应商", path: '/addPurchaseSupplier', component: addPurchaseSupplier},
                 {name: "编辑供应商", path: '/editPurchaseSupplier', component: editPurchaseSupplier},
                 {name: "供应商详情", path: '/lookPurchaseSupplier', component: lookPurchaseSupplier},
+                /*************************** 仓储模块*************************************/
+                {name: "入库列表", path: '/inboundList', component: inboundList},
+                {name: "出库列表", path: '/outboundList', component: outboundList},
+                {name: "库存列表", path: '/repertoryList', component: repertoryList},
+                {name: "库存调拨", path: '/repertoryAllot', component: repertoryAllot},
+                {name: "库存盘点", path: '/repertoryCheck', component: repertoryCheck},
+                {name: "仓库管理", path: '/repertoryManage', component: repertoryManage},
+                {name: "新增入库", path: '/addInbound', component: addInbound},
+                {name: "出入库详情", path: '/boundDetail/:id', component: boundDetail},
+                {name: "出入库明细", path: '/inoutBound', component: inoutBound},
+                {name: "新增调拨单", path: '/addAllot', component: addAllot},
+                {name: "调拨单详情", path: '/allotDetail/:id', component: allotDetail},
+                {name: "新增仓库", path: '/addRepertory', component: addRepertory},
 
                 /*************************** 审批模块*************************************/
                 {name: "待我审批", path: '/waitReview', component: waitReview},

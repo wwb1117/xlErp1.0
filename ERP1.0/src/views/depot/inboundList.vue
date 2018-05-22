@@ -15,48 +15,26 @@
                         <span :style="{fontSize: '16px'}">高级搜索</span>
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
-                    <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
-                        <el-form-item label="采购单号">
-                            <el-input v-model="superFormData.purchaseList" placeholder="请输入采购单号"></el-input>
-                        </el-form-item>
-                        <el-form-item label="制单人">
-                            <el-input v-model="superFormData.makeListMan" placeholder="请输入制单人"></el-input>
-                        </el-form-item>
-                        <el-form-item label="采购员">
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入采购员"></el-input>
-                        </el-form-item>
-                        <br>
-                        <el-form-item label="供应商">
-                            <el-select v-model="superFormData.supplier" placeholder="请输入采购员">
+                    <el-form class="three_form" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
+                        <el-form-item label="入库仓库">
+                            <el-select v-model="superFormData.supplier" placeholder="请选择" class="three_form_input">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
+                        </el-form-item>
+                        <el-form-item label="入库类型">
+                            <el-select v-model="superFormData.supplier" placeholder="请选择" class="three_form_input">
+                                <el-option label="全部" value=""></el-option>
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="经办人" >
+                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入经办人" class="three_form_input"></el-input>
                         </el-form-item>
                         <el-form-item label="采购单位">
-                            <el-select v-model="superFormData.purchaseCompany" placeholder="请输入采购单位">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="入库仓库">
-                            <el-select v-model="superFormData.inRepository" placeholder="请输入入库仓库">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <br>
-                        <el-form-item label="入库状态">
-                            <el-select v-model="superFormData.inState" placeholder="请输入入库状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="审核状态">
-                            <el-select v-model="superFormData.reviewState" placeholder="请输入审核状态">
+                            <el-select v-model="superFormData.supplier" placeholder="请选择" class="three_form_input">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -72,7 +50,9 @@
                                 end-placeholder="结束日期">
                             </el-date-picker>
                         </el-form-item>
-                        <br>
+                        <el-form-item label="制单人">
+                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入制单人" class="three_form_input"></el-input>
+                        </el-form-item>
                         <el-form-item>
                             <el-button style="width: 90px" type="primary" >确定</el-button>
                             <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
@@ -116,7 +96,7 @@
                         width="55">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseList"
+                        prop="storeNo"
                         label="入库单号"
                     >
                     </el-table-column>
@@ -220,43 +200,31 @@ export default {
             isExportShow: false,
             tableData: [
                 {
-                    purchaseList: '7758521',
-                    supplier: '布加迪',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '888,000,00',
-                    makeListMan: '李明珠',
-                    purchaseMan: '官人',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
+                    audiStatus: '0',
+                    houseId: '',
+                    buyerId: '',
+                    storeType: '',
+                    storeNo: '',
+                    startTime: '',
+                    endTime: ''
                 },
                 {
-                    purchaseList: '6969996',
-                    supplier: '迈巴赫',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '874,000,00',
-                    makeListMan: '张作霖',
-                    purchaseMan: '客官',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
+                    audiStatus: '1',
+                    houseId: '',
+                    buyerId: '',
+                    storeType: '',
+                    storeNo: '',
+                    startTime: '',
+                    endTime: ''
                 },
                 {
-                    purchaseList: '5555587',
-                    supplier: '法拉利',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '562,000,00',
-                    makeListMan: '段祺瑞',
-                    purchaseMan: '小二',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
+                    audiStatus: '3',
+                    houseId: '',
+                    buyerId: '',
+                    storeType: '',
+                    storeNo: '',
+                    startTime: '',
+                    endTime: ''
                 }
             ]
         }
@@ -345,6 +313,12 @@ export default {
         width: 100%;
         height: 300px;
         z-index: 9;
+    }
+    .three_form .el-form-item{
+        width: 32%;
+    }
+    .three_form .three_form_input{
+        width: 360px;
     }
     .model_content_inner{
         position: relative;

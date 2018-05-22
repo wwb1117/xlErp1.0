@@ -1,0 +1,17 @@
+{
+    "data": {
+        "list": [
+            {
+                "buyerName": "bgdf",
+                "creator": "nbrdfn",
+                "id": 12,
+                "storeHouseName": "be",
+                "storeNo": "hernaa",
+                "storeTime": 4587436,
+                "storeType": 3
+            }
+        ]
+    },
+    "message": "OK",
+    "result": 1
+}
