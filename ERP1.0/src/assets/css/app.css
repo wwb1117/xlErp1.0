@@ -56,6 +56,12 @@ input[type="file"] {
 #purchaseDetail_wrap .el-table--border .el-table__header th{
     border-right: none;
 }
+/* 采购供应商 */
+#supplier_form .el-upload--picture-card{
+    width: 88px;
+    height: 88px;
+    line-height: 88px;
+}
 /****************************elementUI分页样式自定义**************************************************/
 .el-pagination{
     height: 37px;
