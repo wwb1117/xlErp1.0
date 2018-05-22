@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="model_topcol">
-            <span>采购单</span>
+            <span>出库单</span>
             <div>
-                <el-button @click="invalidRecordEvent" size="small">作废记录</el-button>
-                <el-button @click="importEvent" size="small">导入采购单</el-button>
-                <el-button type="primary" @click="purchaseAddEvent" size="small">新增采购单</el-button>
+                <el-button size="small">导入出库单</el-button>
+                <el-button size="small">导出出库单</el-button>
+                <el-button type="primary" @click="purchaseAddEvent" size="small">新增出库单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -40,16 +40,16 @@
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="入库仓库">
-                            <el-select v-model="superFormData.inRepository" placeholder="请输入入库仓库">
+                        <el-form-item label="出库仓库">
+                            <el-select v-model="superFormData.inRepository" placeholder="请输入出库仓库">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <br>
-                        <el-form-item label="入库状态">
-                            <el-select v-model="superFormData.inState" placeholder="请输入入库状态">
+                        <el-form-item label="出库状态">
+                            <el-select v-model="superFormData.inState" placeholder="请输入出库状态">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -117,25 +117,25 @@
                     </el-table-column>
                     <el-table-column
                         prop="purchaseList"
-                        label="采购单号"
-                        >
+                        label="出库单号"
+                    >
                     </el-table-column>
                     <el-table-column
                         prop="supplier"
-                        label="供应商"
-                       >
+                        label="出库时间"
+                    >
                     </el-table-column>
                     <el-table-column
                         prop="purchaseCompany"
                         label="采购单位">
                     </el-table-column>
                     <el-table-column
-                        prop="inRepository"
-                        label="入库仓库">
+                        prop="purchaseCompany"
+                        label="出库仓库">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseRMB"
-                        label="采购金额">
+                        prop="inRepository"
+                        label="出库类型">
                     </el-table-column>
                     <el-table-column
                         prop="makeListMan"
@@ -143,15 +143,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="purchaseMan"
-                        label="采购员">
-                    </el-table-column>
-                    <el-table-column
-                        prop="purchaseDate"
-                        label="采购时间">
-                    </el-table-column>
-                    <el-table-column
-                        prop="inState"
-                        label="入库状态">
+                        label="经办人">
                     </el-table-column>
                     <el-table-column
                         prop="reviewState"
@@ -161,19 +153,19 @@
                         prop="prop"
                         width="150"
                         label="操作">
-                         <template slot-scope="scope">
+                        <template slot-scope="scope">
                             <el-button
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            入库
+                                @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
+                                type="text"
+                                size="small">
+                                详情
                             </el-button>
                             <el-button
-                            :style="{marginRight: '10px'}"
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            编辑
+                                :style="{marginRight: '10px'}"
+                                @click.native.prevent="editTable(scope.$index, tableData)"
+                                type="text"
+                                size="small">
+                                修改
                             </el-button>
                             <el-dropdown :hide-timeout="50" @command="dropdownSelectEvent" trigger="click">
                                 <span class="el-dropdown-link">
@@ -221,7 +213,7 @@ export default {
                 makeListMan: '李明珠',
                 purchaseMan: '官人',
                 purchaseDate: '2018-05-16',
-                inState: '已入库',
+                inState: '已出库',
                 reviewState: '已审核',
                 prop: ''
             },
@@ -236,7 +228,7 @@ export default {
                     makeListMan: '李明珠',
                     purchaseMan: '官人',
                     purchaseDate: '2018-05-16',
-                    inState: '已入库',
+                    inState: '已出库',
                     reviewState: '已审核',
                     prop: ''
                 },
@@ -249,7 +241,7 @@ export default {
                     makeListMan: '张作霖',
                     purchaseMan: '客官',
                     purchaseDate: '2018-05-16',
-                    inState: '已入库',
+                    inState: '已出库',
                     reviewState: '已审核',
                     prop: ''
                 },
@@ -262,7 +254,7 @@ export default {
                     makeListMan: '段祺瑞',
                     purchaseMan: '小二',
                     purchaseDate: '2018-05-16',
-                    inState: '已入库',
+                    inState: '已出库',
                     reviewState: '已审核',
                     prop: ''
                 }
@@ -278,6 +270,9 @@ export default {
 
         },
         inRepositoryEvent(){
+            this.$router.push({name: '出入库详情', params: {id:12314654, type: '出库'}})
+        },
+        editTable() {
 
         },
         closeExportWrap(){
@@ -297,7 +292,8 @@ export default {
         },
         purchaseAddEvent(){
             this.$router.push({
-                path: '/addPurchaseList'
+                name: '新增入库',
+                params: {type: '出库'}
             })
         },
         dropdownSelectEvent(command){
@@ -306,67 +302,58 @@ export default {
                     path: '/purchaseListDetail'
                 })
             }
-        },
-        importEvent(){
-            this.$router.push({
-                path: '/importPurchase'
-            })
-        },
-        invalidRecordEvent(){
-            this.$router.push({
-                path: '/invalidRecord'
-            })
         }
-
     },
     created(){},
     mounted(){}
 }
 </script>
+
+
 <style scoped>
-.purchaseList_title{
-    height: 63px;
-    line-height: 63px;
-    padding-left: 17px;
-}
-.purchaseList_exportWrap{
-    height: 63px;
-    padding-top: 15px;
-}
-.purchaseList_title span{
-    cursor: pointer;
-}
-.el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-    font-size: 12px;
-}
-.purchaseList_exportWrap>ul{
-    overflow: hidden;
-    padding-left: 0;
-}
-.purchaseList_exportWrap>ul>li{
-    float: left;
-    padding: 0 20px;
-    height: 33px;
-    line-height: 32px;
-}
-.box_card{
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 300px;
-    z-index: 9;
-}
-.model_content_inner{
-    position: relative;
-}
-.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-    width: 390px;
-}
-.el-form{
-    color: #636365;
-}
+    .purchaseList_title{
+        height: 63px;
+        line-height: 63px;
+        padding-left: 17px;
+    }
+    .purchaseList_exportWrap{
+        height: 63px;
+        padding-top: 15px;
+    }
+    .purchaseList_title span{
+        cursor: pointer;
+    }
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #409EFF;
+        font-size: 12px;
+    }
+    .purchaseList_exportWrap>ul{
+        overflow: hidden;
+        padding-left: 0;
+    }
+    .purchaseList_exportWrap>ul>li{
+        float: left;
+        padding: 0 20px;
+        height: 33px;
+        line-height: 32px;
+    }
+    .box_card{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 300px;
+        z-index: 9;
+    }
+    .model_content_inner{
+        position: relative;
+    }
+    .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+        width: 360px;
+    }
+    .el-form{
+        color: #636365;
+    }
 
 </style>
