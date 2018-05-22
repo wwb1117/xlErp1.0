@@ -180,16 +180,10 @@ input[type="file"] {
     margin-bottom: 0;
     height: 140px;
 }
-.addSpec_box .el-table td{
+.AEgoods_box .el-table td{
     padding: 0
 }
-.addSpec_box .el-table th{
-    padding: 0
+.AEgoods_box .el-table th{
+    padding: 0;
 }
-.addSpec_box .cell{
-    text-align: center;
-    padding: 0
-}
-
-
 
