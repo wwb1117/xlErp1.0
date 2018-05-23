@@ -163,20 +163,8 @@
                                             <el-button type='text' @click="addSpec">添加规格值</el-button>
                                             <div style="display:flex">
                                                 <div style="width:158px" v-for='(item,index) in spec.length' :key='index'>
-                                                    <div class="updata" @click="updata = true">
-                                                        <i class="el-icon-plus"></i>
-                                                    </div>
+                                                    <updata></updata>
                                                 </div>
-                                                <!-- 弹出信息 -->
-                                                <el-dialog
-                                                    title="选择图片"
-                                                    :visible.sync="updata"
-                                                    width="30%"
-                                                    >
-                                                    <!-- :before-close="handleClose" -->
-                                                    <el-button type="primary" @click="updata = false">确 定</el-button>
-                                                    <el-button @click="updata = false">取 消</el-button>
-                                                </el-dialog>
                                             </div>
                                             <p style="color:#888;font-size:12px">仅支持为第一组规格设置图片（最多40张图），买家选择不同规格会看到对应图片，建议尺寸：640 X 640 像素</p>
                                         </el-form-item>
@@ -391,6 +379,7 @@
 <script>
 import tinymce from '@/components/tinymce'
 import bar from '@/components/stepBar'
+import updata from '@/components/updata'
 
 let goodAttr =
 
@@ -583,7 +572,8 @@ export default {
     },
     components: {
         tinymce,
-        bar
+        bar,
+        updata
     }
 
 
