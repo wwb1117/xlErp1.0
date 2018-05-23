@@ -55,19 +55,19 @@
                         label="操作">
                          <template slot-scope="scope">
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 1)"
+                            @click.native="tablePropEvent(scope.row.id, 1)"
                             type="text"
                             size="small">
                             详情
                             </el-button>
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 2)"
+                            @click.native="tablePropEvent(scope.row.id, 2)"
                             type="text"
                             size="small">
                             编辑
                             </el-button>
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 3)"
+                            @click.native="tablePropEvent(scope.row.id, 3)"
                             type="text"
                             size="small">
                             删除
@@ -127,7 +127,7 @@ export default {
 
             })
         },
-        tablePropEvent(index, type){
+        tablePropEvent(rowid, type){
             if (type == 1){
                 this.$router.push({
                     path: '/lookPurchaseSupplier'
@@ -148,6 +148,11 @@ export default {
             })
         }
 
+    },
+    activated(){
+        this.tableParam.pageSize = 15
+        this.tableParam.pageNo = 1
+        this.getTableData()
     },
     created(){
         this.getTableData()

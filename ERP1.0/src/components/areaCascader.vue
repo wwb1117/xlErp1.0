@@ -3,6 +3,7 @@
         <el-cascader
         style="width: 194px"
         :options="proviceData"
+        v-model="modelValue"
         :change-on-select="false"
         @change="change"
         @active-item-change="handleItemChange"
@@ -17,12 +18,16 @@ export default {
     data(){
         return {
             proviceData: [],
+            modelValue: [],
             selectedOptions3: [],
             props: {
                 value: 'id'
             }
         }
     },
+    props: [
+        'fatherValue'
+    ],
     computed:{},
     methods:{
         handleItemChange(val){
@@ -80,6 +85,44 @@ export default {
                         id: item.id,
                         label: item.provinceName,
                         children: []
+                    })
+                }
+            }).then((reponse) => {
+                if (this.fatherValue){
+                    api.getCityData(this.fatherValue[0]).then((response) => {
+                        if (response.data.length > 0){
+                            var proItemData = this.findProData(this.fatherValue[0])
+
+                            proItemData.children = []
+                            for (var city of response.data){
+                                proItemData.children.push({
+                                    id: city.id,
+                                    label: city.cityName,
+                                    children: []
+                                })
+                            }
+                        }
+                    }).then((response) => {
+                        if (this.fatherValue){
+                            var proItemData = this.findProData(this.fatherValue[0]).children
+                            var cityItemData = this.findCityData(proItemData, this.fatherValue[1])
+
+                            api.getAreaData(this.fatherValue[1]).then((respon) => {
+
+                                if (respon.data.length > 0){
+                                    cityItemData.children = []
+                                    for (var area of respon.data){
+                                        cityItemData.children.push({
+                                            id: area.id,
+                                            label: area.areaName
+                                        })
+                                    }
+                                }
+
+                                this.modelValue = this.fatherValue
+
+                            })
+                        }
                     })
                 }
             })
