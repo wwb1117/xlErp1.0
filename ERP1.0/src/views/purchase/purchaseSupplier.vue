@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
@@ -172,7 +173,11 @@ export default {
         }
 
     },
-    created(){},
+    created(){
+        api.getSupplierSelectData().then((response) => {
+            console.log(response)
+        })
+    },
     mounted(){}
 }
 </script>
