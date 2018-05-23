@@ -7,7 +7,7 @@
             </el-breadcrumb>
         </header>
         <section class="addTypes_conent" >
-            <div class="addTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+            <div class="addTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <el-form ref="types" :model="types" label-width="100px">
                     <el-form-item label="规格名称" required>
                         <el-input v-model="types.name" style="width:338px" size='small'></el-input>
@@ -160,7 +160,7 @@ export default {
 .addTypes_footer{
     border-top:1px solid #e5e8e8;
     padding: 11px 30px;
-    margin-top: -23px;
+    /* margin-top: -23px; */
     background: white
 }
 

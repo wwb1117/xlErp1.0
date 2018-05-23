@@ -6,7 +6,7 @@
             <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='openAddtypes'>新增类型</el-button>
         </header>
         <section class="types_conent" >
-            <div class="types_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+            <div class="types_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <div class='box_top'>
                      <el-input
                         size="small"
@@ -195,12 +195,12 @@ export default {
     border-top:1px solid #e5e8e8;
     position: relative;
     padding: 11px 30px;
-    margin-top: -23px;
+    /* margin-top: -23px; */
     background: white;
 }
 .types_footer .block{
     position: absolute;
     right: 30px;
-    top:15px
+    top:0px
 }
 </style>
