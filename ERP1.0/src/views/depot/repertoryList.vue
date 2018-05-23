@@ -92,7 +92,7 @@
                     <span @click="supperBoxShow">高级搜索</span>
                     <div :style="{display: 'inline-block', marginLeft: '45px'}">
                         <span>预警状态</span>
-                        <el-select v-model="warnState" placeholder="请输入预警状态">
+                        <el-select size="small" v-model="warnState" placeholder="请输入预警状态">
                             <el-option label="全部" value="库存下限"></el-option>
                             <el-option label="区域一" value="shanghai"></el-option>
                             <el-option label="区域二" value="beijing"></el-option>
