@@ -13,7 +13,7 @@
                         :style="{width: '378px'}"
                         v-model="serchText">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button @click="getTableData" :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                     <el-button @click="addPurchaseSupplierEvent" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
 
                 </div>
@@ -82,16 +82,17 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
+                :page-sizes="[15, 20, 30, 50]"
                 :page-size="100"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
@@ -99,56 +100,31 @@ export default {
             currentPage: 2,
             selectTableData: [],
             tableHeight: 500,
-            tableData: [
-                {
-                    purchaseCompanyNo: 'GG7758521',
-                    purchaseCompanyName: '联星贸易',
-                    leadMan: '李明珠',
-                    purchaseRMB: '888,000,00',
-                    makeListTime: '2018-05-16',
-                    tlephone: '15639115673',
-                    email: '153634555@qq.com',
-                    address: '杭州西溪',
-                    maker: '备注就是备注',
-                    state: '1',
-                    prop: ''
-                },
-                {
-                    purchaseCompanyNo: 'GG7758521',
-                    purchaseCompanyName: '联星贸易',
-                    leadMan: '李明珠',
-                    purchaseRMB: '888,000,00',
-                    makeListTime: '2018-05-16',
-                    tlephone: '15639115673',
-                    email: '153634555@qq.com',
-                    address: '杭州西溪',
-                    maker: '备注就是备注',
-                    state: '0',
-                    prop: ''
-                },
-                {
-                    purchaseCompanyNo: 'GG7758521',
-                    purchaseCompanyName: '联星贸易',
-                    leadMan: '李明珠',
-                    purchaseRMB: '888,000,00',
-                    makeListTime: '2018-05-16',
-                    tlephone: '15639115673',
-                    email: '153634555@qq.com',
-                    address: '杭州西溪',
-                    maker: '备注就是备注',
-                    state: '0',
-                    prop: ''
-                }
-            ]
+            totalPage: 1,
+            tableParam: {
+                pageNo: 1,
+                pageSize: 15,
+                sellerName: this.serchText
+            },
+            tableData: []
         }
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
+            this.getTableData()
         },
-        handleCurrentChange(){
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
+            this.getTableData()
+        },
+        getTableData(){
+            api.getSupplierList(this.tableParam).then((response) => {
+                this.totalPage = response.data.total
+                this.tableData = response.data.list
 
+            })
         },
         tablePropEvent(index, type){
             if (type == 1){
@@ -172,7 +148,12 @@ export default {
         }
 
     },
-    created(){},
+    created(){
+        this.getTableData()
+        api.getSupplierSelectData().then((response) => {
+            console.log(response)
+        })
+    },
     mounted(){}
 }
 </script>

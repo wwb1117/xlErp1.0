@@ -32,37 +32,77 @@ axios.interceptors.response.use(
 
 function checkStatus(response) {
     return new Promise((resolve, reject) => {
-        var timerArr = base.timerArr
-
         if (response.status === 200) {
-            if (response.data.code === 401){
+            if (response.data.result === 1){
+                resolve(response.data)
+            }else if (response.data.result === 2){
                 Message.warning({
-                    'message':'会话失效,请重新登录',
-                    'duration': 1500,
-                    'onClose':function(){
+                    message:'参数异常',
+                    showClose: true,
+                    type: 'warning',
+                    duration: 1500
+
+                })
+            }else if (response.data.result === 3){
+                Message.warning({
+                    message:'服务端运行异常',
+                    showClose: true,
+                    type: 'warning',
+                    duration: 1500
+
+                })
+            }else if (response.data.result === 4){
+                Message.warning({
+                    message:'服务器内部错误',
+                    showClose: true,
+                    type: 'warning',
+                    duration: 1500
+
+                })
+            }else if (response.data.result === 5){
+                Message.warning({
+                    message:'服务端内部调用失败',
+                    showClose: true,
+                    type: 'warning',
+                    duration: 1500
+
+                })
+            }else if (response.data.result === 6){
+                Message.warning({
+                    message:'淘宝服务调用失败',
+                    showClose: true,
+                    type: 'warning',
+                    duration: 1500
+
+                })
+            }else if (response.data.result === 7){
+                Message.warning({
+                    message:'程序挂了',
+                    showClose: true,
+                    type: 'warning',
+                    duration: 1500
+
+                })
+            }else if (response.data.result === 8){
+                Message.warning({
+                    message:'会话失效,请重新登录',
+                    showClose: true,
+                    type: 'warning',
+                    duration: 1500,
+                    onClose: function(){
                         router.push({path:'/login'})
                     }
                 })
-                for (var item of timerArr){
-                    if (item){
-                        clearInterval(item)
-                    }
-                }
+            }else{
+                Message.warning({
+                    message:'未知异常',
+                    showClose: true,
+                    type: 'warning',
+                    duration: 1500
+
+                })
             }
-            if (response.data.code){
-                if (response.data.code == 200){
-                    resolve(response.data)
-                } else {
-                    reject(response.data)
-                    for (var item1 of timerArr){
-                        if (item1){
-                            clearInterval(item1)
-                        }
-                    }
-                }
-            } else {
-                resolve(response.data)
-            }
+
         } else {
             reject(response.data)
         }
