@@ -134,7 +134,7 @@ module.exports = {
     // "stroustrup" enforces Stroustrup style
     // "allman" enforces Allman style
     "brace-style": [1, "1tbs"],//大括号风格
-    "callback-return": 1,//避免多次调用回调什么的
+    "callback-return": 0,//避免多次调用回调什么的
     "camelcase": 2,//强制驼峰法命名
     "comma-dangle": [2, "never"],//对象字面量项尾不能有逗号
     "comma-spacing": 2,//逗号前后的空格

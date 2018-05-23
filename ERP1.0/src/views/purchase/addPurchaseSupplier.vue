@@ -6,35 +6,35 @@
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="model_content_inner form_wrap">
-                <el-form id="supplier_form" :inline="true" :model="formData" label-position="right" size="small" label-width="120px">
+                <el-form id="supplier_form" :inline="true" ref="addSupplierForm" :rules="rules" :model="formData" label-position="right" size="small" label-width="120px">
                     <div class="banner">
                         供应商信息
                     </div>
                     <div style="margin-top: 20px">
-                        <el-form-item label="公司名称">
-                            <el-input style="width: 194px" v-model="formData.comName" placeholder="请输入公司名称"></el-input>
+                        <el-form-item prop="sellerCompanyName" label="公司名称">
+                            <el-input style="width: 194px" v-model="formData.sellerCompanyName" placeholder="请输入公司名称"></el-input>
                         </el-form-item>
-                        <el-form-item label="供应商编号">
-                            <el-input style="width: 194px" v-model="formData.suppNo" placeholder="请输入供应商编号"></el-input>
+                        <el-form-item prop="sellerCompanyNo" label="供应商编号">
+                            <el-input style="width: 194px" v-model="formData.sellerCompanyNo" placeholder="请输入供应商编号"></el-input>
                         </el-form-item>
                     </div>
                     <div>
-                        <el-form-item label="区域">
+                        <el-form-item prop="provinceId" label="区域">
                             <area-cader v-on:areaFromChild="areaCallBack"></area-cader>
                         </el-form-item>
                         <el-form-item label="详细地址">
-                            <el-input style="width: 194px" v-model="formData.address" placeholder="请输入详细地址"></el-input>
+                            <el-input style="width: 194px" v-model="formData.sellerCompanyAddress" placeholder="请输入详细地址"></el-input>
                         </el-form-item>
                     </div>
                     <div class="banner">
                         个人信息
                     </div>
                     <div style="margin-top: 20px">
-                        <el-form-item label="联系人">
-                            <el-input style="width: 194px" v-model="formData.linkMan" placeholder="请输入联系人"></el-input>
+                        <el-form-item prop="contactPerson" label="联系人">
+                            <el-input style="width: 194px" v-model="formData.contactPerson" placeholder="请输入联系人"></el-input>
                         </el-form-item>
-                        <el-form-item label="联系方式">
-                            <el-input style="width: 194px" v-model="formData.telphone" placeholder="请输入联系方式"></el-input>
+                        <el-form-item prop="phone" label="联系方式">
+                            <el-input style="width: 194px" v-model="formData.phone" placeholder="请输入联系方式"></el-input>
                         </el-form-item>
                     </div>
                     <div>
@@ -95,12 +95,12 @@
                             <el-input style="width: 194px" v-model="formData.accountName" placeholder="请输入开户名称"></el-input>
                         </el-form-item>
                         <el-form-item label="开户银行">
-                            <el-input style="width: 194px" v-model="formData.accountBank" placeholder="请输入开户银行"></el-input>
+                            <el-input style="width: 194px" v-model="formData.bankName" placeholder="请输入开户银行"></el-input>
                         </el-form-item>
                     </div>
                     <div>
                         <el-form-item label="银行账户">
-                            <el-input style="width: 194px" v-model="formData.bankAccount" placeholder="请输入银行账户"></el-input>
+                            <el-input style="width: 194px" v-model="formData.accountNumber" placeholder="请输入银行账户"></el-input>
                         </el-form-item>
                     </div>
                     <div class="banner">
@@ -108,27 +108,24 @@
                     </div>
                     <div style="margin-top: 20px">
                         <el-form-item label="备注">
-                            <el-input type="textarea" :rows="4" style="width: 524px" v-model="formData.maker" placeholder="请输入备注"></el-input>
+                            <el-input type="textarea" :rows="4" style="width: 524px" v-model="formData.remark" placeholder="请输入备注"></el-input>
                         </el-form-item>
                     </div>
 
-
-
                 </el-form>
-
-
 
             </div>
         </div>
         <div class="model_footer">
-            <el-button size="small" type="primary" style="width: 90px; margin-left: 25px;">保存</el-button>
-            <el-button size="small" style="width: 90px; margin-left: 25px;">取消</el-button>
+            <el-button size="small" @click="saveBtnEvent" type="primary" style="width: 90px; margin-left: 25px;">保存</el-button>
+            <el-button v-RouterBack size="small" style="width: 90px; margin-left: 25px;">取消</el-button>
         </div>
     </div>
 </template>
 
 <script>
 import areaCader from 'components/areaCascader'
+import api from 'api/purchase'
 export default {
     components: {
         areaCader
@@ -138,15 +135,38 @@ export default {
             formData: {
                 sellerCompanyName: '妈妈去哪儿',
                 sellerCompanyNo: '12545666',
-                area: '',
-                address: '',
-                linkMan: '',
-                tlephone: '',
+                provinceId: '',
+                cityId: '',
+                areaId: '',
+                sellerCompanyAddress: '',
+                contactPerson: '',
+                phone: '',
+                faceIdcard: 'test',
+                frontIdcard: 'test',
+                imgLicense: 'test',
                 accountName: '',
-                accountBank: '',
-                bankAccount: '',
-                maker: ''
+                bankName: '',
+                accountNumber: '',
+                remark: ''
 
+            },
+            rules: {
+                sellerCompanyName: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' }
+                ],
+                sellerCompanyNo: [
+                    { required: true, message: '请输入供应商编号', trigger: 'blur' }
+                ],
+                provinceId: [
+                    { required: true, message: '请选择区域', trigger: 'blur' }
+                ],
+                contactPerson: [
+                    { required: true, message: '请输入联系人', trigger: 'blur' }
+                ],
+                phone: [
+                    { required: true, message: '请输入联系方式', trigger: 'blur' },
+                    { validator: this.phoneValidate, trigger: 'blur' }
+                ]
             },
             dialogImageUrl: '',
             dialogVisible: false
@@ -162,8 +182,33 @@ export default {
             this.dialogVisible = true;
         },
         areaCallBack(data){
-            console.log(data)
+            this.formData.provinceId = data[0]
+            this.formData.cityId = data[1]
+            this.formData.areaId = data[2]
+        },
+        phoneValidate(rule, value, callback){
+            if (/^1[34578]\d{9}$/.test(value) || /^0\d{2,3}-?\d{7,8}$/.test(value)){
+                callback()
+            } else {
+                callback(new Error('请正确输入电话号码或者手机号码'))
+            }
+        },
+        saveBtnEvent(){
+            this.$refs['addSupplierForm'].validate((valid) => {
+                if (valid) {
+                    api.addSupplier(this.formData).then((response) => {
+                        this.$message({
+                            type: 'success',
+                            duration: 1500,
+                            showClose: true,
+                            message: '新增成功'
+                        });
+                        this.$router.go(-1)
+                    })
+                }
+            })
         }
+
 
     },
     created(){},
