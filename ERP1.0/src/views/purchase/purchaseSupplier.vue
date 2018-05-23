@@ -29,24 +29,24 @@
                     width="50">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompanyNo"
+                        prop="sellerCompanyNo"
                         label="供应商编号"
                         >
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompanyName"
+                        prop="sellerCompanyName"
                         label="供应商名称">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
+                        prop="sellerCompanyAddress"
                         label="地址">
                     </el-table-column>
                     <el-table-column
-                        prop="leadMan"
+                        prop="contactPerson"
                         label="联系人">
                     </el-table-column>
                     <el-table-column
-                        prop="tlephone"
+                        prop="phone"
                         label="联系方式">
                     </el-table-column>
                     <el-table-column
@@ -82,8 +82,8 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[15, 20, 30, 50]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="totalPage">
             </el-pagination>
@@ -121,6 +121,7 @@ export default {
         },
         getTableData(){
             api.getSupplierList(this.tableParam).then((response) => {
+                console.log(response)
                 this.totalPage = response.data.total
                 this.tableData = response.data.list
 

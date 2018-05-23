@@ -194,10 +194,10 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
@@ -209,6 +209,7 @@ export default {
         return {
             serchText: '',
             currentPage: 2,
+            totalPage: 1,
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,

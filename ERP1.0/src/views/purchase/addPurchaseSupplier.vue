@@ -20,11 +20,7 @@
                     </div>
                     <div>
                         <el-form-item label="区域">
-                            <el-select style="width: 194px" v-model="formData.area" placeholder="请选择区域">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
+                            <area-cader></area-cader>
                         </el-form-item>
                         <el-form-item label="详细地址">
                             <el-input style="width: 194px" v-model="formData.address" placeholder="请输入详细地址"></el-input>
@@ -132,12 +128,16 @@
 </template>
 
 <script>
+import areaCader from 'components/areaCascader'
 export default {
+    components: {
+        areaCader
+    },
     data(){
         return {
             formData: {
-                comName: '妈妈去哪儿',
-                suppNo: '12545666',
+                sellerCompanyName: '妈妈去哪儿',
+                sellerCompanyNo: '12545666',
                 area: '',
                 address: '',
                 linkMan: '',
