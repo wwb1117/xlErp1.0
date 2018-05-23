@@ -15,38 +15,38 @@
                         <span :style="{fontSize: '16px'}">高级搜索</span>
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
-                    <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
+                    <el-form class="myForm" :inline="true" :model="searchFormData" label-position="right" size="small" label-width="80px">
                         <el-form-item label="入库仓库">
-                            <el-select v-model="superFormData.supplier" placeholder="请选择">
+                            <el-select v-model="searchFormData.supplier" placeholder="请选择">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库类型">
-                            <el-select v-model="superFormData.supplier" placeholder="请选择" >
+                            <el-select v-model="searchFormData.supplier" placeholder="请选择" >
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="经办人" >
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入经办人"></el-input>
+                            <el-input v-model="searchFormData.purchaseMan" placeholder="请输入经办人"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item label="采购单位">
-                            <el-select v-model="superFormData.supplier" placeholder="请选择">
+                            <el-select v-model="searchFormData.supplier" placeholder="请选择">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="制单人">
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入制单人"></el-input>
+                            <el-input v-model="searchFormData.purchaseMan" placeholder="请输入制单人"></el-input>
                         </el-form-item>
                         <el-form-item label="采购时间">
                             <el-date-picker
-                                v-model="superFormData.purchaseDate"
+                                v-model="searchFormData.purchaseDate"
                                 type="daterange"
                                 :editable="false"
                                 range-separator="至"
@@ -65,10 +65,10 @@
                 <div v-show="!isExportShow" class="purchaseList_title">
                     <el-input
                         size="small"
-                        placeholder="请输入采购单号/供应商名称/采购单位"
+                        placeholder="请输入入库单号"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="searchFormData.storeNo">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
@@ -103,32 +103,32 @@
                     >
                     </el-table-column>
                     <el-table-column
-                        prop="supplier"
+                        prop="storeTime"
                         label="入库时间"
                     >
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompany"
+                        prop="buyerId"
                         label="采购单位">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompany"
+                        prop="houseId"
                         label="入库仓库">
                     </el-table-column>
                     <el-table-column
-                        prop="inRepository"
+                        prop="storeType"
                         label="入库类型">
                     </el-table-column>
                     <el-table-column
-                        prop="makeListMan"
+                        prop="operator"
                         label="制单人">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseMan"
+                        prop="operator"
                         label="经办人">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="auditStatus"
                         label="审核状态">
                     </el-table-column>
                     <el-table-column
@@ -137,14 +137,14 @@
                         label="操作">
                         <template slot-scope="scope">
                             <el-button
-                                @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
+                                @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
                                 详情
                             </el-button>
                             <el-button
                                 :style="{marginRight: '10px'}"
-                                @click.native.prevent="editTable(scope.$index, tableData)"
+                                @click.native.prevent="editTable(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
                                 修改
@@ -168,8 +168,8 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="1"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="400">
             </el-pagination>
@@ -177,7 +177,8 @@
     </div>
 </template>
 <script>
-import API from '../../api/depot';
+import 'utils/repertory'
+import API from 'api/depot'
 export default {
     data(){
         return {
@@ -186,47 +187,45 @@ export default {
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
-            superFormData: {
-                purchaseList: '7758521',
-                supplier: '',
-                purchaseCompany: '',
-                inRepository: '402',
-                purchaseRMB: '888,000,00',
-                makeListMan: '李明珠',
-                purchaseMan: '官人',
-                purchaseDate: '2018-05-16',
-                inState: '已入库',
-                reviewState: '已审核',
-                prop: ''
+            searchFormData: {
+                auditStatus: '0',
+                houseId: '',
+                buyerId: '',
+                storeType: '',
+                storeNo: '',
+                startTime: '',
+                endTime: '',
+                pageNo: '',
+                pageSize: ''
             },
             isExportShow: false,
             tableData: [
                 {
                     audiStatus: '0',
-                    houseId: '',
-                    buyerId: '',
-                    storeType: '',
                     storeNo: '',
+                    buyerId: '',
+                    houseId: '',
                     startTime: '',
-                    endTime: ''
+                    endTime: '',
+                    storeType: ''
                 },
                 {
                     audiStatus: '1',
-                    houseId: '',
-                    buyerId: '',
-                    storeType: '',
                     storeNo: '',
+                    buyerId: '',
+                    houseId: '',
                     startTime: '',
-                    endTime: ''
+                    endTime: '',
+                    storeType: ''
                 },
                 {
-                    audiStatus: '3',
-                    houseId: '',
-                    buyerId: '',
-                    storeType: '',
+                    audiStatus: '2',
                     storeNo: '',
+                    buyerId: '',
+                    houseId: '',
                     startTime: '',
-                    endTime: ''
+                    endTime: '',
+                    storeType: ''
                 }
             ]
         }
@@ -239,10 +238,17 @@ export default {
         handleCurrentChange(){
 
         },
-        inRepositoryEvent(){
-            this.$router.push({name: '出入库详情', params: {id:12314654, type: '入库'}})
+        // 获取列表数据
+        getInboundList() {
+            API.getInboundList().then(res => {
+
+            })
         },
-        editTable() {
+        // 跳转详情页
+        inBoundDetail(index, data) {
+            this.$router.push({name: '出入库详情', params: {id: data.storeNo || 123, type: '入库'}})
+        },
+        editTable(index, data) {
 
         },
         closeExportWrap(){
@@ -276,9 +282,8 @@ export default {
     },
     created(){},
     mounted(){
-        API.getWarehouseList().then(res => {
-            console.log(res, "dasdadsa")
-        })
+        this.getWarehouseList()
+
     }
 }
 </script>

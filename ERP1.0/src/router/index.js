@@ -42,6 +42,7 @@ import inoutBound from '@/views/depot/inoutBound'
 import addAllot from '@/views/depot/addAllot'
 import allotDetail from '@/views/depot/allotDetail'
 import addRepertory from '@/views/depot/addRepertory'
+import editRepertory from '@/views/depot/editRepertory'
 
 /**************************************************审批模块*********************************************/
 import waitReview from '@/views/review/waitReview'
@@ -53,7 +54,8 @@ import IReviewed from '@/views/review/IReviewed'
 
 
 
-/**************************************************商品模块*********************************************/
+// 商品
+// 列表
 import goods from '@/views/goods/list/goods'
 import addGoods from '@/views/goods/list/addGoods'
 import items from '@/views/goods/items'
@@ -65,12 +67,6 @@ import editSpec from '@/views/goods/spec/editSpec'
 import addTypes from '@/views/goods/types/addTypes'
 import editTypes from '@/views/goods/types/editTypes'
 import dteails from '@/views/goods/details'
-
-/**************************************************系统模块*********************************************/
-import flow from '@/views/work/flow'
-import authority from '@/views/work/authority'
-import user from '@/views/work/user/user'
-
 
 Vue.use(Router)
 
@@ -116,6 +112,7 @@ var router = new Router({
                 {name: "新增调拨单", path: '/addAllot', component: addAllot},
                 {name: "调拨单详情", path: '/allotDetail/:id', component: allotDetail},
                 {name: "新增仓库", path: '/addRepertory', component: addRepertory},
+                {name: "编辑仓库", path: '/editRepertory/:id', component: editRepertory},
 
                 /*************************** 审批模块*************************************/
                 {name: "待我审批", path: '/waitReview', component: waitReview},
@@ -142,14 +139,7 @@ var router = new Router({
 
                 {name: "包装类型", path: '/goodsTypes', component: types},
                 {name: "新增类型", path: '/addTypes', component: addTypes},
-                {name: "编辑类型", path: '/editTypes', component: editTypes},
-
-
-                /*************************** 系统模块*************************************/
-                {name: "流程配置", path: '/workflowConfig', component: flow},
-                {name: "权限管理", path: '/permissionManage', component: authority},
-                {name: "用户管理", path: '/userManage', component: user}
-
+                {name: "编辑类型", path: '/editTypes', component: editTypes}
             ]
         },
         {
