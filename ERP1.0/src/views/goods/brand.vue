@@ -54,7 +54,7 @@
             </el-dialog>
         </header>
         <section class="brand_conent" >
-            <div class="brand_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+            <div class="brand_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <div class='box_top'>
                      <el-input
                         size="small"
@@ -251,13 +251,14 @@ export default {
 .brand_footer{
     border-top:1px solid #e5e8e8;
     position: relative;
-    margin-top: -23px;
+    /* margin-top: -23px; */
     background: white;
     padding: 11px 30px;
 }
 .brand_footer .block{
     position: absolute;
     right: 30px;
+    top:0
 }
 </style>
 

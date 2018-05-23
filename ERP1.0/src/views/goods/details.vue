@@ -13,7 +13,7 @@
             </div>
         </header>
         <section class="details_conent">
-            <div class="details_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+            <div class="details_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <div class="details_text">
                     <!-- 轮播图 -->
                     <div class="img_box">
@@ -215,7 +215,7 @@ export default {
 .details_footer{
     border-top:1px solid #e5e8e8;
     padding: 12px 30px;
-    margin-top: -23px;
+    /* margin-top: -23px; */
     background: white
 }
 </style>

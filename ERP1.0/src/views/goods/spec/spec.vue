@@ -6,7 +6,7 @@
             <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='openAddspec'>新增规格</el-button>
         </header>
         <section class="spec_conent" >
-            <div class="spec_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+            <div class="spec_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <div class='box_top'>
                      <el-input
                         size="small"
@@ -183,14 +183,14 @@ export default {
 .spec_footer{
     border-top:1px solid #e5e8e8;
     position: relative;
-    margin-top: -23px;
+    /* margin-top: -23px; */
     background: white;
     padding: 11px 30px;
 }
 .spec_footer .block{
     position: absolute;
     right: 30px;
-    top:15px
+    top:0
 }
 </style>
 

@@ -8,12 +8,12 @@
             </el-breadcrumb>
         </header>
         <!-- 主体内容 -->
-        <section class="add_conent" >
+        <section class="add_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="conent_box">
                 <div class="step" style="height:80px">
                     <bar :step-texts="testText" :step-nums="stepNums" :current-step="currentStep"></bar>
                 </div>
-                <ul style='margin:0' v-if='conent1'>
+                <ul style='margin:0' v-if='conent1' >
                     <!-- 商品title -->
                     <li class="good_title">
                         <p>商品类型</p>
@@ -137,68 +137,70 @@
                             <el-form-item label="商品规格" required>
                                 <div class="add_standard">
                                     <div class="add_small_standard add_standard">
-                                        <el-button type="primary" size='small'>添加规格项目</el-button>
+                                        <el-button type="primary" size='small' >添加规格项目</el-button>
                                     </div>
                                 </div>
                             </el-form-item>
                             <p class="standard_p">如有颜色、尺码等多种规格，请添加商品规格</p>
-                            <el-form-item label="商品规格" required v-model="spec">
-                                <div class="add_standard">
-                                    <div class="add_small_standard">
-                                        <el-form-item label="规格名" style="margin-left:-80px" >
-                                            <el-select v-model="spec.data" placeholder="请选择活动区域" size='small' style="width:138px">
-                                                <el-option label="区域一" value="shanghai"></el-option>
-                                                <el-option label="区域二" value="beijing"></el-option>
+                            <div>
+                                <!-- 商品规格 -->
+                                <el-form-item label="商品规格" required v-model="spec">
+                                    <div class="add_standard">
+                                        <div class="add_small_standard">
+                                            <el-form-item label="规格名" style="margin-left:-80px" >
+                                                <el-select v-model="spec.data" placeholder="请选择活动区域" size='small' style="width:138px">
+                                                    <el-option label="区域一" value="shanghai"></el-option>
+                                                    <el-option label="区域二" value="beijing"></el-option>
+                                                </el-select>
+                                                <el-checkbox v-model="checked" style="margin-left:10px">添加规格图片</el-checkbox>
+                                            </el-form-item>
+                                        </div>
+                                        <el-form-item label='规格值' style="margin-left:-10px;margin-top:5px" >
+                                            <el-select  placeholder="请选择活动区域" size='small' v-for="(item,index) in spec" :key='index' v-model="item.age" style="width:138px;margin-right:20px">
+                                                <el-option label="蓝色" value="shanghai"></el-option>
+                                                <el-option label="红色" value="beijing"></el-option>
                                             </el-select>
-                                            <el-checkbox v-model="checked" style="margin-left:10px">添加规格图片</el-checkbox>
+                                            <el-button type='text' @click="addSpec">添加规格值</el-button>
+                                            <div style="display:flex">
+                                                <div style="width:158px" v-for='(item,index) in spec.length' :key='index'>
+                                                    <div class="updata" @click="updata = true">
+                                                        <i class="el-icon-plus"></i>
+                                                    </div>
+                                                </div>
+                                                <!-- 弹出信息 -->
+                                                <el-dialog
+                                                    title="选择图片"
+                                                    :visible.sync="updata"
+                                                    width="30%"
+                                                    >
+                                                    <!-- :before-close="handleClose" -->
+                                                    <el-button type="primary" @click="updata = false">确 定</el-button>
+                                                    <el-button @click="updata = false">取 消</el-button>
+                                                </el-dialog>
+                                            </div>
+                                            <p style="color:#888;font-size:12px">仅支持为第一组规格设置图片（最多40张图），买家选择不同规格会看到对应图片，建议尺寸：640 X 640 像素</p>
                                         </el-form-item>
                                     </div>
-                                    <el-form-item label='规格值' style="margin-left:-10px;margin-top:5px" >
-                                        <el-select  placeholder="请选择活动区域" size='small' v-for="(item,index) in spec" :key='index' v-model="item.age" style="width:138px;margin-right:20px">
-                                            <el-option label="蓝色" value="shanghai"></el-option>
-                                            <el-option label="红色" value="beijing"></el-option>
-                                        </el-select>
-                                        <el-button type='text' @click="addSpec">添加规格值</el-button>
-                                        <div style="display:flex">
-                                            <div style="width:158px" v-for='(item,index) in spec.length' :key='index'>
-                                                <div class="updata" @click="updata = true">
-                                                    <i class="el-icon-plus"></i>
-                                                </div>
-                                            </div>
-                                            <!-- 弹出信息 -->
-                                            <el-dialog
-                                                title="选择图片"
-                                                :visible.sync="updata"
-                                                width="30%"
-                                                >
-                                                <!-- :before-close="handleClose" -->
-                                                <el-button type="primary" @click="updata = false">确 定</el-button>
-                                                <el-button @click="updata = false">取 消</el-button>
-                                            </el-dialog>
-                                        </div>
-                                        <p style="color:#888;font-size:12px">仅支持为第一组规格设置图片（最多40张图），买家选择不同规格会看到对应图片，建议尺寸：640 X 640 像素</p>
-                                    </el-form-item>
-                                </div>
-                            </el-form-item>
-                            <p style="margin-left:100px;margin-top:-10px">如有颜色、尺码等多种规格，请添加商品规格</p>
-                            <!-- 规格明细 -->
-                            <el-form-item label="规格明细">
-                                <el-table
-                                :data="specmore"
-                                :span-method="objectSpanMethod"
-                                border>
-                                <el-table-column
-                                    prop="color"
-                                    label="颜色"
-                                    width='100'>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="size"
-                                    label="尺码"
-                                    width='100'>
-                                </el-table-column>
-                                </el-table>
-                            </el-form-item>
+                                </el-form-item>
+                                <p style="margin-left:100px;margin-top:-10px">如有颜色、尺码等多种规格，请添加商品规格</p>
+                                <!-- 规格明细 -->
+                                <el-form-item label="规格明细" v-model="spec.specmore">
+                                    <el-table
+                                    :data="spec.specmore"
+                                    border>
+                                    <el-table-column
+                                        prop="color"
+                                        label="颜色"
+                                        width='100'>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="size"
+                                        label="尺码"
+                                        width='100'>
+                                    </el-table-column>
+                                    </el-table>
+                                </el-form-item>
+                            </div>
                         </el-form>
                     </li>
                     <!-- 商品属性title -->
@@ -257,13 +259,8 @@
                             <tinymce></tinymce>
                         </div>
                     </li>
-                    <!-- 控制步骤 -->
-                    <li class="add_bottom">
-                        <el-button @click="reset" size='small'>重置</el-button>
-                        <el-button @click="next" size='small' type="primary">下一步</el-button>
-                    </li>
                 </ul>
-                <ul v-if='conent2'>
+                <ul style='margin:0' v-if='conent2'>
                     <!-- 供货设置title -->
                     <li class="good_title">
                         <p>供货设置</p>
@@ -374,14 +371,20 @@
                             </el-form-item>
                         </el-form>
                     </li>
-                    <!-- 控制步骤 -->
-                    <li class="add_bottom">
-                        <el-button @click="prev" size='small' type="primary">上一步</el-button>
-                        <el-button @click="submit" size='small'>保存</el-button>
-                    </li>
+
                 </ul>
             </div>
         </section>
+        <!-- 控制步骤 -->
+        <div class="add_bottom" v-if='conent1'>
+            <el-button @click="reset" size='small'>重置</el-button>
+            <el-button @click="next" size='small' type="primary">下一步</el-button>
+        </div>
+        <!-- 控制步骤 -->
+        <div class="add_bottom" v-if='conent2'>
+            <el-button @click="prev" size='small' type="primary">上一步</el-button>
+            <el-button @click="submit" size='small'>保存</el-button>
+        </div>
     </section>
 
 </template>
@@ -470,40 +473,23 @@ export default {
                     name: '蓝色',
                     age: '',
                     region: '',
-                    data: ''
+                    data: '',
+                    specmore: {
+                        id: '1',
+                        color: 'blue',
+                        size: 'xl'
+                    }
                 },
                 {
                     name: '红色',
                     age: '',
                     region: '',
-                    data: ''
-                }
-            ],
-            specmore:[
-                {
-                    id: '',
-                    color: 'blue',
-                    size: 'xl'
-                },
-                {
-                    id: '',
-                    color: 'red',
-                    size: 'xl'
-                },
-                {
-                    id: '',
-                    color: 'blue',
-                    size: 'xll'
-                },
-                {
-                    id: '',
-                    color: 'yellow',
-                    size: 'xlll'
-                },
-                {
-                    id: '',
-                    color: 'yellow',
-                    size: 'xlll'
+                    data: '',
+                    specmore: {
+                        id: '2',
+                        color: 'blue',
+                        size: 'xl'
+                    }
                 }
             ],
             updata: false,
@@ -581,18 +567,19 @@ export default {
                 age: '',
                 region: '',
                 data: '',
-                color: 'blue'
+                specmore: {
+                    id: '2',
+                    color: 'blue',
+                    size: 'xl'
+                }
             }
 
             // // 添加规格的时候，循环添加的对象，如果有和当前已经有的对象相同熟悉。那么添加到当前已经有的对象后面。如果没有直接添
 
             this.spec.push(obj)
-        },
-        // 规格明细
-        objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-            console.log(row.color)
-
         }
+        // 规格明细
+
     },
     components: {
         tinymce,
@@ -646,7 +633,8 @@ export default {
 .add_conent{
     padding:10px;
     background: #f5f5f5;
-    border-top:1px solid #e6e9e9
+    border-top:1px solid #e6e9e9;
+    overflow: auto
 }
 .conent_box{
     border: 1px solid #e6e9e9
@@ -736,7 +724,8 @@ export default {
 .add_bottom{
     height: 50px;
     padding: 10px 25px;
-    background: white
+    background: white;
+    border-top:1px solid #e5e8e8;
 }
 
 /* 内容2 */
