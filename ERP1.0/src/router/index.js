@@ -47,6 +47,10 @@ import addRepertory from '@/views/depot/addRepertory'
 import waitReview from '@/views/review/waitReview'
 import waitReviewRe from '@/views/review/waitReview_Re'
 import lookWaitReview from '@/views/review/waitReview_look'
+import lookIlaunched from '@/views/review/Ilaunched_look'
+import Ilaunched from '@/views/review/Ilaunched'
+import IReviewed from '@/views/review/IReviewed'
+
 
 
 // 商品
@@ -112,6 +116,10 @@ var router = new Router({
                 {name: "待我审批", path: '/waitReview', component: waitReview},
                 {name: "待我审批-审批", path: '/waitReviewRe', component: waitReviewRe},
                 {name: "待我审批-查看订单", path: '/lookWaitReviewRe', component: lookWaitReview},
+                {name: "待我审批-查看订单", path: '/lookIlaunched', component: lookIlaunched},
+                {name: "我发起的", path: '/Ilaunched', component: Ilaunched},
+                {name: "我已审批", path: '/IReviewed', component: IReviewed},
+
 
 
                 /*************************** 商品模块*************************************/
