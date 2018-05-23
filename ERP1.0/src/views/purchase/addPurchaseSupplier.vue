@@ -20,7 +20,7 @@
                     </div>
                     <div>
                         <el-form-item label="区域">
-                            <area-cader></area-cader>
+                            <area-cader v-on:areaFromChild="areaCallBack"></area-cader>
                         </el-form-item>
                         <el-form-item label="详细地址">
                             <el-input style="width: 194px" v-model="formData.address" placeholder="请输入详细地址"></el-input>
@@ -160,6 +160,9 @@ export default {
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
+        },
+        areaCallBack(data){
+            console.log(data)
         }
 
     },
