@@ -72,7 +72,7 @@ export default {
     padding-left: 30px
 }
 #k_ .navdiv .el-tabs__nav-wrap::after {
-    height: 1px;
+    height: 0;
 }
 </style>
 

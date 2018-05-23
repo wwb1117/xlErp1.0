@@ -222,4 +222,23 @@ input[type="file"] {
     height: 40px;
     width: 100px;
 }
-
+.up_box .el-upload{
+    width: 89px;
+    height: 32px;
+    border-radius: 5px;
+    background: #3f9fff;
+    color:white;
+    line-height: 32px ;
+    text-align: center;
+    margin-left: 30px
+}
+.user_top .el-tabs__header{
+    margin-top: -2px;
+    margin-left: 20px
+}
+.user_top .el-tabs__item{
+    line-height: 33px
+}
+.user_top .el-tabs__nav-wrap::after {
+    height: 0;
+}

@@ -53,8 +53,7 @@ import IReviewed from '@/views/review/IReviewed'
 
 
 
-// 商品
-// 列表
+/**************************************************商品模块*********************************************/
 import goods from '@/views/goods/list/goods'
 import addGoods from '@/views/goods/list/addGoods'
 import items from '@/views/goods/items'
@@ -66,6 +65,12 @@ import editSpec from '@/views/goods/spec/editSpec'
 import addTypes from '@/views/goods/types/addTypes'
 import editTypes from '@/views/goods/types/editTypes'
 import dteails from '@/views/goods/details'
+
+/**************************************************系统模块*********************************************/
+import flow from '@/views/work/flow'
+import authority from '@/views/work/authority'
+import user from '@/views/work/user/user'
+
 
 Vue.use(Router)
 
@@ -137,7 +142,14 @@ var router = new Router({
 
                 {name: "包装类型", path: '/goodsTypes', component: types},
                 {name: "新增类型", path: '/addTypes', component: addTypes},
-                {name: "编辑类型", path: '/editTypes', component: editTypes}
+                {name: "编辑类型", path: '/editTypes', component: editTypes},
+
+
+                /*************************** 系统模块*************************************/
+                {name: "流程配置", path: '/workflowConfig', component: flow},
+                {name: "权限管理", path: '/permissionManage', component: authority},
+                {name: "用户管理", path: '/userManage', component: user}
+
             ]
         },
         {
