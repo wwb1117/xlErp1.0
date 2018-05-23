@@ -15,30 +15,34 @@
                         <span :style="{fontSize: '16px'}">高级搜索</span>
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
-                    <el-form class="three_form" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
+                    <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
                         <el-form-item label="入库仓库">
-                            <el-select v-model="superFormData.supplier" placeholder="请选择" class="three_form_input">
+                            <el-select v-model="superFormData.supplier" placeholder="请选择">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库类型">
-                            <el-select v-model="superFormData.supplier" placeholder="请选择" class="three_form_input">
+                            <el-select v-model="superFormData.supplier" placeholder="请选择" >
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="经办人" >
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入经办人" class="three_form_input"></el-input>
+                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入经办人"></el-input>
                         </el-form-item>
+                        <br>
                         <el-form-item label="采购单位">
-                            <el-select v-model="superFormData.supplier" placeholder="请选择" class="three_form_input">
+                            <el-select v-model="superFormData.supplier" placeholder="请选择">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
+                        </el-form-item>
+                        <el-form-item label="制单人">
+                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入制单人"></el-input>
                         </el-form-item>
                         <el-form-item label="采购时间">
                             <el-date-picker
@@ -50,9 +54,7 @@
                                 end-placeholder="结束日期">
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="制单人">
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入制单人" class="three_form_input"></el-input>
-                        </el-form-item>
+                        <br>
                         <el-form-item>
                             <el-button style="width: 90px" type="primary" >确定</el-button>
                             <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
@@ -174,8 +176,8 @@
         </div>
     </div>
 </template>
-
 <script>
+import API from '../../api/depot';
 export default {
     data(){
         return {
@@ -273,7 +275,11 @@ export default {
         }
     },
     created(){},
-    mounted(){}
+    mounted(){
+        API.getWarehouseList().then(res => {
+            console.log(res, "dasdadsa")
+        })
+    }
 }
 </script>
 
@@ -313,12 +319,6 @@ export default {
         width: 100%;
         height: 300px;
         z-index: 9;
-    }
-    .three_form .el-form-item{
-        width: 32%;
-    }
-    .three_form .three_form_input{
-        width: 360px;
     }
     .model_content_inner{
         position: relative;
