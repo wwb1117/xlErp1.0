@@ -18,6 +18,10 @@ ul{
 .fontWe_600{
     font-weight: 600;
 }
+.color_hover:hover{
+    color: #409EFF;
+    cursor: pointer;
+}
 .el-icon-close:hover{
     font-size: 18px;
     color: #409EFF;

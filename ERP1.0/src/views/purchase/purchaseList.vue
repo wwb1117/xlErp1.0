@@ -15,54 +15,54 @@
                         <span :style="{fontSize: '16px'}">高级搜索</span>
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
-                    <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
+                    <el-form class="myForm" :inline="true" :model="tableParam" label-position="right" size="small" label-width="80px">
                         <el-form-item label="采购单号">
-                            <el-input v-model="superFormData.purchaseList" placeholder="请输入采购单号"></el-input>
+                            <el-input v-model="tableParam.purchaseOrderNo" placeholder="请输入采购单号"></el-input>
                         </el-form-item>
                         <el-form-item label="制单人">
-                            <el-input v-model="superFormData.makeListMan" placeholder="请输入制单人"></el-input>
+                            <el-input v-model="tableParam.makeListMan" placeholder="请输入制单人"></el-input>
                         </el-form-item>
                         <el-form-item label="采购员">
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入采购员"></el-input>
+                            <el-input v-model="tableParam.purchaseMan" placeholder="请输入采购员"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item label="供应商">
-                            <el-select v-model="superFormData.sellerId" placeholder="请选择供应商">
+                            <el-select @change="selectChangeEvent(1)" v-model="tableParam.sellerId" placeholder="请选择供应商">
                                 <el-option v-for="item in supplierSelectData" :key="item.id" :label="item.sellerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购单位">
-                            <el-select v-model="superFormData.purchaseCompany" placeholder="请输入采购单位">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select @change="selectChangeEvent(2)" v-model="tableParam.buyerId" placeholder="请选择采购单位">
+                                <el-option v-for="item in buyerNameSelectData" :key="item.id" :label="item.buyerName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库仓库">
-                            <el-select v-model="superFormData.inRepository" placeholder="请输入入库仓库">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select @change="selectChangeEvent(3)" v-model="tableParam.inRepository" placeholder="请选择入库仓库">
+                                <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.repositoryName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <br>
                         <el-form-item label="入库状态">
-                            <el-select v-model="superFormData.inState" placeholder="请输入入库状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="tableParam.storeStatus" placeholder="请选择入库状态">
+                                <el-option label="待入库" value="0"></el-option>
+                                <el-option label="部分入库" value="1"></el-option>
+                                <el-option label="已入库" value="2"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="审核状态">
-                            <el-select v-model="superFormData.reviewState" placeholder="请输入审核状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="tableParam.auditStatus" placeholder="请输入审核状态">
+                                <el-option label="待审核" value="0"></el-option>
+                                <el-option label="审核中" value="1"></el-option>
+                                <el-option label="通过" value="2"></el-option>
+                                <el-option label="不通过" value="3"></el-option>
+                                <el-option label="撤销" value="4"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购时间">
                             <el-date-picker
-                                v-model="superFormData.purchaseDate"
+                                v-model="tableParam.purchaseDate"
+                                value-format="timestamp"
+                                @change="datePickerChangeEvent"
                                 type="daterange"
                                 :editable="false"
                                 range-separator="至"
@@ -72,9 +72,9 @@
                         </el-form-item>
                         <br>
                         <el-form-item>
-                            <el-button style="width: 90px" type="primary" >确定</el-button>
-                            <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
-                            <el-button type="text" style="width: 40px; color: #636365">清空</el-button>
+                            <el-button @click="supperSureBoxShow" style="width: 90px" type="primary" >确定</el-button>
+                            <el-button @click="supperCansleBoxShow" style="width: 90px">取消</el-button>
+                            <el-button class="color_hover" @click="resetBtnEvent" type="text" style="width: 40px; color: #636365">清空</el-button>
                         </el-form-item>
                     </el-form>
                 </el-card>
@@ -86,7 +86,7 @@
                         :style="{width: '378px'}"
                         v-model="serchText">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button :style="{margin: '0 10px'}" @click="getTableData" type="primary" size="small">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
                 </div>
                 <div v-show="isExportShow" class="purchaseList_exportWrap">
@@ -114,29 +114,29 @@
                         width="55">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseList"
+                        prop="purchaseOrderNo"
                         label="采购单号"
                         >
                     </el-table-column>
                     <el-table-column
-                        prop="supplier"
+                        prop="sellerName"
                         label="供应商"
                        >
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompany"
+                        prop="buyerName"
                         label="采购单位">
                     </el-table-column>
                     <el-table-column
-                        prop="inRepository"
+                        prop="purchaseHouseName"
                         label="入库仓库">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseRMB"
+                        prop="receivedPrice"
                         label="采购金额">
                     </el-table-column>
                     <el-table-column
-                        prop="makeListMan"
+                        prop="creator"
                         label="制单人">
                     </el-table-column>
                     <el-table-column
@@ -148,12 +148,24 @@
                         label="采购时间">
                     </el-table-column>
                     <el-table-column
-                        prop="inState"
+                        prop="storeStatus"
                         label="入库状态">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.storeStatus == 0">待入库</span>
+                            <span v-if="scope.row.storeStatus == 1">部分入库</span>
+                            <span v-if="scope.row.storeStatus == 2">已入库</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="auditStatus"
                         label="审核状态">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.auditStatus == 0">待审核</span>
+                            <span v-if="scope.row.auditStatus == 1">审核中</span>
+                            <span v-if="scope.row.auditStatus == 2">通过</span>
+                            <span v-if="scope.row.auditStatus == 3">不通过</span>
+                            <span v-if="scope.row.auditStatus == 4">撤销</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="prop"
@@ -211,75 +223,65 @@ export default {
             totalPage: 1,
             selectTableData: [],
             supplierSelectData: [],
+            buyerNameSelectData: [
+                {
+                    id: '1',
+                    buyerName: '妈妈去哪儿'
+                },
+                {
+                    id: '2',
+                    buyerName: 'wwb'
+                },
+                {
+                    id: '3',
+                    buyerName: '迈巴赫'
+                }
+            ],
+            repositorySelectData: [
+                {
+                    id: '1',
+                    repository: '默认仓库'
+                },
+                {
+                    id: '2',
+                    repository: '德信影城'
+                },
+                {
+                    id: '3',
+                    repository: '雷峰塔'
+                }
+            ],
             isSupperBoxShow: false,
             tableParam: {
                 searchText: '',
-                purchaseOrderNo: ''
-            },
-            superFormData: {
-                purchaseList: '7758521',
-                supplier: '',
-                purchaseCompany: '',
-                inRepository: '402',
-                purchaseRMB: '888,000,00',
-                makeListMan: '李明珠',
-                purchaseMan: '官人',
-                purchaseDate: '2018-05-16',
-                inState: '已入库',
-                reviewState: '已审核',
-                prop: ''
+                purchaseOrderNo: '',
+                buyerId: '',
+                purchaseDate: '',
+                storeStatus: '',
+                auditStatus: '',
+                startTime: "",
+                endTime: "",
+                sellerName: "",
+                sellerId: "",
+                buyerName: "",
+                repositoryId: "",
+                repositoryName: "",
+                pageNo: 1,
+                pageSize: 10
             },
             isExportShow: false,
-            tableData: [
-                {
-                    purchaseList: '7758521',
-                    supplier: '布加迪',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '888,000,00',
-                    makeListMan: '李明珠',
-                    purchaseMan: '官人',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                },
-                {
-                    purchaseList: '6969996',
-                    supplier: '迈巴赫',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '874,000,00',
-                    makeListMan: '张作霖',
-                    purchaseMan: '客官',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                },
-                {
-                    purchaseList: '5555587',
-                    supplier: '法拉利',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '562,000,00',
-                    makeListMan: '段祺瑞',
-                    purchaseMan: '小二',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                }
-            ]
+            tableData: []
         }
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
+            this.getTableData()
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
+            this.getTableData()
         },
         inRepositoryEvent(){
 
@@ -298,6 +300,19 @@ export default {
         },
         supperBoxShow(){
             this.isSupperBoxShow = !this.isSupperBoxShow
+        },
+        supperCansleBoxShow () {
+            this.isSupperBoxShow = !this.isSupperBoxShow
+            this.resetBtnEvent()
+        },
+        supperSureBoxShow () {
+            this.isSupperBoxShow = !this.isSupperBoxShow
+            this.getTableData()
+        },
+        resetBtnEvent () {
+            for (var key in this.tableParam) {
+                this.tableParam[key] = ""
+            }
         },
         purchaseAddEvent(){
             this.$router.push({
@@ -325,13 +340,49 @@ export default {
             api.getSupplierSelectData().then((response) => {
                 this.supplierSelectData = response.data.list
             })
+        },
+        selectChangeEvent(val){
+            if (val == 1){
+                this.supplierSelectData.forEach((item, index) => {
+                    if (item.id == this.tableParam.sellerId) {
+                        this.tableParam.sellerName = item.sellerCompanyName
+                    }
+                })
+            }
+            if (val == 2) {
+                this.buyerNameSelectData.forEach((item, index) => {
+                    if (item.id == this.tableParam.buyerId) {
+                        this.tableParam.buyerName = item.buyerName
+                    }
+                })
+            }
+            if (val == 3) {
+                this.repositorySelectData.forEach((item, index) => {
+                    if (item.id == this.tableParam.repositoryId) {
+                        this.tableParam.repositoryName = item.repositoryName
+                    }
+                })
+            }
+        },
+        datePickerChangeEvent (val) {
+            this.tableParam.startTime = val[0]
+            this.tableParam.endTime = val[1]
+
+        },
+        getTableData(){
+            api.getPurchaseList(this.tableParam).then((response) => {
+                this.totalPage = response.data.total
+                this.tableData = response.data.list
+            })
         }
+
+
     },
     activated(){
-
+        this.getSupplierSelectData()
     },
     created(){
-
+        this.getSupplierSelectData()
     },
     mounted(){}
 }
