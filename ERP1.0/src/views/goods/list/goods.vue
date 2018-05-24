@@ -59,7 +59,7 @@ export default {
 #k_>div:nth-child(2){
     position: absolute;
     right: 10px;
-    top:8px
+    top:6px
 }
 #k_ .navdiv .el-tabs__nav{
     height: 46px;
@@ -72,7 +72,7 @@ export default {
     padding-left: 30px
 }
 #k_ .navdiv .el-tabs__nav-wrap::after {
-    height: 0;
+    height: 1px;
 }
 </style>
 
