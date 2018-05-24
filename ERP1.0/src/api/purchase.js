@@ -10,6 +10,9 @@ export default {
     },
     addSupplier(data){
         return HttpClient.post('/seller/insertSeller', data);
+    },
+    getItemSupplierData(data){
+        return HttpClient.get('/seller/' + data);
     }
 
 }

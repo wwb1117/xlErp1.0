@@ -6,39 +6,35 @@
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="model_content_inner form_wrap">
-                <el-form id="supplier_form" :inline="true" :disabled="true" :model="formData" label-position="right" size="small" label-width="120px">
+                <el-form id="supplier_form" :inline="true" :disabled="true" ref="lookSupplierForm" :model="formData" label-position="right" size="small" label-width="120px">
                     <div class="banner">
                         供应商信息
                     </div>
                     <div style="margin-top: 20px">
-                        <el-form-item label="公司名称">
-                            <el-input style="width: 194px" v-model="formData.comName" placeholder="请输入公司名称"></el-input>
+                        <el-form-item prop="sellerCompanyName" label="公司名称">
+                            <el-input style="width: 194px" v-model="formData.sellerCompanyName" placeholder="请输入公司名称"></el-input>
                         </el-form-item>
-                        <el-form-item label="供应商编号">
-                            <el-input style="width: 194px" v-model="formData.suppNo" placeholder="请输入供应商编号"></el-input>
+                        <el-form-item prop="sellerCompanyNo" label="供应商编号">
+                            <el-input style="width: 194px" v-model="formData.sellerCompanyNo" placeholder="请输入供应商编号"></el-input>
                         </el-form-item>
                     </div>
                     <div>
-                        <el-form-item label="区域">
-                            <el-select style="width: 194px" v-model="formData.area" placeholder="请选择区域">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
+                        <el-form-item prop="provinceId" label="区域">
+                            <area-cader :fatherValue="fatherValue" v-on:areaFromChild="areaCallBack"></area-cader>
                         </el-form-item>
                         <el-form-item label="详细地址">
-                            <el-input style="width: 194px" v-model="formData.address" placeholder="请输入详细地址"></el-input>
+                            <el-input style="width: 194px" v-model="formData.sellerCompanyAddress" placeholder="请输入详细地址"></el-input>
                         </el-form-item>
                     </div>
                     <div class="banner">
                         个人信息
                     </div>
                     <div style="margin-top: 20px">
-                        <el-form-item label="联系人">
-                            <el-input style="width: 194px" v-model="formData.linkMan" placeholder="请输入联系人"></el-input>
+                        <el-form-item prop="contactPerson" label="联系人">
+                            <el-input style="width: 194px" v-model="formData.contactPerson" placeholder="请输入联系人"></el-input>
                         </el-form-item>
-                        <el-form-item label="联系方式">
-                            <el-input style="width: 194px" v-model="formData.telphone" placeholder="请输入联系方式"></el-input>
+                        <el-form-item prop="phone" label="联系方式">
+                            <el-input style="width: 194px" v-model="formData.phone" placeholder="请输入联系方式"></el-input>
                         </el-form-item>
                     </div>
                     <div>
@@ -99,12 +95,12 @@
                             <el-input style="width: 194px" v-model="formData.accountName" placeholder="请输入开户名称"></el-input>
                         </el-form-item>
                         <el-form-item label="开户银行">
-                            <el-input style="width: 194px" v-model="formData.accountBank" placeholder="请输入开户银行"></el-input>
+                            <el-input style="width: 194px" v-model="formData.bankName" placeholder="请输入开户银行"></el-input>
                         </el-form-item>
                     </div>
                     <div>
                         <el-form-item label="银行账户">
-                            <el-input style="width: 194px" v-model="formData.bankAccount" placeholder="请输入银行账户"></el-input>
+                            <el-input style="width: 194px" v-model="formData.accountNumber" placeholder="请输入银行账户"></el-input>
                         </el-form-item>
                     </div>
                     <div class="banner">
@@ -112,11 +108,9 @@
                     </div>
                     <div style="margin-top: 20px">
                         <el-form-item label="备注">
-                            <el-input type="textarea" :rows="4" style="width: 524px" v-model="formData.maker" placeholder="请输入备注"></el-input>
+                            <el-input type="textarea" :rows="4" style="width: 524px" v-model="formData.remark" placeholder="请输入备注"></el-input>
                         </el-form-item>
                     </div>
-
-
 
                 </el-form>
 
@@ -125,28 +119,39 @@
             </div>
         </div>
         <div class="model_footer">
-            <el-button size="small" style="width: 90px; margin-left: 25px;">返回</el-button>
+            <el-button v-RouterBack size="small" style="width: 90px; margin-left: 25px;">返回</el-button>
         </div>
     </div>
 </template>
 
 <script>
+import areaCader from 'components/areaCascader'
+import api from 'api/purchase'
 export default {
+    components: {
+        areaCader
+    },
     data(){
         return {
             formData: {
-                comName: '妈妈去哪儿',
-                suppNo: '12545666',
-                area: '',
-                address: '',
-                linkMan: '',
-                tlephone: '',
+                sellerCompanyName: '',
+                sellerCompanyNo: '',
+                provinceId: '',
+                cityId: '',
+                areaId: '',
+                sellerCompanyAddress: '',
+                contactPerson: '',
+                phone: '',
+                faceIdcard: 'test',
+                frontIdcard: 'test',
+                imgLicense: 'test',
                 accountName: '',
-                accountBank: '',
-                bankAccount: '',
-                maker: ''
+                bankName: '',
+                accountNumber: '',
+                remark: ''
 
             },
+            fatherValue: ['10000', '10000', '100000'],
             dialogImageUrl: '',
             dialogVisible: false
         }
@@ -159,10 +164,32 @@ export default {
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
+        },
+        areaCallBack(){
+
+        },
+        getFormData(){
+            var id = this.$store.state.purchase.supplierId
+
+            api.getItemSupplierData(id).then((response) => {
+                this.formData = response.data
+                this.fatherValue = []
+                this.fatherValue.push(this.formData.provinceId)
+                this.fatherValue.push(this.formData.cityId)
+                this.fatherValue.push(this.formData.areaId)
+
+            })
+
         }
 
+
     },
-    created(){},
+    activated(){
+        this.getFormData()
+    },
+    created(){
+
+    },
     mounted(){}
 }
 </script>
