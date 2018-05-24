@@ -24,7 +24,7 @@
         </section>
         <footer class="authority_bottom">
             <el-button type="primary" size='small' style="margin:10px 0 0 30px">保存</el-button>
-            <el-button size='small' style="margin:10px 0 0 10px">取消</el-button>
+            <el-button size='small' style="margin:10px 0 0 10px" @click='prevuser'>取消</el-button>
         </footer>
     </section>
 </template>
@@ -110,7 +110,12 @@ export default {
                 children: 'children',
                 label: 'label'
             }
-        };
+        }
+    },
+    methods: {
+        prevuser() {
+            this.$router.push('userManage')
+        }
     }
 }
 </script>
