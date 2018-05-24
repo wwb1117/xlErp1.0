@@ -28,9 +28,9 @@
                         </el-form-item>
                         <el-form-item prop="zone" label="所在地区">
                             <!--<el-cascader-->
-                                <!--:options="options"-->
-                                <!--v-model="addFormData.zone"-->
-                                <!--class="w50_item"-->
+                            <!--:options="options"-->
+                            <!--v-model="addFormData.zone"-->
+                            <!--class="w50_item"-->
                             <!--&gt;</el-cascader>-->
                         </el-form-item>
                         <el-form-item prop="warehouseAddress" label="详细地址" class="w100">
@@ -52,7 +52,7 @@
         </div>
         <div class="model_footer">
             <el-button style="width: 90px" type="primary" size="small">保存</el-button>
-            <el-button style="width: 90px" size="small">取消</el-button>
+            <el-button style="width: 90px" size="small" @click="goBack">取消</el-button>
         </div>
     </div>
 </template>
@@ -285,9 +285,19 @@ export default {
     },
     computed:{},
     methods:{
-
+        getRepertoryDetail() {
+            this.addFormData = this.$route.params.data
+        },
+        goBack() {
+            this.$router.back(-1)
+        }
     },
     created(){},
+    activated () {
+        this.getRepertoryDetail()
+    },
+    deactivated () {
+    },
     mounted(){
 
     }

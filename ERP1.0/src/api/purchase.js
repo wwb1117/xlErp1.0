@@ -7,6 +7,9 @@ export default {
     },
     getSupplierList(data){
         return HttpClient.get('/seller/findByCondition', data);
+    },
+    addSupplier(data){
+        return HttpClient.post('/seller/insertSeller', data);
     }
 
 }

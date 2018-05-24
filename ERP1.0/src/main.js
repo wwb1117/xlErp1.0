@@ -7,7 +7,7 @@ import ElementUI from 'element-ui';
 import store from './store'
 import 'vue2-animate/dist/vue2-animate.min.css'
 import 'jquery'
-
+import directive from './directive/customDirective'
 // 引入代码填充,解决浏览器兼容问题n
 import 'babel-polyfill'
 
@@ -30,6 +30,7 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 
 Vue.use(ElementUI)
+Vue.use(directive)
 
 //自定义全局变量和函数
 

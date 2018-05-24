@@ -29,24 +29,24 @@
                     width="50">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompanyNo"
+                        prop="sellerCompanyNo"
                         label="供应商编号"
                         >
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompanyName"
+                        prop="sellerCompanyName"
                         label="供应商名称">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
+                        prop="sellerCompanyAddress"
                         label="地址">
                     </el-table-column>
                     <el-table-column
-                        prop="leadMan"
+                        prop="contactPerson"
                         label="联系人">
                     </el-table-column>
                     <el-table-column
-                        prop="tlephone"
+                        prop="phone"
                         label="联系方式">
                     </el-table-column>
                     <el-table-column
@@ -55,19 +55,19 @@
                         label="操作">
                          <template slot-scope="scope">
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 1)"
+                            @click.native="tablePropEvent(scope.row.id, 1)"
                             type="text"
                             size="small">
                             详情
                             </el-button>
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 2)"
+                            @click.native="tablePropEvent(scope.row.id, 2)"
                             type="text"
                             size="small">
                             编辑
                             </el-button>
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 3)"
+                            @click.native="tablePropEvent(scope.row.id, 3)"
                             type="text"
                             size="small">
                             删除
@@ -82,8 +82,8 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[15, 20, 30, 50]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="totalPage">
             </el-pagination>
@@ -121,12 +121,13 @@ export default {
         },
         getTableData(){
             api.getSupplierList(this.tableParam).then((response) => {
+                console.log(response)
                 this.totalPage = response.data.total
                 this.tableData = response.data.list
 
             })
         },
-        tablePropEvent(index, type){
+        tablePropEvent(rowid, type){
             if (type == 1){
                 this.$router.push({
                     path: '/lookPurchaseSupplier'
@@ -147,6 +148,11 @@ export default {
             })
         }
 
+    },
+    activated(){
+        this.tableParam.pageSize = 15
+        this.tableParam.pageNo = 1
+        this.getTableData()
     },
     created(){
         this.getTableData()
