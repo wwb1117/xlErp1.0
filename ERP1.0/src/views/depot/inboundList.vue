@@ -17,36 +17,36 @@
                     </div>
                     <el-form class="myForm" :inline="true" :model="searchFormData" label-position="right" size="small" label-width="80px">
                         <el-form-item label="入库仓库">
-                            <el-select v-model="searchFormData.supplier" placeholder="请选择">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="searchFormData.houseId" placeholder="请选择">
+                                <el-option label="全部" value="123"></el-option>
+                                <el-option label="区域一" value="456"></el-option>
+                                <el-option label="区域二" value="789"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库类型">
-                            <el-select v-model="searchFormData.supplier" placeholder="请选择" >
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="searchFormData.storeType" placeholder="请选择" >
+                                <el-option label="采购" value="1"></el-option>
+                                <el-option label="销售退货" value="2"></el-option>
+                                <el-option label="其他" value="3"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="经办人" >
-                            <el-input v-model="searchFormData.purchaseMan" placeholder="请输入经办人"></el-input>
+                            <el-input v-model="searchFormData.operator" placeholder="请输入经办人"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item label="采购单位">
-                            <el-select v-model="searchFormData.supplier" placeholder="请选择">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="searchFormData.buyerId" placeholder="请选择">
+                                <el-option label="全部" value="555"></el-option>
+                                <el-option label="区域一" value="666"></el-option>
+                                <el-option label="区域二" value="777"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="制单人">
-                            <el-input v-model="searchFormData.purchaseMan" placeholder="请输入制单人"></el-input>
+                            <el-input v-model="searchFormData.creator" placeholder="请输入制单人"></el-input>
                         </el-form-item>
-                        <el-form-item label="采购时间">
+                        <el-form-item label="入库时间">
                             <el-date-picker
-                                v-model="searchFormData.purchaseDate"
+                                v-model="searchFormData.date"
                                 type="daterange"
                                 :editable="false"
                                 range-separator="至"
@@ -108,11 +108,11 @@
                     >
                     </el-table-column>
                     <el-table-column
-                        prop="buyerId"
+                        prop="buyerName"
                         label="采购单位">
                     </el-table-column>
                     <el-table-column
-                        prop="houseId"
+                        prop="storeHouseName"
                         label="入库仓库">
                     </el-table-column>
                     <el-table-column
@@ -120,7 +120,7 @@
                         label="入库类型">
                     </el-table-column>
                     <el-table-column
-                        prop="operator"
+                        prop="creator"
                         label="制单人">
                     </el-table-column>
                     <el-table-column
@@ -183,12 +183,11 @@ export default {
     data(){
         return {
             serchText: '',
-            currentPage: 2,
+            currentPage: 1,
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
             searchFormData: {
-                auditStatus: '0',
                 houseId: '',
                 buyerId: '',
                 storeType: '',
@@ -196,36 +195,25 @@ export default {
                 startTime: '',
                 endTime: '',
                 pageNo: '',
-                pageSize: ''
+                pageSize: '',
+                creator: '',
+                operator: '',
+                date: ''
             },
             isExportShow: false,
             tableData: [
                 {
-                    audiStatus: '0',
+                    audiStatus: '',
                     storeNo: '',
                     buyerId: '',
                     houseId: '',
                     startTime: '',
                     endTime: '',
-                    storeType: ''
-                },
-                {
-                    audiStatus: '1',
-                    storeNo: '',
-                    buyerId: '',
-                    houseId: '',
-                    startTime: '',
-                    endTime: '',
-                    storeType: ''
-                },
-                {
-                    audiStatus: '2',
-                    storeNo: '',
-                    buyerId: '',
-                    houseId: '',
-                    startTime: '',
-                    endTime: '',
-                    storeType: ''
+                    storeType: '',
+                    operator: '',
+                    creator: '',
+                    storeHouseName: '',
+                    buyerName: ''
                 }
             ]
         }
@@ -241,7 +229,7 @@ export default {
         // 获取列表数据
         getInboundList() {
             API.getInboundList().then(res => {
-
+                this.tableData = res.data.list
             })
         },
         // 跳转详情页
@@ -282,7 +270,7 @@ export default {
     },
     created(){},
     mounted(){
-        this.getWarehouseList()
+        this.getInboundList()
 
     }
 }

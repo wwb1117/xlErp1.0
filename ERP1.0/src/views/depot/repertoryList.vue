@@ -15,62 +15,45 @@
                         <span :style="{fontSize: '16px'}">高级搜索</span>
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
-                    <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
-                        <el-form-item label="采购单号">
-                            <el-input v-model="superFormData.purchaseList" placeholder="请输入采购单号"></el-input>
+                    <el-form class="myForm" :inline="true" :model="searchFormData" label-position="right" size="small" label-width="80px">
+                        <el-form-item label="商品编号">
+                            <el-input v-model="searchFormData.itemSku" placeholder="请输入商品编号"></el-input>
                         </el-form-item>
-                        <el-form-item label="制单人">
-                            <el-input v-model="superFormData.makeListMan" placeholder="请输入制单人"></el-input>
+                        <el-form-item label="条码">
+                            <el-input v-model="searchFormData.itemMac" placeholder="请输入条码"></el-input>
                         </el-form-item>
-                        <el-form-item label="采购员">
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入采购员"></el-input>
+                        <el-form-item label="名称">
+                            <el-input v-model="searchFormData.itemName" placeholder="请输入名称"></el-input>
                         </el-form-item>
                         <br>
-                        <el-form-item label="供应商">
-                            <el-select v-model="superFormData.supplier" placeholder="请输入采购员">
+                        <el-form-item label="商品分类">
+                            <el-select v-model="searchFormData.itemTypeId" placeholder="请选择">
+                                <el-option label="全部" value=""></el-option>
+                                <el-option label="区域一" value="shanghai"></el-option>
+                                <el-option label="区域二" value="beijing"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="所属仓库">
+                            <el-select v-model="searchFormData.houseId" placeholder="请选择">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购单位">
-                            <el-select v-model="superFormData.purchaseCompany" placeholder="请输入采购单位">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="出库仓库">
-                            <el-select v-model="superFormData.inRepository" placeholder="请输入出库仓库">
+                            <el-select v-model="searchFormData.buyerId" placeholder="请选择">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <br>
-                        <el-form-item label="出库状态">
-                            <el-select v-model="superFormData.inState" placeholder="请输入出库状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                        <el-form-item label="预警状态">
+                            <el-select v-model="searchFormData.houseStatus" placeholder="请选择">
+                                <el-option label="高于上限" value="1"></el-option>
+                                <el-option label="低于下限" value="2"></el-option>
+                                <el-option label="低于效期" value="3"></el-option>
                             </el-select>
-                        </el-form-item>
-                        <el-form-item label="审核状态">
-                            <el-select v-model="superFormData.reviewState" placeholder="请输入审核状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="采购时间">
-                            <el-date-picker
-                                v-model="superFormData.purchaseDate"
-                                type="daterange"
-                                :editable="false"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期">
-                            </el-date-picker>
                         </el-form-item>
                         <br>
                         <el-form-item>
@@ -83,7 +66,7 @@
                 <div v-show="!isExportShow" class="purchaseList_title">
                     <el-input
                         size="small"
-                        placeholder="请输入采购单号/供应商名称/采购单位"
+                        placeholder="请输入编码/条码/名称"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
                         v-model="serchText">
@@ -92,10 +75,10 @@
                     <span @click="supperBoxShow">高级搜索</span>
                     <div :style="{display: 'inline-block', marginLeft: '45px'}">
                         <span>预警状态</span>
-                        <el-select size="small" v-model="warnState" placeholder="请输入预警状态">
-                            <el-option label="全部" value="库存下限"></el-option>
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
+                        <el-select v-model="searchFormData.houseStatus" placeholder="请选择">
+                            <el-option label="高于上限" value="1"></el-option>
+                            <el-option label="低于下限" value="2"></el-option>
+                            <el-option label="低于效期" value="3"></el-option>
                         </el-select>
                     </div>
                 </div>
@@ -124,65 +107,65 @@
                         width="55">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseList"
+                        prop="itemSku"
                         label="编号"
                     >
                     </el-table-column>
                     <el-table-column
-                        prop="supplier"
+                        prop="itemMac"
                         label="条码"
                     >
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompany"
+                        prop="itemName"
                         label="名称">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompany"
+                        prop="itemSpec"
                         label="规格-sku">
                     </el-table-column>
                     <el-table-column
-                        prop="inRepository"
-                        label="保质日期">
+                        prop="itemExp"
+                        label="保质期">
                     </el-table-column>
                     <el-table-column
-                        prop="makeListMan"
+                        prop="productionDate"
                         label="生产日期">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseMan"
+                        prop="itemValid"
                         label="有效期">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="itemQuantifierUnit"
                         label="单位">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="warehouseName"
                         label="所属仓库">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="buyerName"
                         label="采购单位">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="inventoryUpperLimit"
                         label="库存上限">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="inventoryLowerLimit"
                         label="库存下限">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="blockedInventory"
                         label="已付款未发货库存">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="availableInventory"
                         label="可用库存">
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="physicalInventory"
                         label="实际库存">
                     </el-table-column>
                     <el-table-column
@@ -232,59 +215,33 @@ export default {
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
-            superFormData: {
-                purchaseList: '7758521',
-                supplier: '',
-                purchaseCompany: '',
-                inRepository: '402',
-                purchaseRMB: '888,000,00',
-                makeListMan: '李明珠',
-                purchaseMan: '官人',
-                purchaseDate: '2018-05-16',
-                inState: '已出库',
-                reviewState: '已审核',
-                prop: ''
+            searchFormData: {
+                itemSku: '1',
+                itemMac: '2',
+                itemName: '3',
+                itemTypeId: '4',
+                houseId: '5',
+                buyerId: '6',
+                houseStatus: '7'
             },
             isExportShow: false,
             tableData: [
                 {
-                    purchaseList: '7758521',
-                    supplier: '布加迪',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '888,000,00',
-                    makeListMan: '李明珠',
-                    purchaseMan: '官人',
-                    purchaseDate: '2018-05-16',
-                    inState: '已出库',
-                    reviewState: '已审核',
-                    prop: ''
-                },
-                {
-                    purchaseList: '6969996',
-                    supplier: '迈巴赫',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '874,000,00',
-                    makeListMan: '张作霖',
-                    purchaseMan: '客官',
-                    purchaseDate: '2018-05-16',
-                    inState: '已出库',
-                    reviewState: '已审核',
-                    prop: ''
-                },
-                {
-                    purchaseList: '5555587',
-                    supplier: '法拉利',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '562,000,00',
-                    makeListMan: '段祺瑞',
-                    purchaseMan: '小二',
-                    purchaseDate: '2018-05-16',
-                    inState: '已出库',
-                    reviewState: '已审核',
-                    prop: ''
+                    itemSku: '1',
+                    itemMac: '2',
+                    itemName: '3',
+                    itemValid: '4',
+                    itemSpec: '5',
+                    itemExp: '6',
+                    itemQuantifierUnit: '7',
+                    productionDate: '8',
+                    availableInventory: '9',
+                    blockedInventory: '10',
+                    physicalInventory: '11',
+                    inventoryLowerLimit: '12',
+                    inventoryUpperLimit: '13',
+                    warehouseName: '14',
+                    buyerName: '15'
                 }
             ]
         }

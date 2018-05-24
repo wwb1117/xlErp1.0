@@ -52,7 +52,7 @@
         </div>
         <div class="model_footer">
             <el-button style="width: 90px" type="primary" size="small">保存</el-button>
-            <el-button style="width: 90px" size="small" @click="goBack">取消</el-button>
+            <el-button style="width: 90px" size="small" v-RouterBack>取消</el-button>
         </div>
     </div>
 </template>

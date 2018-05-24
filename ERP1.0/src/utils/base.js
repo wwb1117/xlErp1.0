@@ -60,6 +60,18 @@ export default {
               message: '已取消删除'
             });
         });
+    },
+    deepCopy(p, c) { // 深拷贝
+        let cop = c || {};
+        for (let i in p) {
+            if (typeof p[i] === 'object') {
+                cop[i] = (p[i].constructor === Array) ? [] : {};
+                deepCopy(p[i], cop[i]);
+            } else {
+                cop[i] = p[i];
+            }
+        }
+        return cop;
     }
 
 
