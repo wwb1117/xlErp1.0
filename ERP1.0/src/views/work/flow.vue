@@ -42,37 +42,37 @@
                         width="200">
                         <template  slot-scope="scope">
                             <el-button type="text" size="small" @click="writeflow" style="margin-right:10px">配置</el-button>
-                            <el-button type="text" size="small" @click="editflow = true" style="margin-right:10px">编辑</el-button>
-                            <el-button type="text" size="small" @click='delflow = true' >删除</el-button>
+                            <el-button type="text" size="small" @click="edittrue(scope)" style="margin-right:10px">编辑</el-button>
+                            <el-button type="text" size="small" @click='deltrue(scope)' >删除</el-button>
+                            <!-- 编辑 -->
+                            <el-dialog
+                                title="编辑流程"
+                                :visible.sync="editflow"
+                                width="30%">
+                                <div>
+                                    <span style="width:80px;text-align:center;display:inline-block">流程名</span>
+                                    <el-input v-model="edittext" size='small' style="width:388px"></el-input>
+                                </div>
+                                <span slot="footer" class="dialog-footer">
+                                    <el-button @click="editflow = false" size='small'>取 消</el-button>
+                                    <el-button type="primary" @click="editconfirm" size='small'>确 定</el-button>
+                                </span>
+                            </el-dialog>
+                            <!-- 删除 -->
+                            <el-dialog
+                                title="提示"
+                                :visible.sync="delflow"
+                                width="30%">
+                                <span>确定删除此项流程？</span>
+                                <span slot="footer" class="dialog-footer">
+                                    <el-button @click="delflow = false" size='small'>取 消</el-button>
+                                    <el-button type="primary" @click="delconfirm" size='small'>确 定</el-button>
+                                </span>
+                            </el-dialog>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
-            <!-- 编辑 -->
-            <el-dialog
-                title="编辑流程"
-                :visible.sync="editflow"
-                width="30%">
-                <div>
-                    <span style="width:80px;text-align:center;display:inline-block">流程名</span>
-                    <el-input v-model="edittext" size='small' style="width:388px"></el-input>
-                </div>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="editflow = false" size='small'>取 消</el-button>
-                    <el-button type="primary" @click="edittrue(scope)" size='small'>确 定</el-button>
-                </span>
-            </el-dialog>
-            <!-- 删除 -->
-            <el-dialog
-                title="提示"
-                :visible.sync="delflow"
-                width="30%">
-                <span>确定删除此项流程？</span>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="delflow = false" size='small'>取 消</el-button>
-                    <el-button type="primary" @click="deltrue(scope)" size='small'>确 定</el-button>
-                </span>
-            </el-dialog>
         </section>
     </section>
 </template>
@@ -97,13 +97,16 @@ export default {
                     name: '采购退货',
                     other: ''
                 }
-            ]
+            ],
+            text: '',
+            index: ''
         }
     },
     methods: {
         addflow() {
             this.addopen = true
         },
+
         addtrue() {
             this.addopen = false
 
@@ -117,18 +120,41 @@ export default {
             this.flow.push(obj)
         },
         deltrue(data) {
-            if (this.flow.length > 1){
-                this.flow.splice(data.$index, 1)
-            }
-            this.delflow = false
+            this.delflow = true
+
+            this.index = data.$index
+
         },
         edittrue(data) {
-            data.row.name = this.edittext
-            this.editflow = false
-            this.edittext = ''
+            this.editflow = true
+            this.edittext = data.row.name
+            this.index = data.$index
         },
         writeflow() {
             this.$router.push('configuration')
+        },
+        editconfirm() {
+            this.editflow = false
+            for (var i in this.flow){
+
+                if (i == this.index){
+                    this.flow[i].name = this.edittext
+                }
+            }
+            this.index = ''
+            this.edittext = ''
+        },
+        delconfirm() {
+            this.delflow = false
+            for (var i in this.flow){
+
+                if (i == this.index){
+                    if (this.flow.length > 1){
+                        this.flow.splice(i, 1)
+                    }
+                }
+            }
+            this.index = ''
         }
     }
 }

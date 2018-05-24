@@ -23,39 +23,40 @@
                     width="200">
                     <template  slot-scope="scope">
                         <el-button type="text" size="small" @click="gotoAuthority">权限管理</el-button>
-                        <el-button type="text" size="small" @click="editauthorit = true" >编辑</el-button>
-                        <el-button type="text" size="small" @click='delauthorit = true' >删除</el-button>
+                        <el-button type="text" size="small" @click="edittrue(scope)" >编辑</el-button>
+                        <el-button type="text" size="small" @click='deltrue(scope)' >删除</el-button>
                     </template>
+                    <!-- 编辑 -->
+                    <el-dialog
+                        title="编辑权限组名"
+                        :visible.sync="editauthorit"
+                        width="30%"
+                        append-to-body>
+                        <div>
+                            <span style="width:80px;text-align:center;display:inline-block">权限组名</span>
+                            <el-input v-model="text" size='small' style="width:388px"></el-input>
+                        </div>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="editauthorit = false" size='small'>取 消</el-button>
+                            <el-button type="primary" @click="editconfirm" size='small'>确 定</el-button>
+                        </span>
+                    </el-dialog>
+                    <!-- 删除 -->
+                    <el-dialog
+                        title="提示"
+                        :visible.sync="delauthorit"
+                        width="30%"
+                        append-to-body>
+                        <span>确定删除该权限组？</span>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="delauthorit = false" size='small'>取 消</el-button>
+                            <el-button type="primary" @click="delconfirm" size='small'>确 定</el-button>
+                        </span>
+                    </el-dialog>
                 </el-table-column>
             </el-table>
         </div>
-        <!-- 权限管理 -->
-        <el-dialog
-            title="编辑权限组名"
-            :visible.sync="editauthorit"
-            width="30%"
-            append-to-body>
-            <div>
-                <span style="width:80px;text-align:center;display:inline-block">权限组名</span>
-                <el-input v-model="authoritytext" size='small' style="width:388px"></el-input>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editauthorit = false" size='small'>取 消</el-button>
-                <el-button type="primary" @click="edittrue(scope.$index, scope.row)" size='small'>确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 删除 -->
-        <el-dialog
-            title="提示"
-            :visible.sync="delauthorit"
-            width="30%"
-            append-to-body>
-            <span>确定删除该权限组？</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="delauthorit = false" size='small'>取 消</el-button>
-                <el-button type="primary" @click="deltrue(scope)" size='small'>确 定</el-button>
-            </span>
-        </el-dialog>
+
     </section>
 </template>
 <script>
@@ -82,21 +83,42 @@ export default {
             ],
             editauthorit: false,
             delauthorit: false,
-            authoritytext: ''
+            text: '',
+            index: ''
         }
     },
     methods: {
-        edittrue(index, row) {
-            // data.row.name = this.authoritytext
+        edittrue(data) {
+            this.editauthorit = true
+            this.text = data.row.name
+            this.index = data.$index
+        },
+        editconfirm() {
             this.editauthorit = false
-            this.authoritytext = ''
-            console.log(index, row)
+            for (var i in this.authority){
+
+                if (i == this.index){
+                    this.authority[i].name = this.text
+                }
+            }
+            this.index = ''
+            this.text = ''
         },
         deltrue(data) {
-            if (this.authority.length > 1){
-                this.authority.splice(data.$index, 1)
-            }
+            this.delauthorit = true
+            this.index = data.$index
+        },
+        delconfirm() {
             this.delauthorit = false
+            for (var i in this.authority){
+
+                if (i == this.index){
+                    if (this.authority.length > 1){
+                        this.authority.splice(i, 1)
+                    }
+                }
+            }
+            this.index = ''
         },
         gotoAuthority() {
             this.$router.push('permissionManage')

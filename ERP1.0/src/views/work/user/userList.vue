@@ -19,9 +19,11 @@
                     label='用户名'>
                 </el-table-column>
                 <el-table-column
-                    prop="username"
                     label='权限组名'
                     width="150">
+                    <template  slot-scope="scope">
+                        <span v-for='(item,index) in scope.row.username' :key="index" style="margin-left:5px">{{item}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="time"
@@ -33,71 +35,72 @@
                     label='操作'
                     width="200">
                     <template  slot-scope="scope">
-                        <el-button type='text' v-show="admin" @click="resultpass = true"  size='small'>重置密码</el-button>
-                        <el-button type='text' @click='edituesr = true' size='small' >编辑</el-button>
-                        <el-button type='text' v-show='admin' @click='deluser = true' size='small' >删除</el-button>
+                        <el-button type='text' @click="resultpass = true"  size='small'>重置密码</el-button>
+                        <el-button type='text' @click='edituesrtrue(scope)' size='small' >编辑</el-button>
+                        <el-button type='text' @click='delusertrue(scope)' size='small' >删除</el-button>
                     </template>
+                    <!-- 重置密码 -->
+                    <el-dialog
+                        title="提示"
+                        :visible.sync="resultpass"
+                        width="30%"
+                        append-to-body>
+                        <span>确定重置用户密码？</span>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="resultpass = false" size='small' style="margin-right:10px">取 消</el-button>
+                            <el-button type="primary" @click="resulttrue(scope)" size='small' style="margin-right:10px">确 定</el-button>
+                        </span>
+                    </el-dialog>
+                    <!-- 编辑 -->
+                    <el-dialog
+                        title="编辑用户"
+                        :visible.sync="edituesr"
+                        width="30%"
+                        append-to-body>
+                        <div>
+                            <span style="width:80px;text-align:center;display:inline-block">用户名</span>
+                            <el-input v-model="name" size='small' style="width:388px"></el-input>
+                        </div>
+                        <div style="margin-top:20px">
+                            <span style="width:80px;text-align:center;display:inline-block">权限组</span>
+                            <el-select
+                                v-model="editlist"
+                                multiple
+                                filterable
+                                allow-create
+                                default-first-option
+                                size='small'
+                                style="width:388px">
+                                <el-option
+                                    v-for="item in edit"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="edituesr = false" size='small' style="margin-right:10px">取 消</el-button>
+                            <el-button type="primary" @click="editconfirm" size='small' style="margin-right:10px">确 定</el-button>
+                        </span>
+                    </el-dialog>
+                    <!-- 删除 -->
+                    <el-dialog
+                        title="提示"
+                        :visible.sync="deluser"
+                        width="30%"
+                        append-to-body>
+                        <span>确定删除该用户？</span>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="deluser = false" size='small' style="margin-right:10px">取 消</el-button>
+                            <el-button type="primary" @click="delconfirm" size='small' style="margin-right:10px">确 定</el-button>
+                        </span>
+                    </el-dialog>
                 </el-table-column>
             </el-table>
         </div>
 
-            <!-- 重置密码 -->
-            <el-dialog
-                title="提示"
-                :visible.sync="resultpass"
-                width="30%"
-                append-to-body>
-                <span>确定重置用户密码？</span>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="resultpass = false" size='small' style="margin-right:10px">取 消</el-button>
-                    <el-button type="primary" @click="resulttrue(scope)" size='small' style="margin-right:10px">确 定</el-button>
-                </span>
-            </el-dialog>
-            <!-- 编辑 -->
-            <el-dialog
-                title="编辑用户"
-                :visible.sync="edituesr"
-                width="30%"
-                append-to-body>
-                <div>
-                    <span style="width:80px;text-align:center;display:inline-block">用户名</span>
-                    <el-input v-model="addautohoritytext" size='small' style="width:388px"></el-input>
-                </div>
-                <div style="margin-top:20px">
-                    <span style="width:80px;text-align:center;display:inline-block">权限组</span>
-                    <el-select
-                        v-model="editlist"
-                        multiple
-                        filterable
-                        allow-create
-                        default-first-option
-                        size='small'
-                        style="width:388px">
-                        <el-option
-                            v-for="item in edit"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="edituesr = false" size='small' style="margin-right:10px">取 消</el-button>
-                    <el-button type="primary" @click="edituesr = false" size='small' style="margin-right:10px">确 定</el-button>
-                </span>
-            </el-dialog>
-            <!-- 删除 -->
-            <el-dialog
-                title="提示"
-                :visible.sync="deluser"
-                width="30%"
-                append-to-body>
-                <span>确定删除该用户？</span>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="deluser = false" size='small' style="margin-right:10px">取 消</el-button>
-                    <el-button type="primary" @click="delusertrue(scope)" size='small' style="margin-right:10px">确 定</el-button>
-                </span>
-            </el-dialog>
+
 
     </section>
 </template>
@@ -110,33 +113,32 @@ export default {
                 {
                     id: '1',
                     name: 'admin',
-                    username: '超级管理员',
+                    username: ['超级管理员'],
                     time: '2018-01-12 10:16',
                     other: ''
                 },
                 {
                     id: '2',
                     name: '商品部',
-                    username: '仓储',
+                    username: ['仓储'],
                     time: '2018-01-12 10:12',
                     other: ''
                 },
                 {
                     id: '3',
                     name: '商品部',
-                    username: '产品',
+                    username: ['产品'],
                     time: '2018-01-12 10:19',
                     other: ''
                 },
                 {
                     id: '4',
                     name: '商品部',
-                    username: '采购',
+                    username: ['采购'],
                     time: '2018-01-12 10:11',
                     other: ''
                 }
             ],
-            admin: true,
             resultpass: false,
             deluser: false,
             edituesr: false,
@@ -154,30 +156,53 @@ export default {
                     label: 'JavaScript'
                 }
             ],
-            editlist: []
+            editlist: [],
+            name: '',
+            index: ''
 
         }
     },
     methods: {
-        // objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-        //     if (row.id == 1){
-        //         this.admin = false
-        //         return this.admin
-        //     } else {
-        //         this.admin = true
-        //         return this.admin
-        //     }
-
-        // },
         resulttrue(data) {
             this.resultpass = false
             this.$router.push('')
         },
-        delusertrue(data) {
-            this.deluser = false
-            if (this.user.length > 1){
-                this.user.splice(data.$index, 1)
+        edituesrtrue(data) {
+            this.edituesr = true
+            this.name = data.row.name
+            this.index = data.$index
+        },
+        editconfirm() {
+            this.edituesr = false
+            for (var i in this.user){
+
+                if (i == this.index){
+                    this.user[i].username = this.editlist
+
+                    // 数组间隔转化问题
+                    this.user[i].name = this.name
+                }
             }
+
+            this.name = ''
+            this.index = ''
+        },
+        delusertrue(data) {
+            this.deluser = true
+            this.index = data.$index
+        },
+        delconfirm() {
+            this.deluser = false
+            for (var i in this.user){
+
+                if (i == this.index){
+                    if (this.user.length > 1){
+                        this.user.splice(i, 1)
+                    }
+                }
+            }
+            this.index = ''
+
         }
     }
 
