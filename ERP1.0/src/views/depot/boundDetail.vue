@@ -104,22 +104,38 @@
 </template>
 
 <script>
+import ME from 'utils/base'
+import API from 'api/depot'
 export default {
     data() {
         return {
-            goodsInfoData: [
-                {
-                    selfNum: 's454645464',
-                    barCode: '',
-                    goodName: '这和商品',
-                    SKU: '',
-                    qualityDate: '',
-                    productData: '',
-                    purchaseNum: '',
-                    unit: '',
-                    remark: 'sdasdsadas'
-                }
-            ]
+            goodsInfoData: [],
+            orderDetail: {
+                list: [
+                    {
+                        currentStoreNumber: 's454645464',
+                        id: '',
+                        itemId: '这和商品',
+                        purchasingNumber: '',
+                        remark: '',
+                        storeOrderId: ''
+                    }
+                ],
+                buyerId: '',
+                buyerName: '',
+                creator: '',
+                id: '',
+                operator: '',
+                purchaseOrderId: '',
+                purchaseOrderNo: '',
+                storeHouseId: '',
+                storeHouseName: '',
+                storeNo: '',
+                storeRemark: '',
+                storeTime: '',
+                storeType: '',
+                totalStoreNumber: ''
+            }
         }
     },
     computed:{},
@@ -152,7 +168,32 @@ export default {
                 }
             })
             return sums;
+        },
+        // 获取详情
+        getboundDetail() {
+            if (this.$route.params.type == '入库') { // 入库单
+                console.log("入库")
+                API.getInboundDetail(this.$route.params.id).then(res => {
+                    console.log("入库res")
+
+                })
+            }
+            else if (this.$route.params.type == '出库') { // 出库单
+                console.log("出库")
+                API.getOutboundDetail(this.$route.params.id).then(res => {
+                    console.log("出库res")
+                })
+            }
+
         }
+
+    },
+    mounted() {
+        // this.getboundDetail()
+
+    },
+    activated () {
+        this.getboundDetail()
     }
 }
 </script>

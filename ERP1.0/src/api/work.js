@@ -11,7 +11,7 @@ export default {
     },
     // 新增流程名称
     postprocessadd(data){
-        return HttpClient.post('/process/list', data)
+        return HttpClient.post('/process/add', data)
     },
     // 修改流程
     putprocessupdate(data){
@@ -19,7 +19,7 @@ export default {
     },
     // 删除流程
     delprocessid(id){
-        return HttpClient.put(`/process/delete/${id}`)
+        return HttpClient.delete(`/process/delete/${id}`)
     },
     // 设置审批流程
     postprocesssetreview(data){

@@ -78,6 +78,7 @@
 </template>
 <script>
 import api from 'api/work'
+// 未写配置审批流程
 export default {
     data() {
         return {
@@ -101,7 +102,13 @@ export default {
             // ],
             flow : [],
             text: '',
-            index: ''
+            index: '',
+            formData:{
+                id: '',
+                name: '',
+                processType: '',
+                enableStatus: ''
+            }
         }
     },
     methods: {
@@ -112,13 +119,19 @@ export default {
             this.addopen = false
 
             let obj = {
-                id: this.flow.length + 1,
                 name: this.addtext,
-                other: ''
+                processType: '',
+                enableStatus: ''
             }
 
             this.addtext = ''
-            this.flow.push(obj)
+            // this.flow.push(obj)
+            api.postprocessadd(obj).then((response)=>{
+                console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+            this.get()
         },
         deltrue(data) {
             this.delflow = true
@@ -139,12 +152,20 @@ export default {
             for (var i in this.flow){
 
                 if (i == this.index){
-                    this.flow[i].name = this.edittext
-
+                    // this.flow[i].name = this.edittext
+                    this.formData.id = i
+                    this.formData.name = this.edittext
+                    api.putprocessupdate(this.formData).then((response)=>{
+                        console.log(response)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
+                    this.get()
                 }
             }
             this.index = ''
             this.edittext = ''
+
         },
         delconfirm() {
             this.delflow = false
@@ -152,20 +173,29 @@ export default {
 
                 if (i == this.index){
                     if (this.flow.length > 1){
-                        this.flow.splice(i, 1)
+                        // this.flow.splice(i, 1)
+                        api.delprocessid(this.index).then((response)=>{
+                            console.log(response)
+                        }).catch((error)=>{
+                            console.log(error)
+                        })
+                        this.get()
                     }
                 }
+
             }
             this.index = ''
+
+        },
+        get() {
+            api.getprocessname().then((response) => {
+            // console.log(response.data.list)
+                this.flow = response.data.list
+            })
         }
     },
     created() {
-        api.getprocessname().then((response) => {
-            // console.log(response.data.list)
-            this.flow = response.data.list
-
-
-        })
+        this.get()
     }
 }
 </script>
