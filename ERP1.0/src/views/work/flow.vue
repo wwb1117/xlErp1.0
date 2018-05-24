@@ -9,7 +9,7 @@
                 :visible.sync="addopen"
                 width="30%">
                 <div>
-                    <span style="width:100px;text-align:center;display:inline-block">流程名</span>
+                    <span style="width:80px;text-align:center;display:inline-block">流程名</span>
                     <el-input v-model="addtext" size='small' style="width:388px"></el-input>
                 </div>
                 <span slot="footer" class="dialog-footer">
@@ -41,47 +41,38 @@
                         label="操作"
                         width="200">
                         <template  slot-scope="scope">
-                            <!-- 配置没写 -->
-                            <el-button type="text" size="small" @click="setflow = true" style="margin-right:10px">配置</el-button>
-                                <el-dialog
-                                    title='配置流程'
-                                    :visible.sync="setflow"
-                                    width="70%">
-                                    <!-- 未写 -->
-                                    <span slot="footer" class="dialog-footer">
-                                        <el-button @click="setflow = false" size='small'>取 消</el-button>
-                                        <el-button type="primary" @click="setflow = false" size='small'>确 定</el-button>
-                                    </span>
-                                </el-dialog>
+                            <el-button type="text" size="small" @click="writeflow" style="margin-right:10px">配置</el-button>
                             <el-button type="text" size="small" @click="editflow = true" style="margin-right:10px">编辑</el-button>
-                                <el-dialog
-                                    title="编辑流程"
-                                    :visible.sync="editflow"
-                                    width="30%">
-                                    <div>
-                                        <span style="width:100px;text-align:center;display:inline-block">流程名</span>
-                                        <el-input v-model="edittext" size='small' style="width:388px"></el-input>
-                                    </div>
-                                    <span slot="footer" class="dialog-footer">
-                                        <el-button @click="editflow = false" size='small'>取 消</el-button>
-                                        <el-button type="primary" @click="edittrue(scope)" size='small'>确 定</el-button>
-                                    </span>
-                                </el-dialog>
                             <el-button type="text" size="small" @click='delflow = true' >删除</el-button>
-                                <el-dialog
-                                    title="提示"
-                                    :visible.sync="delflow"
-                                    width="30%">
-                                    <span>确定删除此项流程？</span>
-                                    <span slot="footer" class="dialog-footer">
-                                        <el-button @click="delflow = false" size='small'>取 消</el-button>
-                                        <el-button type="primary" @click="deltrue(scope)" size='small'>确 定</el-button>
-                                    </span>
-                                </el-dialog>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
+            <!-- 编辑 -->
+            <el-dialog
+                title="编辑流程"
+                :visible.sync="editflow"
+                width="30%">
+                <div>
+                    <span style="width:80px;text-align:center;display:inline-block">流程名</span>
+                    <el-input v-model="edittext" size='small' style="width:388px"></el-input>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="editflow = false" size='small'>取 消</el-button>
+                    <el-button type="primary" @click="edittrue(scope)" size='small'>确 定</el-button>
+                </span>
+            </el-dialog>
+            <!-- 删除 -->
+            <el-dialog
+                title="提示"
+                :visible.sync="delflow"
+                width="30%">
+                <span>确定删除此项流程？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="delflow = false" size='small'>取 消</el-button>
+                    <el-button type="primary" @click="deltrue(scope)" size='small'>确 定</el-button>
+                </span>
+            </el-dialog>
         </section>
     </section>
 </template>
@@ -122,6 +113,7 @@ export default {
                 other: ''
             }
 
+            this.addtext = ''
             this.flow.push(obj)
         },
         deltrue(data) {
@@ -133,6 +125,10 @@ export default {
         edittrue(data) {
             data.row.name = this.edittext
             this.editflow = false
+            this.edittext = ''
+        },
+        writeflow() {
+            this.$router.push('configuration')
         }
     }
 }

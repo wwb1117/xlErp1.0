@@ -33,36 +33,72 @@
                     label='操作'
                     width="200">
                     <template  slot-scope="scope">
-                        <el-button type='text' v-show="admin" @click="resultpass = true" style="margin-right:10px">重置密码</el-button>
-                            <el-dialog
-                                title="提示"
-                                :visible.sync="resultpass"
-                                width="30%"
-                                append-to-body>
-                                <span>确定重置用户密码？</span>
-                                <span slot="footer" class="dialog-footer">
-                                    <el-button @click="resultpass = false" size='small' style="margin-right:10px">取 消</el-button>
-                                    <el-button type="primary" @click="resulttrue(scope)" size='small' style="margin-right:10px">确 定</el-button>
-                                </span>
-                            </el-dialog>
-                        <el-button type='text' >编辑</el-button>
-
-                        <el-button type='text' v-show='admin' @click='deluser = true'>删除</el-button>
-                            <el-dialog
-                                title="提示"
-                                :visible.sync="deluser"
-                                width="30%"
-                                append-to-body>
-                                <span>确定删除该用户？</span>
-                                <span slot="footer" class="dialog-footer">
-                                    <el-button @click="deluser = false" size='small' style="margin-right:10px">取 消</el-button>
-                                    <el-button type="primary" @click="delusertrue(scope)" size='small' style="margin-right:10px">确 定</el-button>
-                                </span>
-                            </el-dialog>
+                        <el-button type='text' v-show="admin" @click="resultpass = true"  size='small'>重置密码</el-button>
+                        <el-button type='text' @click='edituesr = true' size='small' >编辑</el-button>
+                        <el-button type='text' v-show='admin' @click='deluser = true' size='small' >删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
+
+            <!-- 重置密码 -->
+            <el-dialog
+                title="提示"
+                :visible.sync="resultpass"
+                width="30%"
+                append-to-body>
+                <span>确定重置用户密码？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="resultpass = false" size='small' style="margin-right:10px">取 消</el-button>
+                    <el-button type="primary" @click="resulttrue(scope)" size='small' style="margin-right:10px">确 定</el-button>
+                </span>
+            </el-dialog>
+            <!-- 编辑 -->
+            <el-dialog
+                title="编辑用户"
+                :visible.sync="edituesr"
+                width="30%"
+                append-to-body>
+                <div>
+                    <span style="width:80px;text-align:center;display:inline-block">用户名</span>
+                    <el-input v-model="addautohoritytext" size='small' style="width:388px"></el-input>
+                </div>
+                <div style="margin-top:20px">
+                    <span style="width:80px;text-align:center;display:inline-block">权限组</span>
+                    <el-select
+                        v-model="editlist"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        size='small'
+                        style="width:388px">
+                        <el-option
+                            v-for="item in edit"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="edituesr = false" size='small' style="margin-right:10px">取 消</el-button>
+                    <el-button type="primary" @click="edituesr = false" size='small' style="margin-right:10px">确 定</el-button>
+                </span>
+            </el-dialog>
+            <!-- 删除 -->
+            <el-dialog
+                title="提示"
+                :visible.sync="deluser"
+                width="30%"
+                append-to-body>
+                <span>确定删除该用户？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="deluser = false" size='small' style="margin-right:10px">取 消</el-button>
+                    <el-button type="primary" @click="delusertrue(scope)" size='small' style="margin-right:10px">确 定</el-button>
+                </span>
+            </el-dialog>
+
     </section>
 </template>
 <script>
@@ -102,7 +138,24 @@ export default {
             ],
             admin: true,
             resultpass: false,
-            deluser: false
+            deluser: false,
+            edituesr: false,
+            edit: [
+                {
+                    value: 'HTML',
+                    label: 'HTML'
+                },
+                {
+                    value: 'CSS',
+                    label: 'CSS'
+                },
+                {
+                    value: 'JavaScript',
+                    label: 'JavaScript'
+                }
+            ],
+            editlist: []
+
         }
     },
     methods: {

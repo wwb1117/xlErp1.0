@@ -69,6 +69,7 @@ import dteails from '@/views/goods/details'
 import flow from '@/views/work/flow'
 import authority from '@/views/work/authority'
 import user from '@/views/work/user/user'
+import configuration from '@/views/work/configuration'
 
 Vue.use(Router)
 
@@ -146,7 +147,8 @@ var router = new Router({
                 /*************************** 商品模块*************************************/
                 {name: "流程配置", path: '/workflowConfig', component: flow},
                 {name: "权限管理", path: '/permissionManage', component: authority},
-                {name: "用户管理", path: '/userManage', component: user}
+                {name: "用户管理", path: '/userManage', component: user},
+                {name: "配置流程", path: '/configuration', component: configuration}
             ]
         },
         {

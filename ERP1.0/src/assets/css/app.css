@@ -245,3 +245,10 @@ input[type="file"] {
 .user_top .el-tabs__nav-wrap{
     padding-left: 30px
 }
+
+.add_box .el-tag__close:hover{
+    font-size: 10px
+}
+.el-dialog__body .el-tag__close:hover{
+    font-size: 10px
+}
