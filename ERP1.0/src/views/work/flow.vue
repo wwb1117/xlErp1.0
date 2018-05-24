@@ -77,6 +77,7 @@
     </section>
 </template>
 <script>
+import api from 'api/work'
 export default {
     data() {
         return {
@@ -86,18 +87,19 @@ export default {
             setflow: false,
             addtext: '',
             edittext: '',
-            flow: [
-                {
-                    id: '1',
-                    name: '采购订单',
-                    other: ''
-                },
-                {
-                    id: '2',
-                    name: '采购退货',
-                    other: ''
-                }
-            ],
+            // flow: [
+            //     {
+            //         id: '1',
+            //         name: '采购订单',
+            //         other: ''
+            //     },
+            //     {
+            //         id: '2',
+            //         name: '采购退货',
+            //         other: ''
+            //     }
+            // ],
+            flow : [],
             text: '',
             index: ''
         }
@@ -106,7 +108,6 @@ export default {
         addflow() {
             this.addopen = true
         },
-
         addtrue() {
             this.addopen = false
 
@@ -139,6 +140,7 @@ export default {
 
                 if (i == this.index){
                     this.flow[i].name = this.edittext
+
                 }
             }
             this.index = ''
@@ -156,6 +158,14 @@ export default {
             }
             this.index = ''
         }
+    },
+    created() {
+        api.getprocessname().then((response) => {
+            // console.log(response.data.list)
+            this.flow = response.data.list
+
+
+        })
     }
 }
 </script>
