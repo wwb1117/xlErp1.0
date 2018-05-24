@@ -70,6 +70,7 @@ import flow from '@/views/work/flow'
 import authority from '@/views/work/authority'
 import user from '@/views/work/user/user'
 import configuration from '@/views/work/configuration'
+import operationLog from '@/views/work/operation'
 
 Vue.use(Router)
 
@@ -148,7 +149,8 @@ var router = new Router({
                 {name: "流程配置", path: '/workflowConfig', component: flow},
                 {name: "权限管理", path: '/permissionManage', component: authority},
                 {name: "用户管理", path: '/userManage', component: user},
-                {name: "配置流程", path: '/configuration', component: configuration}
+                {name: "配置流程", path: '/configuration', component: configuration},
+                {name: "操作日志", path: '/operationLog', component: operationLog}
             ]
         },
         {

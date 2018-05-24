@@ -39,7 +39,7 @@ export default {
                     path: '/goodsSpec'
                 },
                 {
-                    name: '商品类型',
+                    name: '包装类型',
                     path: '/goodsTypes'
                 }
             ],
@@ -111,12 +111,12 @@ export default {
                     path: '/workflowConfig'
                 },
                 {
-                    name: '权限管理',
-                    path: '/permissionManage'
-                },
-                {
                     name: '用户管理',
                     path: '/userManage'
+                },
+                {
+                    name: '操作日志',
+                    path: '/operationLog'
                 }
             ]
 
