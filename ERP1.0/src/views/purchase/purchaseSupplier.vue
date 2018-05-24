@@ -11,7 +11,7 @@
                         placeholder="请输入供应商名称"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="tableParam.sellerName">
                     </el-input>
                     <el-button @click="getTableData" :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                     <el-button @click="addPurchaseSupplierEvent" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
@@ -96,7 +96,6 @@ import api from 'api/purchase'
 export default {
     data(){
         return {
-            serchText: '',
             currentPage: 2,
             selectTableData: [],
             tableHeight: 500,
@@ -104,7 +103,7 @@ export default {
             tableParam: {
                 pageNo: 1,
                 pageSize: 15,
-                sellerName: this.serchText
+                sellerName: ''
             },
             tableData: []
         }
@@ -121,7 +120,6 @@ export default {
         },
         getTableData(){
             api.getSupplierList(this.tableParam).then((response) => {
-                console.log(response)
                 this.totalPage = response.data.total
                 this.tableData = response.data.list
 
@@ -135,10 +133,29 @@ export default {
                 })
             }
             if (type == 2){
+                this.$store.commit('setSupplierId', rowid)
                 this.$router.push({
                     path: '/editPurchaseSupplier'
                 })
             }
+            if (type == 3){
+                this.myBase.confirmDelet('你确定要永久删除此供应商信息?', () => {
+                    api.deleteSupplier(rowid).then((response) => {
+                        this.$message({
+                            type: 'success',
+                            duration: 1500,
+                            showClose: true,
+                            message: '删除成功'
+                        })
+
+                        this.tableParam.pageSize = 15
+                        this.tableParam.pageNo = 1
+                        this.getTableData()
+
+                    })
+                })
+            }
+
         },
 
         handleSelectionChange(val){
@@ -157,9 +174,6 @@ export default {
     },
     created(){
         this.getTableData()
-        api.getSupplierSelectData().then((response) => {
-            console.log(response)
-        })
     },
     mounted(){}
 }

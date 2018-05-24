@@ -49,12 +49,6 @@ export default {
             if (success){
                 success()
             }
-            Message.success({
-                type: 'success',
-                showClose: true,
-                duration: 1500,
-                message: '删除成功!'
-            })
         }).catch(() => {
             if (cansel){
                 cancel()

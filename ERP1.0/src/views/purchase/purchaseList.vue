@@ -27,10 +27,8 @@
                         </el-form-item>
                         <br>
                         <el-form-item label="供应商">
-                            <el-select v-model="superFormData.supplier" placeholder="请输入采购员">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="superFormData.sellerId" placeholder="请选择供应商">
+                                <el-option v-for="item in supplierSelectData" :key="item.id" :label="item.sellerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购单位">
@@ -204,6 +202,7 @@
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
@@ -211,8 +210,12 @@ export default {
             currentPage: 2,
             totalPage: 1,
             selectTableData: [],
+            supplierSelectData: [],
             isSupperBoxShow: false,
-            tableHeight: 500,
+            tableParam: {
+                searchText: '',
+                purchaseOrderNo: ''
+            },
             superFormData: {
                 purchaseList: '7758521',
                 supplier: '',
@@ -317,10 +320,19 @@ export default {
             this.$router.push({
                 path: '/invalidRecord'
             })
+        },
+        getSupplierSelectData(){
+            api.getSupplierSelectData().then((response) => {
+                this.supplierSelectData = response.data.list
+            })
         }
+    },
+    activated(){
 
     },
-    created(){},
+    created(){
+
+    },
     mounted(){}
 }
 </script>
