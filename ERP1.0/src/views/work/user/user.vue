@@ -1,8 +1,8 @@
 <template>
-    <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
+    <section class="uesr_box">
         <!-- 顶部 -->
-        <header class="user_top">
-             <el-tabs v-model="activeName" >
+        <header class="user_top" >
+            <el-tabs v-model="activeName" >
                 <el-tab-pane label="用户列表" name="first">
                     <userlist></userlist>
                 </el-tab-pane>
@@ -10,9 +10,11 @@
                     <autohority></autohority>
                 </el-tab-pane>
             </el-tabs>
-            <el-button type='primary' size='small'>新增用户</el-button>
-        </header>
 
+        </header>
+        <div class="button_box">
+            <el-button type='primary' size='small' style="margin-right:10px">新增用户</el-button>
+        </div>
     </section>
 </template>
 <script>
@@ -37,12 +39,23 @@ export default {
 </script>
 <style scoped>
 /* 顶部 */
-.user_top{
+.uesr_box{
     display: flex;
     justify-content: space-between;
+    position: relative;
+    border-bottom: 1px solid #e5e8e8;
+    z-index: 10
+}
+.button_box{
+    position: absolute;
+    right: 0px;
+    top:6px
+}
+.user_top{
     height: 46px;
-    padding: 8px 10px;
-    border-bottom: 1px solid #e5e8e8
+    padding: 8px 0;
+
+    width: 100%;
 }
 .user_title{
     height: 25px;
