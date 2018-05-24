@@ -11,22 +11,20 @@
                         基本信息
                     </div>
                     <div class="baseInfoBox">
-                        <el-form-item prop="supplier" label="供应商">
-                            <el-select v-model="addFormData.supplier" placeholder="请输入供应商">
+                        <el-form-item prop="sellerId" label="供应商">
+                            <el-select v-model="addFormData.sellerId" placeholder="请选择供应商">
+                                <el-option v-for="item in supplierSelectData" :key="item.id" :label="item.sellerCompanyName" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item prop="purchaseHouseId" label="入库仓库">
+                            <el-select v-model="addFormData.purchaseHouseId" placeholder="请输入入库仓库">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="inRepository" label="入库仓库">
-                            <el-select v-model="addFormData.inRepository" placeholder="请输入入库仓库">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item prop="purchaseCompany" label="采购单位">
-                            <el-select v-model="addFormData.purchaseCompany" placeholder="请输入采购单位">
+                        <el-form-item prop="buyerId" label="采购单位">
+                            <el-select v-model="addFormData.buyerId" placeholder="请输入采购单位">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -40,6 +38,7 @@
                         <el-table
                             :data="goodsInfoData"
                             :span-method="arraySpanMethod"
+                            :summary-method="getSummaries"
                             show-summary
                             border
                         style="width: 100%">
@@ -134,40 +133,40 @@
                         </el-table>
                         <div class="tableBottom">
                             <div style="width: 350px; float: right;padding-top: 10px">
-                                <el-form-item prop="carriage" label="运费">
-                                    <el-input v-model="addFormData.carriage" placeholder="请输入运费"></el-input>
+                                <el-form-item prop="freight" label="运费">
+                                    <el-input @change.native="costInputChangeEvent()" @keyup.native="costInputChangeEvent()" v-model="addFormData.freight" placeholder="请输入运费"></el-input>
                                 </el-form-item>
-                                <el-form-item prop="extraCost" label="其他费用">
-                                    <el-input v-model="addFormData.extraCost" placeholder="请输入其他费用"></el-input>
+                                <el-form-item prop="otherMoney" label="其他费用">
+                                    <el-input @change.native="costInputChangeEvent()" @keyup.native="costInputChangeEvent()" v-model="addFormData.otherMoney" placeholder="请输入其他费用"></el-input>
                                 </el-form-item>
-                                <el-form-item prop="totalCost" label="应付金额">
-                                    <span style="color: #f56c6b" v-text="addFormData.totalCost"></span>
+                                <el-form-item prop="receivedPrice" label="应付金额">
+                                    <span style="color: #f56c6b" v-text="addFormData.receivedPrice"></span>
                                 </el-form-item>
                             </div>
                         </div>
                     </div>
 
                     <div class="goodInfoBox" style="width: 650px">
-                        <el-form-item prop="purchaseDate" label="采购时间">
+                        <el-form-item prop="orderTime" label="采购时间">
                             <el-date-picker
-                            v-model="addFormData.purchaseDate"
+                            v-model="addFormData.orderTime"
                             type="date"
                             placeholder="选择日期">
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item prop="purchaseList" label="采购单号">
-                            <el-input v-model="addFormData.purchaseList" placeholder="请输入采购单号"></el-input>
+                        <el-form-item prop="purchaseOrderNo" label="采购单号">
+                            <el-input v-model="addFormData.purchaseOrderNo" placeholder="请输入采购单号"></el-input>
                         </el-form-item>
                         <br>
-                        <el-form-item prop="purchaseMan" label="采购员">
-                            <el-input v-model="addFormData.purchaseMan" placeholder="请输入采购员"></el-input>
+                        <el-form-item prop="purchasingAgent" label="采购员">
+                            <el-input v-model="addFormData.purchasingAgent" placeholder="请输入采购员"></el-input>
                         </el-form-item>
-                        <el-form-item prop="makeListMan" label="制单人">
-                            <el-input v-model="addFormData.makeListMan" placeholder="请输入制单人"></el-input>
+                        <el-form-item prop="creator" label="制单人">
+                            <el-input v-model="addFormData.creator" placeholder="请输入制单人"></el-input>
                         </el-form-item>
                         <br>
-                        <el-form-item class="marker" :style="{width: '100%'}" prop="maker" label="备注">
-                            <el-input style="width: 490px" type="textarea" :rows="4" v-model="addFormData.maker" placeholder="请输入备注"></el-input>
+                        <el-form-item class="marker" :style="{width: '100%'}" prop="purchaseRemark" label="备注">
+                            <el-input style="width: 490px" type="textarea" :rows="4" v-model="addFormData.purchaseRemark" placeholder="请输入备注"></el-input>
                         </el-form-item>
                     </div>
                 </el-form>
@@ -175,17 +174,20 @@
 
         </div>
         <div class="model_footer">
-            <el-button style="width: 90px" type="primary" size="small">保存</el-button>
+            <el-button @click="saveBtnEvent" style="width: 90px" type="primary" size="small">保存</el-button>
             <el-button style="width: 90px" size="small">取消</el-button>
         </div>
     </div>
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
             querySearchText: '',
+            tableTotalUnit: 0,
+            supplierSelectData: [],
             goodsInfoData: [{
                 oper: '',
                 selfNum: '11111',
@@ -200,37 +202,63 @@ export default {
                 unitTotal: ''
             }],
             addFormData: {
-                supplier: '',
-                inRepository: '',
-                purchaseCompany: '',
-                purchaseDate: '',
-                purchaseList: '',
-                purchaseMan: '',
-                makeListMan: '',
-                maker: '',
-                carriage: '0',
-                extraCost: '0',
-                totalCost: '00'
+                buyerId: "123",
+                buyerName: "",
+                creator: "",
+                purchaseOrderNo: "",
+                list: [
+                    {
+                        itemId: "2",
+                        purchaseTotalPrice: "1000",
+                        purchaseUnitPrice: "10",
+                        purchasingNumber: "100"
+                    }
+                ],
+                orderTime: "",
+                purchaseHouseId: "123",
+                purchaseHouseName: "",
+                purchasingAgent: "",
+                purchasingTotalNumber: "",
+                receivedPrice: "",
+                sellerId: "",
+                sellerName: "",
+                totalMoney: "",
+                freight: "",
+                otherMoney: ''
+
+
             },
             rules: {
-                supplier: [
+                sellerId: [
                     { required: true, message: '请选择供应商', trigger: 'blur' }
                 ],
-                inRepository: [
+                purchaseHouseId: [
                     { required: true, message: '请选择入库仓库', trigger: 'blur' }
                 ],
-                purchaseCompany: [
+                buyerId: [
                     { required: true, message: '请选择采购单位', trigger: 'blur' }
                 ],
-                purchaseDate: [
+                orderTime: [
                     { required: true, message: '请选择采购时间', trigger: 'blur' }
                 ],
-                purchaseList: [
+                purchaseOrderNo: [
                     { required: true, message: '请输入采购单号', trigger: 'blur' }
                 ],
-                makeListMan: [
+                creator: [
                     { required: true, message: '请输入制单人', trigger: 'blur' }
                 ]
+            }
+        }
+    },
+    watch: {
+        tableTotalUnit(newvalue){
+            this.addFormData.receivedPrice = newvalue
+
+            if (!isNaN(this.addFormData.freight) && this.addFormData.freight != ""){
+                this.addFormData.receivedPrice = this.addFormData.receivedPrice + parseFloat(this.addFormData.freight)
+            }
+            if (!isNaN(this.addFormData.otherMoney) && this.addFormData.otherMoney != ""){
+                this.addFormData.receivedPrice = this.addFormData.receivedPrice + parseFloat(this.addFormData.otherMoney)
             }
         }
     },
@@ -253,14 +281,49 @@ export default {
 
             this.goodsInfoData.push(itemobj)
         },
+        getSummaries(param){
+            var columns = param.columns
+            var data = param.data
+            var sums = []
+
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                if (column.property == 'purchaseNum' || column.property == 'unitTotal'){
+                    const values = data.map(item => Number(item[column.property]));
+
+                    if (!values.every(value => isNaN(value))) {
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+
+                    }
+
+                    if (column.property == 'unitTotal'){
+                        this.tableTotalUnit = sums[index]
+                    }
+                } else {
+                    sums[index] = ''
+                }
+            })
+
+            return sums
+
+        },
         goodTableReduceEvent(data){
             if (this.goodsInfoData.length > 1){
                 this.goodsInfoData.splice(data.$index, 1)
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
-            console.log(rowIndex)
-            console.log(this.goodsInfoData.length)
             if (columnIndex === 2) {
                 if (row.selfNum == ""){
                     return [1, 3];
@@ -280,24 +343,51 @@ export default {
         unitTatalEvent(data){
             data.row.unitPrice = data.row.unitPrice.replace(/[^\d\.]/g, '')
             data.row.purchaseNum = data.row.purchaseNum.replace(/[^\d\.]/g, '')
+
             if (data.row.unitPrice == '' || data.row.purchaseNum == ''){
-                data.row.unitTotal = ''
+                data.row.unitTotal = 0
                 return
             }
             var price = parseFloat(data.row.unitPrice)
             var num = parseFloat(data.row.purchaseNum)
 
-
-
             data.row.unitTotal = price * num
+
+        },
+        costInputChangeEvent(){
+            this.addFormData.freight = this.addFormData.freight.replace(/[^\d\.]/g, '')
+            this.addFormData.otherMoney = this.addFormData.otherMoney.replace(/[^\d\.]/g, '')
+            this.addFormData.receivedPrice = this.tableTotalUnit
+
+            if (this.addFormData.freight != "" && !isNaN(this.addFormData.freight)){
+                this.addFormData.receivedPrice = this.addFormData.receivedPrice + parseFloat(this.addFormData.freight)
+            }
+            if (this.addFormData.otherMoney != "" && !isNaN(this.addFormData.otherMoney)){
+                this.addFormData.receivedPrice = this.addFormData.receivedPrice + parseFloat(this.addFormData.otherMoney)
+            }
         },
         chooseGoodEvent(){
             this.$router.push({
                 path: '/chooseGood'
             });
+        },
+        getSupplierSelectData(){
+            api.getSupplierSelectData().then((response) => {
+                this.supplierSelectData = response.data.list
+            })
+        },
+        saveBtnEvent(){
+            api.addPurchaseList().then((response) => {
+                console.log(response)
+            })
         }
     },
-    created(){},
+    created(){
+        this.getSupplierSelectData()
+    },
+    activated(){
+        this.getSupplierSelectData()
+    },
     mounted(){}
 }
 </script>

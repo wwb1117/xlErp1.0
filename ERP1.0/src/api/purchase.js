@@ -11,8 +11,21 @@ export default {
     addSupplier(data){
         return HttpClient.post('/seller/insertSeller', data);
     },
+    editSupplier(data){
+        return HttpClient.put('/seller/updateSeller', data);
+    },
+    deleteSupplier(data){
+        return HttpClient.delete('/seller/' + data);
+    },
     getItemSupplierData(data){
         return HttpClient.get('/seller/' + data);
+    },
+    /************************采购单****************************** */
+    getPurchaseList(data){
+        return HttpClient.get('/purchase/findByCondition', data);
+    },
+    addPurchaseList(data){
+        return HttpClient.post('/purchase/insertOrder', data);
     }
 
 }

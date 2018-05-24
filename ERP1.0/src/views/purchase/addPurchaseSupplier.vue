@@ -20,7 +20,7 @@
                     </div>
                     <div>
                         <el-form-item prop="provinceId" label="区域">
-                            <area-cader :fatherValue="fatherValue" v-on:areaFromChild="areaCallBack"></area-cader>
+                            <area-cader v-on:areaFromChild="areaCallBack"></area-cader>
                         </el-form-item>
                         <el-form-item label="详细地址">
                             <el-input style="width: 194px" v-model="formData.sellerCompanyAddress" placeholder="请输入详细地址"></el-input>
@@ -132,7 +132,6 @@ export default {
     },
     data(){
         return {
-            fatherValue: [130000, 130100, 130102],
             formData: {
                 sellerCompanyName: '',
                 sellerCompanyNo: '',
