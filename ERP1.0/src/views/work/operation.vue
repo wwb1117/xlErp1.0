@@ -17,7 +17,8 @@
                 </div>
                 <el-table
                     :data='date'
-                    style="width:100%">
+                    style="width:100%"
+                    :height='$store.state.home.modelContentHeight-78'>
                     <el-table-column
                         prop=""
                         width='30'>
@@ -111,7 +112,9 @@ export default {
                     time: '2018-5-31',
                     ip: '183.134.178.27'
                 }
-            ]
+            ],
+            currentPage4: 1,
+            input: ''
         }
     }
 }
