@@ -129,6 +129,7 @@ export default {
         },
         tablePropEvent(rowid, type){
             if (type == 1){
+                this.$store.commit('setSupplierId', rowid)
                 this.$router.push({
                     path: '/lookPurchaseSupplier'
                 })

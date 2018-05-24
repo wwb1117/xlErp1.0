@@ -29,6 +29,13 @@ export default {
         'fatherValue'
     ],
     computed:{},
+    watch: {
+        fatherValue(newvalue){
+            if (newvalue && newvalue.length == 3){
+                this.getProviceData()
+            }
+        }
+    },
     methods:{
         handleItemChange(val){
             if (val){
@@ -88,7 +95,7 @@ export default {
                     })
                 }
             }).then((reponse) => {
-                if (this.fatherValue){
+                if (this.fatherValue && this.fatherValue.length == 3){
                     api.getCityData(this.fatherValue[0]).then((response) => {
                         if (response.data.length > 0){
                             var proItemData = this.findProData(this.fatherValue[0])
@@ -103,7 +110,7 @@ export default {
                             }
                         }
                     }).then((response) => {
-                        if (this.fatherValue){
+                        if (this.fatherValue && this.fatherValue.length == 3){
                             var proItemData = this.findProData(this.fatherValue[0]).children
                             var cityItemData = this.findCityData(proItemData, this.fatherValue[1])
 
