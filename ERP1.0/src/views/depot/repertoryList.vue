@@ -337,8 +337,17 @@ export default {
     .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
         width: 360px;
     }
-    .el-form{
+    .el-form, .el-table{
         color: #636365;
+    }
+    .el-table .cell .auditStatus_0, .el-table .cell .auditStatus_1{
+        color: #e6a23c;
+    }
+    .el-table .cell .auditStatus_2{
+        color: #606266;
+    }
+    .el-table .cell .auditStatus_3{
+        color: #f56c6c;
     }
 
 </style>
