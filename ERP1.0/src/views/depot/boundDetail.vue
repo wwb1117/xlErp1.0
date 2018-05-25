@@ -104,7 +104,6 @@
 </template>
 
 <script>
-import ME from 'utils/base'
 import API from 'api/depot'
 export default {
     data() {
@@ -178,13 +177,6 @@ export default {
 
                 })
             }
-            else if (this.$route.params.type == '出库') { // 出库单
-                console.log("出库")
-                API.getOutboundDetail(this.$route.params.id).then(res => {
-                    console.log("出库res")
-                })
-            }
-
         }
 
     },
