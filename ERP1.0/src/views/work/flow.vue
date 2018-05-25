@@ -123,8 +123,6 @@ export default {
                 processType: '',
                 enableStatus: ''
             }
-
-            this.addtext = ''
             // this.flow.push(obj)
             api.postprocessadd(obj).then((response)=>{
                 console.log(response)
@@ -132,17 +130,19 @@ export default {
                 console.log(error)
             })
             this.get()
+
+            this.addtext = ''
         },
         deltrue(data) {
             this.delflow = true
-
-            this.index = data.$index
-
+            this.index = data.row.id
+            console.log(this.index)
         },
         edittrue(data) {
             this.editflow = true
             this.edittext = data.row.name
-            this.index = data.$index
+            this.index = data.row.id
+
         },
         writeflow() {
             this.$router.push('configuration')
@@ -153,7 +153,7 @@ export default {
 
                 if (i == this.index){
                     // this.flow[i].name = this.edittext
-                    this.formData.id = i
+                    this.formData.id = this.index
                     this.formData.name = this.edittext
                     api.putprocessupdate(this.formData).then((response)=>{
                         console.log(response)
@@ -170,11 +170,10 @@ export default {
         delconfirm() {
             this.delflow = false
             for (var i in this.flow){
-
-                if (i == this.index){
+                if (this.flow[i].id == this.index){
                     if (this.flow.length > 1){
                         // this.flow.splice(i, 1)
-                        api.delprocessid(this.index).then((response)=>{
+                        api.delprocessid(i).then((response)=>{
                             console.log(response)
                         }).catch((error)=>{
                             console.log(error)
@@ -189,12 +188,15 @@ export default {
         },
         get() {
             api.getprocessname().then((response) => {
-            // console.log(response.data.list)
+                // console.log(response.data.list)
                 this.flow = response.data.list
             })
         }
     },
-    created() {
+    // created() {
+    //     this.get()
+    // },
+    activated() {
         this.get()
     }
 }
