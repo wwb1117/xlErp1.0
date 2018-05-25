@@ -137,7 +137,7 @@ export default {
         deltrue(data) {
             this.delflow = true
             this.index = data.row.id
-            console.log(this.index)
+            // console.log(this.index)
         },
         edittrue(data) {
             this.editflow = true
@@ -152,7 +152,7 @@ export default {
             this.editflow = false
             for (var i in this.flow){
 
-                if (i == this.index){
+                if (this.flow[i].id == this.index){
                     // this.flow[i].name = this.edittext
                     this.formData.id = this.index
                     this.formData.name = this.edittext
@@ -194,9 +194,9 @@ export default {
             })
         }
     },
-    // created() {
-    //     this.get()
-    // },
+    created() {
+        this.get()
+    },
     activated() {
         this.get()
     }

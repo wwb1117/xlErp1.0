@@ -15,7 +15,7 @@
                     width="70">
                 </el-table-column>
                 <el-table-column
-                    prop="name"
+                    prop="roleName"
                     label='用户名'>
                 </el-table-column>
                 <el-table-column
@@ -105,39 +105,41 @@
     </section>
 </template>
 <script>
+import api from 'api/work'
+
 export default {
     name: 'userList',
     data() {
         return {
             user: [
-                {
-                    id: '1',
-                    name: 'admin',
-                    username: ['超级管理员'],
-                    time: '2018-01-12 10:16',
-                    other: ''
-                },
-                {
-                    id: '2',
-                    name: '商品部',
-                    username: ['仓储'],
-                    time: '2018-01-12 10:12',
-                    other: ''
-                },
-                {
-                    id: '3',
-                    name: '商品部',
-                    username: ['产品'],
-                    time: '2018-01-12 10:19',
-                    other: ''
-                },
-                {
-                    id: '4',
-                    name: '商品部',
-                    username: ['采购'],
-                    time: '2018-01-12 10:11',
-                    other: ''
-                }
+                // {
+                //     id: '1',
+                //     name: 'admin',
+                //     username: ['超级管理员'],
+                //     time: '2018-01-12 10:16',
+                //     other: ''
+                // },
+                // {
+                //     id: '2',
+                //     name: '商品部',
+                //     username: ['仓储'],
+                //     time: '2018-01-12 10:12',
+                //     other: ''
+                // },
+                // {
+                //     id: '3',
+                //     name: '商品部',
+                //     username: ['产品'],
+                //     time: '2018-01-12 10:19',
+                //     other: ''
+                // },
+                // {
+                //     id: '4',
+                //     name: '商品部',
+                //     username: ['采购'],
+                //     time: '2018-01-12 10:11',
+                //     other: ''
+                // }
             ],
             resultpass: false,
             deluser: false,
@@ -170,17 +172,25 @@ export default {
         edituesrtrue(data) {
             this.edituesr = true
             this.name = data.row.name
-            this.index = data.$index
+            this.index = data.row.id
         },
         editconfirm() {
             this.edituesr = false
             for (var i in this.user){
+                if (this.user[i].id == this.index){
+                    // this.user[i].username = this.editlist
+                    console.log(this.index, this.name)
+                    let obj = {
+                        roleId: this.index,
+                        roleName: this.name
+                    }
 
-                if (i == this.index){
-                    this.user[i].username = this.editlist
-
-                    // 数组间隔转化问题
-                    this.user[i].name = this.name
+                    api.putroleupdate(obj).then((response)=>{
+                        console.log(response)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
+                    this.get()
                 }
             }
 
@@ -189,21 +199,39 @@ export default {
         },
         delusertrue(data) {
             this.deluser = true
-            this.index = data.$index
+            this.index = data.row.id
         },
         delconfirm() {
             this.deluser = false
             for (var i in this.user){
 
-                if (i == this.index){
+                if (this.user[i].id == this.index){
                     if (this.user.length > 1){
-                        this.user.splice(i, 1)
+                        // this.user.splice(i, 1)
+                        api.deleteroleid(this.index).then((response)=>{
+                            console.log(response)
+                        }).catch((error)=>{
+                            console.log(error)
+                        })
+                        this.get()
                     }
                 }
             }
             this.index = ''
 
+        },
+        get() {
+            api.getrolelist().then((response) => {
+                // console.log(response.data.list)
+                this.user = response.data.list
+            })
         }
+    },
+    created() {
+        this.get()
+    },
+    activated() {
+        this.get()
     }
 
 }

@@ -93,14 +93,14 @@
         <footer class="item_footer">
             <div class="block">
                 <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
                     :current-page="currentPage6"
-                    :page-sizes="[100, 200, 300, 400]"
+                    :page-sizes="[10, 30, 50, 100]"
                     :page-size="100"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="totalPage">
                 </el-pagination>
-                <!-- @size-change="handleSizeChange"
-                @current-change="handleCurrentChange" -->
             </div>
         </footer>
     </section>
@@ -171,6 +171,7 @@ export default {
             value1: true,
             value2: true,
             currentPage6: 1,
+            totalPage: '1',
             // 新增
             msg: {
                 name: '',
@@ -205,10 +206,16 @@ export default {
                     done();
                 })
                 .catch(_ => {});
+        },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
         }
     },
     created(){
-        console.log(this.form)
+        // console.log(this.form)
     }
 
 }

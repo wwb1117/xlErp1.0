@@ -15,7 +15,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    label="流程名称">
+                    label="权限组名">
                 </el-table-column>
                 <el-table-column
                     prop="other"

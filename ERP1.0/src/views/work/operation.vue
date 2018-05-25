@@ -17,7 +17,6 @@
                 </div>
                 <el-table
                     :data='date'
-                    style="width:100%"
                     :height='$store.state.home.modelContentHeight-78'>
                     <el-table-column
                         prop=""
