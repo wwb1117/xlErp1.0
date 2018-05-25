@@ -24,7 +24,7 @@ import './assets/css/font.css'
 import './assets/css/app.css'
 
 import myBase from './utils/base'
-
+import * as filters from './utils/filters'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -45,7 +45,10 @@ var winwidth = document.documentElement.clientWidth;
 
 store.commit('setDevice', {width: winwidth, height: winheight});
 store.commit('setModelContentHeight', winheight - 100);
-
+// 定义过滤器
+Object.keys(filters).forEach(key => {
+    Vue.filter(key, filters[key])
+})
 new Vue({
     el: '#app',
     router,

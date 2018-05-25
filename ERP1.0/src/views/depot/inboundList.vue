@@ -128,8 +128,14 @@
                         label="经办人">
                     </el-table-column>
                     <el-table-column
-                        prop="auditStatus"
                         label="审核状态">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.auditStatus == 0" class="auditStatus_0">待审核</span>
+                            <span v-if="scope.row.auditStatus == 1" class="auditStatus_1">审核中</span>
+                            <span v-if="scope.row.auditStatus == 2" class="auditStatus_2">通过</span>
+                            <span v-if="scope.row.auditStatus == 3" class="auditStatus_3">审核未通过</span>
+                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_3">撤销</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="prop"
@@ -177,7 +183,7 @@
     </div>
 </template>
 <script>
-import 'utils/repertory'
+import 'utils/allEnumeration'
 import API from 'api/depot'
 export default {
     data(){
@@ -319,8 +325,18 @@ export default {
     .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
         width: 360px;
     }
-    .el-form{
+    .el-form, .el-table{
         color: #636365;
     }
+    .el-table .cell .auditStatus_0, .el-table .cell .auditStatus_1{
+        color: #e6a23c;
+    }
+    .el-table .cell .auditStatus_2{
+        color: #606266;
+    }
+    .el-table .cell .auditStatus_3{
+        color: #f56c6c;
+    }
+
 
 </style>
