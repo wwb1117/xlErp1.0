@@ -51,25 +51,26 @@
                     <li style="width:170px">操作</li>
                 </ul>
                 <el-tree
-                    :data="form"
+                    :data="items"
                     show-checkbox
-                    node-key="id"
                     default-expand-all
+                    :props="defaultProps"
                     :expand-on-click-node="false">
                     <ul class="item_box_conent custom-tree-node"  slot-scope="{ node, data }">
-                        <li>{{ node.label }}</li>
+                        <li>{{ data.categoryName }}</li>
                         <li :class="data.class"></li>
                         <li style="width:180px;">
                             <div style='width:28px;height:28px;background:black;margin-top:6px'></div>
+                            <!-- <img :src="date.categoryImg" alt=""> -->
                         </li>
                         <li style="width:180px">
                             <el-switch
-                                v-model="value2"
+                                v-model="data.isDisplay"
                                 active-color="#13ce66"
                                 inactive-color="#ff4949">
                             </el-switch>
                         </li>
-                        <li style="width:110px">12</li>
+                        <li style="width:110px">{{ data.sort }}</li>
                         <li style="width:170px">
                             <el-button type='text'>编辑</el-button>
                             <el-button type="text" @click="del = true">删除</el-button>
@@ -95,9 +96,9 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage6"
+                    :current-page="currentPage"
                     :page-sizes="[10, 30, 50, 100]"
-                    :page-size="100"
+                    :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalPage">
                 </el-pagination>
@@ -106,72 +107,15 @@
     </section>
 </template>
 <script>
+import api from 'api/goods'
+
 export default {
     data() {
-
-        const items =
-
-        [
-            {
-                label: '一级 1',
-                class: 'a',
-                children: [
-                    {
-                        label: '二级 1-1',
-                        class: 'b',
-                        children: [
-                            {
-                                label: '三级 1-1-1',
-                                class: 'c'
-                            },
-                            {
-                                label: '三级 1-1-2',
-                                class: 'c'
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                label: '一级 2',
-                class: 'a',
-                children: [
-                    {
-                        label: '二级 2-1',
-                        class: 'b'
-                    },
-                    {
-                        label: '二级 2-2',
-                        class: 'b'
-                    }
-                ]
-            },
-            {
-                label: '一级 3',
-                class: 'a',
-                children: [
-                    {
-                        label: '二级 3-1',
-                        class: 'b'
-                    },
-                    {
-                        label: '二级 3-2',
-                        class: 'b'
-                    }
-                ]
-            }
-        ];
-
         return {
-            form: JSON.parse(JSON.stringify(items)),
-            defaultProps: {
-                children: 'children',
-                label: 'label'
-            },
-            value1: true,
             value2: true,
-            currentPage6: 1,
-            totalPage: '1',
+            currentPage: 2,
+            totalPage: 1,
+            items:[],
             // 新增
             msg: {
                 name: '',
@@ -188,7 +132,11 @@ export default {
             // 上传
             dialogImageUrl: '',
             dialogVisible: false,
-            del: false
+            del: false,
+            defaultProps: {
+                children: 'itemCategories',
+                label: 'categoryName'
+            }
         }
     },
     methods: {
@@ -209,13 +157,30 @@ export default {
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
+            console.log(this.items)
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+
+        get() {
+            api.getcategorylist().then((response)=>{
+                // console.log(response.data.list)
+                this.items = response.data.list
+
+
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
     },
-    created(){
-        // console.log(this.form)
+    // created(){
+    //     // console.log(this.form)
+    //     this.get()
+
+    // },
+    activated() {
+        this.get()
     }
 
 }

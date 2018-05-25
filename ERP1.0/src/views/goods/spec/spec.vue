@@ -22,9 +22,9 @@
                     <li style="width:300px">备注</li>
                     <li style="width:110px">操作</li>
                 </ul>
-                <ul class="spec_list spec_text">
-                    <li style="width:210px">尺码</li>
-                    <li style="width:500px">sm,xl,l</li>
+                <ul class="spec_list spec_text" v-for='(item,index) in this.spec' :key="index">
+                    <li style="width:210px">{{item.skuPropertyName}}</li>
+                    <li style="width:500px"><span v-for="(date,index) in item.list" :key="index" style="margin-right:5px">{{date.skuPropertyValueName}}</span></li>
                     <li style="width:300px">这是备注信息</li>
                     <li style="width:110px">
                         <el-button type='text' @click='gotoEdit'>编辑</el-button>
@@ -47,19 +47,22 @@
         <footer class="spec_footer">
             <div class="block">
                 <el-pagination
-                    :current-page="currentPage4"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 30, 50, 100]"
+                    :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="totalPage">
                 </el-pagination>
-                <!-- @size-change="handleSizeChange"
-                @current-change="handleCurrentChange" -->
+
             </div>
         </footer>
     </section>
 </template>
 <script>
+import api from 'api/goods'
+
 export default {
     data() {
         return {
@@ -68,7 +71,8 @@ export default {
             value2: true,
 
 
-            currentPage4: 1,
+            currentPage: 2,
+            totalPage: 1,
 
             input: '',
             // 关联分类
@@ -97,7 +101,14 @@ export default {
             value: '',
             checked: false,
             // 删除
-            del: false
+            del: false,
+
+            page: {
+                pageSize: 10,
+                pageNo: 1
+            },
+
+            spec: []
 
         }
     },
@@ -122,7 +133,33 @@ export default {
         },
         gotoEdit() {
             this.$router.push('editSpec')
+        },
+        handleSizeChange(val) {
+            this.page.pageSize = val
+        },
+        handleCurrentChange(val) {
+            this.page.pageNo = val
+        },
+        get() {
+
+            api.getitemskuPropertylist(this.page).then((response)=>{
+
+                // console.log(response.data.list)
+                this.spec = response.data.list
+            }).catch((error)=>{
+
+                console.log(error)
+
+            })
         }
+    },
+    created(){
+        // console.log(this.form)
+        this.get()
+
+    },
+    activated() {
+        this.get()
     }
 }
 </script>

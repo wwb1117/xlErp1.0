@@ -73,21 +73,21 @@
                     <li style="width:110px">排序</li>
                     <li style="width:130px">操作</li>
                 </ul>
-                <ul class="brand_list brand_text">
-                    <li style="width:200px">maxsun</li>
-                    <li style="width:170px">孕婴用品</li>
+                <ul class="brand_list brand_text" v-for='(item,index) in this.brand' :key='index'>
+                    <li style="width:200px">{{item.brandName}}</li>
+                    <li style="width:170px"><span v-for="(date,index) in item.itemBrandCategories" :key='index' style="margin-right:5px">{{date.categoryName}}</span></li>
                     <li style="width:150px">40%</li>
-                    <li style="width:190px">
-                        <img src="" alt="">
+                    <li style="width:190px" class="brand_list_img">
+                        <img :src="item.brandImg" alt="">
                     </li>
                     <li style="width:180px">
                         <el-switch
-                            v-model="value2"
+                            v-model="item.isRecommended"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                         </el-switch>
                     </li>
-                    <li style="width:110px">1</li>
+                    <li style="width:110px">{{item.sort}}</li>
                     <li style="width:130px">
                         <el-button type='text'>编辑</el-button>
                         <el-button type="text" @click="del = true">删除</el-button>
@@ -109,19 +109,21 @@
         <footer class="brand_footer">
             <div class="block">
                 <el-pagination
-                    :current-page="currentPage5"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 30, 50, 100]"
+                    :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="totalPage">
                 </el-pagination>
-                <!-- @size-change="handleSizeChange"
-                @current-change="handleCurrentChange" -->
             </div>
         </footer>
     </section>
 </template>
 <script>
+import api from 'api/goods'
+
 export default {
     data() {
         return {
@@ -140,10 +142,10 @@ export default {
             // 上传
             dialogImageUrl: '',
             dialogVisible: false,
-            value1: true,
             value2: true,
             // 分页
-            currentPage5: 1,
+            currentPage: 2,
+            totalPage: 1,
             // 搜索
             input: '',
             // 关联分类
@@ -172,7 +174,14 @@ export default {
             value: '',
             checked: false,
             // 删除
-            del: false
+            del: false,
+            page: {
+                pageNo: 1,
+                pageSize: 10,
+                brandName: '天使芬'
+            },
+
+            brand: []
         }
     },
     methods: {
@@ -190,7 +199,32 @@ export default {
                     done();
                 })
                 .catch(_ => {});
+        },
+        handleSizeChange(val) {
+            this.page.pageSize = val
+        },
+        handleCurrentChange(val) {
+            this.page.pageNo = val
+        },
+        get() {
+
+            api.getitemitemBrandlist(this.page).then((response)=>{
+                // console.log(response.data)
+                this.brand = response.data.itemVOs
+            }).catch((error)=>{
+
+                console.log(error)
+
+            })
         }
+    },
+    created(){
+        // console.log(this.form)
+        this.get()
+
+    },
+    activated() {
+        this.get()
     }
 }
 </script>
@@ -259,6 +293,10 @@ export default {
     position: absolute;
     right: 30px;
     top:0
+}
+.brand_list_img img{
+    width: 30px;
+    height: 30px;
 }
 </style>
 

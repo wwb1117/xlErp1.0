@@ -41,7 +41,7 @@ export default {
     },
     // 修改用户
     putroleupdate(data){
-        return HttpClient.put('/role/update/role', data)
+        return HttpClient.put('/role/update', data)
     },
     // 删除用户
     deleteroleid(id){
