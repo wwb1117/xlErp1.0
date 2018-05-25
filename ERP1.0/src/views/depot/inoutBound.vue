@@ -289,12 +289,7 @@ export default {
             if (data.type == 1) { //出库
                 this.$router.push({name: '出入库详情', params: {id: data.orderNo || 123, type: '出库'}})
             }
-            else if (data.type == 0) { //入库
-                this.$router.push({name: '出入库详情', params: {id: data.orderNo || 123, type: '入库'}})
-            }
-            else {
-                return false
-            }
+
         },
         editTable(index, data) {},
         deleteTable(index, data) {},

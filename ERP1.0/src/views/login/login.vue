@@ -9,7 +9,7 @@
                 <div class="login_input_wrap">
                     <el-input
                         placeholder="账号"
-                        v-model="userInfo.userName"
+                        v-model="userInfo.loginCode"
                         :style="{width: '320px'}"
                         clearable>
                     </el-input>
@@ -17,7 +17,7 @@
                 <div class="login_input_wrap">
                     <el-input
                         placeholder="密码"
-                        v-model="userInfo.userPssd"
+                        v-model="userInfo.loginPassword"
                         :style="{width: '320px'}"
                         clearable>
                     </el-input>
@@ -34,13 +34,14 @@
 </template>
 
 <script>
+import api from 'api/login'
 export default {
     data() {
         return {
             isRemPwd: true,
             userInfo: {
-                userName: 'wwb',
-                userPssd: '666666'
+                loginCode: 'gh',
+                loginPassword: '111111'
             }
 
         }
@@ -50,7 +51,7 @@ export default {
     },
     methods: {
         loginEvent(){
-            if (this.userName == ""){
+            if (this.userInfo.loginCode == ""){
                 this.$message({
                     message: '请输入账号',
                     showClose: true,
@@ -58,7 +59,7 @@ export default {
                 });
                 return
             }
-            if (this.userPssd == ""){
+            if (this.userInfo.loginPassword == ""){
                 this.$message({
                     message: '请输入密码',
                     showClose: true,
@@ -67,12 +68,15 @@ export default {
                 return
             }
 
-            sessionStorage.setItem("user", JSON.stringify(this.userInfo))
+            api.login(this.userInfo).then((reponse) => {
 
-            this.$router.push({
-                path: '/main'
-            });
+                console.log(reponse)
+                sessionStorage.setItem("user", JSON.stringify(this.userInfo))
+                this.$router.push({
+                    path: '/main'
+                });
 
+            })
 
         }
     },
