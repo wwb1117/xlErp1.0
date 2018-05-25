@@ -208,7 +208,7 @@ export default {
                 if (this.user[i].id == this.index){
                     if (this.user.length > 1){
                         // this.user.splice(i, 1)
-                        api.deleteroleid(this.index).then((response)=>{
+                        api.deleteroleid(this.user[i].id).then((response)=>{
                             console.log(response)
                         }).catch((error)=>{
                             console.log(error)

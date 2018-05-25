@@ -78,7 +78,7 @@
 </template>
 <script>
 import api from 'api/work'
-// 未写配置审批流程
+
 export default {
     data() {
         return {
@@ -191,6 +191,8 @@ export default {
             api.getprocessname().then((response) => {
                 // console.log(response.data.list)
                 this.flow = response.data.list
+            }).catch((error)=>{
+                console.log(error)
             })
         }
     },

@@ -25,7 +25,7 @@
             append-to-body>
             <div>
                 <span style="width:80px;text-align:center;display:inline-block">用户名</span>
-                <el-input v-model="addautohoritytext" size='small' style="width:388px"></el-input>
+                <el-input v-model="addusertext" size='small' style="width:388px"></el-input>
             </div>
             <div style="margin-top:20px">
                 <span style="width:80px;text-align:center;display:inline-block">权限组</span>
@@ -47,7 +47,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="adduser = false" size='small' style="margin-right:10px">取 消</el-button>
-                <el-button type="primary" @click="adduser = false" size='small' style="margin-right:10px">确 定</el-button>
+                <el-button type="primary" @click="addconfirm" size='small' style="margin-right:10px">确 定</el-button>
             </span>
         </el-dialog>
         <!-- 新增权限组 -->
@@ -71,6 +71,7 @@
 <script>
 import userlist from 'views/work/user/userList'
 import autohority from 'views/work/user/authorityList'
+import api from 'api/work'
 
 export default {
     name: 'user',
@@ -79,6 +80,7 @@ export default {
             activeName: 'first',
             first: true,
             second: false,
+            addusertext: '',
             addautohoritytext: '',
             addautohority: false,
             adduser: false,
@@ -96,7 +98,10 @@ export default {
                     label: 'JavaScript'
                 }
             ],
-            addlist: []
+            addlist: [],
+            role: {
+                roleName: ''
+            }
         }
     },
     methods: {
@@ -109,12 +114,33 @@ export default {
                 this.second = true
                 this.first = false
             }
+        },
+        addconfirm() {
+            this.adduser = false
+
+            this.role.roleName = this.addusertext
+            api.postroleadd(this.role).then((response)=>{
+                console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+            this.activeName = 'first'
+            this.$router.push('userManage')
+            this.addusertext = ''
         }
     },
     components: {
         userlist,
         autohority
     }
+    // created(){
+    //     // console.log(this.form)
+    //     this.get()
+
+    // }
+    // activated() {
+    //     this.get()
+    // }
 
 }
 </script>
