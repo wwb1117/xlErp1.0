@@ -176,6 +176,12 @@ export default {
                     console.log("入库res")
 
                 })
+            } else if (this.$route.params.type == '出库') { // 出库单
+                console.log("出库")
+                API.getOutboundDetail(this.$route.params.id).then(res => {
+                    console.log("出库res")
+
+                })
             }
         }
 
