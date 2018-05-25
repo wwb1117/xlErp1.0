@@ -157,10 +157,10 @@ export default {
         // console.log(this.form)
         this.get()
 
-    },
-    activated() {
-        this.get()
     }
+    // activated() {
+    //     this.get()
+    // }
 }
 </script>
 <style scoped>

@@ -163,14 +163,14 @@ export default {
             })
         }
     },
-    // created(){
-    //     // console.log(this.form)
-    //     this.get()
-
-    // },
-    activated() {
+    created(){
+        // console.log(this.form)
         this.get()
+
     }
+    // activated() {
+    //     this.get()
+    // }
 
 }
 </script>

@@ -23,12 +23,12 @@
                         width='30'>
                     </el-table-column>
                     <el-table-column
-                        prop="name"
+                        prop="id"
                         label='操作人'
                         width='150'>
                     </el-table-column>
                     <el-table-column
-                        prop="obj"
+                        prop="objectId"
                         label='操作对象'
                         width='150'>
                     </el-table-column>
@@ -36,27 +36,27 @@
                         label='ID'
                         width='200'>
                         <template slot-scope="scope">
-                            <span style="color:#3f9ffe">{{scope.row.id}}</span>
+                            <span style="color:#3f9ffe">{{scope.row.objectId}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="explain"
+                        prop="operateType"
                         label='操作说明'
                         width='200'>
                     </el-table-column>
                     <el-table-column
-                        prop="state"
+                        prop="afterData"
                         label='操作状态'>
                     </el-table-column>
                     <el-table-column
                         label='操作时间'
                         width='250'>
                         <template slot-scope="scope">
-                            <span style="color:#3f9ffe">{{scope.row.time}}</span>
+                            <span style="color:#3f9ffe">{{scope.row.created}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="ip"
+                        prop="ipAddress"
                         label='IP'
                         width='200'>
                     </el-table-column>
@@ -66,56 +66,64 @@
         <footer class="operation_footer">
             <div class="block">
                 <el-pagination
-                    :current-page="currentPage4"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 30, 50, 100]"
+                    :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="totalPage">
                 </el-pagination>
-                <!-- @size-change="handleSizeChange"
-                @current-change="handleCurrentChange" -->
+
             </div>
         </footer>
     </section>
 </template>
 <script>
+import api from 'api/work'
+
 export default {
     name:'operation',
     data() {
         return {
-            date: [
-                {
-                    name: 'admin',
-                    obj: '商品',
-                    id: '54651',
-                    explain: '添加商品',
-                    state: '添加商品66055，删除商品',
-                    time: '2018-5-24',
-                    ip: '183.134.176.25'
-                },
-                {
-                    name: 'ssd',
-                    obj: '采购',
-                    id: '8121',
-                    explain: '采购商品',
-                    state: '审批采购单',
-                    time: '2018-6-24',
-                    ip: '183.134.176.29'
-                },
-                {
-                    name: '旺旺',
-                    obj: '盘点单',
-                    id: '7551',
-                    explain: '修改',
-                    state: '盘点单导入成功',
-                    time: '2018-5-31',
-                    ip: '183.134.178.27'
-                }
-            ],
-            currentPage4: 1,
-            input: ''
+            date:[],
+
+            currentPage: 2,
+            totalPage: 1,
+
+            input: '',
+
+            page:[]
         }
+    },
+    methods: {
+        handleSizeChange(val) {
+            this.page.pageSize = val
+        },
+        handleCurrentChange(val) {
+            this.page.pageNo = val
+        },
+        get() {
+            api.getactionloglist().then((response)=>{
+
+                // console.log(response.data.list)
+                this.date = response.data.list
+
+            }).catch((error)=>{
+
+                console.log(error)
+
+            })
+        }
+    },
+    created(){
+        // console.log(this.form)
+        this.get()
+
     }
+    // activated() {
+    //     this.get()
+    // }
 }
 </script>
 <style scoped>

@@ -46,5 +46,10 @@ export default {
     // 删除用户
     deleteroleid(id){
         return HttpClient.delete(`/role/${id}`)
+    },
+
+    // 工作日志
+    getactionloglist(data){
+        return HttpClient.get('/actionlog/list', data)
     }
 }
