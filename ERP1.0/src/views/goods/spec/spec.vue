@@ -14,7 +14,7 @@
                         prefix-icon="el-icon-search"
                         v-model="input">
                     </el-input>
-                    <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
+                    <el-button type="primary" size='small' style="margin-left:10px" @click='findthat'>搜索</el-button>
                 </div>
                 <ul class="spec_list">
                     <li style="width:210px">规格名称</li>
@@ -27,17 +27,16 @@
                     <li style="width:500px"><span v-for="(date,index) in item.list" :key="index" style="margin-right:5px">{{date.skuPropertyValueName}}</span></li>
                     <li style="width:300px">这是备注信息</li>
                     <li style="width:110px">
-                        <el-button type='text' @click='gotoEdit'>编辑</el-button>
+                        <el-button type='text' @click='gotoEdit(item.id)'>编辑</el-button>
                         <el-button type="text" @click="del = true">删除</el-button>
                         <el-dialog
                             title="温馨提示"
                             :visible.sync="del"
-                            width="30%"
-                            :before-close="handleClose">
+                            width="30%">
                             <span>此操作将永久删除该项</span>
                             <span slot="footer" class="dialog-footer">
                                 <el-button @click="del = false">取 消</el-button>
-                                <el-button type="primary" @click="del = false">确 定</el-button>
+                                <el-button type="primary" disabled>确 定</el-button>
                             </span>
                         </el-dialog>
                     </li>
@@ -62,6 +61,7 @@
 </template>
 <script>
 import api from 'api/goods'
+import bus from '@/assets/eventBus.js'
 
 export default {
     data() {
@@ -113,32 +113,33 @@ export default {
         }
     },
     methods: {
-        // 上传
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
-        handleClose(done) {
-            this.$confirm('确认关闭？')
-                .then(_ => {
-                    done();
-                })
-                .catch(_ => {});
-        },
+
         openAddspec() {
             this.$router.push('addSpec')
         },
-        gotoEdit() {
+        gotoEdit(data) {
             this.$router.push('editSpec')
+            bus.$emit('editSpec', data)
         },
         handleSizeChange(val) {
             this.page.pageSize = val
         },
         handleCurrentChange(val) {
             this.page.pageNo = val
+        },
+        findthat() {
+            let obj = {
+                pageSize: 10,
+                pageNo: '',
+                skuPropertyName: this.input
+            }
+
+            api.getitemskuPropertylist(obj).then((response)=>{
+                this.spec = response.data.list
+
+            }).catch((error)=>{
+                console.log(error)
+            })
         },
         get() {
 

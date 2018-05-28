@@ -76,6 +76,18 @@ export default {
     },
 
     // 商品包装类型/供货规格！
+    // 商品单位列表
+    getitemunitlist(data) {
+        return HttpClient.get('/item/unit/list', data)
+    },
+    // 查询单位详情
+    getitemunitid(id) {
+        return HttpClient.get(`/item/unit/${id}`)
+    },
+    // 新增单位
+    postitemunitadd(data) {
+        return HttpClient.post('/item/unit/add', data)
+    },
     // 新增供货规格
     postitemsupplyPropertyadd(data) {
         return HttpClient.post('/item/supplyProperty/add', data)

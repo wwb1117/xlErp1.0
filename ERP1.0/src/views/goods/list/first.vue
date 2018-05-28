@@ -274,7 +274,7 @@ export default {
 
             page: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 11
             }
         }
     },
@@ -330,6 +330,7 @@ export default {
                 itemId: scope.row.id
             }
 
+            console.log(obj)
             api.getitemskuProperty(obj).then((response)=>{
                 console.log(response.data)
             }).catch((error)=>{
@@ -343,7 +344,7 @@ export default {
 
         get() {
             api.getitemlist(this.page).then((response) => {
-                // console.log(response.data.itemVOs)
+                console.log(response.data.itemVOs)
                 this.goodData = response.data.itemVOs
             }).catch((error)=>{
                 console.log(error)

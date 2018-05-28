@@ -8,19 +8,17 @@
         </header>
         <section class="editTypes_conent" >
             <div class="editTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
-                <el-form ref="types" :model="edit" label-width="100px">
+                <el-form ref="types"  label-width="100px">
                     <el-form-item label="规格名称" required>
-                        <el-input v-model="edit.name" style="width:338px" size='small'></el-input>
+                        <el-input v-model="this.unitMsg" style="width:338px" size='small'></el-input>
                     </el-form-item>
-                    <el-form-item label="规格值" required :style="{height: (editNum.length)*50 + 'px'}">
+                    <el-form-item label="规格值" required :style="{height: (from.length)*50 + 'px'}">
                         <el-table
-                            :data='editNum'
+                            :data='from'
                             border
-                            style="width:658px"
-                        >
+                            style="width:658px">
                             <el-table-column
-                                width='55'
-                            >
+                                width='55'>
                                 <template slot-scope="scope">
                                     <div class="icon_box" style="height:50px;line-height:50px;margin-left:10px">
                                         <i class="el-icon-plus" style="font-weight:700" @click="editTypesnum"></i>
@@ -30,31 +28,31 @@
                             </el-table-column>
                             <!-- 规格值 -->
                             <el-table-column
-                                prop="editname"
+                                prop="unitMsg"
                                 label="规格值"
                                 width="410">
                                 <template slot-scope="scope">
                                     <div>
-                                        <el-input v-model="editNum.editname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
+                                        <el-input v-model="scope.row.unitMsg" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
                             <!-- 商品数量 -->
                             <el-table-column
-                                prop="num"
+                                prop="skuNumber"
                                 label="含商品数量">
                                 <template slot-scope="scope">
-                                    <el-input v-model="editNum.num" size='small'></el-input>
+                                    <el-input v-model="scope.row.skuNumber" size='small'></el-input>
                                 </template>
                             </el-table-column>
                             <!-- 是否启用 -->
                             <el-table-column
-                                prop='bolean'
+                                prop='isDeleted'
                                 label='是否启用'
                                 width="80">
                                 <template slot-scope="scope">
                                     <el-switch
-                                        v-model="editNum.value2"
+                                        v-model="scope.row.isDeleted"
                                         active-color="#13ce66"
                                         inactive-color="#ff4949">
                                     </el-switch>
@@ -76,12 +74,15 @@
             </div>
         </section>
         <footer class="editTypes_footer">
-            <el-button type="primary" size='small'>保存</el-button>
+            <el-button type="primary" size='small' @click="trueconfim">保存</el-button>
             <el-button size='small' @click='returnPrev'>取消</el-button>
         </footer>
     </section>
 </template>
 <script>
+import bus from '@/assets/eventBus.js'
+import api from 'api/goods'
+
 export default {
     data() {
         return {
@@ -100,8 +101,9 @@ export default {
                     value1: true,
                     value2: true
                 }
-            ]
-
+            ],
+            unitMsg: '',
+            from: []
         }
     },
     methods: {
@@ -115,6 +117,8 @@ export default {
             }
 
             this.editNum.push(obj)
+
+            console.log(this.from)
         },
         // removeTypesnum(data) {
         //     if (this.typesNum.length > 1){
@@ -122,9 +126,63 @@ export default {
         //     }
         // },
         returnPrev() {
-            this.$router.push('goodsTypes')
+            this.from = []
+            this.$router.go(-1)
+        },
+
+        trueconfim() {
+            let itemSupplyPropertyDTOs = JSON.stringify(this.from)
+
+            console.log(this.from)
+            // console.log(itemSupplyPropertyDTOs)
+            api.putsupplyPropertyupdate(itemSupplyPropertyDTOs).then((response)=>{
+                console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+            // this.$router.go(-1)
         }
+
+    },
+    created() {
+        var that = this
+
+        bus.$on('editTypes', function(msg){
+            let obj = {
+                unitMsg: msg
+            }
+
+            that.unitMsg = msg
+            api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
+                that.from = response.data
+
+                // console.log(response.data)
+            }).catch((error)=>{
+                console.log(error)
+            })
+        })
+
+    },
+    activated() {
+        var that = this
+
+        bus.$on('editTypes', function(msg){
+            let obj = {
+                unitMsg: msg
+            }
+
+            that.unitMsg = msg
+            api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
+                that.from = response.data
+
+                // console.log(response.data)
+            }).catch((error)=>{
+                console.log(error)
+            })
+        })
+
     }
+
 
 }
 </script>

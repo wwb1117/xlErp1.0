@@ -89,7 +89,7 @@
                     </li>
                     <li style="width:110px">{{item.sort}}</li>
                     <li style="width:130px">
-                        <el-button type='text'>编辑</el-button>
+                        <el-button type='text'  @click="dialogFormVisible = true">编辑</el-button>
                         <el-button type="text" @click="del = true">删除</el-button>
                         <el-dialog
                             title="温馨提示"
