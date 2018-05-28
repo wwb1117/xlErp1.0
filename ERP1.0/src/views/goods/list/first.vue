@@ -16,62 +16,71 @@
                             </el-input>
                         </li>
                         <li class="find">
-                            <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                            <el-button  type="primary" style='padding:9px 15px; margin-left:10px' size='small'>搜索</el-button>
                         </li>
                         <!-- 高级搜索表单 -->
                         <li class="morefind">
                             <el-button type="text" @click="dialogFormVisible = true">高级搜索</el-button>
                         </li>
                         <!-- 高级搜索表单内容 -->
-                        <li class="text_y">
-                            <el-dialog title="高级搜索" :visible.sync="dialogFormVisible">
-                                <el-form :model="form">
+                        <li>
+                            <el-card v-show="dialogFormVisible" class="box_card">
+                                <div slot="header" class="clearfix">
+                                    <span :style="{fontSize: '16px'}">高级搜索</span>
+                                    <i @click="dialogFormVisible = false" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
+                                </div>
+                                <el-form class="myForm" :inline="true" :model="form" label-position="right" size="small" label-width="80px">
                                     <el-form-item label="商品名称">
-                                        <el-input v-model="form.name1" auto-complete="off" size="small"></el-input>
+                                        <el-input v-model="form.name1" placeholder="请输入商品名称"></el-input>
                                     </el-form-item>
                                     <el-form-item label="商品编号">
-                                        <el-input v-model="form.name2" auto-complete="off" size="small"></el-input>
+                                        <el-input v-model="form.name2" placeholder="请输入商品编号"></el-input>
                                     </el-form-item>
                                     <el-form-item label="商品条码">
-                                        <el-input v-model="form.name3" auto-complete="off" size="small"></el-input>
+                                        <el-input v-model="form.name3" placeholder="请输入商品条码"></el-input>
                                     </el-form-item>
+                                    <br>
                                     <el-form-item label="商品分类">
-                                        <el-select v-model="form.name4" placeholder="全部" size="small">
+                                        <el-select  v-model="form.name4" placeholder="全部">
                                             <el-option label="母婴类" value="12"></el-option>
                                             <el-option label="服务类" value="123"></el-option>
                                         </el-select>
                                     </el-form-item>
                                     <el-form-item label="商品品牌">
-                                        <el-select v-model="form.name5" placeholder="全部" size="small">
+                                        <el-select  v-model="form.name5" placeholder="全部">
                                             <el-option label="母婴类" value="123"></el-option>
                                             <el-option label="服务类" value="12312"></el-option>
                                         </el-select>
                                     </el-form-item>
                                     <el-form-item label="商品类型">
-                                        <el-select v-model="form.name6" placeholder="全部" size="small">
+                                        <el-select  v-model="form.name6" placeholder="全部">
                                             <el-option label="母婴类" value="324"></el-option>
                                             <el-option label="服务类" value="145"></el-option>
                                         </el-select>
                                     </el-form-item>
+                                    <br>
                                     <el-form-item label="贸易类型">
-                                        <el-select v-model="form.name7" placeholder="全部" size="small">
+                                        <el-select v-model="form.name7" placeholder="全部">
                                             <el-option label="母婴类" value="145"></el-option>
                                             <el-option label="服务类" value="1345"></el-option>
                                         </el-select>
                                     </el-form-item>
                                     <el-form-item label="提成方式">
-                                        <el-select v-model="form.name8" placeholder="全部" size="small">
+                                        <el-select v-model="form.name8" placeholder="全部">
                                             <el-option label="母婴类" value="13451"></el-option>
                                             <el-option label="服务类" value="1435143"></el-option>
                                         </el-select>
                                     </el-form-item>
+                                    <el-form-item >
+
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-button @click="dialogFormVisible = false" style="padding:9px 15px;width: 90px" type="primary" >确定</el-button>
+                                        <el-button @click="dialogFormVisible = false" style="padding:9px 15px;width: 90px">取消</el-button>
+                                        <el-button class="color_hover" @click="clear" type="text" style="padding:9px 15px;width: 40px; color: #636365">清空</el-button>
+                                    </el-form-item>
                                 </el-form>
-                                <div slot="footer" class="dialog-footer">
-                                    <el-button type="primary" @click="dialogFormVisible = false" size="small">确 定</el-button>
-                                    <el-button @click="dialogFormVisible = false" size="small">取 消</el-button>
-                                    <el-button @click="clear" size="small" type='text' style="color:black">清 空</el-button>
-                                </div>
-                            </el-dialog>
+                            </el-card>
                         </li>
                     </ul>
                 </div>
@@ -359,7 +368,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 *{
     margin: 0;padding: 0;list-style: none;
 }
@@ -369,14 +378,14 @@ export default {
     position: relative;
 }
 /* 顶部样式 */
-#k .conent_list{
+ .conent_list{
     display: flex;
     padding: 15px;
     background: white;
     margin: 0;
     height: 60px;
 }
-#k .conent_hidden{
+ .conent_hidden{
     display: flex;
     background: white;
     margin: 0;
@@ -388,103 +397,97 @@ export default {
     width: 98%;
     line-height: 60px;
 }
-#k .conent_hidden>li{
+.conent_hidden>li{
     margin-left: 30px
 }
-#k .morefind{
+.morefind{
     margin-left: 20px;
     height: 32px;
     line-height: 32px;
 }
-#k .morefind>button{
+.morefind>button{
     padding: 0
 }
 /* 商品内容样式 */
-#k .center .el-checkbox{
+.center .el-checkbox{
     display: block;
     margin: 0
 }
-#k .display{
+.display{
     display: flex;
     justify-content: space-around;
 }
-#k .display>li{
+.display>li{
     width: 150px;
 }
-#k .text_color{
+.text_color{
     color: #409EFF
 }
-#k .goods_conent{
+.goods_conent{
    border-top:1px solid #e4e7ed;
    height: 70px;
    padding: 5px 0;
    margin: 0
 }
-#k .goods_list{
+.goods_list{
     background: #f5f5f5;
     height: 40px;
     line-height: 40px;
     margin: 0
 }
 /* 商品弹出框样式 */
-#k .text_y .el-dialog{
-    left: 5.2%;
-    width: 88.5%;
-    top:-86px;
-    height: 300px
-}
-#k .text_y .dialog-footer{
-    position: absolute;
-    left: 20px;
-    bottom:30px
-}
-#k .text_y .el-dialog__body{
-    padding: 0 20px
-}
-#k .text_y .el-form{
-    display: flex;
-    flex-wrap: wrap;
-}
-#k .text_y .el-form .el-form-item{
-    display: flex;
-    width: 30%;
-}
-#k .text_y .el-form .el-form-item .el-input__inner{
-    width: 300px;
-}
-#k .navdiv>.el-tabs .el-tabs__nav-wrap{
+
+.navdiv>.el-tabs .el-tabs__nav-wrap{
     margin-left: 10px
 }
-#k .text_color>.el-button{
+.text_color>.el-button{
     padding: 0
 }
-#k .small_pagination{
+.small_pagination{
     margin-left: 700px;
     margin-top:30px;
 }
- .bottom{
+.bottom{
     border-top:1px solid #e5e8e8;
     position: relative;
     /* margin-top: -23px; */
     background: white;
     padding: 27px 30px;
 }
- .bottom .block{
+.bottom .block{
     position: absolute;
     right: 30px;
-    top:0
+    top:12px
 }
 
-#k .el-form input{
+.el-form input{
     width: 240px
 }
 
-#k .el-icon-close:hover{
+.el-icon-close:hover{
     font-size: 14px
 }
 .goodimgbox img{
     height: 60px;
     width: 60px
+}
+
+.box_card{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 300px;
+    z-index: 9;
+    margin: 10px
+}
+.model_content_inner{
+    position: relative;
+}
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+    width: 390px;
+}
+.el-form{
+    color: #636365;
 }
 </style>
 
