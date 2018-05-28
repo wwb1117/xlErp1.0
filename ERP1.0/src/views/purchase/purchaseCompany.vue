@@ -11,7 +11,7 @@
                         placeholder="请输入要查询的关键词"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="this.tableParam.serchText">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                     <el-button @click="addPurchaseComEvent" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
@@ -29,47 +29,52 @@
                     width="50">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompanyNo"
+                        prop="buyerCompanyNo"
                         label="采购单位编号"
                         >
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompanyName"
+                        prop="buyerCompanyName"
                         label="采购单位名称">
                     </el-table-column>
                     <el-table-column
-                        prop="leadMan"
+                        prop="legalRepresentative"
                         label="法定代表人">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseRMB"
+                        prop="registeredCapital"
                         label="注册资本">
                     </el-table-column>
                     <el-table-column
-                        prop="makeListTime"
+                        prop="foundingTime"
                         label="成立时间">
+                        <template slot-scope="scope">
+                            <div>
+                                <span>{{scope.row.foundingTime | time}}</span>
+                            </div>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="tlephone"
+                        prop="phone"
                         label="电话">
                     </el-table-column>
                     <el-table-column
-                        prop="email"
+                        prop="mailBox"
                         label="邮箱">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
+                        prop="buyerCompanyAddress"
                         label="详细地址">
                     </el-table-column>
                     <el-table-column
-                        prop="maker"
+                        prop="remark"
                         label="备注">
                     </el-table-column>
                     <el-table-column
-                        prop="state"
+                        prop="enableStatus"
                         label="状态">
                         <template slot-scope="scope">
-                            <el-switch active-value="1" v-model="scope.row.state"></el-switch>
+                            <el-switch :inactive-value="0" :active-value="1" v-model="scope.row.enableStatus"></el-switch>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -78,19 +83,19 @@
                         label="操作">
                          <template slot-scope="scope">
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 1)"
+                            @click.native="tablePropEvent(scope.row.id, 1)"
                             type="text"
                             size="small">
                             详情
                             </el-button>
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 2)"
+                            @click.native="tablePropEvent(scope.row.id, 2)"
                             type="text"
                             size="small">
                             编辑
                             </el-button>
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 3)"
+                            @click.native="tablePropEvent(scope.row.id, 3)"
                             type="text"
                             size="small">
                             删除
@@ -104,22 +109,28 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :current-page="1"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
             serchText: '',
-            currentPage: 2,
+            tableParam: {
+                serchText: '',
+                pageSize: 10,
+                pageNo: 1
+            },
+            totalPage: 1,
             selectTableData: [],
             tableHeight: 500,
             tableData: [
@@ -167,35 +178,49 @@ export default {
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
         },
-        tablePropEvent(index, type){
+        tablePropEvent(rowid, type){
             if (type == 1){
+                this.$store.commit('setBuyerId', rowid)
                 this.$router.push({
                     path: '/lookPurchaseCompany'
                 })
             }
             if (type == 2){
+                this.$store.commit('setBuyerId', rowid)
                 this.$router.push({
                     path: '/editPurchaseCompany'
                 })
             }
-        },
+            if (type == 3){
 
+            }
+        },
         handleSelectionChange(val){
+
         },
         addPurchaseComEvent(){
             this.$router.push({
                 path: '/addPurchaseCompany'
             })
+        },
+        getTableData(){
+            return api.getPurchaseComList(this.tableParam).then((response) => {
+                this.tableData = response.data.list
+                this.totalPage = response.data.total
+            })
         }
 
     },
     created(){},
+    activated(){
+        this.getTableData()
+    },
     mounted(){}
 }
 </script>

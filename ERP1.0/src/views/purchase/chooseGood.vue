@@ -9,9 +9,9 @@
             <i style="float: right; line-height: 60px" class="el-icon-close"></i>
         </div>
         <div class="banner">
-            <el-form :inline="true" :model="searchData" label-position="right" size="small" label-width="80px">
+            <el-form :inline="true" :model="tableParam" label-position="right" size="small" label-width="80px">
                 <el-form-item label="商品分类">
-                    <el-select v-model="searchData.goodsType" placeholder="请输入商品分类">
+                    <el-select v-model="tableParam.categoryName" placeholder="请输入商品分类">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
@@ -23,7 +23,7 @@
                         placeholder="请输入采购单号/供应商名称/采购单位"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="tableParam.serchText">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                 </el-form-item>
@@ -42,17 +42,17 @@
                     label="商品"
                     width="280">
                     <template slot-scope="scope">
-                        <img :src="scope.row.good.img" style="float: left;">
-                        <span class="color_blue" v-text="scope.row.good.text"></span>
+                        <img :src="scope.row.mainImg" style="float: left;">
+                        <span class="color_blue" v-text="scope.row.title"></span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="num"
+                    prop="itemCode"
                     label="编号"
                     width="180">
                 </el-table-column>
                 <el-table-column
-                    prop="barcode"
+                    prop="barCode"
                     label="条码">
                 </el-table-column>
                 <el-table-column
@@ -83,23 +83,32 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :current-page="tableParam.pageNo"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
-            searchData: {
-                goodsType: '',
-                serchText: ''
+            totalPage: 1,
+            tableParam: {
+                serchText: '',
+                pageSize: 10,
+                pageNo: 1,
+                mainImg: '',
+                title: '',
+                itemCode: '',
+                categoryName: '',
+                brandName: '',
+                barCode: ''
             },
             tableData: [
                 {
@@ -131,9 +140,25 @@ export default {
     },
     computed:{},
     methods:{
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
+        },
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
+        },
         mountFormat(data){
             data.row.mount = data.row.mount.replace(/[^\d\.]/g, '')
+        },
+        getTableData(){
+            return api.getPurchaseList(this.tableParam).then((response) => {
+                console.log(response)
+                this.totalPage = response.data.total
+                this.tableData = response.data.list
+            })
         }
+    },
+    activated(){
+        this.getTableData()
     },
     created(){},
     mounted(){}

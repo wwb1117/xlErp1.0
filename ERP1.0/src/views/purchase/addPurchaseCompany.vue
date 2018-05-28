@@ -53,7 +53,7 @@
                         </el-form-item>
                         <br>
                         <el-form-item label="状态">
-                            <el-switch active-value="1" v-model="purchaseComFormData.state"></el-switch>
+                            <el-switch :inactive-value="0" :active-value="1" v-model="purchaseComFormData.state"></el-switch>
                         </el-form-item>
                         <br>
                         <el-form-item label="备注">
