@@ -253,7 +253,9 @@ export default {
                 storeType: '',
                 storeTime: '',
                 storeHouseId: '',
+                storeHouseName: '',
                 buyerId: '',
+                buyerName: '',
                 operator: '',
                 creator: '',
                 purchaseOrderNo: '',
@@ -378,6 +380,7 @@ export default {
         },
         // 保存结果
         save() {
+            this.addFormData.totalStoreNumber = 0
             this.addFormData.list = []
             // 将表中商品信息添加到addFormData
             let obj = {
@@ -394,6 +397,17 @@ export default {
                 this.addFormData.totalStoreNumber += parseInt(obj.currentStoreNumber, 10)
                 this.addFormData.list.push(obj)
             })
+            // 通过仓库ID和采购单ID赋值给addFormData的name
+            this.houseId_option.forEach(res => {
+                if (res.id === this.addFormData.storeHouseId) {
+                    this.addFormData.storeHouseName = res.warehouseName
+                }
+            })
+            this.buyerId_option.forEach(res => {
+                if (res.id === this.addFormData.buyerId) {
+                    this.addFormData.buyerName = res.buyerCompanyName
+                }
+            })
             this.postData = ME.deepCopy(this.addFormData)
             this.postData.storeTime = Date.parse(this.postData.storeTime) / 1000
             console.log(this.postData, "添加数据")
@@ -409,6 +423,11 @@ export default {
 
                 })
             } else if (this.$route.params.type === '出库') {
+                this.postData.deliverHouseId = this.postData.storeHouseId
+                this.postData.deliverHouseName = this.postData.storeHouseName
+                this.$delete(this.postData, 'storeHouseId')
+                this.$delete(this.postData, 'storeHouseName')
+                console.log(this.postData, '转化数据')
 
             }
 
@@ -421,10 +440,15 @@ export default {
     activated () {
         // 获取采购单位列表
         this.getPurchaseList()
+        for (let key in this.addFormData) {
+            this.addFormData[key] = ''
+        }
         if (this.$route.params.type === '入库') {
             this.inbound = true
+            this.outbound = false
         } else if (this.$route.params.type === '出库') {
             this.outbound = true
+            this.inbound = false
         }
         console.log(this.inbound, this.outbound)
     }
