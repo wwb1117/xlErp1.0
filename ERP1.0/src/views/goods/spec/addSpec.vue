@@ -16,11 +16,9 @@
                         <el-table
                             :data='specNum'
                             border
-                            style="width:658px"
-                        >
+                            style="width:658px">
                             <el-table-column
-                                width='55'
-                                >
+                                width='55'>
                                 <template slot-scope="scope">
                                     <div class="icon_box" style="height:50px;line-height:50px">
                                         <i class="el-icon-plus" style="font-weight:700" @click="addSpecnum(scope)"></i>
@@ -31,8 +29,7 @@
                             <el-table-column
                                 prop="specname"
                                 label="规格值"
-                                width="460"
-                            >
+                                width="460">
                                 <template slot-scope="scope">
                                     <div>
                                         <el-input v-model="specNum.specname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
@@ -41,8 +38,7 @@
                             </el-table-column>
                             <el-table-column
                                 prop='bolean'
-                                label='是否启用'
-                            >
+                                label='是否启用'>
                             <template slot-scope="scope">
                                 <el-switch
                                     v-model="specNum.value2"
@@ -58,8 +54,7 @@
                         <el-input
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
-                            style="width:658px"
-                        >
+                            style="width:658px">
                         </el-input>
                     </el-form-item>
                 </el-form>

@@ -23,7 +23,7 @@ export default {
         return HttpClient.delete(`/process/delete/${id}`)
     },
     // 设置审批流程
-    postprocesssetreview(data){
+    putprocesssetreview(data){
         return HttpClient.put('/process/setreview', data)
     },
     // 查询流程审批详情

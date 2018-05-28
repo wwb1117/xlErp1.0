@@ -8,19 +8,17 @@
         </header>
         <section class="addTypes_conent" >
             <div class="addTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
-                <el-form ref="types" :model="types" label-width="100px">
+                <el-form ref="types" v-model="typesNum" label-width="100px">
                     <el-form-item label="规格名称" required>
-                        <el-input v-model="types.name" style="width:338px" size='small'></el-input>
+                        <el-input v-model="typesNum.unitMsg" style="width:338px" size='small'></el-input>
                     </el-form-item>
                     <el-form-item label="规格值" required :style="{height: (typesNum.length)*50 + 'px'}">
                         <el-table
                             :data='typesNum'
                             border
-                            style="width:658px"
-                        >
+                            style="width:658px">
                             <el-table-column
-                                width='55'
-                            >
+                                width='55'>
                                 <template slot-scope="scope">
                                     <div class="icon_box" style="height:50px;line-height:50px">
                                         <i class="el-icon-plus" style="font-weight:700" @click="addTypesnum(scope)"></i>
@@ -30,31 +28,31 @@
                             </el-table-column>
                             <!-- 规格值 -->
                             <el-table-column
-                                prop="typesname"
+                                prop="unitMsg"
                                 label="规格值"
                                 width="410">
                                 <template slot-scope="scope">
                                     <div>
-                                        <el-input v-model="typesNum.typesname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
+                                        <el-input v-model="scope.row.unitMsg" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
                             <!-- 商品数量 -->
                             <el-table-column
-                                prop="num"
+                                prop="skuNumber"
                                 label="含商品数量">
                                 <template slot-scope="scope">
-                                    <el-input v-model="typesNum.num" size='small'></el-input>
+                                    <el-input v-model="scope.row.skuNumber" size='small'></el-input>
                                 </template>
                             </el-table-column>
                             <!-- 是否启用 -->
                             <el-table-column
-                                prop='bolean'
+                                prop='isDeleted'
                                 label='是否启用'
                                 width="80">
                                 <template slot-scope="scope">
                                     <el-switch
-                                        v-model="typesNum.value2"
+                                        v-model="scope.row.isDeleted"
                                         active-color="#13ce66"
                                         inactive-color="#ff4949">
                                     </el-switch>
@@ -68,7 +66,7 @@
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                            v-model="types.text"
+                            v-model="this.text"
                         >
                         </el-input>
                     </el-form-item>
@@ -76,29 +74,29 @@
             </div>
         </section>
         <footer class="addTypes_footer">
-            <el-button type="primary" size='small'>保存</el-button>
+            <el-button type="primary" size='small' @click='trueconfim'>保存</el-button>
             <el-button size='small' @click='returnPrev'>取消</el-button>
         </footer>
     </section>
 </template>
 <script>
+import api from 'api/goods'
+
 export default {
     data() {
         return {
             // 规格名称、备注
-            types: {
-                name: '',
-                text: ''
-            },
-            // 规格值
+            unitMsga: '',
+            text: '',
 
+            // 规格值
             typesNum: [
                 {
-                    typesname: '',
-                    bolean: '',
-                    num: '',
-                    value1: true,
-                    value2: true
+                    skuNumber: '',
+                    unitMsg: '',
+                    price: '',
+                    sort: '',
+                    isDeleted: false
                 }
             ]
 
@@ -107,11 +105,11 @@ export default {
     methods: {
         addTypesnum() {
             let obj = {
-                typesname: '',
-                bolean: '',
-                num: '',
-                value1: true,
-                value2: true
+                skuNumber: '',
+                unitMsg: '',
+                price: '',
+                sort: '',
+                isDeleted: false
             }
 
             this.typesNum.push(obj)
@@ -122,7 +120,26 @@ export default {
             }
         },
         returnPrev() {
-            this.$router.push('goodsTypes')
+            this.typesNum = [
+                {
+                    skuNumber: '',
+                    unitMsg: '',
+                    price: '',
+                    sort: '',
+                    isDeleted: false
+                }
+            ]
+            this.$router.go(-1)
+        },
+        trueconfim() {
+            console.log(this.typesNum)
+            api.postitemsupplyPropertyadd(this.typesNum).then((response)=>{
+                console.log(typeof this.typesNum)
+                console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+            this.$router.go(-1)
         }
     }
 

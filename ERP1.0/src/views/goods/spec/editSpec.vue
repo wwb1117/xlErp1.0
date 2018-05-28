@@ -71,6 +71,9 @@
     </section>
 </template>
 <script>
+import api from 'api/goods'
+import bus from '@/assets/eventBus.js'
+
 export default {
     data() {
         return {
@@ -111,6 +114,20 @@ export default {
         returnPrev() {
             this.$router.push('goodsSpec')
         }
+    },
+    created() {
+        // var that = this
+
+        bus.$on('editSpec', function(msg){
+
+            api.getitemskupropertyid(msg).then((response)=>{
+
+                console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+        })
+
     }
 
 }
