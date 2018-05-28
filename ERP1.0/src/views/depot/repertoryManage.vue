@@ -14,12 +14,10 @@
                         placeholder="请输入要查询的关键词"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="searchText">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
-
+                    <el-button :style="{margin: '0 10px'}" type="primary" size="small" @click="search">搜索</el-button>
                 </div>
-
                 <el-table
                     :data="warehouseList"
                     :height="$store.state.home.modelContentHeight - 33"
@@ -97,7 +95,7 @@ export default {
     data(){
         return {
             warnState: '',
-            serchText: '',
+            searchText: '',
             currentPage: 2,
             selectTableData: [],
             isSupperBoxShow: false,
@@ -135,8 +133,8 @@ export default {
             this.$router.push({name: '出入库详情', params: {id:12314654, type: '出库'}})
         },
         // 获取列表数据
-        getWarehouseList() {
-            API.getWarehouseList().then(res => {
+        getWarehouseList(data) {
+            API.getWarehouseList(data).then(res => {
                 this.warehouseList = res.data.list
                 this.warehouseList.forEach((rs) => {
                     rs.activateState = this.$allEnumeration.activateState[rs.activateState]
@@ -172,6 +170,10 @@ export default {
                     message: '已取消删除'
                 });
             });
+        },
+        // 搜索仓库
+        search() {
+            this.getWarehouseList({warehouseName: this.searchText})
         },
         supperBoxShow(){
             this.isSupperBoxShow = !this.isSupperBoxShow

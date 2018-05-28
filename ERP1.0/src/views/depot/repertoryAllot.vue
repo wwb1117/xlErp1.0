@@ -19,7 +19,21 @@
                             <el-input v-model="searchFormData.inventoryAllocationNo" placeholder="请输入调拨单号"></el-input>
                         </el-form-item>
                         <el-form-item label="调拨仓库">
-                            <el-input v-model="searchFormData.warehouseName" placeholder="请输入调拨仓库"></el-input>
+                            <el-select
+                                v-model="searchFormData.houseId"
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入关键词"
+                                :remote-method="remoteMethod"
+                                :loading="loading">
+                                <el-option
+                                    v-for="item in houseId_option"
+                                    :key="item.id"
+                                    :label="item.warehouseName"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item label="调出单位">
                             <el-input v-model="searchFormData.inventoryOutName" placeholder="请输入调出单位"></el-input>
@@ -53,9 +67,9 @@
                         </el-form-item>
                         <br>
                         <el-form-item>
-                            <el-button style="width: 90px" type="primary" >确定</el-button>
+                            <el-button style="width: 90px" type="primary" @click="search">确定</el-button>
                             <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
-                            <el-button type="text" style="width: 40px; color: #636365">清空</el-button>
+                            <el-button type="text" style="width: 40px; color: #636365" @click="clear">清空</el-button>
                         </el-form-item>
                     </el-form>
                 </el-card>
@@ -67,7 +81,7 @@
                         :style="{width: '378px'}"
                         v-model="inventoryAllocationNo">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button :style="{margin: '0 10px'}" type="primary" size="small" @click="search">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
                 </div>
                 <div v-show="isExportShow" class="purchaseList_exportWrap">
@@ -167,10 +181,10 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="total">
             </el-pagination>
         </div>
     </div>
@@ -178,6 +192,7 @@
 
 <script>
 import 'utils/allEnumeration'
+import ME from 'utils/base'
 import API from 'api/depot'
 export default {
     data(){
@@ -194,11 +209,13 @@ export default {
                 startTime: '',
                 endTime: '',
                 auditStatus: '',
-                warehouseName: '',
+                houseId: '',
                 inventoryOutName: '',
                 inventoryInName: '',
                 creator: ''
             },
+            houseId_option: [],
+            loading: false,
             isExportShow: false,
             tableData: [
                 {
@@ -210,7 +227,8 @@ export default {
                     creator: '',
                     inventoryAllocationTime: ''
                 }
-            ]
+            ],
+            total: ''
         }
     },
     computed:{},
@@ -221,16 +239,57 @@ export default {
         handleCurrentChange(){
 
         },
-        getAllotList() {
+        getAllotList(data) {
             console.log("调拨单列表res1")
-            API.getAllotList().then(res => {
+            API.getAllotList(data).then(res => {
                 this.tableData = res.data.list
+                this.total = res.data.total || res.data.list.length
                 console.log("调拨单列表res", this.tableData)
             })
-
         },
         inAllotDetail(index, data){
             this.$router.push({name: '调拨单详情', params: {id: data.inventoryAllocationNo || 12314654, type: '调拨'}})
+        },
+        // 搜索清空
+        clear() {
+            for (let key in this.searchFormData) {
+                this.searchFormData[key] = ''
+            }
+        },
+        // 搜索
+        search() {
+            if (this.searchFormData.date) {
+                this.searchFormData.startTime = Date.parse(this.searchFormData.date[0]) / 1000
+                this.searchFormData.endTime = Date.parse(this.searchFormData.date[1]) / 1000
+            }
+            this.postData = ME.deepCopy(this.searchFormData)
+            this.$delete(this.postData, 'date')
+            console.log(this.postData)
+            this.getAllotList(this.postData)
+            this.isSupperBoxShow = false
+        },
+        // 入库仓库模糊搜索
+        remoteMethod(query) {
+            if (query !== '') {
+                this.loading = true;
+                let post = {};
+
+                post.warehouseName = query
+                setTimeout(() => {
+                    this.loading = false;
+                    API.getWarehouseList(post).then(res => {
+                        this.houseId_option = res.data.list
+                        console.log(res, "请求来仓库")
+                    })
+                    this.houseId_option = this.houseId_option.filter(item => {
+                        return item.label.toLowerCase()
+                            .indexOf(query.toLowerCase()) > -1;
+                    });
+                }, 200);
+            } else {
+                this.houseId_option = [];
+            }
+
         },
         editTable() {
 

@@ -26,16 +26,29 @@
                         <br>
                         <el-form-item label="商品分类">
                             <el-select v-model="searchFormData.itemTypeId" placeholder="请选择">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value=""></el-option>
-                                <el-option label="区域二" value=""></el-option>
+                                <el-option
+                                    v-for="item in item_option"
+                                    :key="item.id"
+                                    :label="item.categoryName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="所属仓库">
-                            <el-select v-model="searchFormData.houseId" placeholder="请选择">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select
+                                v-model="searchFormData.houseId"
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入关键词"
+                                :remote-method="remoteMethod"
+                                :loading="loading">
+                                <el-option
+                                    v-for="item in houseId_option"
+                                    :key="item.id"
+                                    :label="item.warehouseName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="出入库类型">
@@ -57,9 +70,12 @@
                         <br>
                         <el-form-item label="采购单位">
                             <el-select v-model="searchFormData.buyerId" placeholder="请选择">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                                <el-option
+                                    v-for="item in buyerId_option"
+                                    :key="item.id"
+                                    :label="item.buyerCompanyName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购时间">
@@ -74,9 +90,9 @@
                         </el-form-item>
                         <br>
                         <el-form-item>
-                            <el-button style="width: 90px" type="primary" >确定</el-button>
+                            <el-button style="width: 90px" type="primary" @click="search">确定</el-button>
                             <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
-                            <el-button type="text" style="width: 40px; color: #636365">清空</el-button>
+                            <el-button type="text" style="width: 40px; color: #636365" @click="clear">清空</el-button>
                         </el-form-item>
                     </el-form>
                 </el-card>
@@ -88,7 +104,7 @@
                         :style="{width: '378px'}"
                         v-model="serchText">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button :style="{margin: '0 10px'}" type="primary" size="small" @click="search">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
                 </div>
 
@@ -165,13 +181,13 @@
                                 详情
                             </el-button>
                             <el-button
-                                @click.native.prevent="editTable(scope.$index, tableData)"
+                                @click.native.prevent="editTable(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
                                 编辑
                             </el-button>
                             <el-button
-                                @click.native.prevent="deleteTable(scope.$index, tableData)"
+                                @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
                                 删除
@@ -186,10 +202,10 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="total">
             </el-pagination>
         </div>
     </div>
@@ -198,6 +214,7 @@
 <script>
 import 'utils/allEnumeration'
 import API from 'api/depot'
+import ME from 'utils/base'
 export default {
     data(){
         return {
@@ -208,13 +225,17 @@ export default {
             isSupperBoxShow: false,
             tableHeight: 500,
             outInboundType: '',
+            loading: false,
+            houseId_option: [],
+            buyerId_option: [],
+            item_option: [],
             searchFormData: {
-                itemSku: '1',
-                itemMac: '2',
-                itemName: '3',
-                itemTypeId: '4',
-                houseId: '5',
-                buyerId: '8',
+                itemSku: '',
+                itemMac: '',
+                itemName: '',
+                itemTypeId: '',
+                houseId: '',
+                buyerId: '',
                 startTime: '',
                 endTime: '',
                 date: ''
@@ -237,6 +258,7 @@ export default {
                     orderNumber: '17'
                 }
             ],
+            total: '',
             inoutBoundOption: [{
                 label: '入库类型',
                 options: [{
@@ -279,10 +301,66 @@ export default {
 
         },
         // 获取出入库列表
-        getInoutBoundList() {
-            API.inoutBound().then(res => {
+        getInoutBoundList(data) {
+
+            API.inoutBound(data).then(res => {
                 this.tableData = res.data.list
             })
+        },
+        // 获取采购列表
+        getPurchaseList() {
+            API.getPurchaseAll().then(res => {
+                this.buyerId_option = res.data
+                this.total = res.data.total || res.data.list.length
+                console.log(this.buyerId_option, "采购列表")
+            })
+        },
+        // 获取商品类目列表
+        getItemList() {
+            API.getItemAll().then(res => {
+                this.item_option = res.data
+            })
+        },
+        // 搜索清空
+        clear() {
+            for (let key in this.searchFormData) {
+                this.searchFormData[key] = ''
+            }
+        },
+        // 搜索
+        search() {
+            if (this.searchFormData.date) {
+                this.searchFormData.startTime = Date.parse(this.searchFormData.date[0]) / 1000
+                this.searchFormData.endTime = Date.parse(this.searchFormData.date[1]) / 1000
+            }
+            this.postData = ME.deepCopy(this.searchFormData)
+            this.$delete(this.postData, 'date')
+            console.log(this.postData)
+            this.getInoutBoundList(this.postData)
+            this.isSupperBoxShow = false
+        },
+        // 入库仓库模糊搜索
+        remoteMethod(query) {
+            if (query !== '') {
+                this.loading = true;
+                let post = {};
+
+                post.warehouseName = query
+                setTimeout(() => {
+                    this.loading = false;
+                    API.getWarehouseList(post).then(res => {
+                        this.houseId_option = res.data.list
+                        console.log(res, "请求来仓库")
+                    })
+                    this.houseId_option = this.houseId_option.filter(item => {
+                        return item.label.toLowerCase()
+                            .indexOf(query.toLowerCase()) > -1;
+                    });
+                }, 200);
+            } else {
+                this.houseId_option = [];
+            }
+
         },
         // 进入详情页
         inBoundDetail(index, data) {
@@ -326,7 +404,8 @@ export default {
     created(){},
     mounted(){
         this.getInoutBoundList()
-
+        this.getPurchaseList()
+        this.getItemList()
     }
 }
 </script>
