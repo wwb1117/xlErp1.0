@@ -1,6 +1,7 @@
 import { MessageBox } from 'element-ui';
 import { Message } from 'element-ui';
 
+// noinspection JSAnnotator
 export default {
     backSpaceBiden(){ //禁止返回键
         function doKey(e){
@@ -61,17 +62,10 @@ export default {
             });
         });
     },
-    deepCopy(p, c) { // 深拷贝
-        let cop = c || {};
-        for (let i in p) {
-            if (typeof p[i] === 'object') {
-                cop[i] = (p[i].constructor === Array) ? [] : {};
-                deepCopy(p[i], cop[i]);
-            } else {
-                cop[i] = p[i];
-            }
-        }
-        return cop;
+    deepCopy(initalObj) {
+        var obj = {};
+        obj = JSON.parse(JSON.stringify(initalObj));
+        return obj;
     }
 
 

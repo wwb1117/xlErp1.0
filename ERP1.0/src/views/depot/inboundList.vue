@@ -5,7 +5,7 @@
             <div>
                 <el-button size="small">导入入库单</el-button>
                 <el-button size="small">导出入库单</el-button>
-                <el-button type="primary" @click="purchaseAddEvent" size="small">新增入库单</el-button>
+                <el-button type="primary" @click="inAddEvent" size="small">新增入库单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -17,10 +17,20 @@
                     </div>
                     <el-form class="myForm" :inline="true" :model="searchFormData" label-position="right" size="small" label-width="80px">
                         <el-form-item label="入库仓库">
-                            <el-select v-model="searchFormData.houseId" placeholder="请选择">
-                                <el-option label="全部" value="123"></el-option>
-                                <el-option label="区域一" value="456"></el-option>
-                                <el-option label="区域二" value="789"></el-option>
+                            <el-select
+                                v-model="searchFormData.houseId"
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入关键词"
+                                :remote-method="remoteMethod"
+                                :loading="loading">
+                                <el-option
+                                    v-for="item in houseId_option"
+                                    :key="item.id"
+                                    :label="item.warehouseName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库类型">
@@ -36,9 +46,12 @@
                         <br>
                         <el-form-item label="采购单位">
                             <el-select v-model="searchFormData.buyerId" placeholder="请选择">
-                                <el-option label="全部" value="555"></el-option>
-                                <el-option label="区域一" value="666"></el-option>
-                                <el-option label="区域二" value="777"></el-option>
+                                <el-option
+                                    v-for="item in buyerId_option"
+                                    :key="item.id"
+                                    :label="item.buyerCompanyName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="制单人">
@@ -56,9 +69,9 @@
                         </el-form-item>
                         <br>
                         <el-form-item>
-                            <el-button style="width: 90px" type="primary" >确定</el-button>
+                            <el-button style="width: 90px" type="primary" @click="search">确定</el-button>
                             <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
-                            <el-button type="text" style="width: 40px; color: #636365">清空</el-button>
+                            <el-button type="text" style="width: 40px; color: #636365" @click="clear">清空</el-button>
                         </el-form-item>
                     </el-form>
                 </el-card>
@@ -70,7 +83,7 @@
                         :style="{width: '378px'}"
                         v-model="searchFormData.storeNo">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button :style="{margin: '0 10px'}" type="primary" size="small" @click="search">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
                 </div>
                 <div v-show="isExportShow" class="purchaseList_exportWrap">
@@ -103,9 +116,11 @@
                     >
                     </el-table-column>
                     <el-table-column
-                        prop="storeTime"
                         label="入库时间"
                     >
+                        <template slot-scope="scope">
+                            <span>{{scope.row.storeTime | time_s}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="buyerName"
@@ -134,7 +149,7 @@
                             <span v-if="scope.row.auditStatus == 1" class="auditStatus_1">审核中</span>
                             <span v-if="scope.row.auditStatus == 2" class="auditStatus_2">通过</span>
                             <span v-if="scope.row.auditStatus == 3" class="auditStatus_3">审核未通过</span>
-                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_3">撤销</span>
+                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_4">撤销</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -148,22 +163,32 @@
                                 size="small">
                                 详情
                             </el-button>
-                            <el-button
-                                :style="{marginRight: '10px'}"
-                                @click.native.prevent="editTable(scope.$index, scope.row)"
-                                type="text"
-                                size="small">
-                                修改
-                            </el-button>
-                            <el-dropdown :hide-timeout="50" @command="dropdownSelectEvent" trigger="click">
-                                <span class="el-dropdown-link">
-                                    更多<i class="el-icon-arrow-down el-icon--right"></i>
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item command="1">查看</el-dropdown-item>
-                                    <el-dropdown-item command="4">打印</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
+                            <div v-if="scope.row.auditStatus == 0" style="display: inline-block">
+                                <!--待审核-->
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="editTable(scope.$index, scope.row)"
+                                    type="text"
+                                    size="small">
+                                    修改
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="deleteTable(scope.$index, scope.row)"
+                                    type="text"
+                                    size="small">
+                                    删除
+                                </el-button>
+                            </div>
+                            <div v-if="scope.row.auditStatus == 1" style="display: inline-block">
+                                <!--审核中-->
+                                <el-button
+                                    @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
+                                    type="text"
+                                    size="small">
+                                    撤回
+                                </el-button>
+                            </div>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -175,24 +200,30 @@
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
                 :page-sizes="[10, 30, 50, 100]"
-                :page-size="1"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="total">
             </el-pagination>
         </div>
     </div>
 </template>
 <script>
 import 'utils/allEnumeration'
+import ME from 'utils/base'
 import API from 'api/depot'
 export default {
     data(){
         return {
+            loading: false,
+            timeout:  null,
             serchText: '',
             currentPage: 1,
+            total: '',
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
+            houseId_option: [],
+            buyerId_option: [],
             searchFormData: {
                 houseId: '',
                 buyerId: '',
@@ -206,6 +237,7 @@ export default {
                 operator: '',
                 date: ''
             },
+            postData: {},
             isExportShow: false,
             tableData: [
                 {
@@ -233,17 +265,72 @@ export default {
 
         },
         // 获取列表数据
-        getInboundList() {
-            API.getInboundList().then(res => {
+        getInboundList(data) {
+            API.getInboundList(data).then(res => {
+                console.log(data, '入库单请求数据')
                 this.tableData = res.data.list
+                this.total = res.data.total || res.data.list.length
+            })
+        },
+        // 获取采购列表
+        getPurchaseList() {
+            API.getPurchaseAll().then(res => {
+                this.buyerId_option = res.data
+                console.log(this.buyerId_option, "采购列表")
             })
         },
         // 跳转详情页
         inBoundDetail(index, data) {
             this.$router.push({name: '出入库详情', params: {id: data.storeNo || 123, type: '入库'}})
         },
+        // 修改
         editTable(index, data) {
 
+        },
+        // 搜索清空
+        clear() {
+            for (let key in this.searchFormData) {
+                this.searchFormData[key] = ''
+            }
+        },
+        // 搜索
+        search() {
+            if (this.searchFormData.date) {
+                this.searchFormData.startTime = Date.parse(this.searchFormData.date[0]) / 1000
+                this.searchFormData.endTime = Date.parse(this.searchFormData.date[1]) / 1000
+            }
+            this.postData = ME.deepCopy(this.searchFormData)
+            this.$delete(this.postData, 'date')
+            console.log(this.postData)
+            this.getInboundList(this.postData)
+            this.isSupperBoxShow = false
+        },
+        // 入库仓库模糊搜索
+        remoteMethod(query) {
+            if (query !== '') {
+                this.loading = true;
+                let post = {};
+
+                post.warehouseName = query
+                setTimeout(() => {
+                    this.loading = false;
+                    API.getWarehouseList(post).then(res => {
+                        this.houseId_option = res.data.list
+                        console.log(res, "请求来仓库")
+                    })
+                    this.houseId_option = this.houseId_option.filter(item => {
+                        return item.label.toLowerCase()
+                            .indexOf(query.toLowerCase()) > -1;
+                    });
+                }, 200);
+            } else {
+                this.houseId_option = [];
+            }
+
+        },
+        // 搜索选中后
+        handleSelect(item) {
+            console.log(item);
         },
         closeExportWrap(){
             this.isExportShow = false
@@ -260,7 +347,7 @@ export default {
         supperBoxShow(){
             this.isSupperBoxShow = !this.isSupperBoxShow
         },
-        purchaseAddEvent(){
+        inAddEvent(){
             this.$router.push({
                 name: '新增入库',
                 params: {type: '入库'}
@@ -277,6 +364,7 @@ export default {
     created(){},
     mounted(){
         this.getInboundList()
+        this.getPurchaseList()
 
     }
 }
