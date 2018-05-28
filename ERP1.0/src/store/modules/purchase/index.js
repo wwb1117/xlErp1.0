@@ -1,7 +1,8 @@
 export default {
     state: {
         supplierId: '',
-        buyerId: ''
+        buyerId: '',
+        purchaseId: ''
     },
     mutations: {
         setSupplierId(state, value){
@@ -9,6 +10,9 @@ export default {
         },
         setBuyerId(state, value){
             state.buyerId = value
+        },
+        setPurchaseId(state, value){
+            state.purchaseId = value
         }
 
     }

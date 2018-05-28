@@ -40,8 +40,8 @@ export default {
         return {
             isRemPwd: true,
             userInfo: {
-                loginCode: 'gh',
-                loginPassword: '111111'
+                loginCode: 'mama',
+                loginPassword: '888888'
             }
 
         }

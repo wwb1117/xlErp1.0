@@ -5,17 +5,19 @@
                 <el-tab-pane class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}" label="采购单详情" name="detail">
                     <div class="tab_content">
                         <div class="tab_title fontWe_600">
-                            <span class="title_states">待入库</span>
+                            <span v-if="purchaseListInfo.storeStatus == 0" class="title_states">待入库</span>
+                            <span v-if="purchaseListInfo.storeStatus == 1" class="title_states">部分入库</span>
+                            <span v-if="purchaseListInfo.storeStatus == 2" class="title_states">已入库</span>
                             <span style="margin-left: 30px" class="title_title">采购单号 : </span>
-                            <span class="title_data">456655222222222222522</span>
+                            <span class="title_data" v-text="purchaseListInfo.purchaseOrderNo"></span>
                             <span class="title_title">供应商 : </span>
-                            <span class="title_data">杭州苏雅诗贸易有限公司</span>
+                            <span class="title_data" v-text="purchaseListInfo.sellerName"></span>
                             <span class="title_title">采购单位 : </span>
-                            <span class="title_data">妈妈去哪儿</span>
+                            <span class="title_data" v-text="purchaseListInfo.buyerName"></span>
                             <span class="title_title">入库仓库 : </span>
-                            <span class="title_data">默认仓库</span>
+                            <span class="title_data" v-text="purchaseListInfo.purchaseHouseName">默认仓库</span>
                             <span class="title_title">采购时间 : </span>
-                            <span class="title_data">2018-05-18 16:34</span>
+                            <span class="title_data">{{purchaseListInfo.orderTime | time}}</span>
                         </div>
                         <div class="banner">
                             商品信息
@@ -32,16 +34,16 @@
                                 width="50">
                                 </el-table-column>
                                 <el-table-column
-                                prop="selfNum"
+                                prop="itemId"
                                 label="编号"
                                 width="180">
                                 </el-table-column>
                                 <el-table-column
-                                prop="barCode"
+                                prop="purchaseOrderId"
                                 label="条码">
                                 </el-table-column>
                                 <el-table-column
-                                prop="goodName"
+                                prop="itemId"
                                 label="商品">
                                 </el-table-column>
                                 <el-table-column
@@ -57,7 +59,7 @@
                                 label="生产日期">
                                 </el-table-column>
                                 <el-table-column
-                                prop="purchaseNum"
+                                prop="purchasingNumber"
                                 label="采购数">
                                 </el-table-column>
                                 <el-table-column
@@ -65,26 +67,26 @@
                                 label="单位">
                                 </el-table-column>
                                 <el-table-column
-                                prop="unitPrice"
+                                prop="purchaseUnitPrice"
                                 label="采购单价(元)">
                                 </el-table-column>
                                 <el-table-column
-                                prop="unitTotal"
+                                prop="purchaseTotalPrice"
                                 label="小计(元)">
                                 </el-table-column>
                             </el-table>
                             <div class="table_bottom">
                                 <div class="table_bottom_item">
                                     <span class="table_bottom_title">备注 : </span>
-                                    <span></span>
+                                    <span v-text="purchaseListInfo.purchaseRemark"></span>
                                 </div>
                                 <div class="table_bottom_item">
                                     <span class="table_bottom_title">采购员 : </span>
-                                    <span>浩克</span>
+                                    <span v-text="purchaseListInfo.purchasingAgent"></span>
                                 </div>
                                 <div class="table_bottom_item">
                                     <span class="table_bottom_title">制单人 : </span>
-                                    <span>托尼</span>
+                                    <span v-text="purchaseListInfo.creator"></span>
                                 </div>
                             </div>
                         </div>
@@ -93,20 +95,20 @@
                 <el-tab-pane class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}" label="入库记录" name="inrepos">
                     <div class="tab_content">
                         <div class="tab_title fontWe_600 tab_ruku_title">
-                            <span class="title_states">待入库</span>
+                            <span v-if="storeBaseInfo.storeStatus == 0" class="title_states">待入库</span>
+                            <span v-if="storeBaseInfo.storeStatus == 1" class="title_states">部分入库</span>
+                            <span v-if="storeBaseInfo.storeStatus == 2" class="title_states">已入库</span>
                             <span style="margin-left: 30px" class="title_title">采购单号 : </span>
-                            <span class="title_data">456655222222222222522</span>
+                            <span v-text="storeBaseInfo.purchaseOrderNo" class="title_data"></span>
                             <span class="title_title">供应商 : </span>
-                            <span class="title_data">杭州苏雅诗贸易有限公司</span>
+                            <span v-text="storeBaseInfo.sellerName" class="title_data"></span>
                             <span class="title_title">采购单位 : </span>
-                            <span class="title_data">妈妈去哪儿</span>
+                            <span v-text="storeBaseInfo.buyerName" class="title_data">妈妈去哪儿</span>
                             <span class="title_title">入库仓库 : </span>
-                            <span class="title_data">默认仓库</span>
-                            <!-- <span class="title_title">采购时间 : </span>
-                            <span class="title_data">2018-05-18 16:34</span> -->
+                            <span v-text="storeBaseInfo.purchaseHouseName" class="title_data"></span>
                         </div>
                         <div :style="{height: $store.state.home.modelContentHeight - 64 + 'px'}"  class="ruku_content">
-                            <wait-ruku></wait-ruku>
+                            <wait-ruku :fatherValue="storeBaseInfo"></wait-ruku>
                             <stock-record></stock-record>
                         </div>
                     </div>
@@ -123,12 +125,13 @@
             </div>
         </div>
         <div class="wrap_footer">
-            <el-button style="width: 90px" size="small">返回</el-button>
+            <el-button v-RouterBack style="width: 90px" size="small">返回</el-button>
         </div>
     </div>
 </template>
 
 <script>
+import api from 'api/purchase'
 import waitRuku from 'views/purchase/childComponents/waitin_goodslist'
 import stockRecord from 'views/purchase/childComponents/stockRecord'
 export default {
@@ -150,21 +153,48 @@ export default {
                 unit: '',
                 unitPrice: '',
                 unitTotal: ''
-            }]
+            }],
+            purchaseListInfo: {},
+            storeBaseInfo: {},
+            storeListData: []
         }
     },
     computed:{},
     methods:{
         tabHandleClick(tab){
-            console.log(tab)
         },
         deleteEvent(){
             this.myBase.confirmDelet('你确定要删除该订单?', function(){
                 alert("wwoo")
             })
+        },
+        getPurchaseListItem(){
+            var purId = this.$store.state.purchase.purchaseId
+
+            api.getPurchaseListItem(purId).then((response) => {
+                this.purchaseListInfo = response.data
+                this.goodsInfoData = response.data.list
+            })
+        },
+        getStoreRecordInfo(){
+            var purId = this.$store.state.purchase.purchaseId
+
+            api.getStoreRecord(purId).then((response) => {
+                this.storeBaseInfo = response.data.obj
+                this.storeListData = response.data.list
+
+                console.log(this.storeBaseInfo)
+            })
         }
     },
-    created(){},
+    activated(){
+        this.getPurchaseListItem()
+        this.getStoreRecordInfo()
+    },
+    created(){
+        this.getPurchaseListItem()
+        this.getStoreRecordInfo()
+    },
     mounted(){}
 }
 </script>

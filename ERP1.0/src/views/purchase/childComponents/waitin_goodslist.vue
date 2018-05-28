@@ -6,18 +6,16 @@
             </div>
             <span class="el_icon el-icon-arrow-down"></span>
         </div>
-        <el-form class="myForm" :inline="true" label-position="right" :model="formData" size="small" label-width="90px">
+        <el-form class="myForm" :inline="true" label-position="right" :rules="rules" :model="formData" size="small" label-width="90px">
             <div class="btn_wrap">
                 <el-form-item label="入库仓库">
-                    <el-select v-model="formData.inrepository" placeholder="请选择入库仓库">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                    <el-select @change="storeSelectEvent" v-model="formData.storeHouseId" placeholder="请选择入库仓库">
+                    <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="采购单位">
-                    <el-select v-model="formData.purchaseCom" placeholder="请选择采购单位">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                    <el-select @change="purchaseComSelectEvent" v-model="formData.buyerId" placeholder="请选择采购单位">
+                    <el-option v-for="item in buyerNameSelectData" :key="item.id" :label="item.buyerCompanyName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item :style="{float: 'right'}">
@@ -38,16 +36,16 @@
                     width="50">
                     </el-table-column>
                     <el-table-column
-                    prop="selfNum"
+                    prop="id"
                     label="编号"
                     width="180">
                     </el-table-column>
                     <el-table-column
-                    prop="barCode"
+                    prop="purchaseOrderId"
                     label="条码">
                     </el-table-column>
                     <el-table-column
-                    prop="goodName"
+                    prop="itemId"
                     label="商品">
                     </el-table-column>
                     <el-table-column
@@ -63,11 +61,11 @@
                     label="生产日期">
                     </el-table-column>
                     <el-table-column
-                    prop="purchaseNum"
+                    prop="purchasingNumber"
                     label="采购数">
                     </el-table-column>
                     <el-table-column
-                    prop="inRepositoryNum"
+                    prop="storeNumber"
                     label="已入库数">
                     </el-table-column>
                     <el-table-column
@@ -86,36 +84,42 @@
                 </el-table>
             </div>
             <div class="table_bottom_form">
-                <el-form-item prop="inRepositoryDate" label="入库时间">
+                <el-form-item prop="storeTime" label="入库时间">
                     <el-date-picker
-                    v-model="formData.inRepositoryDate"
+                    v-model="formData.storeTime"
+                    format="yyyy-MM-dd"
+                    value-format="timestamp"
                     type="date"
                     placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item prop="repositoryNo" label="入库单号">
-                    <el-input v-model="formData.repositoryNo" placeholder="请输入入库单号"></el-input>
+                <el-form-item prop="storeNo" label="入库单号">
+                    <el-input v-model="formData.storeNo" placeholder="请输入入库单号"></el-input>
                 </el-form-item><br>
-                <el-form-item prop="makerMan" label="经办人">
-                    <el-input v-model="formData.makerMan" placeholder="请输入经办人"></el-input>
+                <el-form-item prop="operator" label="经办人">
+                    <el-input v-model="formData.operator" placeholder="请输入经办人"></el-input>
                 </el-form-item>
-                <el-form-item prop="repositoryType" label="入库类型">
-                    <el-input v-model="formData.repositoryType" placeholder="请输入入库类型"></el-input>
+                <el-form-item prop="storeType" label="入库类型">
+                    <el-select v-model="formData.storeType" placeholder="请选择采购单位">
+                    <el-option label="采购" value="1"></el-option>
+                    <el-option label="销售退货" value="2"></el-option>
+                    <el-option label="其他" value="3"></el-option>
+                    </el-select>
                 </el-form-item><br>
-                <el-form-item prop="marker" label="备注">
-                    <el-input :style="{width: '490px'}" type="textarea" v-model="formData.marker" placeholder="请输入备注"></el-input>
+                <el-form-item prop="remark" label="备注">
+                    <el-input :style="{width: '490px'}" type="textarea" v-model="formData.remark" placeholder="请输入备注"></el-input>
                 </el-form-item>
             </div>
             <div class="table_bottom color_gray fontWe_500">
                 <div style="margin-bottom: 30px; line-height: 30px">
                     <span class="title_title">采购单号 : </span>
-                    <span class="title_data">456655222222222222522</span>
+                    <span class="title_data" v-text="fatherValue.purchaseOrderNo"></span>
                     <span class="title_title">采购员 : </span>
-                    <span class="title_data">章撒</span>
+                    <span class="title_data" v-text="fatherValue.purchasingAgent"></span>
                     <span class="title_title">制单人 : </span>
-                    <span class="title_data">李思思</span><br>
+                    <span class="title_data" v-text="fatherValue.creator">李思思</span><br>
                     <span class="title_title">采购备注 : </span>
-                    <span ></span><span>我是一只小鸭子,咿呀,咿呀, 呦,, </span>
+                    <span v-text="fatherValue.purchaseRemark"></span>
                     <!-- <span class="title_title">采购时间 : </span>
                     <span class="title_data">2018-05-18 16:34</span> -->
                 </div>
@@ -133,7 +137,7 @@
 
             <div style="line-height: 30px">
                 <span class="title_title">入库仓库 : </span>
-                <span class="title_data">默认仓库</span><br>
+                <span v-text="this.formData.storeHouseName" class="title_data"></span><br>
                 <span class="title_title">商品种类 : </span>
                 <span class="title_data">2</span><br>
                 <span class="title_title">商品数量 : </span>
@@ -143,7 +147,7 @@
 
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-                <el-button size="small" type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button size="small" type="primary" @click="addStoreList">确 定</el-button>
             </span>
        </el-dialog>
 
@@ -152,18 +156,22 @@
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
+    props: [
+        'fatherValue'
+    ],
     data(){
         return {
             dialogVisible: false,
+            repositorySelectData: [],
+            buyerNameSelectData: [],
             formData: {
-                inrepository: '',
-                purchaseCom: '',
-                inRepositoryDate: '',
-                repositoryNo: '8558558',
-                makerMan: 'wwb',
-                repositoryType: '',
-                marker: ''
+                storeHouseId: "",
+                buyerId: "",
+                buyerName: "",
+                storeTime: "",
+                storeHouseName: ""
 
             },
             goodsInfoData: [{
@@ -178,7 +186,28 @@ export default {
                 inRepositoryNum: '',
                 itemRepositoryNum: '',
                 unit: ''
-            }]
+            }],
+            rules: {
+                buyerId: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' }
+                ],
+                storeHouseId: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' }
+                ],
+                storeType: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' }
+                ],
+                storeTime: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' }
+                ],
+                storeNo: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' }
+                ],
+                creator: [
+                    { required: true, message: '请输入公司名称', trigger: 'blur' }
+                ]
+
+            }
         }
     },
     computed:{},
@@ -188,9 +217,73 @@ export default {
         },
         rukuBtnEvent(){
             this.dialogVisible = true
+        },
+        getRepositorySelectData(){
+            api.getRepoSelectData().then((response) => {
+                this.repositorySelectData = response.data
+            })
+        },
+        getBuyerComSelectData(){
+            api.getBuyerComSelectData().then((response) => {
+                this.buyerNameSelectData = response.data
+            })
+        },
+        addStoreList(){
+            var paramobj = {
+                purchaseOrderId: this.$store.state.purchase.purchaseId,
+                purchaseOrderNo: '',
+                buyerId: this.formData.buyerId,
+                buyerName: this.formData.buyerName,
+                storeHouseId: this.formData.storeHouseId,
+                storeHouseName: this.formData.storeHouseName,
+                storeType: this.formData.storeType,
+                storeTime: this.formData.storeTime,
+                storeNo: this.formData.storeNo,
+                operator: this.formData.operator,
+                creator: this.formData.creator,
+
+                // totalStoreNumber: this.formData.totalStoreNumber,
+                totalStoreNumber: 100,
+                storeRemark: this.formData.storeRemark,
+                list: []
+            }
+
+            api.addStoreList(paramobj).then((response) => {
+                this.$message({
+                    type: 'success',
+                    duration: 1500,
+                    showClose: true,
+                    message: '入库成功'
+                });
+                this.dialogVisible = false
+            })
+        },
+        storeSelectEvent(val){
+            this.repositorySelectData.forEach((item, index) => {
+                if (item.id == val) {
+                    this.formData.storeHouseName = item.warehouseName
+                }
+            })
+        },
+        purchaseComSelectEvent(val){
+            this.buyerNameSelectData.forEach((item, index) => {
+                if (item.id == val) {
+                    this.formData.buyerName = item.buyerCompanyName
+                }
+            })
         }
     },
-    created(){},
+    watch: {
+        fatherValue(newvalue){
+            // this.formData = this.fatherValue
+            this.goodsInfoData = this.fatherValue.list
+            this.getRepositorySelectData()
+            this.getBuyerComSelectData()
+        }
+    },
+    created(){
+
+    },
     mounted(){
 
     }

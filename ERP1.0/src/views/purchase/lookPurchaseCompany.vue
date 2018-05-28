@@ -90,6 +90,7 @@ export default {
 
             api.getPurchaseComItem(id).then((response) => {
                 this.purchaseComFormData = response.data
+                this.purchaseComFormData.foundingTime *= 1000
 
                 this.fatherValue = []
                 this.fatherValue.push(this.purchaseComFormData.addrProvinceId)

@@ -174,14 +174,14 @@
                          <template slot-scope="scope">
                             <div v-if="scope.row.storeStatus == 0 && scope.row.auditStatus == 0">
                                 <el-button
-                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
                                     size="small">
                                     查看
                                 </el-button>
                                 <el-button
                                     :style="{marginRight: '10px'}"
-                                    @click.native.prevent="tablePropEvent(scope.$index, 6)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 6)"
                                     type="text"
                                     size="small">
                                     编辑
@@ -191,28 +191,28 @@
                                         更多<i class="el-icon-arrow-down el-icon--right"></i>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.$index, 7)">删除</el-dropdown-item>
-                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.$index, 5)">打印</el-dropdown-item>
+                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.row.id, 7)">删除</el-dropdown-item>
+                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.row.id, 5)">打印</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </div>
                             <div v-if="scope.row.storeStatus == 0 && scope.row.auditStatus == 1">
                                 <el-button
-                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
                                     size="small">
                                     查看
                                 </el-button>
                                 <el-button
                                     :style="{marginRight: '10px'}"
-                                    @click.native.prevent="tablePropEvent(scope.$index, 4)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 4)"
                                     type="text"
                                     size="small">
                                     撤回
                                 </el-button>
                                 <el-button
                                     :style="{marginRight: '10px'}"
-                                    @click.native.prevent="tablePropEvent(scope.$index, 5)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 5)"
                                     type="text"
                                     size="small">
                                     打印
@@ -220,21 +220,21 @@
                             </div>
                             <div v-if="scope.row.storeStatus == 0 && scope.row.auditStatus == 2">
                                 <el-button
-                                    @click.native.prevent="tablePropEvent(scope.$index, 1)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 1)"
                                     type="text"
                                     size="small">
                                     入库
                                 </el-button>
                                 <el-button
                                     :style="{marginRight: '10px'}"
-                                    @click.native.prevent="tablePropEvent(scope.$index, 5)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 5)"
                                     type="text"
                                     size="small">
                                     打印
                                 </el-button>
                                 <el-button
                                     :style="{marginRight: '10px'}"
-                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
                                     size="small">
                                     查看
@@ -242,14 +242,14 @@
                             </div>
                             <div v-if="scope.row.storeStatus == 0 && (scope.row.auditStatus == 3 || scope.row.auditStatus == 4)">
                                 <el-button
-                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
                                     size="small">
                                     查看
                                 </el-button>
                                 <el-button
                                     :style="{marginRight: '10px'}"
-                                    @click.native.prevent="tablePropEvent(scope.$index, 5)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 5)"
                                     type="text"
                                     size="small">
                                     打印
@@ -257,14 +257,14 @@
                             </div>
                             <div v-if="scope.row.storeStatus == 1 && scope.row.auditStatus == 2">
                                 <el-button
-                                    @click.native.prevent="tablePropEvent(scope.$index, 1)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 1)"
                                     type="text"
                                     size="small">
                                     入库
                                 </el-button>
                                 <el-button
                                     :style="{marginRight: '10px'}"
-                                    @click.native.prevent="tablePropEvent(scope.$index, 2)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 2)"
                                     type="text"
                                     size="small">
                                     退货
@@ -274,27 +274,27 @@
                                         更多<i class="el-icon-arrow-down el-icon--right"></i>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.$index, 3)">查看</el-dropdown-item>
-                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.$index, 5)">打印</el-dropdown-item>
+                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.row.id, 3)">查看</el-dropdown-item>
+                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.row.id, 5)">打印</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
                             </div>
                             <div v-if="scope.row.storeStatus == 2 && scope.row.auditStatus == 2">
                                 <el-button
-                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
                                     size="small">
                                     查看
                                 </el-button>
                                 <el-button
                                     :style="{marginRight: '10px'}"
-                                    @click.native.prevent="tablePropEvent(scope.$index, 2)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 2)"
                                     type="text"
                                     size="small">
                                     退货
                                 </el-button>
                                 <el-button
-                                    @click.native.prevent="tablePropEvent(scope.$index, 5)"
+                                    @click.native.prevent="tablePropEvent(scope.row.id, 5)"
                                     type="text"
                                     size="small">
                                     打印
@@ -476,10 +476,14 @@ export default {
                 this.tableData = response.data.list
             })
         },
-        tablePropEvent(index, type){
+        tablePropEvent(rowid, type){
+            this.$store.commit('setPurchaseId', rowid)
+            if (type == 3) {
+                this.$router.push({
+                    path: '/purchaseListDetail'
+                })
+            }
 
-            alert(index)
-            alert(type)
         }
 
 

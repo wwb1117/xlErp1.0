@@ -145,7 +145,7 @@ var router = new Router({
                 {name: "新增类型", path: '/addTypes', component: addTypes},
                 {name: "编辑类型", path: '/editTypes', component: editTypes},
 
-                /*************************** 商品模块*************************************/
+                /*************************** 系统模块*************************************/
                 {name: "流程配置", path: '/workflowConfig', component: flow},
                 {name: "权限管理", path: '/permissionManage', component: authority},
                 {name: "用户管理", path: '/userManage', component: user},

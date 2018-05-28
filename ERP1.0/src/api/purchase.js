@@ -24,8 +24,17 @@ export default {
     getPurchaseList(data){
         return HttpClient.get('/purchase/findByCondition', data);
     },
+    getPurchaseListItem(data){
+        return HttpClient.get('/purchase/' + data);
+    },
+    getStoreRecord(data){
+        return HttpClient.get('/store/list/' + data);
+    },
     addPurchaseList(data){
         return HttpClient.post('/purchase/insertOrder', data);
+    },
+    addStoreList(data){
+        return HttpClient.post('/store/insertOrder', data);
     },
     getRepoSelectData(){
         return HttpClient.get('/warehouse/findAll');
@@ -42,6 +51,9 @@ export default {
     },
     getPurchaseComItem(data){
         return HttpClient.get('/buyer/' + data);
+    },
+    addPurchaseComItem(data){
+        return HttpClient.post('/buyer/add', data);
     },
     editPurchaseComItem(data){
         return HttpClient.put('/buyer/update', data);
