@@ -115,41 +115,39 @@
                         </el-table-column>
                         <!-- 商品图片 -->
                         <el-table-column
-                            prop="goodimg"
+                            prop="mainImg"
                             label="商品"
                             >
-                            <template slot-scope="scope" class="goodimgbox">
-                                <div style="width:60px;height:60px;background: black;"></div>
-                                <!-- <img :src="goodimg" alt=""> -->
+                            <template slot-scope="scope" >
+                                <!-- <div style="width:60px;height:60px;background: black;"></div> -->
+                                <div class="goodimgbox">
+                                    <img :src="scope.row.mainImg" alt="">
+                                </div>
                             </template>
                         </el-table-column>
                         <!-- 商品内容 -->
                         <el-table-column
-                            prop='goodconent'
-                            width="300"
-                            >
+                            prop='title'
+                            width="300">
                             <template slot-scope="scope">
-                                <div @click="openGoods(scope)">{{ scope.row.goodconent }}</div>
+                                <div @click="openGoods(scope)">{{ scope.row.title }}</div>
                             </template>
                         </el-table-column>
                         <!-- 条码 -->
                         <el-table-column
-                            prop="goodcode"
-                            label="条码"
-                        >
+                            prop="barCode"
+                            label="条码">
                         </el-table-column>
                         <!-- 编号 -->
                         <el-table-column
-                            prop="goodnum"
-                            label="编号"
-                            >
+                            prop="itemCode"
+                            label="编号">
                         </el-table-column>
                         <!-- 规格 -->
                         <el-table-column
-                            label="规格-SKU"
-                            >
+                            label="规格-SKU">
                             <template slot-scope="scope">
-                                <el-button type="text" @click="dialogTableVisible = true">查看</el-button>
+                                <el-button type="text" @click="lookgoodsku(scope)">查看</el-button>
                                 <el-dialog title="规格明细" :visible.sync="dialogTableVisible">
                                     <el-table :data="gridData">
                                         <el-table-column property="specification" label="规格" width="320"></el-table-column>
@@ -163,20 +161,18 @@
                         </el-table-column>
                         <!-- 分类 -->
                         <el-table-column
-                            prop="goodtype"
+                            prop="categoryName"
                             label="分类"
-                            >
+                            width='200'>
                         </el-table-column>
                         <!-- 品牌 -->
                         <el-table-column
-                            prop="goodlogo"
-                            label="品牌"
-                            >
+                            prop="brandName"
+                            label="品牌">
                         </el-table-column>
                         <!-- 操作 -->
                         <el-table-column
-                            label="操作"
-                            >
+                            label="操作">
                             <template slot-scope="scope">
                                 <el-button type="text">编辑</el-button>
                                 <el-button type="text">删除</el-button>
@@ -194,20 +190,23 @@
         <footer class="bottom" >
             <div class="block">
                 <el-pagination
-                    :current-page="currentPage4"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 30, 50, 100]"
+                    :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="totalPage">
                 </el-pagination>
-                <!-- @size-change="handleSizeChange"
-                @current-change="handleCurrentChange" -->
+
             </div>
         </footer>
     </section>
 </template>
 
 <script>
+import api from 'api/goodslist'
+
 export default {
     name : 'first',
 
@@ -266,36 +265,17 @@ export default {
                 }
             ],
             // 底部分页数
-            currentPage4: 1,
+            currentPage: 2,
+            totalPage: 1,
 
             // 商品列表内容
-            goodData: [
-                {
-                    goodimg: '',
-                    goodconent: '英国三只切纸尿裤',
-                    goodcode: '6232135465123165',
-                    goodnum: '02010001',
-                    goodtype: '尿不湿-纸尿裤',
-                    goodlogo: 'MYKIYU'
-                },
-                {
-                    goodimg: '',
-                    goodconent: '英国三只切纸尿裤',
-                    goodcode: '6232135465123165',
-                    goodnum: '02010001',
-                    goodtype: '尿不湿-纸尿裤',
-                    goodlogo: 'MYKIYU'
-                },
-                {
-                    goodimg: '',
-                    goodconent: '英国三只切纸尿裤',
-                    goodcode: '6232135465123165',
-                    goodnum: '02010001',
-                    goodtype: '尿不湿-纸尿裤',
-                    goodlogo: 'MYKIYU'
-                }
-            ],
-            selectTableData: []
+            goodData: [],
+            selectTableData: [],
+
+            page: {
+                pageNo: 1,
+                pageSize: 10
+            }
         }
     },
     methods: {
@@ -328,10 +308,12 @@ export default {
             });
         },
         // 底部分页函数
-        // handleSizeChange(val) {
-        // },
-        // handleCurrentChange(val) {
-        // }
+        handleSizeChange(val) {
+            this.page.pageSize = val
+        },
+        handleCurrentChange(val) {
+            this.page.pageNo = val
+        },
         handleSelectionChange(val){
             this.selectTableData = val
             if (this.selectTableData.length > 0){
@@ -340,9 +322,39 @@ export default {
                 this.hidden_show = false
             }
         },
+        // 查看规格    异常
+        lookgoodsku(scope) {
+            this.dialogTableVisible = true
+            // console.log(scope.row.id)
+            let obj = {
+                itemId: scope.row.id
+            }
+
+            api.getitemskuProperty(obj).then((response)=>{
+                console.log(response.data)
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+
         openGoods(data) {
             this.$router.push('goodsDetails')
+        },
+
+        get() {
+            api.getitemlist(this.page).then((response) => {
+                // console.log(response.data.itemVOs)
+                this.goodData = response.data.itemVOs
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
+    },
+    // created() {
+    //     this.get()
+    // },
+    activated() {
+        this.get()
     }
 }
 </script>
@@ -469,8 +481,9 @@ export default {
 #k .el-icon-close:hover{
     font-size: 14px
 }
-.goodimgbox{
+.goodimgbox img{
     height: 60px;
+    width: 60px
 }
 </style>
 

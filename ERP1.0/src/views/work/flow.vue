@@ -78,7 +78,7 @@
 </template>
 <script>
 import api from 'api/work'
-// 未写配置审批流程
+
 export default {
     data() {
         return {
@@ -174,7 +174,7 @@ export default {
                 if (this.flow[i].id == this.index){
                     if (this.flow.length > 1){
                         // this.flow.splice(i, 1)
-                        api.delprocessid(i).then((response)=>{
+                        api.delprocessid(this.flow[i].id).then((response)=>{
                             console.log(response)
                         }).catch((error)=>{
                             console.log(error)
@@ -191,12 +191,14 @@ export default {
             api.getprocessname().then((response) => {
                 // console.log(response.data.list)
                 this.flow = response.data.list
+            }).catch((error)=>{
+                console.log(error)
             })
         }
     },
-    created() {
-        this.get()
-    },
+    // created() {
+    //     this.get()
+    // },
     activated() {
         this.get()
     }

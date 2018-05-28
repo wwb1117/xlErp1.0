@@ -4,7 +4,7 @@ export default {
     // 商品分类！
     // 查询商品分类列表
     getcategorylist(data){
-        return HttpClient.get('/category/list', data)
+        return HttpClient.get('/item/category/list', data)
     },
     // 查看商品分类详情
     getcategoryid(id){
@@ -90,6 +90,6 @@ export default {
     },
     // 更新供货规格
     putsupplyPropertyupdate(data) {
-        return HttpClient.put('/supplyProperty/update', data)
+        return HttpClient.put('/item/supplyProperty/update', data)
     }
 }
