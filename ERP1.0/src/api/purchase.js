@@ -58,7 +58,7 @@ export default {
     editPurchaseComItem(data){
         return HttpClient.put('/buyer/update', data);
     },
-    deletePurchaseComItem(data){
+    onOffPurchaseComItem(data){
         return HttpClient.put('/buyer/status', data);
     }
 

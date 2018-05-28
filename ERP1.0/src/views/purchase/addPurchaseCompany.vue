@@ -25,9 +25,10 @@
                             <el-input v-model="purchaseComFormData.registeredCapital" placeholder="请输入注册资本"></el-input>
                         </el-form-item>
                         <br>
-                        <el-form-item label="成立时间">
+                        <el-form-item prop="foundingTime" label="成立时间">
                             <el-date-picker
                             v-model="purchaseComFormData.foundingTime"
+                            value-format="timestamp"
                             type="date"
                             placeholder="选择日期">
                             </el-date-picker>
@@ -91,6 +92,7 @@ export default {
                 addrProvinceId: '',
                 addrCityId: '',
                 addrAreaId: '',
+                foundingTime: '',
                 maker: ''
             },
             rules: {
@@ -99,6 +101,9 @@ export default {
                 ],
                 buyerCompanyName: [
                     { required: true, message: '请输入采购单位名称', trigger: 'blur' }
+                ],
+                foundingTime: [
+                    { required: true, message: '请选择成立时间', trigger: 'blur' }
                 ]
             }
         }
@@ -113,6 +118,7 @@ export default {
         addDataSaveEvent(){
             this.$refs['addPurComForm'].validate((valid) => {
                 if (valid) {
+                    this.purchaseComFormData.foundingTime /= 1000
                     api.addPurchaseComItem(this.purchaseComFormData).then((response) => {
                         this.$message({
                             type: 'success',
@@ -125,9 +131,27 @@ export default {
                 }
             })
         }
-
     },
     created(){},
+    activated(){
+        this.purchaseComFormData = {
+            buyerCompanyNo: '',
+            buyerCompanyName: '',
+            legalRepresentative: '',
+            registeredCapital: '',
+            setTime: '',
+            telphone: '',
+            email: '',
+            address: '',
+            detailAddress: '',
+            state: '',
+            addrProvinceId: '',
+            addrCityId: '',
+            addrAreaId: '',
+            foundingTime: '',
+            maker: ''
+        }
+    },
     mounted(){}
 }
 </script>
