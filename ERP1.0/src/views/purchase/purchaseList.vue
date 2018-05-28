@@ -151,8 +151,8 @@
                         prop="storeStatus"
                         label="入库状态">
                         <template slot-scope="scope">
-                            <span v-if="scope.row.storeStatus == 0">待入库</span>
-                            <span v-if="scope.row.storeStatus == 1">部分入库</span>
+                            <span style="color: #f37069" v-if="scope.row.storeStatus == 0">待入库</span>
+                            <span style="color: #e7a03d" v-if="scope.row.storeStatus == 1">部分入库</span>
                             <span v-if="scope.row.storeStatus == 2">已入库</span>
                         </template>
                     </el-table-column>
@@ -160,11 +160,11 @@
                         prop="auditStatus"
                         label="审核状态">
                         <template slot-scope="scope">
-                            <span v-if="scope.row.auditStatus == 0">待审核</span>
-                            <span v-if="scope.row.auditStatus == 1">审核中</span>
-                            <span v-if="scope.row.auditStatus == 2">通过</span>
-                            <span v-if="scope.row.auditStatus == 3">不通过</span>
-                            <span v-if="scope.row.auditStatus == 4">撤销</span>
+                            <span style="color: #f37069" v-if="scope.row.auditStatus == 0">待审核</span>
+                            <span style="color: #e7a03d" v-if="scope.row.auditStatus == 1">审核中</span>
+                            <span v-if="scope.row.auditStatus == 2">审核通过</span>
+                            <span style="color: #f37069" v-if="scope.row.auditStatus == 3">审核不通过</span>
+                            <span style="color: #f37069" v-if="scope.row.auditStatus == 4">撤销</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -172,28 +172,134 @@
                         width="150"
                         label="操作">
                          <template slot-scope="scope">
-                            <el-button
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            入库
-                            </el-button>
-                            <el-button
-                            :style="{marginRight: '10px'}"
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            编辑
-                            </el-button>
-                            <el-dropdown :hide-timeout="50" @command="dropdownSelectEvent" trigger="click">
-                                <span class="el-dropdown-link">
-                                    更多<i class="el-icon-arrow-down el-icon--right"></i>
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item command="1">查看</el-dropdown-item>
-                                    <el-dropdown-item command="4">打印</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
+                            <div v-if="scope.row.storeStatus == 0 && scope.row.auditStatus == 0">
+                                <el-button
+                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    type="text"
+                                    size="small">
+                                    查看
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="tablePropEvent(scope.$index, 6)"
+                                    type="text"
+                                    size="small">
+                                    编辑
+                                </el-button>
+                                <el-dropdown :hide-timeout="50" trigger="click">
+                                    <span class="el-dropdown-link">
+                                        更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                    </span>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.$index, 7)">删除</el-dropdown-item>
+                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.$index, 5)">打印</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </div>
+                            <div v-if="scope.row.storeStatus == 0 && scope.row.auditStatus == 1">
+                                <el-button
+                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    type="text"
+                                    size="small">
+                                    查看
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="tablePropEvent(scope.$index, 4)"
+                                    type="text"
+                                    size="small">
+                                    撤回
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="tablePropEvent(scope.$index, 5)"
+                                    type="text"
+                                    size="small">
+                                    打印
+                                </el-button>
+                            </div>
+                            <div v-if="scope.row.storeStatus == 0 && scope.row.auditStatus == 2">
+                                <el-button
+                                    @click.native.prevent="tablePropEvent(scope.$index, 1)"
+                                    type="text"
+                                    size="small">
+                                    入库
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="tablePropEvent(scope.$index, 5)"
+                                    type="text"
+                                    size="small">
+                                    打印
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    type="text"
+                                    size="small">
+                                    查看
+                                </el-button>
+                            </div>
+                            <div v-if="scope.row.storeStatus == 0 && (scope.row.auditStatus == 3 || scope.row.auditStatus == 4)">
+                                <el-button
+                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    type="text"
+                                    size="small">
+                                    查看
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="tablePropEvent(scope.$index, 5)"
+                                    type="text"
+                                    size="small">
+                                    打印
+                                </el-button>
+                            </div>
+                            <div v-if="scope.row.storeStatus == 1 && scope.row.auditStatus == 2">
+                                <el-button
+                                    @click.native.prevent="tablePropEvent(scope.$index, 1)"
+                                    type="text"
+                                    size="small">
+                                    入库
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="tablePropEvent(scope.$index, 2)"
+                                    type="text"
+                                    size="small">
+                                    退货
+                                </el-button>
+                                <el-dropdown :hide-timeout="50" trigger="click">
+                                    <span class="el-dropdown-link">
+                                        更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                    </span>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.$index, 3)">查看</el-dropdown-item>
+                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.$index, 5)">打印</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </div>
+                            <div v-if="scope.row.storeStatus == 2 && scope.row.auditStatus == 2">
+                                <el-button
+                                    @click.native.prevent="tablePropEvent(scope.$index, 3)"
+                                    type="text"
+                                    size="small">
+                                    查看
+                                </el-button>
+                                <el-button
+                                    :style="{marginRight: '10px'}"
+                                    @click.native.prevent="tablePropEvent(scope.$index, 2)"
+                                    type="text"
+                                    size="small">
+                                    退货
+                                </el-button>
+                                <el-button
+                                    @click.native.prevent="tablePropEvent(scope.$index, 5)"
+                                    type="text"
+                                    size="small">
+                                    打印
+                                </el-button>
+                            </div>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -307,7 +413,9 @@ export default {
         },
         supperSureBoxShow () {
             this.isSupperBoxShow = !this.isSupperBoxShow
-            this.getTableData()
+            this.getTableData().then(() => {
+                this.resetBtnEvent()
+            })
         },
         resetBtnEvent () {
             for (var key in this.tableParam) {
@@ -318,13 +426,6 @@ export default {
             this.$router.push({
                 path: '/addPurchaseList'
             })
-        },
-        dropdownSelectEvent(command){
-            if (command == 1){
-                this.$router.push({
-                    path: '/purchaseListDetail'
-                })
-            }
         },
         importEvent(){
             this.$router.push({
@@ -370,19 +471,22 @@ export default {
 
         },
         getTableData(){
-            api.getPurchaseList(this.tableParam).then((response) => {
+            return api.getPurchaseList(this.tableParam).then((response) => {
                 this.totalPage = response.data.total
                 this.tableData = response.data.list
             })
+        },
+        tablePropEvent(index, type){
+
+            alert(index)
+            alert(type)
         }
 
 
     },
     activated(){
         this.getSupplierSelectData()
-    },
-    created(){
-        this.getSupplierSelectData()
+        this.getTableData()
     },
     mounted(){}
 }

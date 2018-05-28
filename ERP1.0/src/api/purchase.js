@@ -26,6 +26,29 @@ export default {
     },
     addPurchaseList(data){
         return HttpClient.post('/purchase/insertOrder', data);
+    },
+    getRepoSelectData(){
+        return HttpClient.get('/warehouse/findAll');
+    },
+    getBuyerComSelectData(){
+        return HttpClient.get('/buyer/findAll');
+    },
+    getChooseGoodsList(data){
+        return HttpClient.get('/item/list', data);
+    },
+    /************************采购单位****************************** */
+    getPurchaseComList(data){
+        return HttpClient.get('/buyer/list', data);
+    },
+    getPurchaseComItem(data){
+        return HttpClient.get('/buyer/' + data);
+    },
+    editPurchaseComItem(data){
+        return HttpClient.put('/buyer/update', data);
+    },
+    deletePurchaseComItem(data){
+        return HttpClient.put('/buyer/status', data);
     }
+
 
 }

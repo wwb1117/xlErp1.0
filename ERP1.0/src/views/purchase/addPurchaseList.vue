@@ -17,17 +17,13 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item prop="purchaseHouseId" label="入库仓库">
-                            <el-select v-model="addFormData.purchaseHouseId" placeholder="请输入入库仓库">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="addFormData.purchaseHouseId" placeholder="请选择入库仓库">
+                                <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item prop="buyerId" label="采购单位">
-                            <el-select v-model="addFormData.buyerId" placeholder="请输入采购单位">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select v-model="addFormData.buyerId" placeholder="请选择采购单位">
+                                <el-option v-for="item in buyerNameSelectData" :key="item.id" :label="item.buyerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                     </div>
@@ -65,8 +61,9 @@
                                     <el-autocomplete
                                     v-model="querySearchText"
                                     :style="{width: '270px'}"
+                                    :disabled="true"
                                     :fetch-suggestions="querySearchAsync"
-                                    placeholder="输入商品名称/编号"
+                                    placeholder=""
                                     @select="querySearchAsynSelect"
                                     >
                                     </el-autocomplete>
@@ -188,9 +185,11 @@ export default {
             querySearchText: '',
             tableTotalUnit: 0,
             supplierSelectData: [],
+            repositorySelectData: [],
+            buyerNameSelectData: [],
             goodsInfoData: [{
                 oper: '',
-                selfNum: '11111',
+                selfNum: '',
                 barCode: '',
                 goodName: '',
                 SKU: '',
@@ -202,7 +201,7 @@ export default {
                 unitTotal: ''
             }],
             addFormData: {
-                buyerId: "123",
+                buyerId: "",
                 buyerName: "",
                 creator: "",
                 purchaseOrderNo: "",
@@ -215,7 +214,7 @@ export default {
                     }
                 ],
                 orderTime: "",
-                purchaseHouseId: "123",
+                purchaseHouseId: "",
                 purchaseHouseName: "",
                 purchasingAgent: "",
                 purchasingTotalNumber: "",
@@ -380,13 +379,22 @@ export default {
             api.addPurchaseList().then((response) => {
                 console.log(response)
             })
+        },
+        getRepositorySelectData(){
+            api.getRepoSelectData().then((response) => {
+                this.repositorySelectData = response.data
+            })
+        },
+        getBuyerComSelectData(){
+            api.getBuyerComSelectData().then((response) => {
+                this.buyerNameSelectData = response.data
+            })
         }
-    },
-    created(){
-        this.getSupplierSelectData()
     },
     activated(){
         this.getSupplierSelectData()
+        this.getRepositorySelectData()
+        this.getBuyerComSelectData()
     },
     mounted(){}
 }

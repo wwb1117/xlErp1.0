@@ -70,7 +70,6 @@ export default {
 
             api.login(this.userInfo).then((reponse) => {
 
-                console.log(reponse)
                 sessionStorage.setItem("user", JSON.stringify(this.userInfo))
                 this.$router.push({
                     path: '/main'
