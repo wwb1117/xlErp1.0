@@ -160,7 +160,12 @@ export default {
             ],
             editlist: [],
             name: '',
-            index: ''
+            index: '',
+
+            page: {
+                pageNo: 1,
+                pageSize: 10
+            }
 
         }
     },
@@ -179,18 +184,18 @@ export default {
             for (var i in this.user){
                 if (this.user[i].id == this.index){
                     // this.user[i].username = this.editlist
-                    console.log(this.index, this.name)
-                    let obj = {
-                        roleId: this.index,
-                        roleName: this.name
-                    }
+                    // console.log(this.index, this.name)
+                    // let obj = {
+                    //     roleId: this.index,
+                    //     roleName: this.name
+                    // }
 
-                    api.putroleupdate(obj).then((response)=>{
-                        console.log(response)
-                    }).catch((error)=>{
-                        console.log(error)
-                    })
-                    this.get()
+                    // api.putroleupdate(obj).then((response)=>{
+                    //     console.log(response)
+                    // }).catch((error)=>{
+                    //     console.log(error)
+                    // })
+                    // this.get()
                 }
             }
 
@@ -208,12 +213,12 @@ export default {
                 if (this.user[i].id == this.index){
                     if (this.user.length > 1){
                         // this.user.splice(i, 1)
-                        api.deleteroleid(this.user[i].id).then((response)=>{
-                            console.log(response)
-                        }).catch((error)=>{
-                            console.log(error)
-                        })
-                        this.get()
+                        // api.postuserdeleteuserId(this.user[i].id).then((response)=>{
+                        //     console.log(response)
+                        // }).catch((error)=>{
+                        //     console.log(error)
+                        // })
+                        // this.get()
                     }
                 }
             }
@@ -221,15 +226,15 @@ export default {
 
         },
         get() {
-            api.getrolelist().then((response) => {
-                // console.log(response.data.list)
-                this.user = response.data.list
+            api.getuserlist(this.page).then((response) => {
+                console.log(response)
+                // this.user = response.data.list
             })
         }
     },
-    created() {
-        this.get()
-    },
+    // created() {
+    //     this.get()
+    // },
     activated() {
         this.get()
     }

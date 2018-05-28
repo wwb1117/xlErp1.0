@@ -106,8 +106,7 @@ export default {
             formData:{
                 id: '',
                 name: '',
-                processType: '',
-                enableStatus: ''
+                processType: ''
             }
         }
     },
@@ -120,11 +119,12 @@ export default {
 
             let obj = {
                 name: this.addtext,
-                processType: '',
-                enableStatus: ''
+                processType: '1'
             }
 
             // this.flow.push(obj)
+            // var a = JSON.stringify(obj)
+
             api.postprocessadd(obj).then((response)=>{
                 console.log(response)
             }).catch((error)=>{

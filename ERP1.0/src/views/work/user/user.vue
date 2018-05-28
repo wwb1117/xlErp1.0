@@ -62,7 +62,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addautohority = false" size='small'>取 消</el-button>
-                <el-button type="primary" @click="addautohority = false" size='small'>确 定</el-button>
+                <el-button type="primary" @click="addautohorityconfirm" size='small'>确 定</el-button>
             </span>
         </el-dialog>
 
@@ -119,12 +119,25 @@ export default {
             this.adduser = false
 
             this.role.roleName = this.addusertext
+            // api.postroleadd(this.role).then((response)=>{
+            //     console.log(response)
+            // }).catch((error)=>{
+            //     console.log(error)
+            // })
+            // this.activeName = 'first'
+            // this.$router.push('userManage')
+            // this.addusertext = ''
+        },
+        addautohorityconfirm() {
+            this.addautohority = false
+
+            this.role.roleName = this.addautohoritytext
             api.postroleadd(this.role).then((response)=>{
                 console.log(response)
             }).catch((error)=>{
                 console.log(error)
             })
-            this.activeName = 'first'
+            this.activeName = 'second'
             this.$router.push('userManage')
             this.addusertext = ''
         }
@@ -133,15 +146,6 @@ export default {
         userlist,
         autohority
     }
-    // created(){
-    //     // console.log(this.form)
-    //     this.get()
-
-    // }
-    // activated() {
-    //     this.get()
-    // }
-
 }
 </script>
 <style scoped>

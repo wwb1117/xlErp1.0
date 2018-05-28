@@ -30,20 +30,37 @@ export default {
     getprocessmoreid(id){
         return HttpClient.put(`/process/${id}`)
     },
-    // 用户列表!
+    // 用户列表
     // 获取用户列表
+    getuserlist(data) {
+        return HttpClient.get('/user/list', data)
+    },
+    // 新增用户
+    postuseradd(data) {
+        return HttpClient.post('/user/add', data)
+    },
+    // 删除用户
+    postuserdeleteuserId(userId) {
+        return HttpClient.post(`/user/delete/${userId}`)
+    },
+    // 修改用户信息
+    putuserchangeusername(data) {
+        return HttpClient.put('/user/changeusername', data)
+    },
+    // 权限组列表!
+    // 获取权限组列表
     getrolelist(data){
         return HttpClient.get('/role/list', data)
     },
-    // 新增用户
+    // 新增权限组
     postroleadd(data){
         return HttpClient.post('/role/add', data)
     },
-    // 修改用户
+    // 修改权限组
     putroleupdate(data){
         return HttpClient.put('/role/update', data)
     },
-    // 删除用户
+    // 删除权限组
     deleteroleid(id){
         return HttpClient.delete(`/role/${id}`)
     },

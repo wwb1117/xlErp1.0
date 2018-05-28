@@ -7,18 +7,18 @@
                 style="width:100%">
                 <el-table-column
                     prop=""
-                    width="50">
+                    width="30">
                 </el-table-column>
                 <el-table-column
                     prop="id"
                     width="70">
                 </el-table-column>
                 <el-table-column
-                    prop="name"
+                    prop="roleName"
                     label="权限组名">
                 </el-table-column>
                 <el-table-column
-                    prop="other"
+                    prop=""
                     label="操作"
                     width="200">
                     <template  slot-scope="scope">
@@ -60,26 +60,28 @@
     </section>
 </template>
 <script>
+import api from 'api/work'
+
 export default {
     name: 'authorityList',
     data() {
         return {
             authority: [
-                {
-                    id: '1',
-                    name: '超级管理员',
-                    oteher: ''
-                },
-                {
-                    id: '2',
-                    name: '产品',
-                    oteher: ''
-                },
-                {
-                    id: '3',
-                    name: '采购',
-                    oteher: ''
-                }
+                // {
+                //     id: '1',
+                //     name: '超级管理员',
+                //     oteher: ''
+                // },
+                // {
+                //     id: '2',
+                //     name: '产品',
+                //     oteher: ''
+                // },
+                // {
+                //     id: '3',
+                //     name: '采购',
+                //     oteher: ''
+                // }
             ],
             editauthorit: false,
             delauthorit: false,
@@ -91,14 +93,26 @@ export default {
         edittrue(data) {
             this.editauthorit = true
             this.text = data.row.name
-            this.index = data.$index
+            this.index = data.row.id
+            // console.log(this.index)
         },
         editconfirm() {
             this.editauthorit = false
             for (var i in this.authority){
 
-                if (i == this.index){
+                if (this.authority[i].id == this.index){
                     this.authority[i].name = this.text
+                    let obj = {
+                        roleId: this.index,
+                        roleName: this.text
+                    }
+
+                    api.putroleupdate(obj).then((response)=>{
+                        console.log(response)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
+                    this.get()
                 }
             }
             this.index = ''
@@ -106,23 +120,43 @@ export default {
         },
         deltrue(data) {
             this.delauthorit = true
-            this.index = data.$index
+            this.index = data.row.id
         },
         delconfirm() {
             this.delauthorit = false
             for (var i in this.authority){
 
-                if (i == this.index){
-                    if (this.authority.length > 1){
-                        this.authority.splice(i, 1)
-                    }
+                if (this.authority[i].id == this.index){
+                    // if (this.authority.length > 1){
+                    //     this.authority.splice(i, 1)
+                    // }
+                    api.deleteroleid(this.authority[i].id).then((response)=>{
+                        console.log(response)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
+                    this.get()
                 }
             }
             this.index = ''
         },
         gotoAuthority() {
             this.$router.push('permissionManage')
+        },
+
+        get() {
+            api.getrolelist().then((response) => {
+                // console.log(response)
+                this.authority = response.data.list
+                // console.log(this.authority)
+            })
         }
+    },
+    // created() {
+    //     this.get()
+    // },
+    activated() {
+        this.get()
     }
 }
 </script>
