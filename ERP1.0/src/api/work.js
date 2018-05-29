@@ -27,8 +27,12 @@ export default {
         return HttpClient.put('/process/setreview', data)
     },
     // 查询流程审批详情
-    getprocessmoreid(id){
+    putprocessmoreid(id){
         return HttpClient.put(`/process/${id}`)
+    },
+    // 获取流程配置用户
+    getuseruserList(data) {
+        return HttpClient.get('/user/userList', data)
     },
     // 用户列表
     // 获取用户列表
@@ -40,8 +44,8 @@ export default {
         return HttpClient.post('/user/add', data)
     },
     // 删除用户
-    postuserdeleteuserId(userId) {
-        return HttpClient.post(`/user/delete/${userId}`)
+    deleteuserdeleteuserId(userId) {
+        return HttpClient.delete(`/user/delete/${userId}`)
     },
     // 修改用户信息
     putuserchangeusername(data) {

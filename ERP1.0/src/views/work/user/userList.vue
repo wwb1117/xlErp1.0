@@ -15,15 +15,12 @@
                     width="70">
                 </el-table-column>
                 <el-table-column
-                    prop="roleName"
+                    prop="userName"
                     label='用户名'>
                 </el-table-column>
                 <el-table-column
-                    label='权限组名'
-                    width="150">
-                    <template  slot-scope="scope">
-                        <span v-for='(item,index) in scope.row.username' :key="index" style="margin-left:5px">{{item}}</span>
-                    </template>
+                    prop='roleName'
+                    label='权限组名'>
                 </el-table-column>
                 <el-table-column
                     prop="time"
@@ -73,9 +70,9 @@
                                 style="width:388px">
                                 <el-option
                                     v-for="item in edit"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    :key="item.id"
+                                    :label="item.roleName"
+                                    :value="item.id">
                                 </el-option>
                             </el-select>
                         </div>
@@ -145,18 +142,18 @@ export default {
             deluser: false,
             edituesr: false,
             edit: [
-                {
-                    value: 'HTML',
-                    label: 'HTML'
-                },
-                {
-                    value: 'CSS',
-                    label: 'CSS'
-                },
-                {
-                    value: 'JavaScript',
-                    label: 'JavaScript'
-                }
+                // {
+                //     value: 'HTML',
+                //     label: 'HTML'
+                // },
+                // {
+                //     value: 'CSS',
+                //     label: 'CSS'
+                // },
+                // {
+                //     value: 'JavaScript',
+                //     label: 'JavaScript'
+                // }
             ],
             editlist: [],
             name: '',
@@ -165,7 +162,8 @@ export default {
             page: {
                 pageNo: 1,
                 pageSize: 10
-            }
+            },
+            userId: ''
 
         }
     },
@@ -183,19 +181,20 @@ export default {
             this.edituesr = false
             for (var i in this.user){
                 if (this.user[i].id == this.index){
-                    // this.user[i].username = this.editlist
-                    // console.log(this.index, this.name)
-                    // let obj = {
-                    //     roleId: this.index,
-                    //     roleName: this.name
-                    // }
 
-                    // api.putroleupdate(obj).then((response)=>{
-                    //     console.log(response)
-                    // }).catch((error)=>{
-                    //     console.log(error)
-                    // })
-                    // this.get()
+                    // console.log(this.editlist.toString())
+                    let obj = {
+                        id: this.index,
+                        userName: this.name,
+                        roleIds: this.editlist.toString()
+                    }
+
+                    api.putuserchangeusername(obj).then((response)=>{
+                        console.log(response)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
+                    this.get()
                 }
             }
 
@@ -213,12 +212,17 @@ export default {
                 if (this.user[i].id == this.index){
                     if (this.user.length > 1){
                         // this.user.splice(i, 1)
-                        // api.postuserdeleteuserId(this.user[i].id).then((response)=>{
-                        //     console.log(response)
-                        // }).catch((error)=>{
-                        //     console.log(error)
-                        // })
-                        // this.get()
+                        // let obj = {
+                        //     userId: this.user[i].id
+                        // }
+                        this.userId = this.user[i].id
+                        // console.log(obj)
+                        api.deleteuserdeleteuserId(this.userId).then((response)=>{
+                            console.log(response)
+                        }).catch((error)=>{
+                            console.log(error)
+                        })
+                        this.get()
                     }
                 }
             }
@@ -227,14 +231,19 @@ export default {
         },
         get() {
             api.getuserlist(this.page).then((response) => {
-                console.log(response)
-                // this.user = response.data.list
+                // console.log(response)
+                this.user = response.data.list
+            })
+            api.getrolelist().then((response) => {
+                // console.log(response.data.list)
+                this.edit = response.data.list
+                // console.log(this.authority)
             })
         }
     },
-    // created() {
-    //     this.get()
-    // },
+    created() {
+        this.get()
+    },
     activated() {
         this.get()
     }

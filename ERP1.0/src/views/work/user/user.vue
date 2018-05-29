@@ -39,9 +39,9 @@
                     style="width:388px">
                     <el-option
                         v-for="item in add"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        :key="item.id"
+                        :label="item.roleName"
+                        :value="item.id">
                     </el-option>
                 </el-select>
             </div>
@@ -85,18 +85,18 @@ export default {
             addautohority: false,
             adduser: false,
             add: [
-                {
-                    value: 'HTML',
-                    label: 'HTML'
-                },
-                {
-                    value: 'CSS',
-                    label: 'CSS'
-                },
-                {
-                    value: 'JavaScript',
-                    label: 'JavaScript'
-                }
+                // {
+                //     value: 'HTML',
+                //     label: 'HTML'
+                // },
+                // {
+                //     value: 'CSS',
+                //     label: 'CSS'
+                // },
+                // {
+                //     value: 'JavaScript',
+                //     label: 'JavaScript'
+                // }
             ],
             addlist: [],
             role: {
@@ -118,15 +118,22 @@ export default {
         addconfirm() {
             this.adduser = false
 
-            this.role.roleName = this.addusertext
-            // api.postroleadd(this.role).then((response)=>{
-            //     console.log(response)
-            // }).catch((error)=>{
-            //     console.log(error)
-            // })
-            // this.activeName = 'first'
-            // this.$router.push('userManage')
-            // this.addusertext = ''
+            // console.log(this.addlist)
+            let obj = {
+                userName: this.addusertext,
+                roleIds: this.addlist.toString()
+            }
+
+            api.postuseradd(obj).then((response)=>{
+                console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+            this.activeName = 'first'
+            this.$router.push('userManage')
+            this.addusertext = ''
+            this.addlist = []
+            this.get()
         },
         addautohorityconfirm() {
             this.addautohority = false
@@ -140,11 +147,22 @@ export default {
             this.activeName = 'second'
             this.$router.push('userManage')
             this.addusertext = ''
+            this.get()
+        },
+        get() {
+            api.getrolelist().then((response) => {
+                // console.log(response.data.list)
+                this.add = response.data.list
+                // console.log(this.authority)
+            })
         }
     },
     components: {
         userlist,
         autohority
+    },
+    created() {
+        this.get()
     }
 }
 </script>
