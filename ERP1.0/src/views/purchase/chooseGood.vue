@@ -12,9 +12,7 @@
             <el-form :inline="true" :model="tableParam" label-position="right" size="small" label-width="80px">
                 <el-form-item label="商品分类">
                     <el-select v-model="tableParam.categoryName" placeholder="请输入商品分类">
-                        <el-option label="全部" value=""></el-option>
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                        <el-option v-for="item in goodsItemSelectData" :key="item.id" :label="item.categoryName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -29,8 +27,10 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="content" :style="{height: $store.state.home.modelContentHeight - 126 + 'px'}">
+        <div class="content">
             <el-table
+            :height="$store.state.home.modelContentHeight - 136"
+            @selection-change="tableChangeEvent"
             :data="tableData"
             style="width: 100%">
                 <el-table-column
@@ -42,7 +42,7 @@
                     label="商品"
                     width="280">
                     <template slot-scope="scope">
-                        <img :src="scope.row.mainImg" style="float: left;">
+                        <img src="static/img/purchase/test.png" style="float: left;">
                         <span class="color_blue" v-text="scope.row.title"></span>
                     </template>
                 </el-table-column>
@@ -58,9 +58,33 @@
                 <el-table-column
                     prop="size_sku"
                     label="规格-SKU">
+                    <template slot-scope="scope">
+                        <el-popover
+                        placement="bottom"
+                        width="240"
+                        popper-class="goods_popover"
+                        trigger="click"
+                        >
+                        <el-select
+                            v-model="value11"
+                            @change="skuSelectChange"
+                            multiple
+                            size="small"
+                            collapse-tags
+                            placeholder="请选择规格">
+                            <el-option
+                            v-for="item in SKUSelectData"
+                            :key="item.id"
+                            :label="item.skuPropertieyNames"
+                            :value="item.id">
+                            </el-option>
+                        </el-select>
+                        <span @click="getPopoverData(scope.row.id)" slot="reference" class="color_blue myCur">查看</span>
+                        </el-popover>
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="qualityDate"
+                    prop="expirationDate"
                     label="保质期">
                 </el-table-column>
                 <el-table-column
@@ -72,14 +96,14 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="address"
+                    prop="unit"
                     label="单位">
                 </el-table-column>
             </el-table>
         </div>
         <div class="model_footer">
             <el-button style="width: 90px" type="primary" size="small">确定</el-button>
-            <el-button @click="canselBtnEvent" style="width: 90px" size="small">取消</el-button>
+            <el-button style="width: 90px" size="small">取消</el-button>
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -98,7 +122,20 @@ import api from 'api/purchase'
 export default {
     data(){
         return {
+            value11: [],
             totalPage: 1,
+            goodsItemSelectData: [],
+            SKUSelectData: [
+                {
+                    value: '1',
+                    label: '黄金糕'
+                },
+                {
+                    value: '2',
+                    label: '双皮奶'
+                }
+
+            ],
             tableParam: {
                 serchText: '',
                 pageSize: 10,
@@ -150,15 +187,41 @@ export default {
             data.row.mount = data.row.mount.replace(/[^\d\.]/g, '')
         },
         getTableData(){
-            return api.getPurchaseList(this.tableParam).then((response) => {
-                console.log(response)
+            return api.getChooseGoodsList(this.tableParam).then((response) => {
                 this.totalPage = response.data.total
                 this.tableData = response.data.list
             })
+        },
+        getGoodsItemSelect(){
+            var param = {
+                pageNo: 1,
+                pageSize: 1000
+            }
+
+            api.getGoodSItemSelectData(param).then((response) => {
+                this.goodsItemSelectData = response.data.list
+            })
+        },
+        skuSelectChange(val){
+            console.log(val)
+        },
+        getPopoverData(itemid){
+            var param = {
+                itemId: itemid,
+                skuProperties: ''
+            }
+
+            api.getSKUData(param).then((response) => {
+                this.SKUSelectData = response.data.list
+            })
+        },
+        tableChangeEvent(val){
+            console.log(val)
         }
     },
     activated(){
         this.getTableData()
+        this.getGoodsItemSelect()
     },
     created(){},
     mounted(){}
@@ -189,5 +252,6 @@ export default {
 }
 .el-pagination{
     float: right;
+    padding-top: 0;
 }
 </style>

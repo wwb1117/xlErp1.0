@@ -27,6 +27,12 @@ ul{
     color: #409EFF;
     cursor: pointer;
 }
+.myCur{
+    cursor: pointer;
+}
+.goods_popover{
+    height: 320px;
+}
 #purchaseDetail_wrap .el-tabs__nav-scroll{
     padding-left: 20px;
     height: 46px;
