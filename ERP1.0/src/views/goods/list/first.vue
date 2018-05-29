@@ -351,8 +351,8 @@ export default {
 
         get() {
             api.getitemlist(this.page).then((response) => {
-                console.log(response.data.itemVOs)
-                this.goodData = response.data.itemVOs
+                console.log(response.data.list)
+                this.goodData = response.data.list
             }).catch((error)=>{
                 console.log(error)
             })

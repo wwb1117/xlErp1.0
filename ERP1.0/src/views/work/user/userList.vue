@@ -103,6 +103,7 @@
 </template>
 <script>
 import api from 'api/work'
+import bus from '@/assets/eventBus.js'
 
 export default {
     name: 'userList',
@@ -218,11 +219,11 @@ export default {
                         this.userId = this.user[i].id
                         // console.log(obj)
                         api.deleteuserdeleteuserId(this.userId).then((response)=>{
-                            console.log(response)
+                            this.get()
                         }).catch((error)=>{
                             console.log(error)
                         })
-                        this.get()
+
                     }
                 }
             }
@@ -246,6 +247,13 @@ export default {
     },
     activated() {
         this.get()
+    },
+    beforeUpdate() {
+        var that = this
+
+        bus.$on('click', function() {
+            that.get()
+        })
     }
 
 }

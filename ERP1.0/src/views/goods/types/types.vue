@@ -12,7 +12,8 @@
                         size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
-                        v-model="input">
+                        v-model="input"
+                        style="width:378px">
                     </el-input>
                     <el-button type="primary" size='small' style="margin-left:10px" @click='findthat'>搜索</el-button>
                 </div>
@@ -157,7 +158,7 @@ export default {
 
             api.getitemsupplyPropertylist(this.page).then((response)=>{
 
-                console.log(response.data.list)
+                // console.log(response.data.list)
                 this.types = response.data.list
             }).catch((error)=>{
 
@@ -170,10 +171,10 @@ export default {
         // console.log(this.form)
         this.get()
 
+    },
+    activated() {
+        this.get()
     }
-    // activated() {
-    //     this.get()
-    // }
 
 }
 </script>

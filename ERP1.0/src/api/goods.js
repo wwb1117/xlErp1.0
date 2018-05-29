@@ -29,28 +29,28 @@ export default {
 
     // 商品品牌
     // 查询商品品牌列表
-    getitemitemBrandlist(data) {
-        return HttpClient.get('/item/itemBrand/list', data)
+    getitemBrandlist(data) {
+        return HttpClient.get('/item/brand/list', data)
     },
     // 根据ID获取商品品牌详情
-    getitemitemBrandid(id) {
-        return HttpClient.get(`/item/itemBrand/${id}`)
+    getitemBrandid(id) {
+        return HttpClient.get(`/item/brand/${id}`)
     },
     // 增加商品品牌
-    postitemitemBrandadd(data) {
-        return HttpClient.post('/item/itemBrand/add', data)
+    postitemBrandadd(data) {
+        return HttpClient.post('/item/brand/add', data)
     },
     // 修改商品品牌
     putitemitemBrandupdate(data) {
-        return HttpClient.put('/item/itemBrand/update', data)
+        return HttpClient.put('/item/brand/update', data)
     },
     // 显示隐藏商品品牌
-    putitemitemBrandisRecommended(data) {
-        return HttpClient.put('/item/itemBrand/isRecommended', data)
+    putitemBrandisRecommended(data) {
+        return HttpClient.put('/item/brand/isRecommended', data)
     },
     // 通过商品品牌id删除商品品牌
-    deleteitemitemBranddeleteid(id) {
-        return HttpClient.delete(`/item/itemBrand/delete/${id}`)
+    deleteitemBranddeleteid(id) {
+        return HttpClient.delete(`/item/brand/delete/${id}`)
     },
     // 通过商品品牌id查询门店分组
     getitemitemBrandShopGroupitemBrandId(itemBrandId) {
