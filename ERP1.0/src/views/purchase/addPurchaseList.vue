@@ -187,19 +187,7 @@ export default {
             supplierSelectData: [],
             repositorySelectData: [],
             buyerNameSelectData: [],
-            goodsInfoData: [{
-                oper: '',
-                selfNum: '',
-                barCode: '',
-                goodName: '',
-                SKU: '',
-                qualityDate: '',
-                productData: '',
-                purchaseNum: '',
-                unit: '',
-                unitPrice: '',
-                unitTotal: ''
-            }],
+            goodsInfoData: [],
             addFormData: {
                 buyerId: "",
                 buyerName: "",
@@ -392,6 +380,7 @@ export default {
         }
     },
     activated(){
+        this.goodsInfoData = this.$store.state.purchase.goodsInfoData
         this.getSupplierSelectData()
         this.getRepositorySelectData()
         this.getBuyerComSelectData()

@@ -2,7 +2,20 @@ export default {
     state: {
         supplierId: '',
         buyerId: '',
-        purchaseId: ''
+        purchaseId: '',
+        goodsInfoData: [{
+            oper: '',
+            selfNum: '',
+            barCode: '',
+            goodName: '',
+            SKU: '',
+            qualityDate: '',
+            productData: '',
+            purchaseNum: '',
+            unit: '',
+            unitPrice: '',
+            unitTotal: ''
+        }]
     },
     mutations: {
         setSupplierId(state, value){

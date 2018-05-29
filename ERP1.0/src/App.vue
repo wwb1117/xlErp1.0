@@ -1,6 +1,6 @@
 <template>
   <div id="app" :style="{width: $store.state.home.device.width+'px', height: $store.state.home.device.height+'px'}">
-    <router-view/>
+    <router-view></router-view>
   </div>
 </template>
 
