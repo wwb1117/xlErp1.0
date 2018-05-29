@@ -97,5 +97,13 @@ export default {
     // 删除调拨单
     delAllotOrder(id) {
         return HttpClient.delete(`/allocation/${id}`);
+    },
+    // 获取采购单列表
+    getPurchaseAll() {
+        return HttpClient.get(`/buyer/findAll`);
+    },
+    // 获取商品类目
+    getItemAll() {
+        return HttpClient.get(`/category/list`);
     }
 }

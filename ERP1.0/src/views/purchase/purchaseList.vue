@@ -33,12 +33,12 @@
                         </el-form-item>
                         <el-form-item label="采购单位">
                             <el-select @change="selectChangeEvent(2)" v-model="tableParam.buyerId" placeholder="请选择采购单位">
-                                <el-option v-for="item in buyerNameSelectData" :key="item.id" :label="item.buyerName" :value="item.id"></el-option>
+                                <el-option v-for="item in buyerNameSelectData" :key="item.id" :label="item.buyerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库仓库">
                             <el-select @change="selectChangeEvent(3)" v-model="tableParam.inRepository" placeholder="请选择入库仓库">
-                                <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.repositoryName" :value="item.id"></el-option>
+                                <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <br>
@@ -329,34 +329,8 @@ export default {
             totalPage: 1,
             selectTableData: [],
             supplierSelectData: [],
-            buyerNameSelectData: [
-                {
-                    id: '1',
-                    buyerName: '妈妈去哪儿'
-                },
-                {
-                    id: '2',
-                    buyerName: 'wwb'
-                },
-                {
-                    id: '3',
-                    buyerName: '迈巴赫'
-                }
-            ],
-            repositorySelectData: [
-                {
-                    id: '1',
-                    repository: '默认仓库'
-                },
-                {
-                    id: '2',
-                    repository: '德信影城'
-                },
-                {
-                    id: '3',
-                    repository: '雷峰塔'
-                }
-            ],
+            repositorySelectData: [],
+            buyerNameSelectData: [],
             isSupperBoxShow: false,
             tableParam: {
                 searchText: '',
@@ -442,6 +416,16 @@ export default {
                 this.supplierSelectData = response.data.list
             })
         },
+        getRepositorySelectData(){
+            api.getRepoSelectData().then((response) => {
+                this.repositorySelectData = response.data
+            })
+        },
+        getBuyerComSelectData(){
+            api.getBuyerComSelectData().then((response) => {
+                this.buyerNameSelectData = response.data
+            })
+        },
         selectChangeEvent(val){
             if (val == 1){
                 this.supplierSelectData.forEach((item, index) => {
@@ -453,14 +437,14 @@ export default {
             if (val == 2) {
                 this.buyerNameSelectData.forEach((item, index) => {
                     if (item.id == this.tableParam.buyerId) {
-                        this.tableParam.buyerName = item.buyerName
+                        this.tableParam.buyerName = item.buyerCompanyName
                     }
                 })
             }
             if (val == 3) {
                 this.repositorySelectData.forEach((item, index) => {
                     if (item.id == this.tableParam.repositoryId) {
-                        this.tableParam.repositoryName = item.repositoryName
+                        this.tableParam.repositoryName = item.warehouseName
                     }
                 })
             }
@@ -491,6 +475,8 @@ export default {
     activated(){
         this.getSupplierSelectData()
         this.getTableData()
+        this.getRepositorySelectData()
+        this.getBuyerComSelectData()
     },
     mounted(){}
 }

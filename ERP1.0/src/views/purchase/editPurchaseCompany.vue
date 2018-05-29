@@ -25,7 +25,7 @@
                             <el-input v-model="purchaseComFormData.registeredCapital" placeholder="请输入注册资本"></el-input>
                         </el-form-item>
                         <br>
-                        <el-form-item label="成立时间">
+                        <el-form-item prop="foundingTime" label="成立时间">
                             <el-date-picker
                             v-model="purchaseComFormData.foundingTime"
                             format="yyyy-MM-dd"
@@ -87,7 +87,11 @@ export default {
                 ],
                 buyerCompanyNo: [
                     { required: true, message: '请输入采购单位编码', trigger: 'blur' }
+                ],
+                foundingTime: [
+                    { required: true, message: '请选择成立时间', trigger: 'blur' }
                 ]
+
             }
         }
     },
@@ -117,6 +121,7 @@ export default {
         editBuyerData(){
             this.$refs['purchaseComForm'].validate((valid) => {
                 if (valid) {
+                    this.purchaseComFormData.foundingTime /= 1000
                     api.editPurchaseComItem(this.purchaseComFormData).then((response) => {
                         this.$message({
                             type: 'success',

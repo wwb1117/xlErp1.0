@@ -199,19 +199,21 @@ export default {
             }
             if (type == 3){
                 this.myBase.confirmDelet('你确定要永久删除此采购单位信息?', () => {
-                    api.deleteSupplier(rowid).then((response) => {
-                        this.$message({
-                            type: 'success',
-                            duration: 1500,
-                            showClose: true,
-                            message: '删除成功'
-                        })
 
-                        this.tableParam.pageSize = 15
-                        this.tableParam.pageNo = 1
-                        this.getTableData()
 
-                    })
+                    // api.onOffPurchaseComItem(rowid).then((response) => {
+                    //     this.$message({
+                    //         type: 'success',
+                    //         duration: 1500,
+                    //         showClose: true,
+                    //         message: '删除成功'
+                    //     })
+
+                    //     this.tableParam.pageSize = 15
+                    //     this.tableParam.pageNo = 1
+                    //     this.getTableData()
+
+                    // })
                 })
             }
         },
