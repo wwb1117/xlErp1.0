@@ -19,11 +19,12 @@
                         style="width:388px;margin-left:20px">
                         <el-option
                             v-for="item in name"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            :key="item.id"
+                            :label="item.userName"
+                            :value="item.id">
                         </el-option>
                     </el-select>
+                    <i class="el-icon-close closethat" style="margin-left:10px" @click="closethat(index)"></i>
                 </div>
             </div>
         </section>
@@ -34,32 +35,71 @@
     </section>
 </template>
 <script>
+import api from 'api/work'
+
 export default {
     name: 'configuration',
     data() {
         return {
             name: [
-                {
-                    value: 'HTML',
-                    label: 'HTML'
-                },
-                {
-                    value: 'CSS',
-                    label: 'CSS'
-                },
-                {
-                    value: 'JavaScript',
-                    label: 'JavaScript'
-                }
+                // {
+                //     value: 'HTML',
+                //     label: 'HTML'
+                // },
+                // {
+                //     value: 'CSS',
+                //     label: 'CSS'
+                // },
+                // {
+                //     value: 'JavaScript',
+                //     label: 'JavaScript'
+                // }
             ],
             namelist: [],
-            num: ['1', '1']
+            num: ['1'],
+
+            div: []
         }
     },
     methods: {
         addbox() {
             this.num.push('1')
+            // this.add()
+            // console.log(this.div)
+        },
+        closethat(data) {
+            if (this.num.length > 0){
+                this.num.splice(data, 1)
+            }
+        },
+        get() {
+            api.getuseruserList().then((response)=>{
+                this.name = response.data
+                // console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
+        // add() {
+        //     var that = this
+
+        //     for (var i in that.namelist){
+
+        //         if (that.div.indexOf(that.namelist[i]) == -1){
+        //             that.div.push(that.namelist[i])
+        //         }
+
+        //     }
+
+        //     return this.div
+        // }
+    },
+
+    created() {
+        this.get()
+    },
+    activated() {
+        this.get()
     }
 }
 </script>
@@ -101,7 +141,9 @@ export default {
 .add_box{
     padding: 20px
 }
-
+.closethat:hover{
+    font-size: 14px
+}
 
 /* 底部 */
 .configuration_bottom{

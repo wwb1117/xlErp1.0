@@ -152,9 +152,9 @@ export default {
             })
         }
     },
-    // created() {
-    //     this.get()
-    // },
+    created() {
+        this.get()
+    },
     activated() {
         this.get()
     }
