@@ -80,8 +80,6 @@
                             <el-button type="text" @click="dialogFormVisible = true">高级搜索</el-button>
                         </li>
                         <!-- 高级搜索表单内容 -->
-                        <li style="width: 100%">
-                        </li>
                     </ul>
                 </div>
                 <!-- 列表顶部隐藏对话框   有问题需要改动/消失隐藏没有判断 -->
@@ -476,9 +474,11 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
+    right: 0;
     height: 300px;
     z-index: 9;
-    margin: 10px
+    margin: 10px;
+
 }
 .model_content_inner{
     position: relative;

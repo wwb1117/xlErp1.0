@@ -157,7 +157,7 @@ export default {
 
             api.getitemsupplyPropertylist(this.page).then((response)=>{
 
-                // console.log(response.data.list)
+                console.log(response.data.list)
                 this.types = response.data.list
             }).catch((error)=>{
 
