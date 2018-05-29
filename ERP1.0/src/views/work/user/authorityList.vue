@@ -61,6 +61,7 @@
 </template>
 <script>
 import api from 'api/work'
+import bus from '@/assets/eventBus.js'
 
 export default {
     name: 'authorityList',
@@ -108,11 +109,12 @@ export default {
                     }
 
                     api.putroleupdate(obj).then((response)=>{
-                        console.log(response)
+                        this.get()
+                        // console.log(response)
                     }).catch((error)=>{
                         console.log(error)
                     })
-                    this.get()
+
                 }
             }
             this.index = ''
@@ -131,11 +133,11 @@ export default {
                     //     this.authority.splice(i, 1)
                     // }
                     api.deleteroleid(this.authority[i].id).then((response)=>{
-                        console.log(response)
+                        this.get()
                     }).catch((error)=>{
                         console.log(error)
                     })
-                    this.get()
+
                 }
             }
             this.index = ''
@@ -157,6 +159,13 @@ export default {
     },
     activated() {
         this.get()
+    },
+    beforeUpdate() {
+        var that = this
+
+        bus.$on('click', function() {
+            that.get()
+        })
     }
 }
 </script>

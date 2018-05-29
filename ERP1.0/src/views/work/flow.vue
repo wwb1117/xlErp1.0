@@ -12,6 +12,17 @@
                     <span style="width:80px;text-align:center;display:inline-block">流程名</span>
                     <el-input v-model="addtext" size='small' style="width:388px"></el-input>
                 </div>
+                <div style="margin-top:20px">
+                    <span style="width:80px;text-align:center;display:inline-block">流程类型</span>
+                        <el-select v-model="value" placeholder="请选择" size='small' style="width:388px">
+                            <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                </div>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="addopen = false" size='small'>取 消</el-button>
                     <el-button type="primary" @click="addtrue" size='small'>确 定</el-button>
@@ -107,7 +118,34 @@ export default {
                 id: '',
                 name: '',
                 processType: ''
-            }
+            },
+            options: [
+                {
+                    value: '1',
+                    label: '采购流程'
+                },
+                {
+                    value: '2',
+                    label: '采购退货流程'
+                },
+                {
+                    value: '3',
+                    label: '入库流程'
+                },
+                {
+                    value: '4',
+                    label: '出库流程'
+                },
+                {
+                    value: '5',
+                    label: '调拨流程'
+                },
+                {
+                    value: '6',
+                    label: '盘点流程'
+                }
+            ],
+            value: ''
         }
     },
     methods: {
@@ -119,19 +157,18 @@ export default {
 
             let obj = {
                 name: this.addtext,
-                processType: '1'
+                processType: this.value
             }
 
             // this.flow.push(obj)
             // var a = JSON.stringify(obj)
 
             api.postprocessadd(obj).then((response)=>{
-                console.log(response)
+                this.get()
+                // console.log(response)
             }).catch((error)=>{
                 console.log(error)
             })
-            this.get()
-
             this.addtext = ''
         },
         deltrue(data) {
@@ -157,11 +194,12 @@ export default {
                     this.formData.id = this.index
                     this.formData.name = this.edittext
                     api.putprocessupdate(this.formData).then((response)=>{
-                        console.log(response)
+                        this.get()
+                        // console.log(response)
+
                     }).catch((error)=>{
                         console.log(error)
                     })
-                    this.get()
                 }
             }
             this.index = ''
@@ -175,11 +213,12 @@ export default {
                     if (this.flow.length > 1){
                         // this.flow.splice(i, 1)
                         api.delprocessid(this.flow[i].id).then((response)=>{
-                            console.log(response)
+                            this.get()
+                            // console.log(response)
                         }).catch((error)=>{
                             console.log(error)
                         })
-                        this.get()
+
                     }
                 }
 

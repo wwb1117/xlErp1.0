@@ -60,7 +60,8 @@
                         size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
-                        v-model="input">
+                        v-model="input"
+                        style="width:378px">
                     </el-input>
                     <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
                 </div>
@@ -177,8 +178,7 @@ export default {
             del: false,
             page: {
                 pageNo: 1,
-                pageSize: 10,
-                brandName: '天使芬'
+                pageSize: 10
             },
 
             brand: []
@@ -208,8 +208,8 @@ export default {
         },
         get() {
 
-            api.getitemitemBrandlist(this.page).then((response)=>{
-                // console.log(response.data)
+            api.getitemBrandlist(this.page).then((response)=>{
+                console.log(response.data.itemVOs)
                 this.brand = response.data.itemVOs
             }).catch((error)=>{
 

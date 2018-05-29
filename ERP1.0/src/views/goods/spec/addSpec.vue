@@ -67,6 +67,8 @@
     </section>
 </template>
 <script>
+// import api from 'api/goods'
+
 export default {
     data() {
         return {
@@ -85,6 +87,7 @@ export default {
                     value2: true
                 }
             ]
+
 
         }
     },

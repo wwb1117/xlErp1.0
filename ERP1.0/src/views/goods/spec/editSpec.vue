@@ -120,9 +120,10 @@ export default {
 
         bus.$on('editSpec', function(msg){
 
-            api.getitemskupropertyid(msg).then((response)=>{
+            // console.log(msg)
+            api.getitemskupropertyid(1000).then((response)=>{
 
-                console.log(response)
+                console.log(1)
             }).catch((error)=>{
                 console.log(error)
             })

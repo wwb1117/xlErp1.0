@@ -42,36 +42,22 @@
         </header>
         <!-- 内容 -->
         <section class="item_conent" >
-            <div class="item_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
-                <ul class="item_box_list">
-                    <li style="width:540px;">分类名称</li>
-                    <li style="width:180px;">分类图片</li>
-                    <li style="width:180px;">是否显示</li>
-                    <li style="width:110px;">排序</li>
-                    <li style="width:170px">操作</li>
-                </ul>
+            <ul class="item_box_list">
+                <li style="width:540px;">分类名称</li>
+                <li style="width:180px;">分类图片</li>
+                <li style="width:180px;">是否显示</li>
+                <li style="width:110px;">排序</li>
+                <li style="width:170px">操作</li>
+            </ul>
+            <div class="item_box" :style="{height: $store.state.home.modelContentHeight-63 + 'px'}">
                 <el-tree
                     :data="items"
                     show-checkbox
                     default-expand-all
                     :props="defaultProps"
                     :expand-on-click-node="false">
-                    <ul class="item_box_conent custom-tree-node"  slot-scope="{ node, data }">
-                        <li>{{ data.categoryName }}</li>
-                        <li :class="data.class"></li>
-                        <li style="width:180px;">
-                            <div style='width:28px;height:28px;background:black;margin-top:6px'></div>
-                            <!-- <img :src="date.categoryImg" alt=""> -->
-                        </li>
-                        <li style="width:180px">
-                            <el-switch
-                                v-model="data.isDisplay"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949">
-                            </el-switch>
-                        </li>
-                        <li style="width:110px">{{ data.sort }}</li>
-                        <li style="width:170px">
+                    <ul class="item_box_conent"  slot-scope="{ node, data }" >
+                        <li >
                             <el-button type='text'>编辑</el-button>
                             <el-button type="text" @click="del = true">删除</el-button>
                             <el-dialog
@@ -86,6 +72,19 @@
                                 </span>
                             </el-dialog>
                         </li>
+                        <li>{{ data.sort }}</li>
+                        <li >
+                            <el-switch
+                                v-model="data.isDisplay"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949">
+                            </el-switch>
+                        </li>
+                        <li>
+                            <div style='width:28px;height:28px;background:black;margin-top:6px'></div>
+                            <!-- <img :src="date.categoryImg" alt=""> -->
+                        </li>
+                        <li>{{ data.categoryName }}</li>
                     </ul>
                 </el-tree>
             </div>
@@ -165,7 +164,7 @@ export default {
 
         get() {
             api.getcategorylist().then((response)=>{
-                // console.log(response.data.list)
+                console.log(response.data.list)
                 this.items = response.data.list
 
 
@@ -211,22 +210,13 @@ export default {
     color: #5e6161;
     background: white
 }
-.item_box ul{
+/* .item_box ul{
     display: flex;
     justify-content: space-between;
     padding: 0 20px;
     margin: 0;
-}
-.item_box_list{
-    height: 40px;
-    background: #f5f5f5;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 40px
-}
-.item_box .item_box_conent{
-    display: flex
-}
+} */
+
 /* 底部分页 */
 .item_footer{
     border-top:1px solid #e5e8e8;
@@ -244,19 +234,48 @@ export default {
 .items_top .el-input{
     width: 40%;
 }
-.item_box_conent {
-
+.item_box {
+    overflow: auto;
+}
+.item_box_list{
     display: flex;
-    flex: 1;
+    justify-content: space-between;
+    /* padding: 0 30px; */
+    padding: 0 30px 0  50px;
+    height: 40px;
+    background: #f5f5f5;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 40px;
+    margin: 0;
+    border: 1px solid #e6e9eb;
+    border-bottom: none
 }
-.item_box_conent .a{
-    width: 380px;
+.item_box_conent{
+    padding: 0 20px;
 }
-.item_box_conent .b{
-    width: 350px;
+.item_box_conent{
+    width: 100%;
+    margin: 0
 }
-.item_box_conent .c{
-    width: 320px;
+.item_box_conent li{
+    float: right;
 }
+.item_box_conent li:nth-child(1){
+    margin-right: 90px
+}
+.item_box_conent li:nth-child(2){
+    width: 20px;
+    margin-right: 190px
+}
+.item_box_conent li:nth-child(3){
+    margin-right: 250px
+}
+.item_box_conent li:nth-child(4){
+    margin-right: 250px
+}
+.item_box_conent li:nth-child(5){
+    float: left;
 
+}
 </style>
