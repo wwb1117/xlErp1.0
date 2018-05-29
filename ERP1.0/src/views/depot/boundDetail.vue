@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="model_topcol">
-            <span class="blue">{{$route.params.type}}单</span><span> - 详情</span>
+            <span class="blue">{{$allEnumeration.boundType[$route.params.type]}}单</span><span> - 详情</span>
             <div>
                 <el-button size="small">打印</el-button>
             </div>
@@ -9,26 +9,30 @@
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="tab_content">
                 <div class="tab_title fontWe_600">
-                    <span class="title_states">待{{$route.params.type}}</span>
+                    <span class="title_states" v-if="inbound">{{$allEnumeration.storeType[goodsInfoData.storeType]}}</span>
+                    <span class="title_states" v-if="outbound">{{$allEnumeration.deliverType[goodsInfoData.deliverType]}}</span>
                     <div>
-                        <span class="title_title">{{$route.params.type}}仓库 : </span>
-                        <span class="title_data">杭州仓库</span>
+                        <span class="title_title">{{$allEnumeration.boundType[$route.params.type]}}仓库 : </span>
+                        <span class="title_data" v-if="inbound">{{goodsInfoData.storeHouseName}}</span>
+                        <span class="title_data" v-if="outbound">{{goodsInfoData.deliverHouseName}}</span>
                     </div>
                     <div>
-                        <span class="title_title">{{$route.params.type}}单号 : </span>
-                        <span class="title_data">OUT-20180411-164612</span>
+                        <span class="title_title">{{$allEnumeration.boundType[$route.params.type]}}单号 : </span>
+                        <span class="title_data" v-if="inbound">{{goodsInfoData.storeNo}}</span>
+                        <span class="title_data" v-if="outbound">{{goodsInfoData.deliverNo}}</span>
                     </div>
                     <div>
                         <span class="title_title">采购单位 : </span>
-                        <span class="title_data">妈妈去哪儿</span>
+                        <span class="title_data">{{goodsInfoData.buyerName}}</span>
                     </div>
                     <div>
-                        <span class="title_title">{{$route.params.type}}时间 : </span>
-                        <span class="title_data">2018-05-18 16:34</span>
+                        <span class="title_title">{{$allEnumeration.boundType[$route.params.type]}}时间 : </span>
+                        <span class="title_data" v-if="inbound">{{goodsInfoData.storeTime | time_s}}</span>
+                        <span class="title_data" v-if="outbound">{{goodsInfoData.deliverTime | time_s}}</span>
                     </div>
                     <div>
                         <span class="title_title">制单人 : </span>
-                        <span class="title_data">产品人</span>
+                        <span class="title_data">{{goodsInfoData.creator}}</span>
                     </div>
                 </div>
                 <div class="banner">
@@ -36,7 +40,7 @@
                 </div>
                 <div class="table_wrap" :style="{height: $store.state.home.modelContentHeight - 125 + 'px'}">
                     <el-table
-                        :data="goodsInfoData"
+                        :data="goodsInfoData.list"
                         show-summary
                         border
                         :summary-method="getSummaries"
@@ -47,7 +51,7 @@
                             width="50">
                         </el-table-column>
                         <el-table-column
-                            prop="selfNum"
+                            prop="itemId"
                             label="编号"
                             width="180">
                         </el-table-column>
@@ -72,12 +76,16 @@
                             label="生产日期">
                         </el-table-column>
                         <el-table-column
-
-                            prop="purchaseNum"
-                            label="数量">
+                            prop="deliverNumber"
+                            label="数量"
+                            v-if="outbound">
                         </el-table-column>
                         <el-table-column
-
+                            prop="currentStoreNumber"
+                            label="数量"
+                            v-if="inbound">
+                        </el-table-column>
+                        <el-table-column
                             prop="unit"
                             label="单位">
                         </el-table-column>
@@ -88,12 +96,13 @@
                     </el-table>
                     <div class="table_bottom">
                         <div class="table_bottom_item">
-                            <span class="table_bottom_title">{{$route.params.type}}备注 : </span>
-                            <span>暂无</span>
+                            <span class="table_bottom_title">{{$allEnumeration.boundType[$route.params.type]}}备注 : </span>
+                            <span v-if="inbound">{{goodsInfoData.storeRemark}}</span>
+                            <span v-if="outbound">{{goodsInfoData.deliverRemark}}</span>
                         </div>
                         <div class="table_bottom_item">
                             <span class="table_bottom_title">经办人 : </span>
-                            <span>浩克</span>
+                            <span>{{goodsInfoData.operator}}</span>
                         </div>
                     </div>
                 </div>
@@ -104,11 +113,13 @@
 </template>
 
 <script>
+import 'utils/allEnumeration'
+import ME from 'utils/base'
 import API from 'api/depot'
 export default {
     data() {
         return {
-            goodsInfoData: [],
+            goodsInfoData: '',
             orderDetail: {
                 list: [
                     {
@@ -134,7 +145,9 @@ export default {
                 storeTime: '',
                 storeType: '',
                 totalStoreNumber: ''
-            }
+            },
+            outbound: false,
+            inbound: true
         }
     },
     computed:{},
@@ -170,17 +183,15 @@ export default {
         },
         // 获取详情
         getboundDetail() {
-            if (this.$route.params.type == '入库') { // 入库单
+            if (this.inbound) { // 入库单
                 console.log("入库")
                 API.getInboundDetail(this.$route.params.id).then(res => {
-                    console.log("入库res")
-
+                    this.goodsInfoData = ME.deepCopy(res.data)
                 })
-            } else if (this.$route.params.type == '出库') { // 出库单
+            } else if (this.outbound) { // 出库单
                 console.log("出库")
                 API.getOutboundDetail(this.$route.params.id).then(res => {
-                    console.log("出库res")
-
+                    this.goodsInfoData = ME.deepCopy(res.data)
                 })
             }
         }
@@ -191,7 +202,15 @@ export default {
 
     },
     activated () {
+        if (this.$route.params.type === 'inbound') {
+            this.inbound = true
+            this.outbound = false
+        } else if (this.$route.params.type === 'outbound') {
+            this.outbound = true
+            this.inbound = false
+        }
         this.getboundDetail()
+        console.log(this.inbound, this.outbound, this.$route)
     }
 }
 </script>

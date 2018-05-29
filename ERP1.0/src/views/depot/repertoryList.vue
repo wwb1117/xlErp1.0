@@ -370,6 +370,9 @@ export default {
     },
     created(){},
     mounted(){
+
+    },
+    activated() {
         this.getTableList()
         this.getPurchaseList()
     }
@@ -417,7 +420,7 @@ export default {
         position: relative;
     }
     .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-        width: 390px;
+        width: 360px;
     }
     .el-form, .el-table{
         color: #636365;

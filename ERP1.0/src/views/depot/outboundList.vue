@@ -316,7 +316,7 @@ export default {
             }
         },
         inBoundDetail(index, data){
-            this.$router.push({name: '出入库详情', params: {id: data.deliverNo || 123, type: '出库'}})
+            this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'outbound'}})
         },
         editTable() {
 
@@ -399,7 +399,7 @@ export default {
         position: relative;
     }
     .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-        width: 390px;
+        width: 360px;
     }
     .el-form, .el-table{
         color: #636365;
