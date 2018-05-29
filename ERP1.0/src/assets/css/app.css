@@ -91,6 +91,9 @@ input[type="file"] {
 .myForm .el-date-editor{
     width: 194px;
 }
+.myForm .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+    width: 390px;
+}
 /****************************各模块头部栏公共样式**************************************************/
 .model_topcol{
     height: 46px;
