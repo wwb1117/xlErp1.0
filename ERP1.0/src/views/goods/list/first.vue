@@ -71,9 +71,7 @@
                                             <el-option label="服务类" value="1435143"></el-option>
                                         </el-select>
                                     </el-form-item>
-                                    <el-form-item >
-
-                                    </el-form-item>
+                                    <br>
                                     <el-form-item>
                                         <el-button @click="dialogFormVisible = false" style="padding:9px 15px;width: 90px" type="primary" >确定</el-button>
                                         <el-button @click="dialogFormVisible = false" style="padding:9px 15px;width: 90px">取消</el-button>
@@ -476,9 +474,11 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
+    right: 0;
     height: 300px;
     z-index: 9;
-    margin: 10px
+    margin: 10px;
+
 }
 .model_content_inner{
     position: relative;
