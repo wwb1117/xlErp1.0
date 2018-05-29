@@ -21,7 +21,6 @@
                     :data="tableData"
                     :height="$store.state.home.modelContentHeight - 83"
                     ref="purchaseListTable"
-                    @selection-change="handleSelectionChange"
                     style="width: 100%">
                     <el-table-column
                     type="index"
@@ -74,7 +73,7 @@
                         prop="enableStatus"
                         label="状态">
                         <template slot-scope="scope">
-                            <el-switch :inactive-value="0" :active-value="1" v-model="scope.row.enableStatus"></el-switch>
+                            <el-switch @change="switchChangeEvent(scope.row.id, scope.row.enableStatus)" :inactive-value="0" :active-value="1" v-model="scope.row.enableStatus"></el-switch>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -180,9 +179,11 @@ export default {
     methods:{
         handleSizeChange(val){
             this.tableParam.pageSize = val
+            this.getTableData()
         },
         handleCurrentChange(val){
             this.tableParam.pageNo = val
+            this.getTableData()
         },
         tablePropEvent(rowid, type){
             if (type == 1){
@@ -199,27 +200,26 @@ export default {
             }
             if (type == 3){
                 this.myBase.confirmDelet('你确定要永久删除此采购单位信息?', () => {
+                    var paramobj = {
+                        buyerId: rowid,
+                        enableStatus: 0
+                    }
 
-
-                    // api.onOffPurchaseComItem(rowid).then((response) => {
-                    //     this.$message({
-                    //         type: 'success',
-                    //         duration: 1500,
-                    //         showClose: true,
-                    //         message: '删除成功'
-                    //     })
-
-                    //     this.tableParam.pageSize = 15
-                    //     this.tableParam.pageNo = 1
-                    //     this.getTableData()
-
-                    // })
+                    api.onOffPurchaseComItem(paramobj).then((response) => {
+                        this.$message({
+                            type: 'success',
+                            duration: 1500,
+                            showClose: true,
+                            message: '删除成功'
+                        })
+                        this.tableParam.pageSize = 15
+                        this.tableParam.pageNo = 1
+                        this.getTableData()
+                    })
                 })
             }
         },
-        handleSelectionChange(val){
 
-        },
         addPurchaseComEvent(){
             this.$router.push({
                 path: '/addPurchaseCompany'
@@ -230,6 +230,24 @@ export default {
                 this.tableData = response.data.list
                 this.totalPage = response.data.total
             })
+        },
+        switchState(param){
+            return api.onOffPurchaseComItem(param).then((response) => {
+                this.$message({
+                    type: 'success',
+                    duration: 1500,
+                    showClose: true,
+                    message: '状态修改成功'
+                })
+            })
+        },
+        switchChangeEvent(rowid, state){
+            var paramobj = {
+                buyerId: rowid,
+                enableStatus: state
+            }
+
+            this.switchState(paramobj)
         }
 
     },

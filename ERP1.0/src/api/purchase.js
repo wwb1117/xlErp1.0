@@ -45,6 +45,12 @@ export default {
     getChooseGoodsList(data){
         return HttpClient.get('/item/list', data);
     },
+    getGoodSItemSelectData(data){
+        return HttpClient.get('/item/category/list', data);
+    },
+    getSKUData(data){
+        return HttpClient.get('/item/skuProperty', data);
+    },
     /************************采购单位****************************** */
     getPurchaseComList(data){
         return HttpClient.get('/buyer/list', data);
