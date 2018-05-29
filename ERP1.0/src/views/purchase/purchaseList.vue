@@ -461,7 +461,7 @@ export default {
             })
         },
         tablePropEvent(rowid, type){
-            this.$store.commit('setPurchaseId', rowid)
+            this.$store.commit('setCurrentModelId', rowid)
             if (type == 3) {
                 this.$router.push({
                     path: '/purchaseListDetail'

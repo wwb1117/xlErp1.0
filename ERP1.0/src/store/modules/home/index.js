@@ -1,19 +1,14 @@
 export default {
     state: {
         version: '1.0',
-        langIsOpen:false,
-        userCustomIsOpen:false,
-        orgTreeIsHide:false,
-        orgTreeWidth: 192,
         baseUrl: '',
-        isFreshCarTree: false,
-        timerArr: [],
-        isNextMenuShow: false, //二级菜单是否显示
+        isNextMenuShow: true, //二级菜单是否显示
         device: {
             width: null,
             height: null
         },
         modelContentHeight: null,
+        currentModelId: '',
         nextMenuMap: {
             home: [
                 {
@@ -134,7 +129,10 @@ export default {
         },
         setModelContentHeight(state, value){
             state.modelContentHeight = value
-            console.log(state.modelContentHeight)
+        },
+        setCurrentModelId(state, value){
+            state.currentModelId = value
+            window.localStorage.setItem("currentModelId", JSON.stringify(state.currentModelId))
         }
 
     }

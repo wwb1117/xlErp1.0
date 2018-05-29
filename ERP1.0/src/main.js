@@ -45,6 +45,12 @@ var winwidth = document.documentElement.clientWidth;
 
 store.commit('setDevice', {width: winwidth, height: winheight});
 store.commit('setModelContentHeight', winheight - 100);
+
+//获取local数据
+var currentModelId = JSON.parse(window.localStorage.getItem("currentModelId"))
+
+store.commit('setCurrentModelId', currentModelId);
+
 // 定义过滤器
 Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key])
