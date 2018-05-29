@@ -49,7 +49,7 @@ export default {
         return HttpClient.get('/item/category/list', data);
     },
     getSKUData(data){
-        return HttpClient.get('/item/skuProperty', data);
+        return HttpClient.get('/item/sku', data);
     },
     /************************采购单位****************************** */
     getPurchaseComList(data){
