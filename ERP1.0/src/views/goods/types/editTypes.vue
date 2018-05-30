@@ -133,7 +133,7 @@ export default {
 
     },
     created() {
-        var msg = this.$store.state.goods.typesMsg
+        var msg = this.$store.state.home.typesMsg
 
         let obj = {
             unitMsg: msg
@@ -149,7 +149,7 @@ export default {
 
     },
     activated() {
-        var msg = this.$store.state.goods.typesMsg
+        var msg = this.$store.state.home.typesMsg
 
         let obj = {
             unitMsg: msg

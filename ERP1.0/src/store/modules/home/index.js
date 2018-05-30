@@ -114,9 +114,10 @@ export default {
                     path: '/operationLog'
                 }
             ]
+        },
 
-
-        }
+        // 商品包装类型
+        typesMsg: ''
     },
     mutations: {
         setDevice(state, value){
@@ -133,6 +134,9 @@ export default {
         setCurrentModelId(state, value){
             state.currentModelId = value
             window.localStorage.setItem("currentModelId", JSON.stringify(state.currentModelId))
+        },
+        setTypes(state, value){
+            state.typesMsg = value
         }
 
     }
