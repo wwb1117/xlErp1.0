@@ -171,14 +171,13 @@
                             <div v-if="scope.row.auditStatus == 0" style="display: inline-block">
                                 <!--待审核-->
                                 <el-button
-                                    :style="{marginRight: '10px'}"
+                                    :style="{marginLeft: '12px'}"
                                     @click.native.prevent="editTable(scope.$index, scope.row)"
                                     type="text"
                                     size="small">
                                     修改
                                 </el-button>
                                 <el-button
-                                    :style="{marginRight: '10px'}"
                                     @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                     type="text"
                                     size="small">
@@ -188,6 +187,7 @@
                             <div v-if="scope.row.auditStatus == 1" style="display: inline-block">
                                 <!--审核中-->
                                 <el-button
+                                    :style="{marginLeft: '12px'}"
                                     @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
                                     type="text"
                                     size="small">
@@ -291,6 +291,30 @@ export default {
         // 修改
         editTable(index, data) {
 
+        },
+        // 删除
+        deleteTable(index, data) {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+
+                API.delInboundOrder(data.id).then(res => {
+                    if (res.result == 1) {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        this.tableData.splice(index, 1)
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            })
         },
         // 搜索清空
         clear() {

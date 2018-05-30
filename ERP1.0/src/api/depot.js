@@ -92,7 +92,7 @@ export default {
     /********** 调拨单*********/
     // 新增调拨单
     addAllotOrder(data) {
-        return HttpClient.post('/storage/allocation/insert', data);
+        return HttpClient.postJSON('/storage/allocation/insert', data);
     },
     // 调拨单列表
     getAllotList(data) {

@@ -112,7 +112,7 @@ var router = new Router({
                 {name: "库存盘点", path: '/repertoryCheck', component: repertoryCheck},
                 {name: "仓库管理", path: '/repertoryManage', component: repertoryManage},
                 {name: "新增入库", path: '/addInbound', component: addInbound},
-                {name: "出入库详情", path: '/boundDetail/:id', component: boundDetail},
+                {name: "出入库详情", path: '/boundDetail/:type/:id', component: boundDetail},
                 {name: "出入库明细", path: '/inoutBound', component: inoutBound},
                 {name: "新增调拨单", path: '/addAllot', component: addAllot},
                 {name: "调拨单详情", path: '/allotDetail/:id', component: allotDetail},

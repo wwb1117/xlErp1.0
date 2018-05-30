@@ -102,7 +102,7 @@
                         placeholder="请输入编号/条码/名称"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="searchText">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small" @click="search">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
@@ -180,18 +180,6 @@
                                 size="small">
                                 详情
                             </el-button>
-                            <el-button
-                                @click.native.prevent="editTable(scope.$index, scope.row)"
-                                type="text"
-                                size="small">
-                                编辑
-                            </el-button>
-                            <el-button
-                                @click.native.prevent="deleteTable(scope.$index, scope.row)"
-                                type="text"
-                                size="small">
-                                删除
-                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -219,7 +207,7 @@ export default {
     data(){
         return {
             warnState: '',
-            serchText: '',
+            searchText: '',
             currentPage: 2,
             selectTableData: [],
             isSupperBoxShow: false,
@@ -302,7 +290,6 @@ export default {
         },
         // 获取出入库列表
         getInoutBoundList(data) {
-
             API.inoutBound(data).then(res => {
                 this.tableData = res.data.list
             })
@@ -370,8 +357,6 @@ export default {
                 this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'inbound'}})
             }
         },
-        editTable(index, data) {},
-        deleteTable(index, data) {},
         closeExportWrap(){
             this.isExportShow = false
             this.$refs.purchaseListTable.clearSelection()
@@ -406,6 +391,16 @@ export default {
         this.getInoutBoundList()
         this.getPurchaseList()
         this.getItemList()
+    },
+    activated() {
+        // 商品库存页进入
+        if (this.$route.params.id) {
+            this.clear()
+            this.searchFormData.itemSku = this.$route.params.id
+            this.search()
+            this.clear()
+            this.searchText = this.$route.params.id
+        }
     }
 }
 </script>
