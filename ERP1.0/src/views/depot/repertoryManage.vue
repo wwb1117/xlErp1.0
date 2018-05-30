@@ -35,8 +35,13 @@
                     >
                     </el-table-column>
                     <el-table-column
-                        prop="activateState"
                         label="状态">
+                        <template slot-scope="scope">
+                            <el-switch
+                                v-model="scope.row.activateState"
+                                @change="changeWarehouseState(scope.$index, scope.row)">
+                            </el-switch>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="personResponsible"
@@ -75,7 +80,7 @@
                                 编辑
                             </el-button>
                             <el-button
-                                @click.native.prevent="delDep(scope.$index, scope.row)"
+                                @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
                                 删除
@@ -101,23 +106,7 @@ export default {
             isSupperBoxShow: false,
             tableHeight: 500,
             isExportShow: false,
-            warehouseList: [
-                {
-                    acreage: '面积',
-                    warehouseNo: '仓库编码',
-                    warehouseName: '仓库名字',
-                    activateState: 0,
-                    personResponsible: '负责人',
-                    phone: '负责人手机号',
-                    warehouseAddress: '详细地址',
-                    remark: '备注',
-                    enableStatus: 0,
-                    provinceId: '省份id',
-                    cityId: '城市id',
-                    areaId: '地区id',
-                    prop: ''
-                }
-            ]
+            warehouseList: []
         }
     },
     computed:{},
@@ -129,34 +118,53 @@ export default {
 
         },
         // 进入详情
-        inRepDetail(){
-            this.$router.push({name: '出入库详情', params: {id:12314654, type: '出库'}})
+        inRepDetail(index, data){
+            this.$router.push({name: '编辑仓库', params: {id: data.id, type: 'detail'}})
         },
         // 获取列表数据
         getWarehouseList(data) {
             API.getWarehouseList(data).then(res => {
                 this.warehouseList = res.data.list
                 this.warehouseList.forEach((rs) => {
-                    rs.activateState = this.$allEnumeration.activateState[rs.activateState]
+                    rs.activateState = this.$allEnumeration.bool[rs.activateState]
                 })
+            })
+        },
+        // 修改仓库状态
+        changeWarehouseState(index, data) {
+            console.log(data.activateState, "sdadas")
+            API.editWarehouseState({id: data.id, activateState: this.$allEnumeration.notBool[data.activateState]}).then(res => {
+                if (res.result == 1) {
+                    this.$message({
+                        type: 'success',
+                        message: '状态修改成功!'
+                    });
+                }
             })
         },
         // 编辑数据
         editTable(index, data) {
             this.$router.push({
                 name: '编辑仓库',
-                params: {type: '编辑', data: data, id: data.id}
+                params: {type: 'edit', data: data, id: data.id}
             })
         },
         // 删除仓库
-        delDep(index, data) {
+        deleteTable(index, data) {
+            if (data.activateState) {
+                this.$message({
+                    type: 'warning',
+                    message: '该仓库正在使用，禁止删除！'
+                });
+                return
+            }
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
                 API.deleteWarehouse(data.id).then(res => {
-                    if (res.data.result == 1) {
+                    if (res.result == 1) {
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -187,6 +195,9 @@ export default {
     },
     created(){},
     mounted(){
+
+    },
+    activated() {
         this.getWarehouseList()
     }
 }
@@ -231,7 +242,7 @@ export default {
         position: relative;
     }
     .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-        width: 390px;
+        width: 360px;
     }
     .el-form, .el-table{
         color: #636365;

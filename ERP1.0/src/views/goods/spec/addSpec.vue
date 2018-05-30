@@ -8,9 +8,9 @@
         </header>
         <section class="addSpec_conent" >
             <div class="addSpec_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
-                <el-form ref="spec" :model="spec" label-width="100px">
-                    <el-form-item label="规格名称" required>
-                        <el-input v-model="spec.name" style="width:338px" size='small'></el-input>
+                <el-form ref="spec"  label-width="100px">
+                    <el-form-item label="规格名称" required :model="specNum">
+                        <el-input v-model="specNum.skuPropertyName" style="width:338px" size='small'></el-input>
                     </el-form-item>
                     <el-form-item label="规格值" required :style="{height: (specNum.length)*50 + 'px'}">
                         <el-table
@@ -27,21 +27,21 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="specname"
+                                prop="skuPropertyValueName"
                                 label="规格值"
                                 width="460">
                                 <template slot-scope="scope">
                                     <div>
-                                        <el-input v-model="specNum.specname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
+                                        <el-input v-model="scope.row.skuPropertyValueName" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop='bolean'
+                                prop='isDeleted'
                                 label='是否启用'>
                             <template slot-scope="scope">
                                 <el-switch
-                                    v-model="specNum.value2"
+                                    v-model="scope.row.isDeleted"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949">
                                 </el-switch>
@@ -54,37 +54,32 @@
                         <el-input
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
-                            style="width:658px">
+                            style="width:658px"
+                            v-model="this.text">
                         </el-input>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
         <footer class="addSpec_footer">
-            <el-button type="primary" size='small'>保存</el-button>
+            <el-button type="primary" size='small' @click='trueconfim'>保存</el-button>
             <el-button size='small' @click='returnPrev'>取消</el-button>
         </footer>
     </section>
 </template>
 <script>
-// import api from 'api/goods'
+import api from 'api/goods'
 
 export default {
     data() {
         return {
-            // 规格、备注
-            spec: {
-                name: '',
-                text: ''
-            },
+            text: '',
             // 规格值
 
             specNum: [
                 {
-                    specname: '',
-                    bolean: '',
-                    value1: true,
-                    value2: true
+                    skuPropertyValueName: '',
+                    isDeleted: 0
                 }
             ]
 
@@ -94,10 +89,8 @@ export default {
     methods: {
         addSpecnum() {
             let obj = {
-                specname: '',
-                bolean: '',
-                value1: true,
-                value2: true
+                skuPropertyValueName: '',
+                isDeleted: 0
             }
 
             this.specNum.push(obj)
@@ -109,7 +102,40 @@ export default {
             }
         },
         returnPrev() {
-            this.$router.push('goodsSpec')
+            this.specNum = [
+                {
+                    skuPropertyValueName: '',
+                    isDeleted: 0
+                }
+            ]
+            this.specNum.skuPropertyName = ''
+            this.text = ''
+            this.$router.go(-1)
+        },
+        trueconfim() {
+            // console.log(this.specNum)
+            let obj = {
+                skuPropertys : JSON.stringify({
+                    skuPropertyName: this.specNum.skuPropertyName,
+                    itemSkuPropertyValueDTOS: this.specNum
+                })
+            }
+
+            api.postitemskuPropertyadd(obj).then((response)=>{
+                this.specNum = [
+                    {
+                        skuPropertyValueName: '',
+                        isDeleted: 0
+                    }
+                ]
+                this.specNum.skuPropertyName = ''
+                this.text = ''
+                this.$router.go(-1)
+
+            }).catch((error)=>{
+                console.log(error)
+            })
+
         }
     }
 

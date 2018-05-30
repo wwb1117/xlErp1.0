@@ -8,19 +8,17 @@
         </header>
         <section class="edit_conent" >
             <div class="edit_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
-                <el-form ref="edit" :model="edit" label-width="100px">
-                    <el-form-item label="规格名称" required>
-                        <el-input v-model="edit.name" style="width:338px" size='small'></el-input>
+                <el-form ref="edit" label-width="100px">
+                    <el-form-item v-model="editNum" label="规格名称" required>
+                        <el-input v-model="editNum.skuPropertyName" style="width:338px" size='small'></el-input>
                     </el-form-item>
-                    <el-form-item label="规格值" required :style="{height: (editNum.length)*50 + 'px'}">
+                    <el-form-item label="规格值" required :style="{height: (this.length)*50 + 'px'}">
                         <el-table
-                            :data='editNum'
+                            :data='editNum.list'
                             border
-                            style="width:658px"
-                        >
+                            style="width:658px">
                             <el-table-column
-                                width='55'
-                            >
+                                width='55'>
                                 <template slot-scope="scope">
                                     <div class="icon_box" style="height:50px;line-height:50px;margin-left:10px">
                                         <i class="el-icon-plus" style="font-weight:700" @click="addEditnum"></i>
@@ -29,22 +27,21 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="editname"
+                                prop="skuPropertyValueName"
                                 label="规格值"
                                 width="425">
                                 <template slot-scope="scope">
                                     <div>
-                                        <el-input v-model="editNum.editname" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
+                                        <el-input v-model="scope.row.skuPropertyValueName" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop='bolean'
-                                label='是否启用'
-                            >
+                                prop='isDeleted'
+                                label='是否启用'>
                             <template slot-scope="scope">
                                 <el-switch
-                                    v-model="editNum.value2"
+                                    v-model="scope.row.isDeleted"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949">
                                 </el-switch>
@@ -53,58 +50,51 @@
                         </el-table>
 
                     </el-form-item>
-                    <el-form-item label="备注" class="other_text">
+                    <el-form-item label="备注" class="other_text" v-model="editNum">
                         <el-input
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                        >
+                            v-model="editNum.remark">
                         </el-input>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
         <footer class="edit_footer">
-            <el-button type="primary" size='small'>保存</el-button>
+            <el-button type="primary" size='small' @click='trueconfim'>保存</el-button>
             <el-button size='small' @click='returnPrev'>取消</el-button>
         </footer>
     </section>
 </template>
 <script>
 import api from 'api/goods'
-import bus from '@/assets/eventBus.js'
+// import bus from '@/assets/eventBus.js'
 
 export default {
     data() {
         return {
-            // 规格、备注
-            edit: {
-                name: '',
-                text: ''
-            },
             // 规格值
-
             editNum: [
-                {
-                    editname: '',
-                    bolean: '',
-                    value1: true,
-                    value2: true
-                }
-            ]
+                // {
+                //     editname: '',
+                //     bolean: '',
+                //     value1: true,
+                //     value2: true
+                // }
+            ],
 
+            length: ''
         }
     },
     methods: {
         addEditnum() {
             let obj = {
-                editname: '',
-                bolean: '',
-                value1: true,
-                value2: true
+                skuPropertyValueName: '',
+                isDeleted: 0
             }
 
-            this.editNum.push(obj)
+            this.editNum.list.push(obj)
         },
         // removeEditnum(data) {
         //     if (this.editNum.length > 1){
@@ -112,23 +102,51 @@ export default {
         //     }
         // },
         returnPrev() {
-            this.$router.push('goodsSpec')
-        }
-    },
-    created() {
-        // var that = this
+            this.editNum = []
+            this.$router.go(-1)
+        },
+        trueconfim() {
 
-        bus.$on('editSpec', function(msg){
+            let obj = {
+                skuPropertys : JSON.stringify({
+                    id: this.editNum.id,
+                    skuPropertyName: this.editNum.skuPropertyName,
+                    itemSkuPropertyValueDTOS: this.editNum.list
+                })
+            }
 
-            // console.log(msg)
-            api.getitemskupropertyid(1000).then((response)=>{
-
-                console.log(1)
+            api.putitemskuPropertyupdate(obj).then((response)=>{
+                this.editNum = []
+                this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)
             })
-        })
 
+        }
+    },
+    created() {
+        var msg = this.$store.state.home.specMsg
+
+
+        api.getitemskupropertyid(msg).then((response)=>{
+
+            this.editNum = response.data
+            this.length = response.data.list.length
+            // console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
+    },
+    activated() {
+        var msg = this.$store.state.home.specMsg
+
+        api.getitemskupropertyid(msg).then((response)=>{
+
+            this.editNum = response.data
+            this.length = response.data.list.length
+        }).catch((error)=>{
+            console.log(error)
+        })
     }
 
 }

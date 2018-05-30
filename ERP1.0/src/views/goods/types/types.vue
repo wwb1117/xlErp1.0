@@ -6,23 +6,23 @@
             <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='openAddtypes'>新增类型</el-button>
         </header>
         <section class="types_conent" >
-            <div class="types_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
-                <div class='box_top'>
-                     <el-input
-                        size="small"
-                        placeholder="请输入内容"
-                        prefix-icon="el-icon-search"
-                        v-model="input"
-                        style="width:378px">
-                    </el-input>
-                    <el-button type="primary" size='small' style="margin-left:10px" @click='findthat'>搜索</el-button>
-                </div>
-                <ul class="types_list">
-                    <li style="width:210px">包装名称</li>
-                    <li style="width:500px">规格值</li>
-                    <li style="width:300px">备注</li>
-                    <li style="width:110px">操作</li>
-                </ul>
+             <div class='box_top' style="border:1px solid #e5e8e8;border-bottom:none">
+                <el-input
+                    size="small"
+                    placeholder="请输入内容"
+                    prefix-icon="el-icon-search"
+                    v-model="input"
+                    style="width:378px">
+                </el-input>
+                <el-button type="primary" size='small' style="margin-left:10px" @click='findthat'>搜索</el-button>
+            </div>
+            <ul class="types_list" style="border:1px solid #e5e8e8;border-bottom:none">
+                <li style="width:210px">包装名称</li>
+                <li style="width:500px">规格值</li>
+                <li style="width:300px">备注</li>
+                <li style="width:110px">操作</li>
+            </ul>
+            <div class="types_box" :style="{height: $store.state.home.modelContentHeight-128 + 'px'}">
                 <ul class="types_list types_text" v-for='(item,index) in this.types' :key='index'>
                     <li style="width:210px">{{item.unitMsg}}</li>
                     <li style="width:500px">{{item.skuNumber}}</li>
@@ -62,7 +62,7 @@
 </template>
 <script>
 import api from 'api/goods'
-import bus from '@/assets/eventBus.js'
+// import bus from '@/assets/eventBus.js'
 
 export default {
     data() {
@@ -129,9 +129,11 @@ export default {
             this.$router.push('addTypes')
         },
         gotoEdit(data) {
+            // bus.$emit('editTypes', data)
+            this.$store.commit('setTypes', data)
             this.$router.push('editTypes')
             // console.log(data)
-            bus.$emit('editTypes', data)
+
         },
         handleSizeChange(val) {
             this.page.pageSize = val
@@ -205,7 +207,8 @@ export default {
 .types_box{
     border: 1px solid #e6e9eb;
     color: #5e6161;
-    background: white
+    background: white;
+    overflow: auto;
 }
 .box_top{
     display: flex;

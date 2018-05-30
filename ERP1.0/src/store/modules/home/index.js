@@ -114,9 +114,12 @@ export default {
                     path: '/operationLog'
                 }
             ]
+        },
 
-
-        }
+        // 商品包装类型
+        typesMsg: '',
+        // 商品规格
+        specMsg: ''
     },
     mutations: {
         setDevice(state, value){
@@ -133,6 +136,14 @@ export default {
         setCurrentModelId(state, value){
             state.currentModelId = value
             window.localStorage.setItem("currentModelId", JSON.stringify(state.currentModelId))
+        },
+        // 商品包装类型
+        setTypes(state, value){
+            state.typesMsg = value
+        },
+        // 商品规格
+        setSpec(state, value){
+            state.specMsg = value
         }
 
     }

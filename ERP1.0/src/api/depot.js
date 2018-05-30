@@ -15,12 +15,20 @@ export default {
     },
     // 删除仓库
     deleteWarehouse(id) {
-        return HttpClient.delete(`/warehouse/${id}`);
+        return HttpClient.delete(`/warehouse/delete/${id}`);
+    },
+    // 仓库详情
+    getWarehouseDetail(id) {
+        return HttpClient.get(`/warehouse/${id}`);
+    },
+    // 修改仓库状态
+    editWarehouseState(data) {
+        return HttpClient.put('/warehouse/change/status', data);
     },
     /********** 入库 *********/
     // 新增入库单
     addInboundOrder(data) {
-        return HttpClient.post('/store/insertOrder', data);
+        return HttpClient.postJSON('/store/insertOrder', data);
     },
     // 查询入库单列表
     getInboundList(data) {
@@ -45,7 +53,7 @@ export default {
     /********** 出库 *********/
     // 新增出库单
     addOutboundOrder(data) {
-        return HttpClient.post('/deliver/insertOrder', data);
+        return HttpClient.postJSON('/deliver/insertOrder', data);
     },
     // 修改出库单
     editOutboundOrder(data) {
@@ -66,37 +74,37 @@ export default {
     /********** 库存 *********/
     // 库存列表
     getInventoryList(data) {
-        return HttpClient.get('/inventory/findByCondition', data);
+        return HttpClient.get('/storage/inventory/findByCondition', data);
     },
     // 修改库存
     editInventory(data) {
-        return HttpClient.put('/inventory/update', data);
+        return HttpClient.put('/storage/inventory/update', data);
     },
     // 出入库记录
     inoutBound(data) {
-        return HttpClient.get('/inventory/findItemByCondition', data);
+        return HttpClient.get('/storage/inventory/findItemByCondition', data);
 
     },
     // 出入库订单详情
     inoutBoundDetail(data) {
-        return HttpClient.get('/inventory/findOrder', data);
+        return HttpClient.get('/storage/inventory/findOrder', data);
     },
     /********** 调拨单*********/
     // 新增调拨单
     addAllotOrder(data) {
-        return HttpClient.post('/allocation/insert', data);
+        return HttpClient.post('/storage/allocation/insert', data);
     },
     // 调拨单列表
     getAllotList(data) {
-        return HttpClient.get('/allocation/findByCondition', data);
+        return HttpClient.get('/storage/allocation/findByCondition', data);
     },
     // 调拨单详情
     getAllotDetail(id) {
-        return HttpClient.get(`/allocation/${id}`);
+        return HttpClient.get(`/storage/allocation/${id}`);
     },
     // 删除调拨单
     delAllotOrder(id) {
-        return HttpClient.delete(`/allocation/${id}`);
+        return HttpClient.delete(`/storage/allocation/${id}`);
     },
     // 获取采购单列表
     getPurchaseAll() {

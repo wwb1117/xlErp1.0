@@ -8,9 +8,16 @@
         </header>
         <section class="addTypes_conent" >
             <div class="addTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
-                <el-form ref="types" v-model="typesNum" label-width="100px">
-                    <el-form-item label="规格名称" required>
-                        <el-input v-model="typesNum.unitMsg" style="width:338px" size='small'></el-input>
+                <el-form ref="types"  label-width="100px">
+                    <el-form-item label="规格名称" required v-model="typesNum">
+                        <el-select v-model="typesNum.supplyMsg" placeholder="请选择" style="width:338px" size='small'>
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="规格值" required :style="{height: (typesNum.length)*50 + 'px'}">
                         <el-table
@@ -59,15 +66,13 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-
                     </el-form-item>
                     <el-form-item label="备注" class="other_text">
                         <el-input
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                            v-model="this.text"
-                        >
+                            v-model="this.text">
                         </el-input>
                     </el-form-item>
                 </el-form>
@@ -86,19 +91,85 @@ export default {
     data() {
         return {
             // 规格名称、备注
-            unitMsga: '',
             text: '',
 
             // 规格值
             typesNum: [
+
                 {
                     skuNumber: '',
                     unitMsg: '',
-                    price: '',
-                    sort: '',
-                    isDeleted: false
+                    isDeleted: false,
+                    remark: ''
                 }
-            ]
+            ],
+            options: [
+                {
+                    value: '1',
+                    label: '灌装'
+                },
+                {
+                    value: '2',
+                    label: '袋装'
+                },
+                {
+                    value: '3',
+                    label: '包装'
+                },
+                {
+                    value: '4',
+                    label: '盒装'
+                },
+                {
+                    value: '5',
+                    label: '瓶装'
+                },
+                {
+                    value: '6',
+                    label: '箱'
+                },
+                {
+                    value: '7',
+                    label: '组'
+                },
+                {
+                    value: '8',
+                    label: '套'
+                },
+                {
+                    value: '9',
+                    label: '个'
+                },
+                {
+                    value: '10',
+                    label: '条'
+                },
+                {
+                    value: '11',
+                    label: '支'
+                },
+                {
+                    value: '12',
+                    label: '本'
+                },
+                {
+                    value: '13',
+                    label: '把'
+                },
+                {
+                    value: '14',
+                    label: '枚'
+                },
+                {
+                    value: '15',
+                    label: '根'
+                },
+                {
+                    value: '16',
+                    label: '双'
+                }
+            ],
+            value: ''
 
         }
     },
@@ -107,9 +178,8 @@ export default {
             let obj = {
                 skuNumber: '',
                 unitMsg: '',
-                price: '',
-                sort: '',
-                isDeleted: false
+                isDeleted: false,
+                remark: ''
             }
 
             this.typesNum.push(obj)
@@ -129,17 +199,31 @@ export default {
                     isDeleted: false
                 }
             ]
+            this.typesNum.supplyMsg = ''
+            this.text = ''
+            this.value = ''
             this.$router.go(-1)
         },
         trueconfim() {
             console.log(this.typesNum)
             api.postitemsupplyPropertyadd(this.typesNum).then((response)=>{
-                console.log(typeof this.typesNum)
-                console.log(response)
+                this.typesNum = [
+                    {
+                        skuNumber: '',
+                        unitMsg: '',
+                        price: '',
+                        sort: '',
+                        isDeleted: false
+                    }
+                ]
+                this.typesNum.supplyMsg = ''
+                this.text = ''
+                this.value = ''
+                this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)
             })
-            this.$router.go(-1)
+            // this.$router.go(-1)
         }
     }
 

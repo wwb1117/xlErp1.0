@@ -195,7 +195,7 @@
 
         <!-- 商品分页 -->
         <footer class="bottom" >
-            <div class="block">
+            <div class="block" style="margin-top:-14px">
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -205,7 +205,6 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalPage">
                 </el-pagination>
-
             </div>
         </footer>
     </section>
@@ -351,7 +350,7 @@ export default {
 
         get() {
             api.getitemlist(this.page).then((response) => {
-                console.log(response.data.list)
+                // console.log(response.data.list)
                 this.goodData = response.data.list
             }).catch((error)=>{
                 console.log(error)
