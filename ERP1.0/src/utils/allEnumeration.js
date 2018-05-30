@@ -31,6 +31,14 @@ Vue.prototype.$allEnumeration = { //仓库枚举类型
     boundType: {
         inbound: '入库',
         outbound: '出库'
+    },
+    bool: {
+        0: false,
+        1: true
+    },
+    notBool: {
+        false: 0,
+        true: 1
     }
 
 }

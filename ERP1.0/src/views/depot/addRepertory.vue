@@ -98,10 +98,10 @@ export default {
         MathRand() {
             let sixNum = ''
 
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 7; i++) {
                 sixNum += Math.floor(Math.random() * 10);
             }
-            this.addFormData.warehouseNo = 'ss' + sixNum
+            this.addFormData.warehouseNo = 's' + sixNum
         },
         // 保存
         save() {
@@ -114,9 +114,20 @@ export default {
                 return
             }
             API.addWarehouse(this.addFormData).then(res => {
+                this.$message({
+                    type:'success',
+                    message:'添加成功'
+                })
+                this.$router.push({ name: "仓库管理" })
 
             })
             console.log(this.addFormData)
+        },
+        // 清空
+        clear() {
+            for (let key in this.addFormData) {
+                this.addFormData[key] = ''
+            }
         }
     },
     created(){},
@@ -124,6 +135,7 @@ export default {
 
     },
     activated() {
+        this.clear()
         this.MathRand()
     }
 }
