@@ -230,7 +230,7 @@ export default {
         },
         addStoreList(){
             var paramobj = {
-                purchaseOrderId: this.$store.state.purchase.purchaseId,
+                purchaseOrderId: this.$store.state.home.currentModelId,
                 purchaseOrderNo: '',
                 buyerId: this.formData.buyerId,
                 buyerName: this.formData.buyerName,

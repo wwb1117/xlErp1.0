@@ -6,23 +6,23 @@
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="model_content_inner" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
-                <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="90px">
+                <el-form class="myForm" ref="addPurchaseListForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="90px">
                     <div class="banner">
                         基本信息
                     </div>
                     <div class="baseInfoBox">
                         <el-form-item prop="sellerId" label="供应商">
-                            <el-select v-model="addFormData.sellerId" placeholder="请选择供应商">
+                            <el-select @change="selectChangeEvent(1)" v-model="addFormData.sellerId" placeholder="请选择供应商">
                                 <el-option v-for="item in supplierSelectData" :key="item.id" :label="item.sellerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item prop="purchaseHouseId" label="入库仓库">
-                            <el-select v-model="addFormData.purchaseHouseId" placeholder="请选择入库仓库">
+                            <el-select @change="selectChangeEvent(1)" v-model="addFormData.purchaseHouseId" placeholder="请选择入库仓库">
                                 <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item prop="buyerId" label="采购单位">
-                            <el-select v-model="addFormData.buyerId" placeholder="请选择采购单位">
+                            <el-select @change="selectChangeEvent(3)" v-model="addFormData.buyerId" placeholder="请选择采购单位">
                                 <el-option v-for="item in buyerNameSelectData" :key="item.id" :label="item.buyerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
@@ -53,11 +53,11 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                            prop="selfNum"
+                            prop="itemCode"
                             label="编号"
                             width="180">
                             <template slot-scope="scope">
-                                <div v-if="scope.row.selfNum === ''">
+                                <div v-if="scope.row.itemCode === ''">
                                     <el-autocomplete
                                     v-model="querySearchText"
                                     :style="{width: '270px'}"
@@ -70,8 +70,8 @@
 
                                     <span @click="chooseGoodEvent" class="el-icon-more"></span>
                                 </div>
-                                <div v-if="scope.row.selfNum !== ''">
-                                    <span v-text="scope.row.selfNum"></span>
+                                <div v-if="scope.row.itemCode !== ''">
+                                    <span v-text="scope.row.itemCode"></span>
                                 </div>
                             </template>
                             </el-table-column>
@@ -80,7 +80,7 @@
                             label="条码">
                             </el-table-column>
                             <el-table-column
-                            prop="goodName"
+                            prop="title"
                             label="商品">
                             </el-table-column>
                             <el-table-column
@@ -88,7 +88,7 @@
                             label="规格-SKU">
                             </el-table-column>
                             <el-table-column
-                            prop="qualityDate"
+                            prop="expirationDate"
                             label="保质期">
                             </el-table-column>
                             <el-table-column
@@ -99,10 +99,10 @@
                             prop="purchaseNum"
                             label="采购数">
                                 <template slot-scope="scope">
-                                    <div v-if="scope.row.selfNum === ''">
+                                    <div v-if="scope.row.itemCode === ''">
                                         <span></span>
                                     </div>
-                                    <div v-if="scope.row.selfNum !== ''">
+                                    <div v-if="scope.row.itemCode !== ''">
                                         <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.purchaseNum"></el-input>
                                     </div>
                                 </template>
@@ -115,10 +115,10 @@
                             prop="unitPrice"
                             label="采购单价(元)">
                                 <template slot-scope="scope">
-                                    <div v-if="scope.row.selfNum === ''">
+                                    <div v-if="scope.row.itemCode === ''">
                                         <span></span>
                                     </div>
-                                    <div v-if="scope.row.selfNum !== ''">
+                                    <div v-if="scope.row.itemCode !== ''">
                                         <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.unitPrice"></el-input>
                                     </div>
                                 </template>
@@ -171,7 +171,7 @@
 
         </div>
         <div class="model_footer">
-            <el-button @click="saveBtnEvent" style="width: 90px" type="primary" size="small">保存</el-button>
+            <el-button @click="saveBtn" style="width: 90px" type="primary" size="small">保存</el-button>
             <el-button style="width: 90px" size="small">取消</el-button>
         </div>
     </div>
@@ -212,8 +212,6 @@ export default {
                 totalMoney: "",
                 freight: "",
                 otherMoney: ''
-
-
             },
             rules: {
                 sellerId: [
@@ -254,11 +252,11 @@ export default {
         goodTableAddEvent(){
             var itemobj = {
                 oper: '',
-                selfNum: '',
+                itemCode: '',
                 barCode: '',
-                goodName: '',
+                title: '',
                 SKU: '',
-                qualityDate: '',
+                expirationDate: '',
                 productData: '',
                 purchaseNum: '',
                 unit: '',
@@ -296,6 +294,7 @@ export default {
 
                     if (column.property == 'unitTotal'){
                         this.tableTotalUnit = sums[index]
+                        this.addFormData.totalMoney = this.tableTotalUnit
                     }
                 } else {
                     sums[index] = ''
@@ -312,7 +311,7 @@ export default {
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
             if (columnIndex === 2) {
-                if (row.selfNum == ""){
+                if (row.itemCode == ""){
                     return [1, 3];
                 } else {
                     return [1, 1];
@@ -363,8 +362,34 @@ export default {
                 this.supplierSelectData = response.data.list
             })
         },
+        saveBtn(){
+            this.$refs['addPurchaseListForm'].validate((valid) => {
+                if (valid) {
+                    this.addFormData.orderTime /= 1000
+                    this.saveBtnEvent()
+                }
+            })
+        },
         saveBtnEvent(){
-            api.addPurchaseList().then((response) => {
+
+
+            var listArr = []
+
+            this.goodsInfoData.forEach((item, index) => {
+                var itemobj = {
+                    itemSku: item.itemCode,
+                    itemMac: item.barCode,
+                    itemSpec: item.SKU,
+                    itemExp: item.expirationDate,
+                    itemQuantifierUnit: item.unit
+                }
+
+                listArr.push(itemobj)
+            })
+
+            this.addFormData.list = listArr
+
+            api.addPurchaseList(this.addFormData).then((response) => {
                 console.log(response)
             })
         },
@@ -377,10 +402,57 @@ export default {
             api.getBuyerComSelectData().then((response) => {
                 this.buyerNameSelectData = response.data
             })
+        },
+        setGoodsTableData(){
+            var resArr = []
+
+            this.$store.state.purchase.goodsInfoData.forEach((item, index) => {
+                for (var child of item.skuGroups) {
+                    var itemobj = this.myBase.deepCopy(item)
+
+                    itemobj.SKU = child
+                    itemobj.purchaseNum = "1"
+                    itemobj.unitPrice = '0'
+                    itemobj.unitTotal = '0'
+
+                    resArr.push(itemobj)
+                }
+            })
+
+            this.goodsInfoData = resArr
+        },
+        selectChangeEvent(type){
+            if (type == 1) {
+                var itemobj1 = this.setSelectName(this.addFormData.sellerId, this.supplierSelectData)
+
+                this.addFormData.sellerName = itemobj1.sellerCompanyName
+            }
+            if (type == 2) {
+                var itemobj2 = this.setSelectName(this.addFormData.purchaseHouseId, this.repositorySelectData)
+
+                this.addFormData.purchaseHouseName = itemobj2.warehouseName
+            }
+            if (type == 3) {
+                var itemobj3 = this.setSelectName(this.addFormData.buyerId, this.buyerNameSelectData)
+
+                this.addFormData.buyerName = itemobj3.buyerCompanyName
+            }
+        },
+        setSelectName(fid, Arr){
+            var itemobj = {}
+
+            Arr.forEach((item, index) => {
+                if (fid == item.id) {
+                    itemobj = item
+                }
+            })
+
+            return itemobj
         }
     },
     activated(){
-        this.goodsInfoData = this.$store.state.purchase.goodsInfoData
+
+        this.setGoodsTableData()
         this.getSupplierSelectData()
         this.getRepositorySelectData()
         this.getBuyerComSelectData()

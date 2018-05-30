@@ -5,16 +5,17 @@ export default {
         purchaseId: '',
         goodsInfoData: [{
             oper: '',
-            selfNum: '',
+            itemCode: '',
             barCode: '',
-            goodName: '',
+            title: '',
             SKU: '',
-            qualityDate: '',
+            expirationDate: '',
             productData: '',
             purchaseNum: '',
             unit: '',
             unitPrice: '',
-            unitTotal: ''
+            unitTotal: '',
+            skuGroups: [""]
         }]
     },
     mutations: {
@@ -26,6 +27,9 @@ export default {
         },
         setPurchaseId(state, value){
             state.purchaseId = value
+        },
+        setGoodsInfoData(state, value){
+            state.goodsInfoData = value
         }
 
     }
