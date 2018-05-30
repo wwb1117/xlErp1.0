@@ -10,7 +10,7 @@
             <div class="editTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <el-form ref="types"  label-width="100px">
                     <el-form-item label="规格名称" required>
-                        <el-input v-model="this.unitMsg" style="width:338px" size='small'></el-input>
+                        <el-input v-model="this.unitMsg" style="width:338px" size='small' disabled></el-input>
                     </el-form-item>
                     <el-form-item label="规格值" required :style="{height: (from.length)*50 + 'px'}">
                         <el-table
