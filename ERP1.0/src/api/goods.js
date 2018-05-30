@@ -64,7 +64,7 @@ export default {
     },
     // 获取商品规格详情
     getitemskupropertyid(id) {
-        return HttpClient.get(`/item/skuproperty/${id}`)
+        return HttpClient.get(`/item/skuProperty/${id}`)
     },
     // 新增商品规格
     postitemskuPropertyadd(data) {

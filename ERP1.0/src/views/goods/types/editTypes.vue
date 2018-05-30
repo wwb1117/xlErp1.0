@@ -20,9 +20,9 @@
                             <el-table-column
                                 width='55'>
                                 <template slot-scope="scope">
-                                    <div class="icon_box" style="height:50px;line-height:50px">
+                                    <div class="icon_box" style="height:50px;line-height:50px;margin-left:10px">
                                         <i class="el-icon-plus" style="font-weight:700" @click="editTypesnum"></i>
-                                        <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(scope)"></i>
+                                        <!-- <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(scope)"></i> -->
                                     </div>
                                 </template>
                             </el-table-column>
@@ -107,11 +107,11 @@ export default {
             this.from.push(obj)
 
         },
-        removeTypesnum(data) {
-            if (this.from.length > 1){
-                this.from.splice(data.$index, 1)
-            }
-        },
+        // removeTypesnum(data) {
+        //     if (this.from.length > 1){
+        //         this.from.splice(data.$index, 1)
+        //     }
+        // },
         returnPrev() {
             this.from = []
             this.$router.go(-1)

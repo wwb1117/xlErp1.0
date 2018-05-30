@@ -164,7 +164,7 @@ export default {
 
         get() {
             api.getcategorylist().then((response)=>{
-                console.log(response.data.list)
+                // console.log(response.data.list)
                 this.items = response.data.list
 
 

@@ -8,8 +8,8 @@
         </header>
         <section class="addTypes_conent" >
             <div class="addTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
-                <el-form ref="types" v-model="typesNum" label-width="100px">
-                    <el-form-item label="规格名称" required>
+                <el-form ref="types"  label-width="100px">
+                    <el-form-item label="规格名称" required v-model="typesNum">
                         <el-select v-model="typesNum.supplyMsg" placeholder="请选择" style="width:338px" size='small'>
                             <el-option
                                 v-for="item in options"
@@ -199,13 +199,27 @@ export default {
                     isDeleted: false
                 }
             ]
+            this.typesNum.supplyMsg = ''
+            this.text = ''
+            this.value = ''
             this.$router.go(-1)
         },
         trueconfim() {
             console.log(this.typesNum)
             api.postitemsupplyPropertyadd(this.typesNum).then((response)=>{
-                // console.log(typeof this.typesNum)
-                // console.log(response)
+                this.typesNum = [
+                    {
+                        skuNumber: '',
+                        unitMsg: '',
+                        price: '',
+                        sort: '',
+                        isDeleted: false
+                    }
+                ]
+                this.typesNum.supplyMsg = ''
+                this.text = ''
+                this.value = ''
+                this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)
             })
