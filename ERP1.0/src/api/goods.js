@@ -94,7 +94,7 @@ export default {
     },
     // 根据包装名称查询
     getitemsupplyPropertyfindByUnitMsg(data) {
-        return HttpClient.get('/item/supplyProperty/findByUnitMsg', data)
+        return HttpClient.get('/item/supplyProperty/findBySupplyMsg', data)
     },
     // 查询包装类型列表
     getitemsupplyPropertylist(data) {

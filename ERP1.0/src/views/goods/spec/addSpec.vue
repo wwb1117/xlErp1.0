@@ -55,15 +55,15 @@
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                            v-model="this.text">
+                            v-model="text">
                         </el-input>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
         <footer class="addSpec_footer">
-            <el-button type="primary" size='small' @click='trueconfim'>保存</el-button>
-            <el-button size='small' @click='returnPrev'>取消</el-button>
+            <el-button type="primary" size='small' @click='trueconfim' style="width:90px">保存</el-button>
+            <el-button size='small' @click='returnPrev' style="width:90px">取消</el-button>
         </footer>
     </section>
 </template>
@@ -113,14 +113,15 @@ export default {
             this.$router.go(-1)
         },
         trueconfim() {
-            // console.log(this.specNum)
+
             let obj = {
-                skuPropertys : JSON.stringify({
+                skuProperties : JSON.stringify({
                     skuPropertyName: this.specNum.skuPropertyName,
                     itemSkuPropertyValueDTOS: this.specNum
                 })
             }
 
+            console.log(obj)
             api.postitemskuPropertyadd(obj).then((response)=>{
                 this.specNum = [
                     {

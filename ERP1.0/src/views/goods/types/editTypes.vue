@@ -9,8 +9,8 @@
         <section class="editTypes_conent" >
             <div class="editTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <el-form ref="types"  label-width="100px">
-                    <el-form-item label="规格名称" required>
-                        <el-input v-model="this.unitMsg" style="width:338px" size='small' disabled></el-input>
+                    <el-form-item label="规格名称" required >
+                        <el-input v-model="supplyMsg" style="width:338px" size='small' disabled></el-input>
                     </el-form-item>
                     <el-form-item label="规格值" required :style="{height: (from.length)*50 + 'px'}">
                         <el-table
@@ -28,12 +28,12 @@
                             </el-table-column>
                             <!-- 规格值 -->
                             <el-table-column
-                                prop="unitMsg"
+                                prop="supplyMsg"
                                 label="规格值"
                                 width="410">
                                 <template slot-scope="scope">
                                     <div>
-                                        <el-input v-model="scope.row.unitMsg" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
+                                        <el-input  v-model="scope.row.supplyMsg" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -42,7 +42,7 @@
                                 prop="skuNumber"
                                 label="含商品数量">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.skuNumber" size='small'></el-input>
+                                    <el-input  v-model="scope.row.skuNumber" size='small'></el-input>
                                 </template>
                             </el-table-column>
                             <!-- 是否启用 -->
@@ -60,20 +60,20 @@
                             </el-table-column>
                         </el-table>
                     </el-form-item>
-                    <el-form-item label="备注" class="other_text">
+                    <el-form-item label="备注" class="other_text" v-model="from">
                         <el-input
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                            v-model="this.text">
+                            v-model="from.remark">
                         </el-input>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
         <footer class="editTypes_footer">
-            <el-button type="primary" size='small' @click="trueconfim">保存</el-button>
-            <el-button size='small' @click='returnPrev'>取消</el-button>
+            <el-button type="primary" size='small' @click="trueconfim" style="width:90px">保存</el-button>
+            <el-button size='small' @click='returnPrev' style="width:90px">取消</el-button>
         </footer>
     </section>
 </template>
@@ -89,18 +89,20 @@ export default {
             // 规格值   // 规格名称、备注
 
             text: '',
-            unitMsg: '',
+            supplyMsg: '',
+            remark: '',
             from: []
-            // itemSupplyPropertyParams: ''
+
+            // disabled: false
+
         }
     },
     methods: {
         editTypesnum() {
             let obj = {
                 id: '',
-                remark: '',
                 skuNumber: '',
-                unitMsg: '',
+                supplyMsg: '',
                 isDeleted: '0'
             }
 
@@ -118,10 +120,12 @@ export default {
         },
 
         trueconfim() {
+
             let obj = {
                 itemSupplyPropertyParams : JSON.stringify(this.from)
             }
 
+            console.log(this.from)
             api.putsupplyPropertyupdate(obj).then((response)=>{
                 this.$router.go(-1)
                 // console.log(response)
@@ -136,13 +140,14 @@ export default {
         var msg = this.$store.state.home.typesMsg
 
         let obj = {
-            unitMsg: msg
+            supplyMsg: msg
         }
 
-        this.unitMsg = msg
+        this.supplyMsg = msg
         api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
             this.from = response.data
             // console.log(response.data)
+
         }).catch((error)=>{
             console.log(error)
         })
@@ -152,14 +157,13 @@ export default {
         var msg = this.$store.state.home.typesMsg
 
         let obj = {
-            unitMsg: msg
+            supplyMsg: msg
         }
 
-        this.unitMsg = msg
+        this.supplyMsg = msg
         api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
             this.from = response.data
-            // console.log(response.data)
-            console.log(this.from)
+
         }).catch((error)=>{
             console.log(error)
         })

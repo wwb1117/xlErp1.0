@@ -13,7 +13,7 @@
             </div>
         </header>
         <section class="details_conent">
-            <div class="details_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
+            <div class="details_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <!-- conents -->
             </div>
         </section>
@@ -52,7 +52,6 @@ export default {
 .details_footer{
     border-top:1px solid #e5e8e8;
     padding: 12px 30px;
-    margin-top: -23px;
     background: white
 }
 </style>
