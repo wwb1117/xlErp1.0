@@ -169,7 +169,7 @@ export default {
             })
         },
         getPurchaseListItem(){
-            var purId = this.$store.state.purchase.purchaseId
+            var purId = this.$store.state.home.currentModelId
 
             api.getPurchaseListItem(purId).then((response) => {
                 this.purchaseListInfo = response.data
@@ -177,7 +177,7 @@ export default {
             })
         },
         getStoreRecordInfo(){
-            var purId = this.$store.state.purchase.purchaseId
+            var purId = this.$store.state.home.currentModelId
 
             api.getStoreRecord(purId).then((response) => {
                 this.storeBaseInfo = response.data.obj

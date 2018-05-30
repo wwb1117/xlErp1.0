@@ -117,7 +117,7 @@ var router = new Router({
                 {name: "新增调拨单", path: '/addAllot', component: addAllot},
                 {name: "调拨单详情", path: '/allotDetail/:id', component: allotDetail},
                 {name: "新增仓库", path: '/addRepertory', component: addRepertory},
-                {name: "编辑仓库", path: '/editRepertory/:id', component: editRepertory},
+                {name: "编辑仓库", path: '/editRepertory/:type/:id', component: editRepertory},
 
                 /*************************** 审批模块*************************************/
                 {name: "待我审批", path: '/waitReview', component: waitReview},

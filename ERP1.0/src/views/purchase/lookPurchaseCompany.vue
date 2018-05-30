@@ -86,7 +86,7 @@ export default {
     computed:{},
     methods:{
         getBuyerData(){
-            var id = this.$store.state.purchase.buyerId
+            var id = this.$store.state.home.currentModelId
 
             api.getPurchaseComItem(id).then((response) => {
                 this.purchaseComFormData = response.data

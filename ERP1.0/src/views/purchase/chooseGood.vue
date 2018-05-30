@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="chooseGoodWrap">
          <div class="model_topcol">
             <span style="color: #409EFF">采购单</span>
             <span> - 新增采购单</span>
@@ -29,7 +29,7 @@
         </div>
         <div class="content">
             <el-table
-            :height="$store.state.home.modelContentHeight - 136"
+            :height="$store.state.home.modelContentHeight - 138"
             @selection-change="tableChangeEvent"
             :data="tableData"
             style="width: 100%">
@@ -66,8 +66,8 @@
                         trigger="click"
                         >
                         <el-select
-                            v-model="value11"
-                            @change="skuSelectChange"
+                            v-model="SKUSelectvalue"
+                            @change="skuSelectChange(scope)"
                             multiple
                             size="small"
                             collapse-tags
@@ -76,7 +76,7 @@
                             v-for="item in SKUSelectData"
                             :key="item.id"
                             :label="item.skuPropertieyNames"
-                            :value="item.id">
+                            :value="item.skuPropertieyNames">
                             </el-option>
                         </el-select>
                         <span @click="getPopoverData(scope.row.id)" slot="reference" class="color_blue myCur">查看</span>
@@ -102,8 +102,8 @@
             </el-table>
         </div>
         <div class="model_footer">
-            <el-button style="width: 90px" type="primary" size="small">确定</el-button>
-            <el-button style="width: 90px" size="small">取消</el-button>
+            <el-button @click="sureBtnEvent" style="width: 90px" type="primary" size="small">确定</el-button>
+            <el-button @click="cancelBtnEvent" style="width: 90px" size="small">取消</el-button>
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -122,20 +122,23 @@ import api from 'api/purchase'
 export default {
     data(){
         return {
-            value11: [],
+            SKUSelectvalue: [],
             totalPage: 1,
             goodsItemSelectData: [],
-            SKUSelectData: [
-                {
-                    value: '1',
-                    label: '黄金糕'
-                },
-                {
-                    value: '2',
-                    label: '双皮奶'
-                }
-
-            ],
+            goodsInfoData: [{
+                oper: '',
+                selfNum: '',
+                barCode: '',
+                goodName: '',
+                SKU: '',
+                qualityDate: '',
+                productData: '',
+                purchaseNum: '',
+                unit: '',
+                unitPrice: '',
+                unitTotal: ''
+            }],
+            SKUSelectData: [],
             tableParam: {
                 serchText: '',
                 pageSize: 10,
@@ -147,32 +150,8 @@ export default {
                 brandName: '',
                 barCode: ''
             },
-            tableData: [
-                {
-                    good: {
-                        img: 'static/img/purchase/test.png',
-                        text: '再牛逼的肖邦也弹不出老子的忧伤'
-                    },
-                    num : '85211414',
-                    barcode: 'WSSS',
-                    size_sku: '2018年1月',
-                    qualityDate: '24',
-                    mount: '1',
-                    unit: '罐'
-                },
-                {
-                    good: {
-                        img: 'static/img/purchase/test.png',
-                        text: '情缘为你画地为牢'
-                    },
-                    num : '456522555',
-                    barcode: 'SSSs22',
-                    size_sku: '2018年1月',
-                    qualityDate: '24',
-                    mount: '1',
-                    unit: '罐'
-                }
-            ]
+            tableData: [],
+            selectTableData: []
         }
     },
     computed:{},
@@ -202,8 +181,8 @@ export default {
                 this.goodsItemSelectData = response.data.list
             })
         },
-        skuSelectChange(val){
-            console.log(val)
+        skuSelectChange(scope){
+            scope.row.skuGroups = this.SKUSelectvalue
         },
         getPopoverData(itemid){
             var param = {
@@ -215,8 +194,44 @@ export default {
                 this.SKUSelectData = response.data.list
             })
         },
-        tableChangeEvent(val){
-            console.log(val)
+        tableChangeEvent(rowarr){
+            this.selectTableData = rowarr
+            this.$store.commit('setGoodsInfoData', rowarr)
+        },
+        sureBtnEvent(){
+            var flg = true;
+
+            if (this.selectTableData.length == 0) {
+                this.$message({
+                    type: 'warning',
+                    duration: 1500,
+                    showClose: true,
+                    message: '请选择商品'
+                })
+                return
+            }
+
+            this.selectTableData.forEach((item, index) => {
+                if (item.skuGroups == "" || item.skuGroups.length == 0) {
+                    flg = false
+                    return;  //只能跳出本次循环,待修改
+                }
+            })
+
+            if (!flg) {
+                this.$message({
+                    type: 'warning',
+                    duration: 1500,
+                    showClose: true,
+                    message: '请选择商品规格'
+                })
+            } else {
+                this.$router.go(-1)
+            }
+        },
+        cancelBtnEvent(){
+            this.$store.commit('setGoodsInfoData', this.goodsInfoData)
+            this.$router.go(-1)
         }
     },
     activated(){

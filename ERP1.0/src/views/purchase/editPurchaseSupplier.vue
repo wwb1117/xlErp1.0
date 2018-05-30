@@ -199,7 +199,7 @@ export default {
             }
         },
         getFormData(){
-            var id = this.$store.state.purchase.supplierId
+            var id = this.$store.state.home.currentModelId
 
             api.getItemSupplierData(id).then((response) => {
                 this.formData = response.data

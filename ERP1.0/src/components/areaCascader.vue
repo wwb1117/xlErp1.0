@@ -5,6 +5,7 @@
         :options="proviceData"
         v-model="modelValue"
         :change-on-select="false"
+        :disabled="bool"
         @change="change"
         @active-item-change="handleItemChange"
         :props="props"
@@ -20,13 +21,15 @@ export default {
             proviceData: [],
             modelValue: [],
             selectedOptions3: [],
+            bool: false,
             props: {
                 value: 'id'
             }
         }
     },
     props: [
-        'fatherValue'
+        'fatherValue',
+        'disabled'
     ],
     computed:{},
     watch: {
@@ -34,6 +37,9 @@ export default {
             if (newvalue && newvalue.length == 3){
                 this.getProviceData()
             }
+        },
+        disabled(newBool) {
+            this.bool = newBool
         }
     },
     methods:{
@@ -85,6 +91,7 @@ export default {
             this.$emit("areaFromChild", val)
         },
         getProviceData(){
+            this.bool = this.disabled
             api.getProviceData().then((response) => {
                 this.proviceData = []
                 for (let item of response.data){
