@@ -10,7 +10,7 @@
             <div class="editTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <el-form ref="types"  label-width="100px">
                     <el-form-item label="规格名称" required>
-                        <el-input v-model="this.unitMsg" style="width:338px" size='small'></el-input>
+                        <el-input v-model="this.unitMsg" style="width:338px" size='small' disabled></el-input>
                     </el-form-item>
                     <el-form-item label="规格值" required :style="{height: (from.length)*50 + 'px'}">
                         <el-table
@@ -20,9 +20,9 @@
                             <el-table-column
                                 width='55'>
                                 <template slot-scope="scope">
-                                    <div class="icon_box" style="height:50px;line-height:50px">
+                                    <div class="icon_box" style="height:50px;line-height:50px;margin-left:10px">
                                         <i class="el-icon-plus" style="font-weight:700" @click="editTypesnum"></i>
-                                        <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(scope)"></i>
+                                        <!-- <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(scope)"></i> -->
                                     </div>
                                 </template>
                             </el-table-column>
@@ -107,11 +107,11 @@ export default {
             this.from.push(obj)
 
         },
-        removeTypesnum(data) {
-            if (this.from.length > 1){
-                this.from.splice(data.$index, 1)
-            }
-        },
+        // removeTypesnum(data) {
+        //     if (this.from.length > 1){
+        //         this.from.splice(data.$index, 1)
+        //     }
+        // },
         returnPrev() {
             this.from = []
             this.$router.go(-1)
@@ -133,7 +133,7 @@ export default {
 
     },
     created() {
-        var msg = this.$store.state.goods.typesMsg
+        var msg = this.$store.state.home.typesMsg
 
         let obj = {
             unitMsg: msg
@@ -149,7 +149,7 @@ export default {
 
     },
     activated() {
-        var msg = this.$store.state.goods.typesMsg
+        var msg = this.$store.state.home.typesMsg
 
         let obj = {
             unitMsg: msg

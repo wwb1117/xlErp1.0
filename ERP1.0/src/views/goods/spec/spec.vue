@@ -62,7 +62,7 @@
 </template>
 <script>
 import api from 'api/goods'
-import bus from '@/assets/eventBus.js'
+// import bus from '@/assets/eventBus.js'
 
 export default {
     data() {
@@ -119,8 +119,8 @@ export default {
             this.$router.push('addSpec')
         },
         gotoEdit(data) {
+            this.$store.commit('setSpec', data)
             this.$router.push('editSpec')
-            bus.$emit('editSpec', data)
         },
         handleSizeChange(val) {
             this.page.pageSize = val
@@ -146,7 +146,7 @@ export default {
 
             api.getitemskuPropertylist(this.page).then((response)=>{
 
-                console.log(response.data.list)
+                // console.log(response.data.list)
                 this.spec = response.data.list
             }).catch((error)=>{
 
