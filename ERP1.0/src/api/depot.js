@@ -20,7 +20,7 @@ export default {
     /********** 入库 *********/
     // 新增入库单
     addInboundOrder(data) {
-        return HttpClient.post('/store/insertOrder', data);
+        return HttpClient.postJSON('/store/insertOrder', data);
     },
     // 查询入库单列表
     getInboundList(data) {
@@ -45,7 +45,7 @@ export default {
     /********** 出库 *********/
     // 新增出库单
     addOutboundOrder(data) {
-        return HttpClient.post('/deliver/insertOrder', data);
+        return HttpClient.postJSON('/deliver/insertOrder', data);
     },
     // 修改出库单
     editOutboundOrder(data) {

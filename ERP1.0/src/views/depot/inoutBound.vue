@@ -311,7 +311,7 @@ export default {
         getPurchaseList() {
             API.getPurchaseAll().then(res => {
                 this.buyerId_option = res.data
-                this.total = res.data.total || res.data.list.length
+                this.total = res.data.total || 0
                 console.log(this.buyerId_option, "采购列表")
             })
         },
@@ -365,9 +365,9 @@ export default {
         // 进入详情页
         inBoundDetail(index, data) {
             if (data.type == 1) { //出库
-                this.$router.push({name: '出入库详情', params: {id: data.orderNo || 123, type: '出库'}})
+                this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'outbound'}})
             } else if (data.type == 0) { //入库
-                this.$router.push({name: '出入库详情', params: {id: data.orderNo || 123, type: '入库'}})
+                this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'inbound'}})
             }
         },
         editTable(index, data) {},
@@ -449,7 +449,7 @@ export default {
         position: relative;
     }
     .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-        width: 390px;
+        width: 360px;
     }
     .el-form, .el-table{
         color: #636365;

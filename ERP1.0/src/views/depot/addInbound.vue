@@ -158,7 +158,21 @@
                             </el-table-column>
                             <el-table-column
                                 prop="currentStoreNumber"
-                                label="入库数">
+                                label="入库数"
+                                v-if="inbound">
+                                <template slot-scope="scope">
+                                    <div v-if="scope.row.itemId === ''">
+                                        <span></span>
+                                    </div>
+                                    <div v-if="scope.row.itemId !== ''">
+                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currentStoreNumber"></el-input>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                prop="currentStoreNumber"
+                                label="出库数"
+                                v-if="outbound">
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.itemId === ''">
                                         <span></span>
@@ -223,7 +237,7 @@ export default {
             outbound: false,
             goodsInfoData: [{
                 oper: '',
-                itemId: '1231',
+                itemId: '2',
                 currentStoreNumber: '5',
                 barCode: '',
                 goodName: '',
@@ -237,7 +251,7 @@ export default {
             },
             {
                 oper: '',
-                itemId: '1223',
+                itemId: '3',
                 currentStoreNumber: '6',
                 barCode: '',
                 goodName: '',
@@ -261,7 +275,8 @@ export default {
                 purchaseOrderNo: '',
                 totalStoreNumber: 0,
                 storeRemark: '',
-                list: []
+                list: [],
+                creatorId: ''
             },
             rules: {
                 storeType: [
@@ -383,20 +398,21 @@ export default {
             this.addFormData.totalStoreNumber = 0
             this.addFormData.list = []
             // 将表中商品信息添加到addFormData
-            let obj = {
-                itemId: '',
-                currentStoreNumber: '',
-                purchasingNumber: '',
-                remark: ''
-            }
-
             this.goodsInfoData.forEach(res => {
+                let obj = {
+                    itemId: '',
+                    currentStoreNumber: '',
+                    purchasingNumber: '',
+                    remark: ''
+                }
+
                 obj.itemId = res.itemId
-                obj.currentStoreNumber = res.currentStoreNumber
                 obj.remark = res.remark
+                obj.currentStoreNumber = res.currentStoreNumber
                 this.addFormData.totalStoreNumber += parseInt(obj.currentStoreNumber, 10)
                 this.addFormData.list.push(obj)
             })
+            this.addFormData.creatorId = '12346'
             // 通过仓库ID和采购单ID赋值给addFormData的name
             this.houseId_option.forEach(res => {
                 if (res.id === this.addFormData.storeHouseId) {
@@ -410,27 +426,157 @@ export default {
             })
             this.postData = ME.deepCopy(this.addFormData)
             this.postData.storeTime = Date.parse(this.postData.storeTime) / 1000
-            console.log(this.postData, "添加数据")
-            console.log(this.$route.params, "添加数据")
+            console.log(JSON.stringify(this.postData), "添加数据")
+            // 出入库操作
             if (this.$route.params.type === '入库') {
+                // 数据判空
+                for (let key in this.postData) {
+                    if (!this.postData[key]) {
+                        if (key == 'storeType') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择入库类型'
+                            })
+                            return
+                        }
+                        if (key == 'storeHouseId') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择入库仓库'
+                            })
+                            return
+                        }
+                        if (key == 'buyerId') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择采购单位'
+                            })
+                            return
+                        }
+                        if (key == 'storeTime') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择入库时间'
+                            })
+                            return
+                        }
+                        if (key == 'storeNo') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择入库单号'
+                            })
+                            return
+                        }
+                        if (key == 'creator') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择制单人'
+                            })
+                            return
+                        }
+                    }
+                }
+                if (!this.postData.list[0].itemId) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择商品'
+                    })
+                    return
+                }
                 // 调取新增入库单的接口
                 API.addInboundOrder(this.postData).then(res => {
                     this.$message({
                         type:'success',
                         message:'入库单添加成功'
                     })
+
                 }).catch(error => {
 
                 })
             } else if (this.$route.params.type === '出库') {
-                this.postData.deliverHouseId = this.postData.storeHouseId
-                this.postData.deliverHouseName = this.postData.storeHouseName
+                this.$set(this.postData, 'deliverHouseId', this.postData.storeHouseId)
+                this.$set(this.postData, 'deliverHouseName', this.postData.storeHouseName)
+                this.$set(this.postData, 'deliverNo', this.postData.storeNo)
+                this.$set(this.postData, 'deliverTime', this.postData.storeTime)
+                this.$set(this.postData, 'deliverType', this.postData.storeType)
+                this.$set(this.postData, 'totalDeliverNumber', this.postData.totalStoreNumber)
+                this.$set(this.postData, 'deliverRemark', this.postData.storeRemark)
+                this.postData.list.forEach(res => {
+                    this.$set(res, 'deliverNumber', res.currentStoreNumber)
+                    this.$delete(res, 'currentStoreNumber')
+                })
                 this.$delete(this.postData, 'storeHouseId')
                 this.$delete(this.postData, 'storeHouseName')
+                this.$delete(this.postData, 'storeNo')
+                this.$delete(this.postData, 'storeTime')
+                this.$delete(this.postData, 'storeType')
+                this.$delete(this.postData, 'totalStoreNumber')
+                this.$delete(this.postData, 'storeRemark')
                 console.log(this.postData, '转化数据')
+                // 数据判空
+                for (let key in this.postData) {
+                    if (!this.postData[key]) {
+                        if (key == 'deliverType') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择出库类型'
+                            })
+                            return
+                        }
+                        if (key == 'deliverHouseId') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择出库仓库'
+                            })
+                            return
+                        }
+                        if (key == 'buyerId') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择采购单位'
+                            })
+                            return
+                        }
+                        if (key == 'deliverTime') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择出库时间'
+                            })
+                            return
+                        }
+                        if (key == 'deliverNo') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择出库单号'
+                            })
+                            return
+                        }
+                        if (key == 'creator') {
+                            this.$message({
+                                type: 'warning',
+                                message: '请选择制单人'
+                            })
+                            return
+                        }
+                    }
+                }
+                if (!this.postData.list[0].itemId) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择商品'
+                    })
+                    return
+                }
+                // 调取新增出库单的接口
+                API.addOutboundOrder(this.postData).then(res => {
+                    this.$message({
+                        type:'success',
+                        message:'出库单添加成功'
+                    })
+                }).catch(error => {
 
+                })
             }
-
         }
     },
     created(){},

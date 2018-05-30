@@ -133,6 +133,11 @@
                     <el-table-column
                         prop="storeType"
                         label="入库类型">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.storeType == 1" >{{$allEnumeration.storeType[1]}}</span>
+                            <span v-if="scope.row.storeType == 2" >{{$allEnumeration.storeType[2]}}</span>
+                            <span v-if="scope.row.storeType == 3" >{{$allEnumeration.storeType[3]}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="creator"
@@ -145,11 +150,11 @@
                     <el-table-column
                         label="审核状态">
                         <template slot-scope="scope">
-                            <span v-if="scope.row.auditStatus == 0" class="auditStatus_0">待审核</span>
-                            <span v-if="scope.row.auditStatus == 1" class="auditStatus_1">审核中</span>
-                            <span v-if="scope.row.auditStatus == 2" class="auditStatus_2">通过</span>
-                            <span v-if="scope.row.auditStatus == 3" class="auditStatus_3">审核未通过</span>
-                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_4">撤销</span>
+                            <span v-if="scope.row.auditStatus == 0" class="auditStatus_0">{{$allEnumeration.auditStatus[0]}}</span>
+                            <span v-if="scope.row.auditStatus == 1" class="auditStatus_1">{{$allEnumeration.auditStatus[1]}}</span>
+                            <span v-if="scope.row.auditStatus == 2" class="auditStatus_2">{{$allEnumeration.auditStatus[2]}}</span>
+                            <span v-if="scope.row.auditStatus == 3" class="auditStatus_3">{{$allEnumeration.auditStatus[3]}}</span>
+                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_4">{{$allEnumeration.auditStatus[4]}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -281,7 +286,7 @@ export default {
         },
         // 跳转详情页
         inBoundDetail(index, data) {
-            this.$router.push({name: '出入库详情', params: {id: data.storeNo || 123, type: '入库'}})
+            this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'inbound'}})
         },
         // 修改
         editTable(index, data) {
@@ -411,7 +416,7 @@ export default {
         position: relative;
     }
     .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
-        width: 390px;
+        width: 360px;
     }
     .el-form, .el-table{
         color: #636365;

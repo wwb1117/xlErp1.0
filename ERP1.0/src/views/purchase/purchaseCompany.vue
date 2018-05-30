@@ -187,13 +187,13 @@ export default {
         },
         tablePropEvent(rowid, type){
             if (type == 1){
-                this.$store.commit('setBuyerId', rowid)
+                this.$store.commit('setCurrentModelId', rowid)
                 this.$router.push({
                     path: '/lookPurchaseCompany'
                 })
             }
             if (type == 2){
-                this.$store.commit('setBuyerId', rowid)
+                this.$store.commit('setCurrentModelId', rowid)
                 this.$router.push({
                     path: '/editPurchaseCompany'
                 })

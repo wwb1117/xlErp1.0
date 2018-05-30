@@ -122,6 +122,17 @@ export default {
             }
         }).then(checkStatus)
     },
+    postJSON(url, data) {
+        return axios({
+            method: 'post',
+            url,
+            data: JSON.stringify(data),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        }).then(checkStatus)
+    },
     get(url, params) {
         return axios({
             method: 'get',
