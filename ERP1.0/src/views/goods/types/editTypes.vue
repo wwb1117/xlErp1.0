@@ -20,9 +20,9 @@
                             <el-table-column
                                 width='55'>
                                 <template slot-scope="scope">
-                                    <div class="icon_box" style="height:50px;line-height:50px;margin-left:10px">
+                                    <div class="icon_box" style="height:50px;line-height:50px">
                                         <i class="el-icon-plus" style="font-weight:700" @click="editTypesnum"></i>
-                                        <!-- <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(edit)"></i> -->
+                                        <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeTypesnum(scope)"></i>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -59,15 +59,13 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-
                     </el-form-item>
                     <el-form-item label="备注" class="other_text">
                         <el-input
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                            v-model="edit.text"
-                        >
+                            v-model="this.text">
                         </el-input>
                     </el-form-item>
                 </el-form>
@@ -80,105 +78,90 @@
     </section>
 </template>
 <script>
-import bus from '@/assets/eventBus.js'
+// import bus from '@/assets/eventBus.js'
 import api from 'api/goods'
+// import qs from 'qs'
 
 export default {
     data() {
         return {
-            // 规格名称、备注
-            edit: {
-                name: '',
-                text: ''
-            },
-            // 规格值
 
-            editNum: [
-                {
-                    editname: '',
-                    bolean: '',
-                    num: '',
-                    value1: true,
-                    value2: true
-                }
-            ],
+            // 规格值   // 规格名称、备注
+
+            text: '',
             unitMsg: '',
             from: []
+            // itemSupplyPropertyParams: ''
         }
     },
     methods: {
         editTypesnum() {
             let obj = {
-                editname: '',
-                bolean: '',
-                num: '',
-                value1: true,
-                value2: true
+                id: '',
+                remark: '',
+                skuNumber: '',
+                unitMsg: '',
+                isDeleted: '0'
             }
 
-            this.editNum.push(obj)
+            this.from.push(obj)
 
-            console.log(this.from)
         },
-        // removeTypesnum(data) {
-        //     if (this.typesNum.length > 1){
-        //         this.typesNum.splice(data.$index, 1)
-        //     }
-        // },
+        removeTypesnum(data) {
+            if (this.from.length > 1){
+                this.from.splice(data.$index, 1)
+            }
+        },
         returnPrev() {
             this.from = []
             this.$router.go(-1)
         },
 
         trueconfim() {
-            let itemSupplyPropertyDTOs = JSON.stringify(this.from)
+            let obj = {
+                itemSupplyPropertyParams : JSON.stringify(this.from)
+            }
 
-            console.log(this.from)
-            // console.log(itemSupplyPropertyDTOs)
-            api.putsupplyPropertyupdate(itemSupplyPropertyDTOs).then((response)=>{
-                console.log(response)
+            api.putsupplyPropertyupdate(obj).then((response)=>{
+                this.$router.go(-1)
+                // console.log(response)
             }).catch((error)=>{
                 console.log(error)
             })
-            // this.$router.go(-1)
+
         }
 
     },
     created() {
-        var that = this
+        var msg = this.$store.state.goods.typesMsg
 
-        bus.$on('editTypes', function(msg){
-            let obj = {
-                unitMsg: msg
-            }
+        let obj = {
+            unitMsg: msg
+        }
 
-            that.unitMsg = msg
-            api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
-                that.from = response.data
-
-                // console.log(response.data)
-            }).catch((error)=>{
-                console.log(error)
-            })
+        this.unitMsg = msg
+        api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
+            this.from = response.data
+            // console.log(response.data)
+        }).catch((error)=>{
+            console.log(error)
         })
 
     },
     activated() {
-        var that = this
+        var msg = this.$store.state.goods.typesMsg
 
-        bus.$on('editTypes', function(msg){
-            let obj = {
-                unitMsg: msg
-            }
+        let obj = {
+            unitMsg: msg
+        }
 
-            that.unitMsg = msg
-            api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
-                that.from = response.data
-
-                // console.log(response.data)
-            }).catch((error)=>{
-                console.log(error)
-            })
+        this.unitMsg = msg
+        api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
+            this.from = response.data
+            // console.log(response.data)
+            console.log(this.from)
+        }).catch((error)=>{
+            console.log(error)
         })
 
     }
@@ -205,6 +188,7 @@ export default {
     color: #5e6161;
     background: white;
     padding: 30px;
+    overflow: auto
 }
 .editTypes_box .el-form-item{
     height: 50px

@@ -66,8 +66,7 @@
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                            v-model="this.text"
-                        >
+                            v-model="this.text">
                         </el-input>
                     </el-form-item>
                 </el-form>
@@ -86,7 +85,6 @@ export default {
     data() {
         return {
             // 规格名称、备注
-            unitMsga: '',
             text: '',
 
             // 规格值
@@ -94,9 +92,8 @@ export default {
                 {
                     skuNumber: '',
                     unitMsg: '',
-                    price: '',
-                    sort: '',
-                    isDeleted: false
+                    isDeleted: false,
+                    remark: ''
                 }
             ]
 
@@ -107,9 +104,8 @@ export default {
             let obj = {
                 skuNumber: '',
                 unitMsg: '',
-                price: '',
-                sort: '',
-                isDeleted: false
+                isDeleted: false,
+                remark: ''
             }
 
             this.typesNum.push(obj)
@@ -139,7 +135,7 @@ export default {
             }).catch((error)=>{
                 console.log(error)
             })
-            this.$router.go(-1)
+            // this.$router.go(-1)
         }
     }
 

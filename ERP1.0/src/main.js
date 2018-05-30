@@ -56,9 +56,9 @@ new Vue({
     components: { App },
     template: '<App/>'
 })
-router.push({
-    path: '/main'
-});
+// router.push({
+//     path: '/main'
+// });
 
 window.onresize = function(){
     winheight = document.documentElement.clientHeight
