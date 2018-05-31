@@ -270,9 +270,11 @@ export default {
     },
     created() {
         this.get()
+
     },
     activated() {
         this.get()
+
     }
 }
 </script>

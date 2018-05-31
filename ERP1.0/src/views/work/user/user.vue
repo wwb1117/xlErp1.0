@@ -4,10 +4,10 @@
         <header class="user_top" >
             <el-tabs v-model="activeName" @tab-click="clickTab">
                 <el-tab-pane label="用户列表" name="first" >
-                    <userlist></userlist>
+                    <userlist ref="userList"></userlist>
                 </el-tab-pane>
                 <el-tab-pane label="权限组" name="second"  >
-                    <autohority></autohority>
+                    <autohority ref='authorityList'></autohority>
                 </el-tab-pane>
             </el-tabs>
 
@@ -102,7 +102,9 @@ export default {
             addlist: [],
             role: {
                 roleName: ''
-            }
+            },
+
+            changeZ: 0
         }
     },
     methods: {
@@ -126,8 +128,8 @@ export default {
             }
 
             api.postuseradd(obj).then((response)=>{
-
-                this.get()
+                this.getP()
+                this.$refs.userList.get();
             }).catch((error)=>{
                 console.log(error)
             })
@@ -135,6 +137,7 @@ export default {
             this.$router.push('userManage')
             this.addusertext = ''
             this.addlist = []
+            this.changeZ = 1
 
         },
         addautohorityconfirm() {
@@ -143,7 +146,8 @@ export default {
             this.role.roleName = this.addautohoritytext
             api.postroleadd(this.role).then((response)=>{
                 this.addautohoritytext = ''
-                this.get()
+                this.getP()
+                this.$refs.authorityList.get();
             }).catch((error)=>{
                 console.log(error)
             })
@@ -151,7 +155,7 @@ export default {
             this.$router.push('userManage')
 
         },
-        get() {
+        getP() {
             api.getrolelist().then((response) => {
                 // console.log(response.data.list)
                 this.add = response.data.list
@@ -164,7 +168,7 @@ export default {
         autohority
     },
     created() {
-        this.get()
+        this.getP()
     }
 
 }
