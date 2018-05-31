@@ -174,6 +174,8 @@ export default {
             api.getPurchaseListItem(purId).then((response) => {
                 this.purchaseListInfo = response.data
                 this.goodsInfoData = response.data.list
+
+                console.log(response)
             })
         },
         getStoreRecordInfo(){

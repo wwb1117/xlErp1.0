@@ -13,33 +13,33 @@
                         <span :style="{fontSize: '16px'}">高级搜索</span>
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
-                    <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
+                    <el-form class="myForm" :inline="true" :model="tableParam" label-position="right" size="small" label-width="80px">
                         <el-form-item label="退货单号">
-                            <el-input v-model="superFormData.rejectNo" placeholder="请输入采购单号"></el-input>
+                            <el-input v-model="tableParam.ReturnOrderNo" placeholder="请输入采购单号"></el-input>
                         </el-form-item>
                         <el-form-item label="经办人">
-                            <el-input v-model="superFormData.leaderMan" placeholder="请输入经办人"></el-input>
+                            <el-input v-model="tableParam.operator" placeholder="请输入经办人"></el-input>
                         </el-form-item>
                         <el-form-item label="制单人">
-                            <el-input v-model="superFormData.makeListMan" placeholder="请输入制单人"></el-input>
+                            <el-input v-model="tableParam.makeListMan" placeholder="请输入制单人"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item label="供应商">
-                            <el-select v-model="superFormData.supplier" placeholder="请输入采购员">
+                            <el-select v-model="tableParam.supplier" placeholder="请输入采购员">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购单位">
-                            <el-select v-model="superFormData.purchaseCompany" placeholder="请输入采购单位">
+                            <el-select v-model="tableParam.buyerId" placeholder="请输入采购单位">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="退货仓库">
-                            <el-select v-model="superFormData.inRepository" placeholder="请输入入库仓库">
+                            <el-select v-model="tableParam.houseId" placeholder="请输入入库仓库">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -47,7 +47,7 @@
                         </el-form-item>
                         <br>
                         <el-form-item label="审核状态">
-                            <el-select v-model="superFormData.reviewState" placeholder="请输入审核状态">
+                            <el-select v-model="tableParam.auditStatus" placeholder="请输入审核状态">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -55,9 +55,10 @@
                         </el-form-item>
                         <el-form-item label="采购时间">
                             <el-date-picker
-                                v-model="superFormData.purchaseDate"
                                 type="daterange"
                                 :editable="false"
+                                value-format="timestamp"
+                                @change="datePickerChange"
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期">
@@ -77,7 +78,7 @@
                         placeholder="请输入退货单号"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="tableParam.searchStr">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
@@ -196,18 +197,17 @@ export default {
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
-            superFormData: {
-                purchaseList: '7758521',
-                supplier: '',
-                purchaseCompany: '',
-                inRepository: '402',
-                purchaseRMB: '888,000,00',
-                makeListMan: '李明珠',
-                leaderMan: '官人',
-                purchaseDate: '2018-05-16',
-                inState: '已入库',
-                reviewState: '已审核',
-                prop: ''
+            tableParam: {
+                storeStatus: "",
+                buyerId: "",
+                houseId: "",
+                auditStatus: "",
+                startTime: "",
+                endTime: "",
+                ReturnOrderNo: "",
+                pageNo: 1,
+                pageSize: 1,
+                searchStr: ''
             },
             isExportShow: false,
             tableData: [
@@ -295,6 +295,10 @@ export default {
             this.$router.push({
                 path: '/addPurchaseReject'
             })
+        },
+        datePickerChange(data){
+            this.tableParam.startTime = data[0] / 1000
+            this.tableParam.endTime = data[1] / 1000
         }
 
     },

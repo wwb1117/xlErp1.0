@@ -31,7 +31,7 @@ export default {
         return HttpClient.get('/store/list/' + data);
     },
     addPurchaseList(data){
-        return HttpClient.post('/purchase/insertOrder', data);
+        return HttpClient.postJSON('/purchase/insertOrder', data);
     },
     addStoreList(data){
         return HttpClient.post('/store/insertOrder', data);
@@ -51,6 +51,9 @@ export default {
     getSKUData(data){
         return HttpClient.get('/item/sku/list', data);
     },
+    addInStoreList(data){
+        return HttpClient.post('/store/insertOrder', data);
+    },
     /************************采购单位****************************** */
     getPurchaseComList(data){
         return HttpClient.get('/buyer/list', data);
@@ -66,7 +69,9 @@ export default {
     },
     onOffPurchaseComItem(data){
         return HttpClient.put('/buyer/status', data);
+    },
+    /************************采购退货****************************** */
+    getRejectListData(data){
+        return HttpClient.get('/returnOrder/findByCondition', data);
     }
-
-
 }
