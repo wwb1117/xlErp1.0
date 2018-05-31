@@ -54,6 +54,9 @@ export default {
     addInStoreList(data){
         return HttpClient.post('/store/insertOrder', data);
     },
+    invalidStoreRecode(data){
+        return HttpClient.put('/store/invalidOrder', data);
+    },
     /************************采购单位****************************** */
     getPurchaseComList(data){
         return HttpClient.get('/buyer/list', data);

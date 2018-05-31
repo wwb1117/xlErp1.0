@@ -36,24 +36,24 @@
                     width="50">
                     </el-table-column>
                     <el-table-column
-                    prop="id"
+                    prop="itemSku"
                     label="编号"
                     width="180">
                     </el-table-column>
                     <el-table-column
-                    prop="purchaseOrderId"
+                    prop="itemMac"
                     label="条码">
                     </el-table-column>
                     <el-table-column
-                    prop="itemId"
+                    prop="itemName"
                     label="商品">
                     </el-table-column>
                     <el-table-column
-                    prop="SKU"
+                    prop="itemSpec"
                     label="规格-SKU">
                     </el-table-column>
                     <el-table-column
-                    prop="qualityDate"
+                    prop="itemExp"
                     label="保质期">
                     </el-table-column>
                     <el-table-column
@@ -78,7 +78,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                    prop="unit"
+                    prop="itemQuantifierUnit"
                     label="单位">
                     </el-table-column>
                 </el-table>
@@ -88,6 +88,7 @@
                     <el-date-picker
                     v-model="formData.orderTime"
                     format="yyyy-MM-dd HH:mm"
+                    value-format="timestamp"
                     type="date"
                     placeholder="选择日期">
                     </el-date-picker>
@@ -136,7 +137,7 @@
 
             <div style="line-height: 30px">
                 <span class="title_title">入库仓库 : </span>
-                <span v-text="formData.storeHouseName" class="title_data"></span><br>
+                <span v-text="formData.purchaseHouseName" class="title_data"></span><br>
                 <span class="title_title">商品种类 : </span>
                 <span v-text="goodsInfoData.length" class="title_data"></span><br>
                 <span class="title_title">商品数量 : </span>
@@ -156,6 +157,7 @@
 
 <script>
 import api from 'api/purchase'
+import capi from 'api/common'
 export default {
     props: [
         'fatherValue'
@@ -166,6 +168,7 @@ export default {
             dialogVisible: false,
             repositorySelectData: [],
             buyerNameSelectData: [],
+            totalStoreNumber: 0,
             formData: {},
             goodsInfoData: [{
                 oper: '',
@@ -222,21 +225,26 @@ export default {
             })
         },
         addStoreList(){
+            this.totalStoreNumber = 0
+            this.goodsInfoData.forEach((item, index) => {
+                this.totalStoreNumber += parseFloat(item.currentStoreNumber)
+            })
+
             var paramobj = {
                 purchaseOrderId: this.$store.state.home.currentModelId,
                 purchaseOrderNo: this.formData.purchaseOrderNo,
                 buyerId: this.formData.buyerId,
                 buyerName: this.formData.buyerName,
-                storeHouseId: this.formData.storeHouseId,
-                storeHouseName: this.formData.storeHouseName,
+                storeHouseId: this.formData.purchaseHouseId,
+                storeHouseName: this.formData.purchaseHouseName,
                 storeType: this.formData.storeType,
-                storeTime: Date.parse(this.formData.orderTime) / 1000,
+                storeTime: Math.round(this.formData.orderTime / 1000),
                 storeNo: this.formData.storeNo,
                 operator: this.formData.operator,
                 creator: this.formData.creator,
                 creatorId: this.formData.creatorId,
 
-                totalStoreNumber: this.formData.purchasingTotalNumber,
+                totalStoreNumber: this.totalStoreNumber,
                 storeRemark: this.formData.remark,
                 list: this.goodsInfoData
             }
@@ -249,12 +257,13 @@ export default {
                     message: '入库成功'
                 });
                 this.dialogVisible = false
+                this.$router.go(-1)
             })
         },
         storeSelectEvent(val){
             this.repositorySelectData.forEach((item, index) => {
                 if (item.id == val) {
-                    this.formData.storeHouseName = item.warehouseName
+                    this.formData.purchaseHouseName = item.warehouseName
                 }
             })
         },
@@ -263,6 +272,12 @@ export default {
                 if (item.id == val) {
                     this.formData.buyerName = item.buyerCompanyName
                 }
+            })
+        },
+        getUserInfo(){
+            capi.getUserInfo().then((response) => {
+                this.formData.creator = response.data.userName
+                this.formData.creatorId = response.data.id
             })
         },
         isWrapShowEvent(){
@@ -276,9 +291,9 @@ export default {
             this.formData.storeType = '1'
             this.goodsInfoData = this.fatherValue.list
 
-            console.log(this.formData)
             this.getRepositorySelectData()
             this.getBuyerComSelectData()
+            this.getUserInfo()
         }
     },
     created(){

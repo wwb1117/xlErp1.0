@@ -139,8 +139,8 @@ export default {
             })
         },
         datePickerChange(data){
-            this.tableParam.startTime = data[0] / 1000
-            this.tableParam.endTime = data[1] / 1000
+            this.tableParam.startTime = Math.round(data[0] / 1000)
+            this.tableParam.endTime = Math.round(data[1] / 1000)
         }
     },
     created(){},

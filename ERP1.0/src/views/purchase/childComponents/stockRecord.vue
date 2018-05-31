@@ -9,7 +9,7 @@
         <div class="btn_wrap">
             <div style="float: left">
                 <span>入库时间 : </span>
-                <span>2018-05-19 17:58</span>
+                <span>{{formData.storeTime | time_m}}</span>
             </div>
             <div style="float: right">
                 <el-button size="small" :style="{width: '90px'}">导出</el-button>
@@ -31,24 +31,24 @@
                 width="50">
                 </el-table-column>
                 <el-table-column
-                prop="selfNum"
+                prop="itemSku"
                 label="编号"
                 width="180">
                 </el-table-column>
                 <el-table-column
-                prop="barCode"
+                prop="itemMac"
                 label="条码">
                 </el-table-column>
                 <el-table-column
-                prop="goodName"
+                prop="itemName"
                 label="商品">
                 </el-table-column>
                 <el-table-column
-                prop="SKU"
+                prop="itemSpec"
                 label="规格-SKU">
                 </el-table-column>
                 <el-table-column
-                prop="qualityDate"
+                prop="itemExp"
                 label="保质期">
                 </el-table-column>
                 <el-table-column
@@ -56,7 +56,7 @@
                 label="生产日期">
                 </el-table-column>
                 <el-table-column
-                prop="purchaseNum"
+                prop="purchasingNumber"
                 label="采购数">
                 </el-table-column>
                 <el-table-column
@@ -64,11 +64,11 @@
                 label="已入库数">
                 </el-table-column>
                 <el-table-column
-                prop="itemRepositoryNum"
+                prop="currentStoreNumber"
                 label="本次入库数">
                 </el-table-column>
                 <el-table-column
-                prop="unit"
+                prop="itemQuantifierUnit"
                 label="单位">
                 </el-table-column>
             </el-table>
@@ -76,25 +76,25 @@
         <div class="table_bottom color_gray fontWe_500">
             <div style="margin-bottom: 30px; line-height: 30px">
                 <span class="title_title">入库单号 : </span>
-                <span class="title_data">456655222222222222522</span>
+                <span v-text="formData.storeNo" class="title_data"></span>
                 <span class="title_title">入库仓库 : </span>
-                <span class="title_data">默认仓库</span>
+                <span v-text="formData.storeHouseName" class="title_data"></span>
                 <span class="title_title">经办人 : </span>
-                <span class="title_data">李思思</span><br>
+                <span v-text="formData.operator" class="title_data"></span><br>
                 <span class="title_title">入库备注 : </span>
-                <span ></span><span>我是一只小鸭子,咿呀,咿呀, 呦,, </span>
+                <span v-text="formData.storeRemark"></span>
                 <!-- <span class="title_title">采购时间 : </span>
                 <span class="title_data">2018-05-18 16:34</span> -->
             </div>
             <div style="margin-bottom: 30px; line-height: 30px">
                 <span class="title_title">采购单号 : </span>
-                <span class="title_data">456655222222222222522</span>
+                <span v-text="formData.purchaseOrderNo" class="title_data"></span>
                 <span class="title_title">采购员 : </span>
-                <span class="title_data">章撒</span>
+                <span v-text="baseInfoData.purchasingAgent" class="title_data"></span>
                 <span class="title_title">制单人 : </span>
-                <span class="title_data">李思思</span><br>
+                <span v-text="baseInfoData.creator" class="title_data"></span><br>
                 <span class="title_title">采购备注 : </span>
-                <span ></span><span>我是一只小鸭子,咿呀,咿呀, 呦,, </span>
+                <span v-text="baseInfoData.purchaseRemark"></span>
                 <!-- <span class="title_title">采购时间 : </span>
                 <span class="title_data">2018-05-18 16:34</span> -->
             </div>
@@ -103,9 +103,9 @@
             title="作废记录"
             :visible.sync="dialogVisible"
             :close-on-click-modal="false"
+            @close="dialogCancelEvent"
             width="30%"
             >
-
             <div>
                 <el-input
                     type="textarea"
@@ -115,10 +115,9 @@
                 </el-input>
             </div>
 
-
             <span slot="footer" class="dialog-footer">
-                <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-                <el-button size="small" type="primary" @click="dialogSureEvent">确 定</el-button>
+                <el-button size="small" @click="dialogCancelEvent">取 消</el-button>
+                <el-button size="small" type="primary" @click="invalidRecodeEvent">确 定</el-button>
             </span>
        </el-dialog>
 
@@ -128,21 +127,18 @@
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
+    props: [
+        'fatherValue',
+        'baseInfo'
+    ],
     data(){
         return {
             dialogVisible: false,
             invalidRecord: '',
-            formData: {
-                inrepository: '',
-                purchaseCom: '',
-                inRepositoryDate: '',
-                repositoryNo: '8558558',
-                makerMan: 'wwb',
-                repositoryType: '',
-                marker: ''
-
-            },
+            formData: {},
+            baseInfoData: {},
             goodsInfoData: [{
                 oper: '',
                 selfNum: '11111',
@@ -166,16 +162,44 @@ export default {
         invalidBtnEvent(){
             this.dialogVisible = true
         },
-        dialogSureEvent(){
-            this.$router.push({
-                path: '/invalidRecord'
+        invalidRecodeEvent(){
+            var paramobj = {
+                id: this.fatherValue.id,
+                invalidReason: this.invalidRecord
+            }
+
+            api.invalidStoreRecode(paramobj).then((res) => {
+                this.$message({
+                    type: 'success',
+                    duration: 1500,
+                    showClose: true,
+                    message: '作废成功'
+                })
+                this.$router.push({
+                    path: '/invalidRecord'
+                })
+                this.dialogVisible = false
             })
+        },
+        dialogCancelEvent(){
+            this.invalidRecord = ""
             this.dialogVisible = false
         }
     },
     created(){},
     mounted(){
 
+    },
+    watch: {
+        fatherValue(newvalue){
+            console.log(newvalue)
+            this.formData = newvalue
+            this.goodsInfoData = newvalue.list
+        },
+        baseInfo(newvalue){
+            this.baseInfoData = newvalue
+            console.log(newvalue)
+        }
     }
 }
 </script>
