@@ -148,6 +148,7 @@
                             <el-date-picker
                             v-model="addFormData.orderTime"
                             format="yyyy-MM-dd"
+                            value-format="timestamp"
                             type="date"
                             placeholder="选择日期">
                             </el-date-picker>

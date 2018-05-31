@@ -407,6 +407,16 @@ export default {
             })
         },
         invalidRecordEvent(){
+            // if (this.selectTableData.length == 0 || this.selectTableData.length > 1) {
+            //     this.$message({
+            //         type: 'warning',
+            //         duration: 1500,
+            //         showClose: true,
+            //         message: '请选择一条表格数据进行查询'
+            //     })
+            //     return
+            // }
+            // console.log(this.selectTableData)
             this.$router.push({
                 path: '/invalidRecord'
             })

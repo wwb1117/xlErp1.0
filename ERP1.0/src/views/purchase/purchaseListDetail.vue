@@ -107,9 +107,9 @@
                             <span class="title_title">入库仓库 : </span>
                             <span v-text="storeBaseInfo.purchaseHouseName" class="title_data"></span>
                         </div>
-                        <div :style="{height: $store.state.home.modelContentHeight - 64 + 'px'}"  class="ruku_content">
+                        <div :style="{height: $store.state.home.modelContentHeight - 84 + 'px'}"  class="ruku_content">
                             <wait-ruku :fatherValue="storeBaseInfo"></wait-ruku>
-                            <stock-record v-for="item in storeListData" :key="item.id" :fatherValue="item"></stock-record>
+                            <stock-record v-for="item in storeListData" :key="item.id" :baseInfo="storeBaseInfo" :fatherValue="item"></stock-record>
                         </div>
                     </div>
 
@@ -183,8 +183,6 @@ export default {
             api.getStoreRecord(purId).then((response) => {
                 this.storeBaseInfo = response.data.obj
                 this.storeListData = response.data.list
-                console.log(this.storeListData)
-
             })
         }
     },
