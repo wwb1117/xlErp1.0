@@ -14,7 +14,7 @@
                         v-model="input"
                         style="width:378px">
                     </el-input>
-                    <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
+                    <el-button type="primary" size='small' style="margin-left:10px" @click="find">搜索</el-button>
                 </div>
                 <el-table
                     :data='date'
@@ -106,6 +106,22 @@ export default {
         },
         get() {
             api.getactionloglist().then((response)=>{
+
+                // console.log(response.data.list)
+                this.date = response.data.list
+
+            }).catch((error)=>{
+
+                console.log(error)
+
+            })
+        },
+        find() {
+            let obj = {
+                userName: this.input
+            }
+
+            api.getactionloglist(obj).then((response)=>{
 
                 // console.log(response.data.list)
                 this.date = response.data.list

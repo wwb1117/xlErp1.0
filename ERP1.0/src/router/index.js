@@ -58,6 +58,7 @@ import addGoods from '@/views/goods/list/addGoods'
 import items from '@/views/goods/items'
 import brand from '@/views/goods/brand/brand'
 import addbrand from '@/views/goods/brand/addbrand'
+import editbrand from '@/views/goods/brand/editbrand'
 import spec from '@/views/goods/spec/spec'
 import types from '@/views/goods/types/types'
 import addSpec from '@/views/goods/spec/addSpec'
@@ -137,7 +138,8 @@ var router = new Router({
                 {name: "商品分类", path: '/goodsItems', component: items},
 
                 {name: "商品品牌", path: '/goodsBrand', component: brand},
-                {name: "商品品牌", path: '/addBrand', component: addbrand},
+                {name: "新增品牌", path: '/addBrand', component: addbrand},
+                {name: "编辑品牌", path: '/editBrand', component: editbrand},
 
                 {name: "商品规格", path: '/goodsSpec', component: spec},
                 {name: "编辑规格", path: '/editSpec', component: editSpec},

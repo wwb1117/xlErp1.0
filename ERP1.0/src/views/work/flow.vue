@@ -52,7 +52,7 @@
                         label="操作"
                         width="200">
                         <template  slot-scope="scope">
-                            <el-button type="text" size="small" @click="writeflow" style="margin-right:10px">配置</el-button>
+                            <el-button type="text" size="small" @click="writeflow(scope)" style="margin-right:10px">配置</el-button>
                             <el-button type="text" size="small" @click="edittrue(scope)" style="margin-right:10px">编辑</el-button>
                             <el-button type="text" size="small" @click='deltrue(scope)' >删除</el-button>
                             <!-- 编辑 -->
@@ -182,7 +182,8 @@ export default {
             this.index = data.row.id
 
         },
-        writeflow() {
+        writeflow(data) {
+            this.$store.commit('setFlow', data.row.id)
             this.$router.push('configuration')
         },
         editconfirm() {
