@@ -23,12 +23,12 @@ export default {
         return HttpClient.delete(`/process/delete/${id}`)
     },
     // 设置审批流程
-    putprocesssetreview(data){
-        return HttpClient.put('/process/setreview', data)
+    postprocesssetreview(data){
+        return HttpClient.post('/process/setreview', data)
     },
     // 查询流程审批详情
-    putprocessmoreid(id){
-        return HttpClient.put(`/process/${id}`)
+    getprocessmoreid(id){
+        return HttpClient.get(`/process/${id}`)
     },
     // 获取流程配置用户
     getuseruserList(data) {

@@ -10,18 +10,20 @@
                 <div class="add_box" v-for="(item,index) in num" :key="index">
                     <el-button icon="el-icon-plus" circle @click='addbox'></el-button>
                     <el-select
-                        v-model="namelist"
+                        v-model="item.namelist"
                         multiple
                         filterable
                         allow-create
                         default-first-option
                         size='small'
-                        style="width:388px;margin-left:20px">
+                        style="width:388px;margin-left:20px"
+                        @focus='focus()'>
                         <el-option
-                            v-for="item in name"
-                            :key="item.id"
-                            :label="item.userName"
-                            :value="item.id">
+                            v-for="date in name"
+                            :key="date.id"
+                            :label="date.userName"
+                            :disabled="date.disabled"
+                            :value="date.id">
                         </el-option>
                     </el-select>
                     <i class="el-icon-close closethat" style="margin-left:10px" @click="closethat(index)"></i>
@@ -29,7 +31,7 @@
             </div>
         </section>
         <footer class="configuration_bottom">
-            <el-button type="primary" size='small' style="margin:10px 0 0 30px">保存</el-button>
+            <el-button type="primary" size='small' style="margin:10px 0 0 30px" @click='trueconfim'>保存</el-button>
             <el-button  size='small' style="margin:10px 0 0 10px">取消</el-button>
         </footer>
     </section>
@@ -44,7 +46,8 @@ export default {
             name: [
                 // {
                 //     value: 'HTML',
-                //     label: 'HTML'
+                //     label: 'HTML',
+                //     a: false
                 // },
                 // {
                 //     value: 'CSS',
@@ -55,51 +58,226 @@ export default {
                 //     label: 'JavaScript'
                 // }
             ],
-            namelist: [],
-            num: ['1'],
 
-            div: []
+            shu: '',
+
+            num: [
+                {
+                    namelist: []
+                }
+            ],
+
+            update:[],
+
+            upname:[
+                {
+                    idname:[]
+                }
+            ],
+
+            date:[]
+
         }
     },
     methods: {
         addbox() {
-            this.num.push('1')
-            // this.add()
-            // console.log(this.div)
+            let obj = {
+                namelist: []
+            }
+
+            let obje = {
+                idname: []
+            }
+
+            this.num.push(obj)
+            this.upname.push(obje)
+
         },
         closethat(data) {
-            if (this.num.length > 0){
+            if (this.num.length > 1){
                 this.num.splice(data, 1)
             }
         },
+        trueconfim() {
+
+            for (var q in this.num){
+
+                for (var w in this.num[q].namelist){
+
+                    for (var e in this.name){
+
+                        if (this.num[q].namelist[w] == this.name[e].id){
+
+                            this.upname[q].idname.push(this.name[e].userName)
+
+                        }
+
+                    }
+                }
+            }
+
+            var a = 0
+            var b = 0
+
+            for (var i in this.num){
+                a++
+
+                for (var k in this.num[i].namelist){
+
+                    if (a == this.num.length){
+                        b = 1
+                    }
+                    let obj = {
+                        reviewProcessUserId: this.num[i].namelist[k],
+                        reviewProcessUserName: this.upname[i].idname[k],
+                        reviewProcessSort: a,
+                        isFinal: b
+                    }
+
+                    this.update.push(obj)
+
+                }
+
+            }
+
+            let obj = {
+                reviewProcessId: this.shu,
+                reviewProcessItems: JSON.stringify(this.update)
+            }
+
+            api.postprocesssetreview(obj).then((response)=>{
+                this.num = [
+                    {
+                        namelist: []
+                    }
+                ]
+                this.idname = [
+                    {
+                        idname: []
+                    }
+                ]
+                this.update = []
+                this.id = ''
+                this.$router.go(-1)
+
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+
         get() {
             api.getuseruserList().then((response)=>{
                 this.name = response.data
                 // console.log(response)
+                for (var s in this.name){
+                    this.name[s].disabled = false
+                }
+
+                // console.log(this.name)
             }).catch((error)=>{
                 console.log(error)
             })
+
+
+        },
+
+        list() {
+
+            api.getprocessmoreid(this.shu).then((response)=>{
+                this.num = [
+                    {
+                        namelist: []
+                    }
+                ]
+                this.idname = [
+                    {
+                        idname: []
+                    }
+                ]
+                this.update = []
+                this.id = ''
+
+                this.date = response.data
+                // console.log(this.date)
+                var a = this.date[this.date.length - 1].reviewProcessSort
+
+                for (var i = 0 ; i <= a - 1 ;i ++){
+                    let obj = {
+                        namelist: []
+                    }
+
+                    let obje = {
+                        idname: []
+                    }
+
+                    this.num.push(obj)
+                    this.upname.push(obje)
+
+                    for (var k = 0 ; k < this.date.length; k ++){
+
+                        if (this.date[k].reviewProcessSort == i + 1){
+
+                            this.num[i].namelist.push(this.date[k].reviewProcessUserId)
+                            this.upname[i].idname.push(this.date[k].reviewProcessUserName)
+
+                        }
+                    }
+
+                }
+
+                this.num.splice(this.num.length - 1, 1)
+                // console.log(this.num)
+                for (var z in this.num){
+
+                    for (var x in this.num[z].namelist){
+
+                        for (var c in this.name){
+
+                            if (this.name[c].id == this.num[z].namelist[x]){
+                                this.name[c].disabled = true
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+
+        focus() {
+            for (var z in this.num){
+
+                for (var x in this.num[z].namelist){
+
+                    for (var c in this.name){
+
+                        if (this.name[c].id == this.num[z].namelist[x]){
+                            this.name[c].disabled = true
+                        }
+
+                    }
+
+                }
+
+            }
         }
-        // add() {
-        //     var that = this
 
-        //     for (var i in that.namelist){
-
-        //         if (that.div.indexOf(that.namelist[i]) == -1){
-        //             that.div.push(that.namelist[i])
-        //         }
-
-        //     }
-
-        //     return this.div
-        // }
     },
 
     created() {
+        this.shu = this.$store.state.home.flowId
         this.get()
+        this.list()
+
     },
     activated() {
+        this.shu = this.$store.state.home.flowId
         this.get()
+        this.list()
     }
 }
 </script>

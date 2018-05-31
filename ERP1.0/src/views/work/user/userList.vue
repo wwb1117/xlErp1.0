@@ -96,9 +96,6 @@
                 </el-table-column>
             </el-table>
         </div>
-
-
-
     </section>
 </template>
 <script>
@@ -180,32 +177,31 @@ export default {
             this.name = data.row.userName
 
             // console.log(data)
-            // this.list = this.editlist
-            // let arr = data.row.roleName.split(",")
+            this.list = this.editlist
 
-            // this.editlist = []
+            let arr = data.row.roleName.split(",")
 
-            // for (var i in arr){
-            //     this.editlist[i] = arr[i]
-            // }
+            this.editlist = []
+
+            for (var i in arr){
+                this.editlist[i] = arr[i]
+            }
+            for (var k in this.editlist){
+
+                for (var y in this.edit){
+
+                    if (this.edit[y].roleName == this.editlist[k]){
+
+                        this.editlist[k] = this.edit[k].id
+                    }
+                }
+
+            }
 
             this.index = data.row.id
 
         },
         editconfirm() {
-
-
-            // for (var k in this.editlist){
-
-            //     for (var y in this.edit){
-
-            //         if (this.edit[y].roleName == this.editlist[k]){
-
-            //             this.editlist[k] = this.edit[k].id
-            //         }
-            //     }
-
-            // }
 
             this.edituesr = false
             for (var i in this.user){
