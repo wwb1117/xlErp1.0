@@ -117,7 +117,7 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="itemId"
+                                prop="itemSku"
                                 label="编号"
                                 width="180">
                                 <template slot-scope="scope">
@@ -139,23 +139,23 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="barCode"
+                                prop="itemMac"
                                 label="条码">
                             </el-table-column>
                             <el-table-column
-                                prop="goodName"
+                                prop="itemName"
                                 label="商品">
                             </el-table-column>
                             <el-table-column
-                                prop="SKU"
+                                prop="itemSpec"
                                 label="规格-SKU">
                             </el-table-column>
                             <el-table-column
-                                prop="qualityDate"
+                                prop="itemExp"
                                 label="保质期">
                             </el-table-column>
                             <el-table-column
-                                prop="productData"
+                                prop="productionDate"
                                 label="生产日期">
                             </el-table-column>
                             <el-table-column
@@ -185,7 +185,7 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="unit"
+                                prop="itemQuantifierUnit"
                                 label="单位">
                             </el-table-column>
                             <el-table-column
@@ -207,13 +207,13 @@
                         </el-form-item>
                         <br>
                         <el-form-item prop="creator" label="制单人">
-                            <el-input v-model="addFormData.creator" placeholder="请输入制单人"></el-input>
+                            <el-input v-model="addFormData.creator" placeholder="请输入制单人" disabled="true"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item class="marker" :style="{width: '700px'}" prop="storeRemark" label="备注">
                             <el-input type="textarea" :style="{width: '530px'}" :rows="4" v-model="addFormData.storeRemark" placeholder="请输入备注信息，最多不超过100字"></el-input>
                         </el-form-item>
-            </div>
+                    </div>
                 </el-form>
             </div>
         </div>

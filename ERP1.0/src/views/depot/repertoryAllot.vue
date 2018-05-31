@@ -166,7 +166,7 @@
                         label="操作">
                         <template slot-scope="scope">
                             <el-button
-                                @click.native.prevent="inAllotDetail(scope.$index, tableData)"
+                                @click.native.prevent="inAllotDetail(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
                                 详情
@@ -231,16 +231,16 @@ export default {
             tableHeight: 500,
             inventoryAllocationNo: '',
             searchFormData: {
-                inventoryAllocationNo: '',
-                startTime: '',
-                endTime: '',
-                auditStatus: '',
-                houseId: '',
-                inventoryInId: '',
-                inventoryOutId: '',
-                inventoryOutName: '',
-                inventoryInName: '',
-                creator: ''
+                inventoryAllocationNo: null,
+                startTime: null,
+                endTime: null,
+                auditStatus: null,
+                houseId: null,
+                inventoryInId: null,
+                inventoryOutId: null,
+                inventoryOutName: null,
+                inventoryInName: null,
+                creator: null
             },
             buyerId_option: [],
             houseId_option: [],
@@ -257,7 +257,7 @@ export default {
                     inventoryAllocationTime: ''
                 }
             ],
-            total: ''
+            total: 0
         }
     },
     computed:{},
@@ -272,17 +272,17 @@ export default {
             console.log("调拨单列表res1")
             API.getAllotList(data).then(res => {
                 this.tableData = res.data.list
-                this.total = res.data.total || res.data.list.length
+                this.total = res.data.total || 0
                 console.log("调拨单列表res", this.tableData)
             })
         },
         inAllotDetail(index, data){
-            this.$router.push({name: '调拨单详情', params: {id: data.inventoryAllocationNo || 12314654, type: '调拨'}})
+            this.$router.push({name: '调拨单详情', params: {id: data.id, type: '调拨'}})
         },
         // 搜索清空
         clear() {
             for (let key in this.searchFormData) {
-                this.searchFormData[key] = ''
+                this.searchFormData[key] = null
             }
         },
         // 搜索
@@ -387,6 +387,10 @@ export default {
     mounted(){
         this.getPurchaseList()
         this.getAllotList()
+    },
+    activated(from, to, next) {
+        console.log(from, '从哪来')
+
     }
 }
 </script>

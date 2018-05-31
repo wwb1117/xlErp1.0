@@ -75,7 +75,7 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="itemId"
+                                prop="itemSku"
                                 label="编号"
                                 width="180">
                                 <template slot-scope="scope">
@@ -92,44 +92,44 @@
                                         <span @click="chooseGoodEvent" class="el-icon-more"></span>
                                     </div>
                                     <div v-if="scope.row.itemId !== ''">
-                                        <span v-text="scope.row.itemId"></span>
+                                        <span v-text="scope.row.itemSku"></span>
                                     </div>
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="barCode"
+                                prop="itemMac"
                                 label="条码">
                             </el-table-column>
                             <el-table-column
-                                prop="goodName"
+                                prop="itemName"
                                 label="商品">
                             </el-table-column>
                             <el-table-column
-                                prop="SKU"
+                                prop="itemSpec"
                                 label="规格-SKU">
                             </el-table-column>
                             <el-table-column
-                                prop="qualityDate"
+                                prop="itemExp"
                                 label="保质期">
                             </el-table-column>
                             <el-table-column
-                                prop="productData"
+                                prop="productionDate"
                                 label="生产日期">
                             </el-table-column>
                             <el-table-column
-                                prop="currentStoreNumber"
+                                prop="inventoryNumber"
                                 label="调拨数">
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.itemId === ''">
                                         <span></span>
                                     </div>
                                     <div v-if="scope.row.itemId !== ''">
-                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currentStoreNumber"></el-input>
+                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.inventoryNumber"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="unit"
+                                prop="itemQuantifierUnit"
                                 label="单位">
                             </el-table-column>
                             <el-table-column
@@ -138,7 +138,6 @@
                             </el-table-column>
                         </el-table>
                     </div>
-
                     <div class="goodInfoBox">
                         <el-form-item prop="inventoryAllocationNo" label="调拨单号">
                             <el-input v-model="addFormData.inventoryAllocationNo" placeholder="请输入调拨单号"></el-input>
@@ -155,7 +154,7 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item prop="creator" label="制单人">
-                            <el-input v-model="addFormData.creator" placeholder="制单人"></el-input>
+                            <el-input v-model="addFormData.creator" placeholder="制单人" ></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item class="marker" :style="{width: '700px'}" prop="remark" label="备注">
@@ -183,33 +182,19 @@ export default {
             querySearchText: '',
             goodsInfoData: [{
                 oper: '',
+                itemSku: '2',
                 itemId: '2',
                 itemSpec: '4瓶',
-                currentStoreNumber: 5,
-                barCode: '',
-                goodName: '',
-                SKU: '',
-                qualityDate: '',
-                productData: '',
-                unit: '',
-                unitPrice: '',
-                unitTotal: '',
-                remark: '入库备注1'
+                remark: '入库备注1',
+                inventoryNumber: 5
             },
             {
                 oper: '',
+                itemSku: '3',
                 itemId: '3',
                 itemSpec: '3瓶',
-                currentStoreNumber: 6,
-                barCode: '',
-                goodName: '',
-                SKU: '',
-                qualityDate: '',
-                productData: '',
-                unit: '',
-                unitPrice: '',
-                unitTotal: '',
-                remark: '入库备注2'
+                remark: '入库备注2',
+                inventoryNumber: 5
             }],
             addFormData: {
                 warehouseName: '',
@@ -257,17 +242,11 @@ export default {
         goodTableAddEvent(){
             var itemobj = {
                 oper: '',
-                selfNum: '',
-                barCode: '',
-                goodName: '',
-                SKU: '',
+                itemSku: '',
+                itemId: '',
                 itemSpec: '',
-                qualityDate: '',
-                productData: '',
-                purchaseNum: '',
-                unit: '',
-                unitPrice: '',
-                unitTotal: ''
+                remark: '',
+                inventoryNumber: ''
             }
 
             this.goodsInfoData.push(itemobj)
@@ -281,7 +260,7 @@ export default {
             // console.log(rowIndex)
             // console.log(this.goodsInfoData.length)
             if (columnIndex === 2) {
-                if (row.selfNum == ""){
+                if (row.itemId == ""){
                     return [1, 3];
                 } else {
                     return [1, 1];
@@ -318,7 +297,7 @@ export default {
                     sums[index] = '合计';
                     return;
                 }
-                if (column.property == 'currentStoreNumber' || column.property == 'unitTotal'){
+                if (column.property == 'inventoryNumber' || column.property == 'unitTotal'){
                     const values = data.map(item => Number(item[column.property]));
 
                     if (!values.every(value => isNaN(value))) {
@@ -391,7 +370,7 @@ export default {
                 obj.itemId = res.itemId
                 obj.remark = res.remark
                 obj.itemSpec = res.itemSpec
-                obj.inventoryNumber = res.currentStoreNumber
+                obj.inventoryNumber = res.inventoryNumber
                 this.addFormData.list.push(obj)
                 this.addFormData.totalInventoryNumber += parseInt(obj.inventoryNumber, 10)
             })
@@ -435,6 +414,7 @@ export default {
         this.getPurchaseList()
     },
     activated() {
+
         for (let key in this.addFormData) {
             this.addFormData[key] = ''
         }

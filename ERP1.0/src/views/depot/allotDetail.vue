@@ -9,22 +9,22 @@
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="tab_content">
                 <div class="tab_title fontWe_600">
-                    <span class="title_states">待{{$route.params.type}}</span>
+                    <span class="title_states">调拨单</span>
                     <div>
-                        <span class="title_title">{{$route.params.type}}仓库 : </span>
-                        <span class="title_data">杭州仓库</span>
+                        <span class="title_title">调拨仓库 : </span>
+                        <span class="title_data">{{tableData.warehouseName}}</span>
                     </div>
                     <div>
-                        <span class="title_title">{{$route.params.type}}单号 : </span>
-                        <span class="title_data">OUT-20180411-164612</span>
+                        <span class="title_title">调拨单号 : </span>
+                        <span class="title_data">{{tableData.inventoryAllocationNo}}</span>
                     </div>
                     <div>
-                        <span class="title_title">{{$route.params.type}}时间 : </span>
-                        <span class="title_data">2018-05-18 16:34</span>
+                        <span class="title_title">调拨时间 : </span>
+                        <span class="title_data">{{tableData.inventoryAllocationTime}}</span>
                     </div>
                     <div>
                         <span class="title_title">制单人 : </span>
-                        <span class="title_data">产品人</span>
+                        <span class="title_data">{{tableData.creator}}</span>
                     </div>
                 </div>
                 <div class="banner">
@@ -32,7 +32,7 @@
                 </div>
                 <div class="table_wrap" :style="{height: $store.state.home.modelContentHeight - 125 + 'px'}">
                     <el-table
-                        :data="goodsInfoData"
+                        :data="tableData.list"
                         show-summary
                         border
                         :summary-method="getSummaries"
@@ -43,38 +43,36 @@
                             width="50">
                         </el-table-column>
                         <el-table-column
-                            prop="selfNum"
+                            prop="itemSku"
                             label="编号"
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="barCode"
+                            prop="itemMac"
                             label="条码">
                         </el-table-column>
                         <el-table-column
-                            prop="goodName"
+                            prop="itemName"
                             label="商品名称">
                         </el-table-column>
                         <el-table-column
-                            prop="SKU"
+                            prop="itemSpec"
                             label="规格-SKU">
                         </el-table-column>
                         <el-table-column
-                            prop="qualityDate"
+                            prop="itemExp"
                             label="保质期">
                         </el-table-column>
                         <el-table-column
-                            prop="productData"
+                            prop="productionDate"
                             label="生产日期">
                         </el-table-column>
                         <el-table-column
-
-                            prop="purchaseNum"
-                            label="数量">
+                            prop="inventoryNumber"
+                            label="调拨数量">
                         </el-table-column>
                         <el-table-column
-
-                            prop="unit"
+                            prop="itemQuantifierUnit"
                             label="单位">
                         </el-table-column>
                         <el-table-column
@@ -85,30 +83,36 @@
                     <div class="table_bottom">
                         <div class="table_bottom_item" :style="{marginBottom :'10px'}">
                             <span class="table_bottom_title">调入单位 : </span>
-                            <span :style="{marginRight :'50px'}">联星贸易</span>
+                            <span :style="{marginRight :'50px'}">{{tableData.inventoryInName}}</span>
                             <span class="table_bottom_title">调出单位 : </span>
-                            <span>妈妈去哪儿</span>
+                            <span>{{tableData.inventoryOutName}}</span>
                         </div>
                         <div class="table_bottom_item">
                             <span class="table_bottom_title">{{$route.params.type}}备注 : </span>
-                            <span>暂无</span>
+                            <span>{{tableData.remark}}</span>
                         </div>
                         <div class="table_bottom_item">
                             <span class="table_bottom_title">经办人 : </span>
-                            <span>浩克</span>
+                            <span>{{tableData.operator}}</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="model_footer">
+            <el-button style="width: 90px" size="small" v-RouterBack>返回</el-button>
         </div>
 
     </div>
 </template>
 
 <script>
+import 'utils/allEnumeration'
+import API from 'api/depot'
 export default {
     data() {
         return {
+            tableData: {},
             goodsInfoData: [
                 {
                     selfNum: 's454645464',
@@ -154,14 +158,34 @@ export default {
                 }
             })
             return sums;
+        },
+        // 获取调拨单详情
+        getTableData() {
+            let id = this.$route.params.id
+
+            API.getAllotDetail(id).then(res => {
+                this.tableData = res.data
+                console.log(this.tableData, "测试数据")
+
+            })
+
         }
-    }
+    },
+    mounted(){
+        this.getTableData()
+    },
+    activated(){}
 }
 </script>
 
 <style scoped>
     .model_topcol .blue {
         color: #409eff;
+    }
+    .model_footer{
+        line-height: 50px;
+        text-align: left;
+        padding-left: 40px;
     }
     .tab_title{
         height: 65px;

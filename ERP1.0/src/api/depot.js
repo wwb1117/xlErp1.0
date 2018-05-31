@@ -113,5 +113,17 @@ export default {
     // 获取商品类目
     getItemAll() {
         return HttpClient.get(`/category/list`);
+    },
+    // 盘点导出
+    exportInventory(id, data) {
+        return HttpClient.get(`/storage/stockCount/export/${id}`, data)
+    },
+    // 盘点导入
+    importInventory(data) {
+        return HttpClient.post(`/storage/stockCount/import`, data)
+    },
+    // 盘点异常导出
+    reExportInventory(id) {
+        return HttpClient.get(`/storage/stockCount/reExport/${id}`)
     }
 }
