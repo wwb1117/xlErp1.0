@@ -34,7 +34,7 @@ export default {
         return HttpClient.postJSON('/purchase/insertOrder', data);
     },
     addStoreList(data){
-        return HttpClient.post('/store/insertOrder', data);
+        return HttpClient.postJSON('/store/insertOrder', data);
     },
     getRepoSelectData(){
         return HttpClient.get('/warehouse/findAll');

@@ -147,6 +147,7 @@
                         <el-form-item prop="orderTime" label="采购时间">
                             <el-date-picker
                             v-model="addFormData.orderTime"
+                            format="yyyy-MM-dd"
                             type="date"
                             placeholder="选择日期">
                             </el-date-picker>
@@ -378,7 +379,7 @@ export default {
         saveBtn(){
             this.$refs['addPurchaseListForm'].validate((valid) => {
                 if (valid) {
-                    this.addFormData.orderTime /= 1000
+                    this.addFormData.orderTime = Date.parse(this.addFormData.orderTime) / 1000
                     this.saveBtnEvent()
                 }
             })
