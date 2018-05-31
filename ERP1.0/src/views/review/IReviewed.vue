@@ -11,27 +11,22 @@
                         placeholder="请输入关键词"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="searchText">
+                        v-model="tableParam.searchStr">
                     </el-input>
-                    <el-button :style="{margin: '0 30px 0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button @click="getTableData" :style="{margin: '0 30px 0 10px'}" type="primary" size="small">搜索</el-button>
                     <el-date-picker
                         size="small"
                         v-model="searchTime"
+                        value-format="timestamp"
+                        @change="datePickerChange"
                         type="datetimerange"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期">
                     </el-date-picker>
 
-                    <el-select style="margin-left: 20px" size="small" v-model="searState" placeholder="审核状态">
-                        <el-option
-                        label="未通过"
-                        value="0">
-                        </el-option>
-                        <el-option
-                        label="通过"
-                        value="1">
-                        </el-option>
+                    <el-select style="margin-left: 20px" size="small" v-model="tableParam.auditStatus" placeholder="审核状态">
+                        <el-option v-for="key in $allEnumeration.auditStatus" :key="key" :label="$allEnumeration.auditStatus[key]" :value="key"> </el-option>
                     </el-select>
 
                 </div>
@@ -83,9 +78,9 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :current-page="1"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="400">
             </el-pagination>
@@ -94,38 +89,26 @@
 </template>
 
 <script>
+import api from 'api/review'
 export default {
     data(){
         return {
             searchText: '',
             searchTime: '',
             searState: '',
+            tableParam: {
+                auditorId: '1',
+                startTime: '',
+                endTime: '',
+                pageNo: 1,
+                pageSize: 10,
+                searchStr: '',
+                auditStatus: ''
+            },
             currentPage: 2,
             selectTableData: [],
             tableHeight: 500,
-            tableData: [
-                {
-                    flowName: '采购订单1',
-                    makeListMan: '联星贸易',
-                    setTime: '2018-05-16',
-                    state: '待审核',
-                    prop: ''
-                },
-                {
-                    flowName: '采购订单1',
-                    makeListMan: '联星贸易',
-                    setTime: '2018-05-16',
-                    state: '待审核',
-                    prop: ''
-                },
-                {
-                    flowName: '采购订单1',
-                    makeListMan: '联星贸易',
-                    setTime: '2018-05-16',
-                    state: '待审核',
-                    prop: ''
-                }
-            ]
+            tableData: []
         }
     },
     computed:{},
@@ -144,6 +127,15 @@ export default {
 
         handleSelectionChange(val){
 
+        },
+        datePickerChange(data){
+            this.tableParam.startTime = data[0] / 1000
+            this.tableParam.endTime = data[1] / 1000
+        },
+        getTableData(){
+            api.getIReviewList(this.tableParam).then((res) => {
+                console.log(res)
+            })
         }
     },
     created(){},

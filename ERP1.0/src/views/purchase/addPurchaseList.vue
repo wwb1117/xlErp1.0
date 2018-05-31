@@ -17,7 +17,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item prop="purchaseHouseId" label="入库仓库">
-                            <el-select @change="selectChangeEvent(1)" v-model="addFormData.purchaseHouseId" placeholder="请选择入库仓库">
+                            <el-select @change="selectChangeEvent(2)" v-model="addFormData.purchaseHouseId" placeholder="请选择入库仓库">
                                 <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
@@ -147,6 +147,7 @@
                         <el-form-item prop="orderTime" label="采购时间">
                             <el-date-picker
                             v-model="addFormData.orderTime"
+                            format="yyyy-MM-dd"
                             type="date"
                             placeholder="选择日期">
                             </el-date-picker>
@@ -159,7 +160,7 @@
                             <el-input v-model="addFormData.purchasingAgent" placeholder="请输入采购员"></el-input>
                         </el-form-item>
                         <el-form-item prop="creator" label="制单人">
-                            <el-input v-model="addFormData.creator" placeholder="请输入制单人"></el-input>
+                            <el-input :disabled="true" v-model="addFormData.creator" placeholder="请输入制单人"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item class="marker" :style="{width: '100%'}" prop="purchaseRemark" label="备注">
@@ -172,13 +173,14 @@
         </div>
         <div class="model_footer">
             <el-button @click="saveBtn" style="width: 90px" type="primary" size="small">保存</el-button>
-            <el-button style="width: 90px" size="small">取消</el-button>
+            <el-button v-RouterBack style="width: 90px" size="small">取消</el-button>
         </div>
     </div>
 </template>
 
 <script>
 import api from 'api/purchase'
+import capi from 'api/common'
 export default {
     data(){
         return {
@@ -188,24 +190,32 @@ export default {
             repositorySelectData: [],
             buyerNameSelectData: [],
             goodsInfoData: [],
+            initGoodsInfoData: [{
+                oper: '',
+                itemCode: '',
+                barCode: '',
+                title: '',
+                SKU: '',
+                expirationDate: '',
+                productData: '',
+                purchaseNum: '',
+                unit: '',
+                unitPrice: '',
+                unitTotal: '',
+                skuGroups: [""]
+            }],
             addFormData: {
                 buyerId: "",
                 buyerName: "",
-                creator: "",
+                creator: "mama",
+                creatorId: "1",
                 purchaseOrderNo: "",
-                list: [
-                    {
-                        itemId: "2",
-                        purchaseTotalPrice: "1000",
-                        purchaseUnitPrice: "10",
-                        purchasingNumber: "100"
-                    }
-                ],
+                list: [],
                 orderTime: "",
                 purchaseHouseId: "",
                 purchaseHouseName: "",
                 purchasingAgent: "",
-                purchasingTotalNumber: "",
+                purchasingTotalNumber: "0",
                 receivedPrice: "",
                 sellerId: "",
                 sellerName: "",
@@ -292,6 +302,10 @@ export default {
 
                     }
 
+                    if (column.property == 'purchaseNum'){
+                        this.addFormData.purchasingTotalNumber = sums[index]
+                    }
+
                     if (column.property == 'unitTotal'){
                         this.tableTotalUnit = sums[index]
                         this.addFormData.totalMoney = this.tableTotalUnit
@@ -365,18 +379,20 @@ export default {
         saveBtn(){
             this.$refs['addPurchaseListForm'].validate((valid) => {
                 if (valid) {
-                    this.addFormData.orderTime /= 1000
+                    this.addFormData.orderTime = Date.parse(this.addFormData.orderTime) / 1000
                     this.saveBtnEvent()
                 }
             })
         },
         saveBtnEvent(){
-
-
             var listArr = []
 
             this.goodsInfoData.forEach((item, index) => {
                 var itemobj = {
+                    itemId: item.id,
+                    purchasingNumber: item.purchaseNum,
+                    purchaseUnitPrice: item.unitPrice,
+                    purchaseTotalPrice: item.unitTotal,
                     itemSku: item.itemCode,
                     itemMac: item.barCode,
                     itemSpec: item.SKU,
@@ -390,7 +406,15 @@ export default {
             this.addFormData.list = listArr
 
             api.addPurchaseList(this.addFormData).then((response) => {
-                console.log(response)
+                this.$message({
+                    type: 'success',
+                    duration: 1500,
+                    showClose: true,
+                    message: '新增成功'
+                })
+
+                this.$router.go(-1)
+
             })
         },
         getRepositorySelectData(){
@@ -448,14 +472,30 @@ export default {
             })
 
             return itemobj
+        },
+        getUserInfo(){
+            capi.getUserInfo().then((response) => {
+                this.addFormData.creator = response.data.userName
+                this.addFormData.creatorId = response.data.id
+            })
+        },
+        addFormDataInit(){
+            for (var kk in this.addFormData) {
+                this.addFormData[kk] = ""
+            }
         }
     },
     activated(){
-
+        this.addFormDataInit()
+        this.getUserInfo()
         this.setGoodsTableData()
         this.getSupplierSelectData()
         this.getRepositorySelectData()
         this.getBuyerComSelectData()
+    },
+    beforeRouteLeave(to, from, next){
+        this.$store.commit('setGoodsInfoData', this.initGoodsInfoData)
+        next()
     },
     mounted(){}
 }

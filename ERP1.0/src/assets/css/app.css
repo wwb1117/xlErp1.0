@@ -6,11 +6,17 @@ ul{
     background: #ED3742;
     border-color: #ED3742;
 }
+.color_red{
+    color:  #ED3742;
+}
 .color_gray{
     color: #5f5f60;
 }
 .color_blue{
     color: #409EFF;
+}
+.color_brown{
+    color: #FF811B;
 }
 .fontWe_500{
     font-weight: 500;

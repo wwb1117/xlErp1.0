@@ -4,12 +4,12 @@
             <div class="title">
                 待入库商品清单
             </div>
-            <span class="el_icon el-icon-arrow-down"></span>
+            <span @click="isWrapShowEvent" class="el_icon" :class="[isWrapShow ? 'el-icon-arrow-down' : 'el-icon-arrow-up']"></span>
         </div>
-        <el-form class="myForm" :inline="true" label-position="right" :rules="rules" :model="formData" size="small" label-width="90px">
+        <el-form v-show="isWrapShow" class="myForm" :inline="true" label-position="right" :rules="rules" :model="formData" size="small" label-width="90px">
             <div class="btn_wrap">
                 <el-form-item label="入库仓库">
-                    <el-select @change="storeSelectEvent" v-model="formData.storeHouseId" placeholder="请选择入库仓库">
+                    <el-select @change="storeSelectEvent" v-model="formData.purchaseHouseId" placeholder="请选择入库仓库">
                     <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -69,11 +69,11 @@
                     label="已入库数">
                     </el-table-column>
                     <el-table-column
-                    prop="itemRepositoryNum"
+                    prop="currentStoreNumber"
                     label="本次入库数">
                         <template slot-scope="scope">
                             <div>
-                                <el-input size="small" @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.itemRepositoryNum"></el-input>
+                                <el-input size="small" @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currentStoreNumber"></el-input>
                             </div>
                         </template>
                     </el-table-column>
@@ -84,11 +84,10 @@
                 </el-table>
             </div>
             <div class="table_bottom_form">
-                <el-form-item prop="storeTime" label="入库时间">
+                <el-form-item prop="orderTime" label="入库时间">
                     <el-date-picker
-                    v-model="formData.storeTime"
-                    format="yyyy-MM-dd"
-                    value-format="timestamp"
+                    v-model="formData.orderTime"
+                    format="yyyy-MM-dd HH:mm"
                     type="date"
                     placeholder="选择日期">
                     </el-date-picker>
@@ -100,10 +99,10 @@
                     <el-input v-model="formData.operator" placeholder="请输入经办人"></el-input>
                 </el-form-item>
                 <el-form-item prop="storeType" label="入库类型">
-                    <el-select v-model="formData.storeType" placeholder="请选择采购单位">
+                    <el-select :disabled="true" v-model="formData.storeType" placeholder="请选择采购单位">
                     <el-option label="采购" value="1"></el-option>
-                    <el-option label="销售退货" value="2"></el-option>
-                    <el-option label="其他" value="3"></el-option>
+                    <!-- <el-option label="销售退货" value="2"></el-option>
+                    <el-option label="其他" value="3"></el-option> -->
                     </el-select>
                 </el-form-item><br>
                 <el-form-item prop="remark" label="备注">
@@ -113,13 +112,13 @@
             <div class="table_bottom color_gray fontWe_500">
                 <div style="margin-bottom: 30px; line-height: 30px">
                     <span class="title_title">采购单号 : </span>
-                    <span class="title_data" v-text="fatherValue.purchaseOrderNo"></span>
+                    <span class="title_data" v-text="formData.purchaseOrderNo"></span>
                     <span class="title_title">采购员 : </span>
-                    <span class="title_data" v-text="fatherValue.purchasingAgent"></span>
+                    <span class="title_data" v-text="formData.purchasingAgent"></span>
                     <span class="title_title">制单人 : </span>
-                    <span class="title_data" v-text="fatherValue.creator">李思思</span><br>
+                    <span class="title_data" v-text="formData.creator"></span><br>
                     <span class="title_title">采购备注 : </span>
-                    <span v-text="fatherValue.purchaseRemark"></span>
+                    <span v-text="formData.purchaseRemark"></span>
                     <!-- <span class="title_title">采购时间 : </span>
                     <span class="title_data">2018-05-18 16:34</span> -->
                 </div>
@@ -137,9 +136,9 @@
 
             <div style="line-height: 30px">
                 <span class="title_title">入库仓库 : </span>
-                <span v-text="this.formData.storeHouseName" class="title_data"></span><br>
+                <span v-text="formData.storeHouseName" class="title_data"></span><br>
                 <span class="title_title">商品种类 : </span>
-                <span class="title_data">2</span><br>
+                <span v-text="goodsInfoData.length" class="title_data"></span><br>
                 <span class="title_title">商品数量 : </span>
                 <span >100</span>
             </div>
@@ -163,17 +162,11 @@ export default {
     ],
     data(){
         return {
+            isWrapShow: true,
             dialogVisible: false,
             repositorySelectData: [],
             buyerNameSelectData: [],
-            formData: {
-                storeHouseId: "",
-                buyerId: "",
-                buyerName: "",
-                storeTime: "",
-                storeHouseName: ""
-
-            },
+            formData: {},
             goodsInfoData: [{
                 oper: '',
                 selfNum: '11111',
@@ -213,7 +206,7 @@ export default {
     computed:{},
     methods:{
         unitTatalEvent (data){
-            data.row.itemRepositoryNum = data.row.itemRepositoryNum.replace(/[^\d\.]/g, '')
+            data.row.currentStoreNumber = data.row.currentStoreNumber.replace(/[^\d\.]/g, '')
         },
         rukuBtnEvent(){
             this.dialogVisible = true
@@ -231,21 +224,21 @@ export default {
         addStoreList(){
             var paramobj = {
                 purchaseOrderId: this.$store.state.home.currentModelId,
-                purchaseOrderNo: '',
+                purchaseOrderNo: this.formData.purchaseOrderNo,
                 buyerId: this.formData.buyerId,
                 buyerName: this.formData.buyerName,
                 storeHouseId: this.formData.storeHouseId,
                 storeHouseName: this.formData.storeHouseName,
                 storeType: this.formData.storeType,
-                storeTime: this.formData.storeTime,
+                storeTime: Date.parse(this.formData.orderTime) / 1000,
                 storeNo: this.formData.storeNo,
                 operator: this.formData.operator,
                 creator: this.formData.creator,
+                creatorId: this.formData.creatorId,
 
-                // totalStoreNumber: this.formData.totalStoreNumber,
-                totalStoreNumber: 100,
-                storeRemark: this.formData.storeRemark,
-                list: []
+                totalStoreNumber: this.formData.purchasingTotalNumber,
+                storeRemark: this.formData.remark,
+                list: this.goodsInfoData
             }
 
             api.addStoreList(paramobj).then((response) => {
@@ -271,12 +264,19 @@ export default {
                     this.formData.buyerName = item.buyerCompanyName
                 }
             })
+        },
+        isWrapShowEvent(){
+            this.isWrapShow = !this.isWrapShow
         }
     },
     watch: {
         fatherValue(newvalue){
-            // this.formData = this.fatherValue
+            this.formData = this.fatherValue
+            this.formData.orderTime *= 1000
+            this.formData.storeType = '1'
             this.goodsInfoData = this.fatherValue.list
+
+            console.log(this.formData)
             this.getRepositorySelectData()
             this.getBuyerComSelectData()
         }

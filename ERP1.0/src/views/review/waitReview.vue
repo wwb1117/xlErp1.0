@@ -11,12 +11,14 @@
                         placeholder="请输入关键词"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="tableParam.searchStr">
                     </el-input>
-                    <el-button :style="{margin: '0 30px 0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button @click="getTableData" :style="{margin: '0 30px 0 10px'}" type="primary" size="small">搜索</el-button>
                     <el-date-picker
                         size="small"
                         v-model="serchTime"
+                        value-format="timestamp"
+                        @change="datePickerChange"
                         type="datetimerange"
                         range-separator="至"
                         start-placeholder="开始日期"
@@ -36,21 +38,31 @@
                     width="50">
                     </el-table-column>
                     <el-table-column
-                        prop="flowName"
+                        prop="processName"
                         label="流程名称"
                         >
                     </el-table-column>
                     <el-table-column
-                        prop="makeListMan"
+                        prop="creator"
                         label="创建人">
                     </el-table-column>
                     <el-table-column
-                        prop="setTime"
+                        prop="created"
                         label="创建时间">
+                        <template slot-scope="scope">
+                            {{scope.row.created | time_m}}
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="state"
+                        prop="auditStatus"
                         label="审核状态">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.auditStatus == 0" class="color_brown">待审核</span>
+                            <span v-if="scope.row.auditStatus == 1" class="color_brown">审核中</span>
+                            <span v-if="scope.row.auditStatus == 2" class="color_brown">通过</span>
+                            <span v-if="scope.row.auditStatus == 3" class="color_brown">不通过</span>
+                            <span v-if="scope.row.auditStatus == 4" class="color_brown">撤销</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="prop"
@@ -73,8 +85,8 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="400">
             </el-pagination>
@@ -83,46 +95,34 @@
 </template>
 
 <script>
+import api from 'api/review'
 export default {
     data(){
         return {
-            serchText: '',
             serchTime: '',
             currentPage: 2,
             selectTableData: [],
             tableHeight: 500,
-            tableData: [
-                {
-                    flowName: '采购订单1',
-                    makeListMan: '联星贸易',
-                    setTime: '2018-05-16',
-                    state: '待审核',
-                    prop: ''
-                },
-                {
-                    flowName: '采购订单1',
-                    makeListMan: '联星贸易',
-                    setTime: '2018-05-16',
-                    state: '待审核',
-                    prop: ''
-                },
-                {
-                    flowName: '采购订单1',
-                    makeListMan: '联星贸易',
-                    setTime: '2018-05-16',
-                    state: '待审核',
-                    prop: ''
-                }
-            ]
+            tableParam: {
+                auditorId: '1',
+                startTime: '',
+                endTime: '',
+                pageNo: 1,
+                pageSize: 10,
+                searchStr: ''
+            },
+            tableData: []
         }
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
+            this.getTableData()
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
+            this.getTableData()
         },
         tablePropEvent(index, type){
             this.$router.push({
@@ -132,9 +132,21 @@ export default {
 
         handleSelectionChange(val){
 
+        },
+        getTableData(){
+            api.getWaitReviewList(this.tableParam).then((response) => {
+                this.tableData = response.data.list
+            })
+        },
+        datePickerChange(data){
+            this.tableParam.startTime = data[0] / 1000
+            this.tableParam.endTime = data[1] / 1000
         }
     },
     created(){},
+    activated(){
+        this.getTableData()
+    },
     mounted(){}
 }
 </script>

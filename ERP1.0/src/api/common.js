@@ -10,7 +10,8 @@ export default {
     },
     getAreaData(data){
         return HttpClient.get('/address/' + data + '/area');
+    },
+    getUserInfo(){
+        return HttpClient.get('/user/info');
     }
-
-
 }

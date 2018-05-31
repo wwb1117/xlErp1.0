@@ -109,7 +109,7 @@
                         </div>
                         <div :style="{height: $store.state.home.modelContentHeight - 64 + 'px'}"  class="ruku_content">
                             <wait-ruku :fatherValue="storeBaseInfo"></wait-ruku>
-                            <stock-record></stock-record>
+                            <stock-record v-for="item in storeListData" :key="item.id" :fatherValue="item"></stock-record>
                         </div>
                     </div>
 
@@ -174,6 +174,7 @@ export default {
             api.getPurchaseListItem(purId).then((response) => {
                 this.purchaseListInfo = response.data
                 this.goodsInfoData = response.data.list
+
             })
         },
         getStoreRecordInfo(){
@@ -182,8 +183,8 @@ export default {
             api.getStoreRecord(purId).then((response) => {
                 this.storeBaseInfo = response.data.obj
                 this.storeListData = response.data.list
+                console.log(this.storeListData)
 
-                console.log(this.storeBaseInfo)
             })
         }
     },
