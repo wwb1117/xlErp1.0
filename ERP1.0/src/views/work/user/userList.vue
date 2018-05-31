@@ -4,6 +4,7 @@
             <el-table
                 :data='user'
                 style="width:100%"
+                :height="$store.state.home.modelContentHeight"
                 >
                 <!-- :span-method="objectSpanMethod" -->
                 <el-table-column
