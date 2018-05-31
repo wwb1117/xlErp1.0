@@ -61,7 +61,7 @@
 </template>
 <script>
 import api from 'api/work'
-import bus from '@/assets/eventBus.js'
+
 
 export default {
     name: 'authorityList',
@@ -93,7 +93,7 @@ export default {
     methods: {
         edittrue(data) {
             this.editauthorit = true
-            this.text = data.row.name
+            this.text = data.row.roleName
             this.index = data.row.id
             // console.log(this.index)
         },
@@ -159,13 +159,6 @@ export default {
     },
     activated() {
         this.get()
-    },
-    beforeUpdate() {
-        var that = this
-
-        bus.$on('click', function() {
-            that.get()
-        })
     }
 }
 </script>

@@ -44,7 +44,7 @@
                     </li>
                     <li style="width:110px">{{item.sort}}</li>
                     <li style="width:130px">
-                        <el-button type='text'  @click="dialogFormVisible = true">编辑</el-button>
+                        <el-button type='text'  @click="openedit(item.id)">编辑</el-button>
                         <el-button type="text" @click="del = true">删除</el-button>
                         <el-dialog
                             title="温馨提示"
@@ -126,10 +126,14 @@ export default {
         openAddbrand() {
             this.$router.push('addBrand')
         },
+        openedit(data) {
+            this.$store.commit('setBrand', data)
+            this.$router.push('editBrand')
+        },
         get() {
 
             api.getitemBrandlist(this.page).then((response)=>{
-                // console.log(response.data.itemVOs)
+                console.log(response.data.itemVOs)
                 this.brand = response.data.itemVOs
             }).catch((error)=>{
 

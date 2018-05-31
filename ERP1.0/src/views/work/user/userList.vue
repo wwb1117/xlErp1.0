@@ -103,7 +103,6 @@
 </template>
 <script>
 import api from 'api/work'
-import bus from '@/assets/eventBus.js'
 
 export default {
     name: 'userList',
@@ -156,6 +155,7 @@ export default {
                 //     label: 'JavaScript'
                 // }
             ],
+
             editlist: [],
             name: '',
             index: '',
@@ -165,7 +165,7 @@ export default {
                 pageSize: 10
             },
             userId: ''
-
+            // list: []
         }
     },
     methods: {
@@ -174,16 +174,43 @@ export default {
             this.$router.push('')
         },
         edituesrtrue(data) {
+
+            this.name = ''
             this.edituesr = true
-            this.name = data.row.name
+            this.name = data.row.userName
+
+            // console.log(data)
+            // this.list = this.editlist
+            // let arr = data.row.roleName.split(",")
+
+            // this.editlist = []
+
+            // for (var i in arr){
+            //     this.editlist[i] = arr[i]
+            // }
+
             this.index = data.row.id
+
         },
         editconfirm() {
+
+
+            // for (var k in this.editlist){
+
+            //     for (var y in this.edit){
+
+            //         if (this.edit[y].roleName == this.editlist[k]){
+
+            //             this.editlist[k] = this.edit[k].id
+            //         }
+            //     }
+
+            // }
+
             this.edituesr = false
             for (var i in this.user){
                 if (this.user[i].id == this.index){
 
-                    // console.log(this.editlist.toString())
                     let obj = {
                         id: this.index,
                         userName: this.name,
@@ -191,16 +218,18 @@ export default {
                     }
 
                     api.putuserchangeusername(obj).then((response)=>{
-                        console.log(response)
+                        // console.log(response)
+                        this.get()
+                        this.editlist = []
+                        this.index = ''
+                        this.name = ''
                     }).catch((error)=>{
                         console.log(error)
                     })
-                    this.get()
+
                 }
             }
 
-            this.name = ''
-            this.index = ''
         },
         delusertrue(data) {
             this.deluser = true
@@ -212,12 +241,9 @@ export default {
 
                 if (this.user[i].id == this.index){
                     if (this.user.length > 1){
-                        // this.user.splice(i, 1)
-                        // let obj = {
-                        //     userId: this.user[i].id
-                        // }
+
                         this.userId = this.user[i].id
-                        // console.log(obj)
+
                         api.deleteuserdeleteuserId(this.userId).then((response)=>{
                             this.get()
                         }).catch((error)=>{
@@ -232,13 +258,13 @@ export default {
         },
         get() {
             api.getuserlist(this.page).then((response) => {
-                // console.log(response)
+
                 this.user = response.data.list
             })
             api.getrolelist().then((response) => {
-                // console.log(response.data.list)
+
                 this.edit = response.data.list
-                // console.log(this.authority)
+
             })
         }
     },
@@ -247,15 +273,7 @@ export default {
     },
     activated() {
         this.get()
-    },
-    beforeUpdate() {
-        var that = this
-
-        bus.$on('click', function() {
-            that.get()
-        })
     }
-
 }
 </script>
 <style scoped>

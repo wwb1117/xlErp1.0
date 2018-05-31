@@ -72,7 +72,7 @@
 import userlist from 'views/work/user/userList'
 import autohority from 'views/work/user/authorityList'
 import api from 'api/work'
-import bus from '@/assets/eventBus.js'
+
 
 export default {
     name: 'user',
@@ -142,15 +142,14 @@ export default {
 
             this.role.roleName = this.addautohoritytext
             api.postroleadd(this.role).then((response)=>{
-
+                this.addautohoritytext = ''
                 this.get()
             }).catch((error)=>{
                 console.log(error)
             })
             this.activeName = 'second'
             this.$router.push('userManage')
-            this.addusertext = ''
-            bus.$emit('click')
+
         },
         get() {
             api.getrolelist().then((response) => {

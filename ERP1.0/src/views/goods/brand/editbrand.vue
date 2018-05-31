@@ -4,7 +4,7 @@
             <div>
                 <el-breadcrumb separator='-' style="line-height:45px;font-size:15px">
                     <el-breadcrumb-item :to="{ path: '/goodsBrand' }">商品品牌</el-breadcrumb-item>
-                    <el-breadcrumb-item>新增品牌</el-breadcrumb-item>
+                    <el-breadcrumb-item>编辑品牌</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
         </header>
@@ -20,7 +20,7 @@
                             placeholder="请选择"
                             size='small'
                             style="width:338px"
-                            v-model="list"
+                            v-model="from.rateList"
                             multiple
                             filterable
                             allow-create
@@ -33,8 +33,8 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in list" :key='index' v-model='text'>
-                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]"></el-input>
+                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" >
+                        <el-input type='text'  size='small' style="width:338px" v-model="from.rateList"></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
                         <el-upload
@@ -83,23 +83,14 @@ export default {
             from: {
                 id: '',
                 brandName: '',
-                isControl: 0,
+                isControl: '',
                 rateList: '',
                 brandImg: '',
                 sort: '',
-                isRecommended: 0,
+                isRecommended: '',
                 shopGroupIds: ''
             },
 
-            list: [],
-            text: [],
-
-            uplist: [
-                {
-                    itemCategoryId: '',
-                    rate: ''
-                }
-            ],
 
             options: [
                 {
@@ -128,53 +119,7 @@ export default {
             this.dialogVisible = true;
         },
         trueconfim() {
-            if (this.list.length != this.uplist.length){
-                alert(1)
-                for (var a = 0 ; a < this.list.length - 1 ; a++){
 
-                    let obj = {
-                        itemCategoryId: '',
-                        rate: ''
-                    }
-
-                    this.uplist.push(obj)
-                }
-
-                for (var i in this.list){
-
-                    this.uplist[i].itemCategoryId = this.list[i]
-                }
-
-                for (var k in this.text){
-
-                    this.uplist[k].rate = this.text[k]
-                }
-
-            }
-
-            this.from.rateList = JSON.stringify(this.uplist)
-
-            if (this.from.isControl == true){
-                this.from.isControl = 1
-            } else {
-                this.from.isControl = 0
-            }
-
-            if (this.from.isRecommended == true){
-                this.from.isRecommended = 1
-            } else {
-                this.from.isRecommended = 0
-            }
-
-            api.postitemBrandadd(this.from).then((response)=>{
-                console.log(response)
-            }).catch((error)=>{
-                console.log(error)
-            })
-
-            console.log(this.text)
-            console.log(this.list)
-            console.log(this.from)
         },
         returnprev() {
             this.from = {
@@ -190,6 +135,27 @@ export default {
             this.value = ''
             this.$router.go(-1)
         }
+    },
+    created() {
+
+        var id = this.$store.state.home.brandId
+
+        api.getitemBrandid(id).then((response)=>{
+            console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+    },
+    activated() {
+
+        var id = this.$store.state.home.brandId
+
+        api.getitemBrandid(id).then((response)=>{
+            console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
     }
 }
 </script>

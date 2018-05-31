@@ -119,7 +119,9 @@ export default {
         // 商品包装类型
         typesMsg: '',
         // 商品规格
-        specMsg: ''
+        specMsg: '',
+        // 商品品牌
+        brandId: ''
     },
     mutations: {
         setDevice(state, value){
@@ -144,7 +146,10 @@ export default {
         // 商品规格
         setSpec(state, value){
             state.specMsg = value
+        },
+        // 商品品牌
+        setBrand(state, value){
+            state.brandId = value
         }
-
     }
 };
