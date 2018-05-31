@@ -97,8 +97,10 @@
                     <div style="padding: 10px;">
                         <el-table
                             :data="goodsInfoData"
+                            show-summary
                             :span-method="arraySpanMethod"
                             border
+                            :summary-method="getSummaries"
                             style="width: 100%">
                             <el-table-column
                                 label=" "
@@ -238,6 +240,7 @@ export default {
             goodsInfoData: [{
                 oper: '',
                 itemId: '2',
+                itemSpec: '4瓶',
                 currentStoreNumber: '5',
                 barCode: '',
                 goodName: '',
@@ -252,6 +255,7 @@ export default {
             {
                 oper: '',
                 itemId: '3',
+                itemSpec: '4包',
                 currentStoreNumber: '6',
                 barCode: '',
                 goodName: '',
@@ -308,6 +312,7 @@ export default {
             let itemobj = {
                 oper: '',
                 itemId: '',
+                itemSpec: '',
                 barCode: '',
                 goodName: '',
                 SKU: '',
@@ -388,6 +393,43 @@ export default {
 
             data.row.unitTotal = price * num
         },
+        getSummaries(param){
+            var columns = param.columns
+            var data = param.data
+            var sums = []
+
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                if (column.property == 'currentStoreNumber' || column.property == 'unitTotal'){
+                    const values = data.map(item => Number(item[column.property]));
+
+                    if (!values.every(value => isNaN(value))) {
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+
+                    }
+
+                    if (column.property == 'unitTotal'){
+                        this.tableTotalUnit = sums[index]
+                    }
+                } else {
+                    sums[index] = ''
+                }
+            })
+
+            return sums
+
+        },
         chooseGoodEvent(){
             this.$router.push({
                 path: '/chooseGood'
@@ -403,11 +445,13 @@ export default {
                     itemId: '',
                     currentStoreNumber: '',
                     purchasingNumber: '',
-                    remark: ''
+                    remark: '',
+                    itemSpec: ''
                 }
 
                 obj.itemId = res.itemId
                 obj.remark = res.remark
+                obj.itemSpec = res.itemSpec
                 obj.currentStoreNumber = res.currentStoreNumber
                 this.addFormData.totalStoreNumber += parseInt(obj.currentStoreNumber, 10)
                 this.addFormData.list.push(obj)
@@ -489,7 +533,7 @@ export default {
                         type:'success',
                         message:'入库单添加成功'
                     })
-
+                    this.$router.push({ name: "入库列表" })
                 }).catch(error => {
 
                 })
@@ -573,6 +617,7 @@ export default {
                         type:'success',
                         message:'出库单添加成功'
                     })
+                    this.$router.push({ name: "出库列表" })
                 }).catch(error => {
 
                 })
@@ -581,11 +626,10 @@ export default {
     },
     created(){},
     mounted(){
-
-    },
-    activated () {
         // 获取采购单位列表
         this.getPurchaseList()
+    },
+    activated () {
         for (let key in this.addFormData) {
             this.addFormData[key] = ''
         }

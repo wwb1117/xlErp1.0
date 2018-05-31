@@ -56,7 +56,8 @@ import IReviewed from '@/views/review/IReviewed'
 import goods from '@/views/goods/list/goods'
 import addGoods from '@/views/goods/list/addGoods'
 import items from '@/views/goods/items'
-import brand from '@/views/goods/brand'
+import brand from '@/views/goods/brand/brand'
+import addbrand from '@/views/goods/brand/addbrand'
 import spec from '@/views/goods/spec/spec'
 import types from '@/views/goods/types/types'
 import addSpec from '@/views/goods/spec/addSpec'
@@ -111,7 +112,7 @@ var router = new Router({
                 {name: "库存盘点", path: '/repertoryCheck', component: repertoryCheck},
                 {name: "仓库管理", path: '/repertoryManage', component: repertoryManage},
                 {name: "新增入库", path: '/addInbound', component: addInbound},
-                {name: "出入库详情", path: '/boundDetail/:id', component: boundDetail},
+                {name: "出入库详情", path: '/boundDetail/:type/:id', component: boundDetail},
                 {name: "出入库明细", path: '/inoutBound', component: inoutBound},
                 {name: "新增调拨单", path: '/addAllot', component: addAllot},
                 {name: "调拨单详情", path: '/allotDetail/:id', component: allotDetail},
@@ -136,6 +137,7 @@ var router = new Router({
                 {name: "商品分类", path: '/goodsItems', component: items},
 
                 {name: "商品品牌", path: '/goodsBrand', component: brand},
+                {name: "商品品牌", path: '/addBrand', component: addbrand},
 
                 {name: "商品规格", path: '/goodsSpec', component: spec},
                 {name: "编辑规格", path: '/editSpec', component: editSpec},

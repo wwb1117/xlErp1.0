@@ -36,14 +36,28 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="调出单位">
-                            <el-input v-model="searchFormData.inventoryOutName" placeholder="请输入调出单位"></el-input>
+                            <el-select v-model="searchFormData.inventoryOutId" placeholder="请选择">
+                                <el-option
+                                    v-for="item in buyerId_option"
+                                    :key="item.id"
+                                    :label="item.buyerCompanyName"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <br>
                         <el-form-item label="调入单位">
-                            <el-input v-model="searchFormData.inventoryInName" placeholder="请输入调入单位"></el-input>
+                            <el-select v-model="searchFormData.inventoryInId" placeholder="请选择">
+                                <el-option
+                                    v-for="item in buyerId_option"
+                                    :key="item.id"
+                                    :label="item.buyerCompanyName"
+                                    :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item label="制单人">
-                            <el-input v-model="searchFormData.purchaseMan" placeholder="请输入制单人"></el-input>
+                            <el-input v-model="searchFormData.creator" placeholder="请输入制单人"></el-input>
                         </el-form-item>
                         <el-form-item label="审核状态">
                             <el-select v-model="searchFormData.auditStatus" placeholder="请选择">
@@ -139,11 +153,11 @@
                     <el-table-column
                         label="审核状态">
                         <template slot-scope="scope">
-                            <span v-if="scope.row.auditStatus == 0" class="auditStatus_0">待审核</span>
-                            <span v-if="scope.row.auditStatus == 1" class="auditStatus_1">审核中</span>
-                            <span v-if="scope.row.auditStatus == 2" class="auditStatus_2">通过</span>
-                            <span v-if="scope.row.auditStatus == 3" class="auditStatus_3">审核未通过</span>
-                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_3">撤销</span>
+                            <span v-if="scope.row.auditStatus == 0" class="auditStatus_0">{{$allEnumeration.auditStatus[0]}}</span>
+                            <span v-if="scope.row.auditStatus == 1" class="auditStatus_1">{{$allEnumeration.auditStatus[1]}}</span>
+                            <span v-if="scope.row.auditStatus == 2" class="auditStatus_2">{{$allEnumeration.auditStatus[2]}}</span>
+                            <span v-if="scope.row.auditStatus == 3" class="auditStatus_3">{{$allEnumeration.auditStatus[3]}}</span>
+                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_4">{{$allEnumeration.auditStatus[4]}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -157,20 +171,32 @@
                                 size="small">
                                 详情
                             </el-button>
-                            <el-button
-                                :style="{marginRight: '10px'}"
-                                @click.native.prevent="editTable(scope.$index, tableData)"
-                                type="text"
-                                size="small">
-                                修改
-                            </el-button>
-                            <el-button
-                                :style="{marginRight: '10px'}"
-                                @click.native.prevent="deleteTable(scope.$index, tableData)"
-                                type="text"
-                                size="small">
-                                删除
-                            </el-button>
+                            <div v-if="scope.row.auditStatus == 0" style="display: inline-block">
+                                <!--待审核-->
+                                <el-button
+                                    :style="{marginLeft: '12px'}"
+                                    @click.native.prevent="editTable(scope.$index, scope.row)"
+                                    type="text"
+                                    size="small">
+                                    修改
+                                </el-button>
+                                <el-button
+                                    @click.native.prevent="deleteTable(scope.$index, scope.row)"
+                                    type="text"
+                                    size="small">
+                                    删除
+                                </el-button>
+                            </div>
+                            <div v-if="scope.row.auditStatus == 1" style="display: inline-block">
+                                <!--审核中-->
+                                <el-button
+                                    :style="{marginLeft: '12px'}"
+                                    @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
+                                    type="text"
+                                    size="small">
+                                    撤回
+                                </el-button>
+                            </div>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -210,10 +236,13 @@ export default {
                 endTime: '',
                 auditStatus: '',
                 houseId: '',
+                inventoryInId: '',
+                inventoryOutId: '',
                 inventoryOutName: '',
                 inventoryInName: '',
                 creator: ''
             },
+            buyerId_option: [],
             houseId_option: [],
             loading: false,
             isExportShow: false,
@@ -294,7 +323,30 @@ export default {
         editTable() {
 
         },
-        deleteTable() {},
+        // 删除
+        deleteTable(index, data) {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.tableData.splice(index, 1)
+                // API.delAllotOrder(data.id).then(res => {
+                //     if (res.result == 1) {
+                //         this.$message({
+                //             type: 'success',
+                //             message: '删除成功!'
+                //         });
+                //
+                //     }
+                // })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            })
+        },
         closeExportWrap(){
             this.isExportShow = false
             this.$refs.purchaseListTable.clearSelection()
@@ -309,6 +361,13 @@ export default {
         },
         supperBoxShow(){
             this.isSupperBoxShow = !this.isSupperBoxShow
+        },
+        // 获取采购列表
+        getPurchaseList() {
+            API.getPurchaseAll().then(res => {
+                this.buyerId_option = res.data
+                console.log(this.buyerId_option, "采购列表")
+            })
         },
         purchaseAddEvent(){
             this.$router.push({
@@ -326,6 +385,7 @@ export default {
     },
     created(){},
     mounted(){
+        this.getPurchaseList()
         this.getAllotList()
     }
 }

@@ -292,7 +292,7 @@ export default {
             })
         },
         inDetail(index, data){
-            this.$router.push({name: '出入库明细', params: {id: data.itemSku || 12314654, type: '出库'}})
+            this.$router.push({name: '出入库明细', params: {id: data.itemSku || 12314654}})
             $('#secondMenu_ul li').removeClass('active')
             $('#secondMenu_ul li').eq(3).addClass('active')
         },
@@ -370,11 +370,11 @@ export default {
     },
     created(){},
     mounted(){
-
+        this.getPurchaseList()
     },
     activated() {
         this.getTableList()
-        this.getPurchaseList()
+
     }
 }
 </script>

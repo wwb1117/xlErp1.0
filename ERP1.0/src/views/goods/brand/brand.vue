@@ -3,55 +3,9 @@
         <!-- 顶部 -->
         <header class="brand_top">
             <p class='brand_title'>商品品牌</p>
-            <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:32px;margin-top:-3px">新增品牌</el-button>
+            <el-button type="primary" @click="openAddbrand" size='small' style="height:32px;margin-top:-3px">新增品牌</el-button>
             <!-- 新增表单内容 -->
-            <el-dialog title="新增品牌" :visible.sync="dialogFormVisible">
-                <el-form :model="msg">
-                    <el-form-item label="品牌名称" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" type='text' suffix-text='0/15'  size='small'></el-input>
-                    </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth">
-                        <el-select v-model="value" placeholder="请选择"  size='small' style="width:320px">
-                            <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="品牌LOGO" :label-width="formLabelWidth">
-                        <el-upload
-                            action=""
-                            list-type="picture-card"
-                            :on-preview="handlePictureCardPreview"
-                            :on-remove="handleRemove">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                        <!-- action上传地址 -->
-                        <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="dialogImageUrl" alt="">
-                        </el-dialog>
-                    </el-form-item>
-                    <el-form-item label="排序" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" placeholder="数值越大越靠前"  size='small' ></el-input>
-                    </el-form-item>
-                    <el-form-item  label="控货品牌" :label-width="formLabelWidth">
-                        <el-checkbox v-model="checked">勾选为控货品牌</el-checkbox>
-                    </el-form-item>
-                    <el-form-item label="是否推荐" required :label-width="formLabelWidth">
-                        <el-switch
-                            v-model="value2"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
-                        </el-switch>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false" size='medium'>取 消</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false" size='medium'>保 存</el-button>
-                </div>
-            </el-dialog>
+
         </header>
         <section class="brand_conent" >
             <div class="brand_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
@@ -138,42 +92,13 @@ export default {
                 resource: '',
                 desc: ''
             },
-            dialogFormVisible: false,
-            formLabelWidth: '120px',
-            // 上传
-            dialogImageUrl: '',
-            dialogVisible: false,
-            value2: true,
+
             // 分页
             currentPage: 2,
             totalPage: 1,
             // 搜索
             input: '',
             // 关联分类
-            options: [
-                {
-                    value: '选项1',
-                    label: '黄金糕'
-                },
-                {
-                    value: '选项2',
-                    label: '双皮奶'
-                },
-                {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                },
-                {
-                    value: '选项4',
-                    label: '龙须面'
-                },
-                {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }
-            ],
-            value: '',
-            checked: false,
             // 删除
             del: false,
             page: {
@@ -185,14 +110,6 @@ export default {
         }
     },
     methods: {
-        // 上传
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
         handleClose(done) {
             this.$confirm('确认关闭？')
                 .then(_ => {
@@ -205,6 +122,9 @@ export default {
         },
         handleCurrentChange(val) {
             this.page.pageNo = val
+        },
+        openAddbrand() {
+            this.$router.push('addBrand')
         },
         get() {
 

@@ -10,7 +10,7 @@
             <div class="addTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <el-form ref="types"  label-width="100px">
                     <el-form-item label="规格名称" required v-model="typesNum">
-                        <el-select v-model="typesNum.supplyMsg" placeholder="请选择" style="width:338px" size='small'>
+                        <el-select v-model="typesNum.unitId" placeholder="请选择" style="width:338px" size='small'>
                             <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -35,12 +35,12 @@
                             </el-table-column>
                             <!-- 规格值 -->
                             <el-table-column
-                                prop="unitMsg"
+                                prop="supplyMsg"
                                 label="规格值"
                                 width="410">
                                 <template slot-scope="scope">
                                     <div>
-                                        <el-input v-model="scope.row.unitMsg" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
+                                        <el-input v-model="scope.row.supplyMsg" placeholder="输入规格名称" size='small' style="width:388px"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -67,20 +67,20 @@
                             </el-table-column>
                         </el-table>
                     </el-form-item>
-                    <el-form-item label="备注" class="other_text">
+                    <el-form-item label="备注" class="other_text" v-model="typesNum">
                         <el-input
                             type="textarea"
                             :autosize="{ minRows: 3, maxRows: 4}"
                             style="width:658px"
-                            v-model="this.text">
+                            v-model="typesNum.remark">
                         </el-input>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
         <footer class="addTypes_footer">
-            <el-button type="primary" size='small' @click='trueconfim'>保存</el-button>
-            <el-button size='small' @click='returnPrev'>取消</el-button>
+            <el-button type="primary" size='small' @click='trueconfim' style="width:90px">保存</el-button>
+            <el-button size='small' @click='returnPrev' style="width:90px">取消</el-button>
         </footer>
     </section>
 </template>
@@ -90,17 +90,13 @@ import api from 'api/goods'
 export default {
     data() {
         return {
-            // 规格名称、备注
-            text: '',
-
             // 规格值
             typesNum: [
 
                 {
                     skuNumber: '',
-                    unitMsg: '',
-                    isDeleted: false,
-                    remark: ''
+                    supplyMsg: '',
+                    isDeleted: false
                 }
             ],
             options: [
@@ -177,9 +173,8 @@ export default {
         addTypesnum() {
             let obj = {
                 skuNumber: '',
-                unitMsg: '',
-                isDeleted: false,
-                remark: ''
+                supplyMsg: '',
+                isDeleted: false
             }
 
             this.typesNum.push(obj)
@@ -194,13 +189,11 @@ export default {
                 {
                     skuNumber: '',
                     unitMsg: '',
-                    price: '',
-                    sort: '',
                     isDeleted: false
                 }
             ]
-            this.typesNum.supplyMsg = ''
-            this.text = ''
+            this.typesNum.unitId = ''
+            this.typesNum.remark = ''
             this.value = ''
             this.$router.go(-1)
         },

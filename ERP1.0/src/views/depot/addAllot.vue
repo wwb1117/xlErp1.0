@@ -11,25 +11,41 @@
                         基本信息
                     </div>
                     <div class="baseInfoBox">
-                        <el-form-item prop="supplier" label="调拨仓库">
-                            <el-select v-model="addFormData.supplier" placeholder="请选择调拨仓库">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                        <el-form-item prop="warehouseId" label="调拨仓库">
+                            <el-select
+                                v-model="addFormData.warehouseId"
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入关键词"
+                                :remote-method="remoteMethod"
+                                :loading="loading">
+                                <el-option
+                                    v-for="item in houseId_option"
+                                    :key="item.id"
+                                    :label="item.warehouseName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="inRepository" label="调出单位">
-                            <el-select v-model="addFormData.inRepository" placeholder="请选择调出单位">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                        <el-form-item prop="inventoryOutId" label="调出单位">
+                            <el-select v-model="addFormData.inventoryOutId" placeholder="请选择">
+                                <el-option
+                                    v-for="item in buyerId_option"
+                                    :key="item.id"
+                                    :label="item.buyerCompanyName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="purchaseCompany" label="调入单位">
-                            <el-select v-model="addFormData.purchaseCompany" placeholder="请输入调入单位">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                        <el-form-item prop="inventoryInId" label="调入单位">
+                            <el-select v-model="addFormData.inventoryInId" placeholder="请选择">
+                                <el-option
+                                    v-for="item in buyerId_option"
+                                    :key="item.id"
+                                    :label="item.buyerCompanyName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </div>
@@ -41,6 +57,8 @@
                             :data="goodsInfoData"
                             :span-method="arraySpanMethod"
                             border
+                            show-summary
+                            :summary-method="getSummaries"
                             style="width: 100%">
                             <el-table-column
                                 label=" "
@@ -57,11 +75,11 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="selfNum"
+                                prop="itemId"
                                 label="编号"
                                 width="180">
                                 <template slot-scope="scope">
-                                    <div v-if="scope.row.selfNum === ''">
+                                    <div v-if="scope.row.itemId === ''">
                                         <el-autocomplete
                                             v-model="querySearchText"
                                             :style="{width: '270px'}"
@@ -73,8 +91,8 @@
 
                                         <span @click="chooseGoodEvent" class="el-icon-more"></span>
                                     </div>
-                                    <div v-if="scope.row.selfNum !== ''">
-                                        <span v-text="scope.row.selfNum"></span>
+                                    <div v-if="scope.row.itemId !== ''">
+                                        <span v-text="scope.row.itemId"></span>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -99,14 +117,14 @@
                                 label="生产日期">
                             </el-table-column>
                             <el-table-column
-                                prop="purchaseNum"
-                                label="入库数">
+                                prop="currentStoreNumber"
+                                label="调拨数">
                                 <template slot-scope="scope">
-                                    <div v-if="scope.row.selfNum === ''">
+                                    <div v-if="scope.row.itemId === ''">
                                         <span></span>
                                     </div>
-                                    <div v-if="scope.row.selfNum !== ''">
-                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.purchaseNum"></el-input>
+                                    <div v-if="scope.row.itemId !== ''">
+                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currentStoreNumber"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -122,22 +140,22 @@
                     </div>
 
                     <div class="goodInfoBox">
-                        <el-form-item prop="purchaseList" label="调拨单号">
-                            <el-input v-model="addFormData.purchaseList" placeholder="请输入调拨单号"></el-input>
+                        <el-form-item prop="inventoryAllocationNo" label="调拨单号">
+                            <el-input v-model="addFormData.inventoryAllocationNo" placeholder="请输入调拨单号"></el-input>
                         </el-form-item>
-                        <el-form-item prop="purchaseMan" label="经办人">
-                            <el-input v-model="addFormData.purchaseMan" placeholder="请输入经办人"></el-input>
+                        <el-form-item prop="operator" label="经办人">
+                            <el-input v-model="addFormData.operator" placeholder="请输入经办人"></el-input>
                         </el-form-item>
                         <br>
-                        <el-form-item prop="makeListMan" label="调拨时间">
+                        <el-form-item prop="inventoryAllocationTime" label="调拨时间">
                             <el-date-picker
-                                v-model="chooseDate"
-                                type="date"
+                                v-model="addFormData.inventoryAllocationTime"
+                                type="datetime"
                                 placeholder="选择日期">
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item prop="purchaseMan" label="制单人">
-                            <el-input v-model="addFormData.purchaseMan" placeholder="制单人"></el-input>
+                        <el-form-item prop="creator" label="制单人">
+                            <el-input v-model="addFormData.creator" placeholder="制单人"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item class="marker" :style="{width: '700px'}" prop="remark" label="备注">
@@ -148,13 +166,16 @@
             </div>
         </div>
         <div class="model_footer">
-            <el-button style="width: 90px" type="primary" size="small">保存</el-button>
+            <el-button style="width: 90px" type="primary" size="small" @click="save">保存</el-button>
             <el-button style="width: 90px" size="small" v-RouterBack>取消</el-button>
         </div>
     </div>
 </template>
 
 <script>
+import 'utils/allEnumeration'
+import ME from 'utils/base'
+import API from 'api/depot'
 export default {
     data(){
         return {
@@ -162,51 +183,73 @@ export default {
             querySearchText: '',
             goodsInfoData: [{
                 oper: '',
-                selfNum: '11111',
+                itemId: '2',
+                itemSpec: '4瓶',
+                currentStoreNumber: 5,
                 barCode: '',
                 goodName: '',
                 SKU: '',
                 qualityDate: '',
                 productData: '',
-                purchaseNum: '',
                 unit: '',
                 unitPrice: '',
-                unitTotal: ''
+                unitTotal: '',
+                remark: '入库备注1'
+            },
+            {
+                oper: '',
+                itemId: '3',
+                itemSpec: '3瓶',
+                currentStoreNumber: 6,
+                barCode: '',
+                goodName: '',
+                SKU: '',
+                qualityDate: '',
+                productData: '',
+                unit: '',
+                unitPrice: '',
+                unitTotal: '',
+                remark: '入库备注2'
             }],
             addFormData: {
-                supplier: '',
-                inRepository: '',
-                purchaseCompany: '',
-                purchaseDate: '',
-                purchaseList: '',
-                purchaseMan: '',
-                makeListMan: '',
-                maker: '',
-                carriage: '0',
-                extraCost: '0',
-                totalCost: '00',
-                remark: ''
+                warehouseName: '',
+                warehouseId: '',
+                inventoryInId: '',
+                inventoryInName: '',
+                inventoryOutId: '',
+                inventoryOutName: '',
+                inventoryAllocationTime: '',
+                creator: '',
+                creatorId: '',
+                inventoryAllocationNo: '',
+                totalInventoryNumber: 0,
+                list: [],
+                remark: '',
+                operator: ''
             },
+            buyerId_option: [],
+            houseId_option: [],
             rules: {
-                supplier: [
-                    { required: true, message: '入库类型', trigger: 'blur' }
-                ],
-                inRepository: [
+                warehouseId: [
                     { required: true, message: '请选择入库仓库', trigger: 'blur' }
                 ],
-                purchaseCompany: [
-                    { required: true, message: '请选择采购单位', trigger: 'blur' }
+                inventoryInId: [
+                    { required: true, message: '请选择调入单位', trigger: 'blur' }
                 ],
-                purchaseDate: [
-                    { required: true, message: '请选择采购时间', trigger: 'blur' }
+                inventoryOutId: [
+                    { required: true, message: '请选择调出单位', trigger: 'blur' }
                 ],
-                purchaseList: [
-                    { required: true, message: '请输入采购单号', trigger: 'blur' }
+                inventoryAllocationNo: [
+                    { required: true, message: '请输入调拨单号', trigger: 'blur' }
                 ],
-                makeListMan: [
+                inventoryAllocationTime: [
+                    {required: true, message: '请输入调拨时间', trigger: 'blur'}
+                ],
+                creator: [
                     { required: true, message: '请输入制单人', trigger: 'blur' }
                 ]
-            }
+            },
+            loading: true
         }
     },
     computed:{},
@@ -218,6 +261,7 @@ export default {
                 barCode: '',
                 goodName: '',
                 SKU: '',
+                itemSpec: '',
                 qualityDate: '',
                 productData: '',
                 purchaseNum: '',
@@ -234,8 +278,8 @@ export default {
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
-            console.log(rowIndex)
-            console.log(this.goodsInfoData.length)
+            // console.log(rowIndex)
+            // console.log(this.goodsInfoData.length)
             if (columnIndex === 2) {
                 if (row.selfNum == ""){
                     return [1, 3];
@@ -262,9 +306,123 @@ export default {
             var price = parseFloat(data.row.unitPrice)
             var num = parseFloat(data.row.purchaseNum)
 
-
-
             data.row.unitTotal = price * num
+        },
+        getSummaries(param){
+            var columns = param.columns
+            var data = param.data
+            var sums = []
+
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                if (column.property == 'currentStoreNumber' || column.property == 'unitTotal'){
+                    const values = data.map(item => Number(item[column.property]));
+
+                    if (!values.every(value => isNaN(value))) {
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+
+                    }
+
+                    if (column.property == 'unitTotal'){
+                        this.tableTotalUnit = sums[index]
+                    }
+                } else {
+                    sums[index] = ''
+                }
+            })
+
+            return sums
+
+        },
+        // 入库仓库模糊搜索
+        remoteMethod(query) {
+            if (query !== '') {
+                this.loading = true;
+                let post = {};
+
+                post.warehouseName = query
+                setTimeout(() => {
+                    this.loading = false;
+                    API.getWarehouseList(post).then(res => {
+                        this.houseId_option = res.data.list
+                    })
+                    this.houseId_option = this.houseId_option.filter(item => {
+                        return item.label.toLowerCase()
+                            .indexOf(query.toLowerCase()) > -1;
+                    });
+                }, 200);
+            } else {
+                this.houseId_option = [];
+            }
+
+        },
+        // 获取采购列表
+        getPurchaseList() {
+            API.getPurchaseAll().then(res => {
+                this.buyerId_option = res.data
+                console.log(this.buyerId_option, "采购列表")
+            })
+        },
+        // 保存
+        save() {
+            this.addFormData.list = []
+            this.addFormData.totalInventoryNumber = 0
+            // 将表中商品信息添加到addFormData
+            this.goodsInfoData.forEach(res => {
+                let obj = {
+                    itemId: '',
+                    inventoryNumber: '',
+                    purchasingNumber: '',
+                    remark: '',
+                    itemSpec: ''
+                }
+
+                obj.itemId = res.itemId
+                obj.remark = res.remark
+                obj.itemSpec = res.itemSpec
+                obj.inventoryNumber = res.currentStoreNumber
+                this.addFormData.list.push(obj)
+                this.addFormData.totalInventoryNumber += parseInt(obj.inventoryNumber, 10)
+            })
+            this.addFormData.creatorId = '12346'
+            // 通过仓库ID和采购单ID赋值给addFormData的name
+            this.houseId_option.forEach(res => {
+                if (res.id === this.addFormData.warehouseId) {
+                    this.addFormData.warehouseName = res.warehouseName
+                }
+            })
+            this.buyerId_option.forEach(res => {
+                if (res.id === this.addFormData.inventoryInId) {
+                    this.addFormData.inventoryInName = res.buyerCompanyName
+                }
+                if (res.id === this.addFormData.inventoryOutId) {
+                    this.addFormData.inventoryOutName = res.buyerCompanyName
+                }
+            })
+            this.postData = ME.deepCopy(this.addFormData)
+            this.postData.inventoryAllocationTime = Date.parse(this.postData.inventoryAllocationTime) / 1000
+            console.log(this.postData, "添加的数据")
+            // 调取新增调拨单的接口
+            API.addAllotOrder(this.postData).then(res => {
+                this.$message({
+                    type:'success',
+                    message:'调拨单添加成功'
+                })
+                this.$router.push({ name: "库存调拨" })
+            }).catch(error => {
+
+            })
         },
         chooseGoodEvent(){
             this.$router.push({
@@ -273,7 +431,14 @@ export default {
         }
     },
     created(){},
-    mounted(){}
+    mounted(){
+        this.getPurchaseList()
+    },
+    activated() {
+        for (let key in this.addFormData) {
+            this.addFormData[key] = ''
+        }
+    }
 }
 </script>
 <style scoped>
