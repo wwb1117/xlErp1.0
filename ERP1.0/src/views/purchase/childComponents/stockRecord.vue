@@ -192,13 +192,11 @@ export default {
     },
     watch: {
         fatherValue(newvalue){
-            console.log(newvalue)
             this.formData = newvalue
             this.goodsInfoData = newvalue.list
         },
         baseInfo(newvalue){
             this.baseInfoData = newvalue
-            console.log(newvalue)
         }
     }
 }

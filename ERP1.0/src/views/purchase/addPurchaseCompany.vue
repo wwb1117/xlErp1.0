@@ -118,7 +118,7 @@ export default {
         addDataSaveEvent(){
             this.$refs['addPurComForm'].validate((valid) => {
                 if (valid) {
-                    this.purchaseComFormData.foundingTime /= 1000
+                    this.purchaseComFormData.foundingTime = Math.round(this.purchaseComFormData.foundingTime / 1000)
                     api.addPurchaseComItem(this.purchaseComFormData).then((response) => {
                         this.$message({
                             type: 'success',
