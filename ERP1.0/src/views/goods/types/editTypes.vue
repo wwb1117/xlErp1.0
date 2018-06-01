@@ -162,6 +162,7 @@ export default {
 
         this.supplyMsg = msg
         api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
+            console.log(response)
             this.from = response.data
 
         }).catch((error)=>{

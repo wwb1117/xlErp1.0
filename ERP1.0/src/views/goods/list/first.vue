@@ -206,7 +206,8 @@
                         </el-table-column>
                         <!-- 操作 -->
                         <el-table-column
-                            label="操作">
+                            label="操作"
+                            width='200'>
                             <template slot-scope="scope">
                                 <el-button type="text">编辑</el-button>
                                 <el-button type="text">删除</el-button>

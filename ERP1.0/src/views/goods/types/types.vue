@@ -100,6 +100,7 @@ export default {
                 {
                     value: '选项3',
                     label: '蚵仔煎'
+
                 },
                 {
                     value: '选项4',
@@ -150,7 +151,7 @@ export default {
             api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
 
                 this.types = response.data
-                console.log(response)
+                // console.log(response)
             }).catch((error)=>{
                 console.log(error)
             })
