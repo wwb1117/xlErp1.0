@@ -6,7 +6,7 @@
         </header>
         <section class="configuration_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="configuration_box" :style="{height: $store.state.home.modelContentHeight-20 + 'px'}">
-                <div class="box_title">采购订单</div>
+                <div class="box_title">{{this.shuname}}</div>
                 <div class="add_box" v-for="(item,index) in num" :key="index">
                     <el-button icon="el-icon-plus" circle @click='addbox'></el-button>
                     <el-select
@@ -58,8 +58,10 @@ export default {
                 //     label: 'JavaScript'
                 // }
             ],
-
+            // 流程ID
             shu: '',
+            // 流程名称
+            shuname: '',
 
             num: [
                 {
@@ -270,12 +272,14 @@ export default {
 
     created() {
         this.shu = this.$store.state.home.flowId
+        this.shuname = this.$store.state.home.flowName
         this.get()
         this.list()
 
     },
     activated() {
         this.shu = this.$store.state.home.flowId
+        this.shuname = this.$store.state.home.flowName
         this.get()
         this.list()
     }

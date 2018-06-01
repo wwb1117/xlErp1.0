@@ -3,7 +3,6 @@
         <div class="authorityList_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <el-table
                 :data='authority'
-                :height="$store.state.home.modelContentHeight"
                 style="width:100%">
                 <el-table-column
                     prop=""
@@ -171,7 +170,8 @@ export default {
 .authorityList_box{
     border: 1px solid #e6e9eb;
     color: #5e6161;
-    background: white
+    background: white;
+    overflow: auto
 }
 </style>
 
