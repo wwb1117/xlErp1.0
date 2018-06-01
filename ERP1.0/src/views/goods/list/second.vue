@@ -2,9 +2,66 @@
     <section>
         <!-- 列表内容 -->
         <div id='k'  class="conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-            <div style="border: 1px solid #dcdfe6;background:white;overflow:hidden" :style="{height: $store.state.home.modelContentHeight-20 + 'px'}" >
+            <div style="border: 1px solid #dcdfe6;background:white;overflow:hidden" :style="{height: $store.state.home.modelContentHeight-20 + 'px'}">
+                <div>
+                    <el-card :style="{width: '98.8%'}" v-show="dialogFormVisible" class="box_card">
+                        <div slot="header" class="clearfix">
+                            <span :style="{fontSize: '16px'}">高级搜索</span>
+                            <i @click="dialogFormVisible = false" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
+                        </div>
+                        <el-form class="myForm" :inline="true" :model="form" label-position="right" size="small" label-width="80px">
+                            <el-form-item label="商品名称">
+                                <el-input v-model="form.name1" placeholder="请输入商品名称"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品编号">
+                                <el-input v-model="form.name2" placeholder="请输入商品编号"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品条码">
+                                <el-input v-model="form.name3" placeholder="请输入商品条码"></el-input>
+                            </el-form-item>
+                            <br>
+                            <el-form-item label="商品分类">
+                                <el-select  v-model="form.name4" placeholder="全部">
+                                    <el-option label="母婴类" value="12"></el-option>
+                                    <el-option label="服务类" value="123"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="商品品牌">
+                                <el-select  v-model="form.name5" placeholder="全部">
+                                    <el-option label="母婴类" value="123"></el-option>
+                                    <el-option label="服务类" value="12312"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="商品类型">
+                                <el-select  v-model="form.name6" placeholder="全部">
+                                    <el-option label="母婴类" value="324"></el-option>
+                                    <el-option label="服务类" value="145"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <br>
+                            <el-form-item label="贸易类型">
+                                <el-select v-model="form.name7" placeholder="全部">
+                                    <el-option label="母婴类" value="145"></el-option>
+                                    <el-option label="服务类" value="1345"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="提成方式">
+                                <el-select v-model="form.name8" placeholder="全部">
+                                    <el-option label="母婴类" value="13451"></el-option>
+                                    <el-option label="服务类" value="1435143"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <br>
+                            <el-form-item>
+                                <el-button @click="dialogFormVisible = false" style="padding:9px 15px;width: 90px" type="primary" >确定</el-button>
+                                <el-button @click="dialogFormVisible = false" style="padding:9px 15px;width: 90px">取消</el-button>
+                                <el-button class="color_hover" @click="clear" type="text" style="padding:9px 15px;width: 40px; color: #636365">清空</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-card>
+                </div>
                 <!-- 列表搜索框 -->
-                <div style="display:flex;justify-content: space-between">
+                <div>
                     <ul class="conent_list">
                         <li class="input">
                             <el-input
@@ -16,63 +73,13 @@
                             </el-input>
                         </li>
                         <li class="find">
-                            <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                            <el-button  type="primary" style='padding:9px 15px; margin-left:10px' size='small'>搜索</el-button>
                         </li>
                         <!-- 高级搜索表单 -->
                         <li class="morefind">
                             <el-button type="text" @click="dialogFormVisible = true">高级搜索</el-button>
                         </li>
                         <!-- 高级搜索表单内容 -->
-                        <li class="text_y">
-                            <el-dialog title="高级搜索" :visible.sync="dialogFormVisible">
-                                <el-form :model="form">
-                                    <el-form-item label="商品名称">
-                                        <el-input v-model="form.name1" auto-complete="off" size="small"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="商品编号">
-                                        <el-input v-model="form.name2" auto-complete="off" size="small"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="商品条码">
-                                        <el-input v-model="form.name3" auto-complete="off" size="small"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="商品分类">
-                                        <el-select v-model="form.name4" placeholder="全部" size="small">
-                                            <el-option label="母婴类" value="12"></el-option>
-                                            <el-option label="服务类" value="123"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                    <el-form-item label="商品品牌">
-                                        <el-select v-model="form.name5" placeholder="全部" size="small">
-                                            <el-option label="母婴类" value="123"></el-option>
-                                            <el-option label="服务类" value="12312"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                    <el-form-item label="商品类型">
-                                        <el-select v-model="form.name6" placeholder="全部" size="small">
-                                            <el-option label="母婴类" value="324"></el-option>
-                                            <el-option label="服务类" value="145"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                    <el-form-item label="贸易类型">
-                                        <el-select v-model="form.name7" placeholder="全部" size="small">
-                                            <el-option label="母婴类" value="145"></el-option>
-                                            <el-option label="服务类" value="1345"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                    <el-form-item label="提成方式">
-                                        <el-select v-model="form.name8" placeholder="全部" size="small">
-                                            <el-option label="母婴类" value="13451"></el-option>
-                                            <el-option label="服务类" value="1435143"></el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-form>
-                                <div slot="footer" class="dialog-footer">
-                                    <el-button type="primary" @click="dialogFormVisible = false" size="small">确 定</el-button>
-                                    <el-button @click="dialogFormVisible = false" size="small">取 消</el-button>
-                                    <el-button @click="clear" size="small" type='text' style="color:black">清 空</el-button>
-                                </div>
-                            </el-dialog>
-                        </li>
                     </ul>
                 </div>
                 <!-- 列表顶部隐藏对话框   有问题需要改动/消失隐藏没有判断 -->
@@ -83,22 +90,39 @@
                         <el-button type="text" @click="open">停止报价</el-button>
                     </li>
                     <li>
-                        <el-button type="text" @click="dialogVisible = true">更改报价供应商</el-button>
+                        <el-button type="text" @click="dialogVisible1 = true">更改报价供应商</el-button>
+                    </li>
+                    <li>
+                        <el-button type="text" @click="dialogVisible2 = true">更改提成方式</el-button>
                     </li>
                 </ul>
                 <!-- 列表顶部隐藏谈出框 -->
-                <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" >
-                    <el-form :model="form">
+                <el-dialog title="提示" :visible.sync="dialogVisible1" width="30%" >
+                    <el-form :model="form" label-width="100px">
                         <el-form-item label="供应商分组" size='small'>
-                            <el-select v-model="form.get" placeholder="选择允许报价的供应商分组" width='300'>
+                            <el-select v-model="form.get" placeholder="选择允许报价的供应商分组"   style="margin-left:20px;width:338px">
                                 <el-option label="妈妈去哪了" value="12312"></el-option>
                                 <el-option label="爸爸去哪了" value="1243123"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogVisible = false" size='small'>取 消</el-button>
-                        <el-button type="primary" @click="dialogVisible = false" size='small'>确 定</el-button>
+                        <el-button @click="dialogVisible1 = false" size='small'>取 消</el-button>
+                        <el-button type="primary" @click="dialogVisible1 = false" size='small'>确 定</el-button>
+                    </span>
+                </el-dialog>
+                <el-dialog title="提示" :visible.sync="dialogVisible2" width="30%" >
+                    <el-form :model="form" label-width="100px">
+                        <el-form-item label="提成方式" size='small' >
+                            <el-select v-model="form.get" placeholder="选择提成方式"  style="margin-left:20px;width:338px">
+                                <el-option label="妈妈去哪了" value="12312"></el-option>
+                                <el-option label="爸爸去哪了" value="1243123"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible2 = false" size='small'>取 消</el-button>
+                        <el-button type="primary" @click="dialogVisible2 = false" size='small'>确 定</el-button>
                     </span>
                 </el-dialog>
                 <!-- 商品列表内容 -->
@@ -107,8 +131,7 @@
                         :data="goodData"
                         :height="$store.state.home.modelContentHeight"
                         ref="goodTable"
-                        @selection-change="handleSelectionChange"
-                        style="width: 100%">
+                        @selection-change="handleSelectionChange">
                         <!-- check -->
                         <el-table-column
                             type="selection"
@@ -116,41 +139,39 @@
                         </el-table-column>
                         <!-- 商品图片 -->
                         <el-table-column
-                            prop="goodimg"
+                            prop="mainImg"
                             label="商品"
                             >
-                            <template slot-scope="scope" class="goodimgbox">
-                                <div style="width:60px;height:60px;background: black;"></div>
-                                <!-- <img :src="goodimg" alt=""> -->
+                            <template slot-scope="scope" >
+                                <!-- <div style="width:60px;height:60px;background: black;"></div> -->
+                                <div class="goodimgbox">
+                                    <img :src="scope.row.mainImg" alt="">
+                                </div>
                             </template>
                         </el-table-column>
                         <!-- 商品内容 -->
                         <el-table-column
-                            prop='goodconent'
-                            width="300"
-                            >
+                            prop='title'
+                            width="300">
                             <template slot-scope="scope">
-                                <div @click="openGoods(scope)">{{ scope.row.goodconent }}</div>
+                                <div @click="openGoods(scope)">{{ scope.row.title }}</div>
                             </template>
                         </el-table-column>
                         <!-- 条码 -->
                         <el-table-column
-                            prop="goodcode"
-                            label="条码"
-                        >
+                            prop="barCode"
+                            label="条码">
                         </el-table-column>
                         <!-- 编号 -->
                         <el-table-column
-                            prop="goodnum"
-                            label="编号"
-                            >
+                            prop="itemCode"
+                            label="编号">
                         </el-table-column>
                         <!-- 规格 -->
                         <el-table-column
-                            label="规格-SKU"
-                            >
+                            label="规格-SKU">
                             <template slot-scope="scope">
-                                <el-button type="text" @click="dialogTableVisible = true">查看</el-button>
+                                <el-button type="text" @click="lookgoodsku(scope)">查看</el-button>
                                 <el-dialog title="规格明细" :visible.sync="dialogTableVisible">
                                     <el-table :data="gridData">
                                         <el-table-column property="specification" label="规格" width="320"></el-table-column>
@@ -164,20 +185,28 @@
                         </el-table-column>
                         <!-- 分类 -->
                         <el-table-column
-                            prop="goodtype"
+                            prop="categoryName"
                             label="分类"
-                            >
+                            width='200'>
                         </el-table-column>
                         <!-- 品牌 -->
                         <el-table-column
-                            prop="goodlogo"
-                            label="品牌"
-                            >
+                            prop="brandName"
+                            label="品牌">
+                        </el-table-column>
+                        <!-- 贸易类型 -->
+                        <el-table-column
+                            prop=""
+                            label="贸易类型">
+                        </el-table-column>
+                        <!-- 提成方式 -->
+                        <el-table-column
+                            prop=""
+                            label="提成方式">
                         </el-table-column>
                         <!-- 操作 -->
                         <el-table-column
-                            label="操作"
-                            >
+                            label="操作">
                             <template slot-scope="scope">
                                 <el-button type="text">编辑</el-button>
                                 <el-button type="text">删除</el-button>
@@ -192,23 +221,25 @@
         </div>
 
         <!-- 商品分页 -->
-        <footer class="bottom">
-            <div class="block">
+        <footer class="bottom" >
+            <div class="block" style="margin-top:-14px">
                 <el-pagination
-                    :current-page="currentPage4"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 30, 50, 100]"
+                    :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="totalPage">
                 </el-pagination>
-                <!-- @size-change="handleSizeChange"
-                @current-change="handleCurrentChange" -->
             </div>
         </footer>
     </section>
 </template>
 
 <script>
+import api from 'api/goodslist'
+
 export default {
     name : 'second',
 
@@ -227,7 +258,8 @@ export default {
             // 弹出框状态  查看规格/高级搜索表单/更改供应商
             dialogTableVisible: false,
             dialogFormVisible: false,
-            dialogVisible: false,
+            dialogVisible1: false,
+            dialogVisible2: false,
 
             // 高级搜索表单内容
             form: {
@@ -267,36 +299,17 @@ export default {
                 }
             ],
             // 底部分页数
-            currentPage4: 1,
+            currentPage: 2,
+            totalPage: 1,
 
             // 商品列表内容
-            goodData: [
-                {
-                    goodimg: '',
-                    goodconent: '英国三只切纸尿裤',
-                    goodcode: '6232135465123165',
-                    goodnum: '02010001',
-                    goodtype: '尿不湿-纸尿裤',
-                    goodlogo: 'MYKIYU'
-                },
-                {
-                    goodimg: '',
-                    goodconent: '英国三只切纸尿裤',
-                    goodcode: '6232135465123165',
-                    goodnum: '02010001',
-                    goodtype: '尿不湿-纸尿裤',
-                    goodlogo: 'MYKIYU'
-                },
-                {
-                    goodimg: '',
-                    goodconent: '英国三只切纸尿裤',
-                    goodcode: '6232135465123165',
-                    goodnum: '02010001',
-                    goodtype: '尿不湿-纸尿裤',
-                    goodlogo: 'MYKIYU'
-                }
-            ],
-            selectTableData: []
+            goodData: [],
+            selectTableData: [],
+
+            page: {
+                pageNo: 1,
+                pageSize: 11
+            }
         }
     },
     methods: {
@@ -329,10 +342,12 @@ export default {
             });
         },
         // 底部分页函数
-        // handleSizeChange(val) {
-        // },
-        // handleCurrentChange(val) {
-        // }
+        handleSizeChange(val) {
+            this.page.pageSize = val
+        },
+        handleCurrentChange(val) {
+            this.page.pageNo = val
+        },
         handleSelectionChange(val){
             this.selectTableData = val
             if (this.selectTableData.length > 0){
@@ -341,15 +356,46 @@ export default {
                 this.hidden_show = false
             }
         },
+        // 查看规格    异常
+        lookgoodsku(scope) {
+            this.dialogTableVisible = true
+            // console.log(scope.row.id)
+            let obj = {
+                itemId: scope.row.id
+            }
+
+            console.log(obj)
+            api.getitemskuProperty(obj).then((response)=>{
+                console.log(response.data)
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+
         openGoods(data) {
             this.$router.push('goodsDetails')
+        },
+
+        get() {
+            api.getitemlist(this.page).then((response) => {
+                // console.log(response.data.list)
+                this.goodData = response.data.list
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
+    },
+    // created() {
+    //     this.get()
+    // },
+    activated() {
+        this.get()
     }
 }
 </script>
-<style>
+<style scoped>
 *{
-    margin: 0;padding: 0;list-style: none;
+   list-style: none;
 }
 #k {
     padding: 10px;
@@ -357,14 +403,14 @@ export default {
     position: relative;
 }
 /* 顶部样式 */
-#k .conent_list{
+ .conent_list{
     display: flex;
     padding: 15px;
     background: white;
     margin: 0;
     height: 60px;
 }
-#k .conent_hidden{
+ .conent_hidden{
     display: flex;
     background: white;
     margin: 0;
@@ -375,103 +421,101 @@ export default {
     z-index: 10;
     width: 98%;
     line-height: 60px;
+    padding: 0
 }
-#k .conent_hidden>li{
+.conent_hidden>li{
     margin-left: 30px
 }
-#k .morefind{
+.morefind{
     margin-left: 20px;
     height: 32px;
     line-height: 32px;
 }
-#k .morefind>button{
+.morefind>button{
     padding: 0
 }
 /* 商品内容样式 */
-#k .center .el-checkbox{
+.center .el-checkbox{
     display: block;
     margin: 0
 }
-#k .display{
+.display{
     display: flex;
     justify-content: space-around;
 }
-#k .display>li{
+.display>li{
     width: 150px;
 }
-#k .text_color{
+.text_color{
     color: #409EFF
 }
-#k .goods_conent{
+.goods_conent{
    border-top:1px solid #e4e7ed;
    height: 70px;
    padding: 5px 0;
    margin: 0
 }
-#k .goods_list{
+.goods_list{
     background: #f5f5f5;
     height: 40px;
     line-height: 40px;
     margin: 0
 }
 /* 商品弹出框样式 */
-#k .text_y .el-dialog{
-    left: 5.2%;
-    width: 88.5%;
-    top:-86px;
-    height: 300px
-}
-#k .text_y .dialog-footer{
-    position: absolute;
-    left: 20px;
-    bottom:30px
-}
-#k .text_y .el-dialog__body{
-    padding: 0 20px
-}
-#k .text_y .el-form{
-    display: flex;
-    flex-wrap: wrap;
-}
-#k .text_y .el-form .el-form-item{
-    display: flex;
-    width: 30%;
-}
-#k .text_y .el-form .el-form-item .el-input__inner{
-    width: 300px;
-}
-#k .navdiv>.el-tabs .el-tabs__nav-wrap{
+
+.navdiv>.el-tabs .el-tabs__nav-wrap{
     margin-left: 10px
 }
-#k .text_color>.el-button{
+.text_color>.el-button{
     padding: 0
 }
-#k .small_pagination{
+.small_pagination{
     margin-left: 700px;
     margin-top:30px;
 }
- .bottom{
+.bottom{
     border-top:1px solid #e5e8e8;
     position: relative;
     /* margin-top: -23px; */
     background: white;
     padding: 27px 30px;
 }
- .bottom .block{
+.bottom .block{
     position: absolute;
     right: 30px;
-    top:0
+    top:12px
 }
 
-#k .el-form input{
+.el-form input{
     width: 240px
 }
 
-#k .el-icon-close:hover{
+.el-icon-close:hover{
     font-size: 14px
 }
-.goodimgbox{
+.goodimgbox img{
     height: 60px;
+    width: 60px
+}
+
+.box_card{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 300px;
+    z-index: 9;
+    margin: 10px;
+
+}
+.model_content_inner{
+    position: relative;
+}
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+    width: 390px;
+}
+.el-form{
+    color: #636365;
 }
 </style>
 

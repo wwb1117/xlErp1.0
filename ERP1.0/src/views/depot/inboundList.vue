@@ -223,24 +223,24 @@ export default {
             timeout:  null,
             serchText: '',
             currentPage: 1,
-            total: '',
+            total: 0,
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
             houseId_option: [],
             buyerId_option: [],
             searchFormData: {
-                houseId: '',
-                buyerId: '',
-                storeType: '',
-                storeNo: '',
-                startTime: '',
-                endTime: '',
-                pageNo: '',
-                pageSize: '',
-                creator: '',
-                operator: '',
-                date: ''
+                houseId: null,
+                buyerId: null,
+                storeType: null,
+                storeNo: null,
+                startTime: null,
+                endTime: null,
+                pageNo: null,
+                pageSize: null,
+                creator: null,
+                operator: null,
+                date: null
             },
             postData: {},
             isExportShow: false,
@@ -274,7 +274,7 @@ export default {
             API.getInboundList(data).then(res => {
                 console.log(data, '入库单请求数据')
                 this.tableData = res.data.list
-                this.total = res.data.total || res.data.list.length
+                this.total = res.data.total || 0
             })
         },
         // 获取采购列表
@@ -319,7 +319,7 @@ export default {
         // 搜索清空
         clear() {
             for (let key in this.searchFormData) {
-                this.searchFormData[key] = ''
+                this.searchFormData[key] = null
             }
         },
         // 搜索

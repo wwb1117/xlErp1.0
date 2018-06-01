@@ -237,13 +237,13 @@ export default {
             houseId_option: [],
             buyerId_option: [],
             searchFormData: {
-                itemSku: '',
-                itemMac: '',
-                itemName: '',
-                itemTypeId: '',
-                houseId: '',
-                buyerId: '',
-                houseStatus: ''
+                itemSku: null,
+                itemMac: null,
+                itemName: null,
+                itemTypeId: null,
+                houseId: null,
+                buyerId: null,
+                houseStatus: null
             },
             isExportShow: false,
             tableData: [
@@ -265,7 +265,7 @@ export default {
                     buyerName: '15'
                 }
             ],
-            total: ''
+            total: 0
         }
     },
     computed:{},
@@ -280,7 +280,7 @@ export default {
         getTableList(data) {
             API.getInventoryList(data).then(res => {
                 this.tableData = res.data.list
-                this.total = res.data.total || res.data.list.length
+                this.total = res.data.total || 0
                 console.log("获取库存", res.data.list)
             })
         },
@@ -336,7 +336,7 @@ export default {
         // 搜索清空
         clear() {
             for (let key in this.searchFormData) {
-                this.searchFormData[key] = ''
+                this.searchFormData[key] = null
             }
         },
         closeExportWrap(){

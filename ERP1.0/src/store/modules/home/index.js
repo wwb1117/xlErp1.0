@@ -123,7 +123,9 @@ export default {
         // 商品品牌
         brandId: '',
         // 流程配置id
-        flowId: ''
+        flowId: '',
+        // 流程配置名称
+        flowName: ''
     },
     mutations: {
         setDevice(state, value){
@@ -156,6 +158,10 @@ export default {
         // 流程配置ID
         setFlow(state, value){
             state.flowId = value
+        },
+        // 流程配置名称
+        setFlowN(state, value){
+            state.flowName = value
         }
     }
 };

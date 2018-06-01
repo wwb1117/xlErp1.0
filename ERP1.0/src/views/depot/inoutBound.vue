@@ -218,15 +218,15 @@ export default {
             buyerId_option: [],
             item_option: [],
             searchFormData: {
-                itemSku: '',
-                itemMac: '',
-                itemName: '',
-                itemTypeId: '',
-                houseId: '',
-                buyerId: '',
-                startTime: '',
-                endTime: '',
-                date: ''
+                itemSku: null,
+                itemMac: null,
+                itemName: null,
+                itemTypeId: null,
+                houseId: null,
+                buyerId: null,
+                startTime: null,
+                endTime: null,
+                date: null
             },
             isExportShow: false,
             tableData: [
@@ -246,7 +246,7 @@ export default {
                     orderNumber: '17'
                 }
             ],
-            total: '',
+            total: 0,
             inoutBoundOption: [{
                 label: '入库类型',
                 options: [{
@@ -292,13 +292,13 @@ export default {
         getInoutBoundList(data) {
             API.inoutBound(data).then(res => {
                 this.tableData = res.data.list
+                this.total = res.data.total || 0
             })
         },
         // 获取采购列表
         getPurchaseList() {
             API.getPurchaseAll().then(res => {
                 this.buyerId_option = res.data
-                this.total = res.data.total || 0
                 console.log(this.buyerId_option, "采购列表")
             })
         },
@@ -311,7 +311,7 @@ export default {
         // 搜索清空
         clear() {
             for (let key in this.searchFormData) {
-                this.searchFormData[key] = ''
+                this.searchFormData[key] = null
             }
         },
         // 搜索

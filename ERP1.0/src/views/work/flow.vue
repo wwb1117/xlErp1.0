@@ -33,7 +33,6 @@
             <div class="flow_box" :style="{height: $store.state.home.modelContentHeight-8 + 'px'}">
                 <el-table
                     :data='flow'
-                    :height="$store.state.home.modelContentHeight"
                     style="width:100%">
                     <el-table-column
                         prop=""
@@ -180,10 +179,11 @@ export default {
             this.editflow = true
             this.edittext = data.row.name
             this.index = data.row.id
-
+            // console.log(data.row)
         },
         writeflow(data) {
             this.$store.commit('setFlow', data.row.id)
+            this.$store.commit('setFlowN', data.row.name)
             this.$router.push('configuration')
         },
         editconfirm() {
@@ -271,6 +271,7 @@ export default {
 .flow_box{
     border: 1px solid #e6e9eb;
     color: #5e6161;
-    background: white
+    background: white;
+    overflow: auto
 }
 </style>

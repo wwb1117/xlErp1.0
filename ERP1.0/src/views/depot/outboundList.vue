@@ -199,7 +199,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
+                :page-sizes="[10, 30, 50, 100]"
                 :page-size="100"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
@@ -221,15 +221,15 @@ export default {
             isSupperBoxShow: false,
             tableHeight: 500,
             searchFormData: {
-                deliverNo: '',
-                houseId: '',
-                deliverType: '',
-                creator: '',
-                operator: '',
-                buyerId: '',
-                startTime: '',
-                endTime: '',
-                date: ''
+                deliverNo: null,
+                houseId: null,
+                deliverType: null,
+                creator: null,
+                operator: null,
+                buyerId: null,
+                startTime: null,
+                endTime: null,
+                date: null
             },
             loading: false,
             houseId_option: [],
@@ -250,7 +250,7 @@ export default {
                     operator: ''
                 }
             ],
-            total: ''
+            total: 0
         }
     },
     computed:{},
@@ -265,7 +265,7 @@ export default {
         getOutboundList(data) {
             API.getOutboundList(data).then(res => {
                 this.tableData = res.data.list
-                this.total = res.data.total || res.data.list.length
+                this.total = res.data.total || 0
             })
         },
         // 获取采购列表
@@ -312,7 +312,7 @@ export default {
         // 搜索清空
         clear() {
             for (let key in this.searchFormData) {
-                this.searchFormData[key] = ''
+                this.searchFormData[key] = null
             }
         },
         inBoundDetail(index, data){

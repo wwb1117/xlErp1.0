@@ -3,8 +3,7 @@
         <div class="userlist_box" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <el-table
                 :data='user'
-                style="width:100%"
-                >
+                style="width:100%">
                 <!-- :span-method="objectSpanMethod" -->
                 <el-table-column
                     prop=""
@@ -159,7 +158,7 @@ export default {
 
             page: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 20
             },
             userId: ''
             // list: []
@@ -283,6 +282,7 @@ export default {
 .userlist_box{
     border: 1px solid #e6e9eb;
     color: #5e6161;
-    background: white
+    background: white;
+    overflow: auto
 }
 </style>

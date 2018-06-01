@@ -90,22 +90,39 @@
                         <el-button type="text" @click="open">停止报价</el-button>
                     </li>
                     <li>
-                        <el-button type="text" @click="dialogVisible = true">更改报价供应商</el-button>
+                        <el-button type="text" @click="dialogVisible1 = true">更改报价供应商</el-button>
+                    </li>
+                    <li>
+                        <el-button type="text" @click="dialogVisible2 = true">更改提成方式</el-button>
                     </li>
                 </ul>
                 <!-- 列表顶部隐藏谈出框 -->
-                <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" >
-                    <el-form :model="form">
+                <el-dialog title="提示" :visible.sync="dialogVisible1" width="30%" >
+                    <el-form :model="form" label-width="100px">
                         <el-form-item label="供应商分组" size='small'>
-                            <el-select v-model="form.get" placeholder="选择允许报价的供应商分组" width='300'>
+                            <el-select v-model="form.get" placeholder="选择允许报价的供应商分组"   style="margin-left:20px;width:338px">
                                 <el-option label="妈妈去哪了" value="12312"></el-option>
                                 <el-option label="爸爸去哪了" value="1243123"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogVisible = false" size='small'>取 消</el-button>
-                        <el-button type="primary" @click="dialogVisible = false" size='small'>确 定</el-button>
+                        <el-button @click="dialogVisible1 = false" size='small'>取 消</el-button>
+                        <el-button type="primary" @click="dialogVisible1 = false" size='small'>确 定</el-button>
+                    </span>
+                </el-dialog>
+                <el-dialog title="提示" :visible.sync="dialogVisible2" width="30%" >
+                    <el-form :model="form" label-width="100px">
+                        <el-form-item label="提成方式" size='small' >
+                            <el-select v-model="form.get" placeholder="选择提成方式"  style="margin-left:20px;width:338px">
+                                <el-option label="妈妈去哪了" value="12312"></el-option>
+                                <el-option label="爸爸去哪了" value="1243123"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible2 = false" size='small'>取 消</el-button>
+                        <el-button type="primary" @click="dialogVisible2 = false" size='small'>确 定</el-button>
                     </span>
                 </el-dialog>
                 <!-- 商品列表内容 -->
@@ -177,6 +194,16 @@
                             prop="brandName"
                             label="品牌">
                         </el-table-column>
+                        <!-- 贸易类型 -->
+                        <el-table-column
+                            prop=""
+                            label="贸易类型">
+                        </el-table-column>
+                        <!-- 提成方式 -->
+                        <el-table-column
+                            prop=""
+                            label="提成方式">
+                        </el-table-column>
                         <!-- 操作 -->
                         <el-table-column
                             label="操作">
@@ -231,7 +258,8 @@ export default {
             // 弹出框状态  查看规格/高级搜索表单/更改供应商
             dialogTableVisible: false,
             dialogFormVisible: false,
-            dialogVisible: false,
+            dialogVisible1: false,
+            dialogVisible2: false,
 
             // 高级搜索表单内容
             form: {
@@ -393,6 +421,7 @@ export default {
     z-index: 10;
     width: 98%;
     line-height: 60px;
+    padding: 0
 }
 .conent_hidden>li{
     margin-left: 30px

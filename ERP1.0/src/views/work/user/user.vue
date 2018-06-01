@@ -102,9 +102,8 @@ export default {
             addlist: [],
             role: {
                 roleName: ''
-            },
+            }
 
-            changeZ: 0
         }
     },
     methods: {
@@ -137,7 +136,6 @@ export default {
             this.$router.push('userManage')
             this.addusertext = ''
             this.addlist = []
-            this.changeZ = 1
 
         },
         addautohorityconfirm() {

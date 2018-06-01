@@ -51,28 +51,28 @@
                             width="50">
                         </el-table-column>
                         <el-table-column
-                            prop="itemId"
+                            prop="itemSku"
                             label="编号"
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="barCode"
+                            prop="itemMac"
                             label="条码">
                         </el-table-column>
                         <el-table-column
-                            prop="goodName"
+                            prop="itemName"
                             label="商品">
                         </el-table-column>
                         <el-table-column
-                            prop="SKU"
+                            prop="itemSpec"
                             label="规格-SKU">
                         </el-table-column>
                         <el-table-column
-                            prop="qualityDate"
+                            prop="itemExp"
                             label="保质期">
                         </el-table-column>
                         <el-table-column
-                            prop="productData"
+                            prop="productionDate"
                             label="生产日期">
                         </el-table-column>
                         <el-table-column
@@ -86,7 +86,7 @@
                             v-if="inbound">
                         </el-table-column>
                         <el-table-column
-                            prop="unit"
+                            prop="itemQuantifierUnit"
                             label="单位">
                         </el-table-column>
                         <el-table-column
@@ -108,7 +108,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="model_footer">
+            <el-button style="width: 90px" size="small" v-RouterBack>返回</el-button>
+        </div>
     </div>
 </template>
 
@@ -123,7 +125,7 @@ export default {
             orderDetail: {
                 list: [
                     {
-                        currentStoreNumber: 's454645464',
+                        currentStoreNumber: 0,
                         id: '',
                         itemId: '这和商品',
                         purchasingNumber: '',
@@ -144,7 +146,7 @@ export default {
                 storeRemark: '',
                 storeTime: '',
                 storeType: '',
-                totalStoreNumber: ''
+                totalStoreNumber: 0
             },
             outbound: false,
             inbound: true
@@ -165,15 +167,17 @@ export default {
                 const values = data.map(item => Number(item[column.property]));
 
                 if (!values.every(value => isNaN(value))) {
-                    sums[7] = values.reduce((prev, curr) => {
-                        let value = Number(curr);
 
-                        if (!isNaN(value)) {
-                            return prev + curr;
-                        } else {
-                            return prev;
-                        }
-                    }, 0);
+                    // sums[7] = values.reduce((prev, curr) => {
+                    //     let value2 = parseInt(curr, 10);
+                    //
+                    //     if (!isNaN(value2)) {
+                    //         return prev + curr;
+                    //     } else {
+                    //         return prev;
+                    //     }
+                    // }, this.goodsInfoData.totalStoreNumber);
+                    sums[7] = this.goodsInfoData.totalStoreNumber || this.goodsInfoData.totalDeliverNumber
 
                 } else {
                     sums[index] = '';
@@ -218,6 +222,11 @@ export default {
 <style scoped>
     .model_topcol .blue {
         color: #409eff;
+    }
+    .model_footer{
+        line-height: 50px;
+        text-align: left;
+        padding-left: 40px;
     }
     .tab_title{
         height: 65px;
