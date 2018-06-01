@@ -160,6 +160,8 @@
                     <el-form-item prop="purchaseDate" label="退货时间">
                         <el-date-picker
                         v-model="addFormData.purchaseDate"
+                        format="yyyy-MM-dd"
+                        value-format="timestamp"
                         type="date"
                         placeholder="选择日期">
                         </el-date-picker>

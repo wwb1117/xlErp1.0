@@ -15,33 +15,33 @@
                         <span :style="{fontSize: '16px'}">高级搜索</span>
                         <i @click="supperBoxShow" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                     </div>
-                    <el-form class="myForm" :inline="true" :model="superFormData" label-position="right" size="small" label-width="80px">
+                    <el-form class="myForm" :inline="true" :model="tableParam" label-position="right" size="small" label-width="80px">
                         <el-form-item label="采购单号">
-                            <el-input v-model="superFormData.purchaseList" placeholder="请输入采购单号"></el-input>
+                            <el-input v-model="tableParam.purchaseOrderNo" placeholder="请输入采购单号"></el-input>
                         </el-form-item>
                         <el-form-item label="制单人">
-                            <el-input v-model="superFormData.makeListMan" placeholder="请输入制单人"></el-input>
+                            <el-input v-model="tableParam.creator" placeholder="请输入制单人"></el-input>
                         </el-form-item>
                         <el-form-item label="采购员">
-                            <el-input v-model="superFormData.purchaseMan" placeholder="请输入采购员"></el-input>
+                            <el-input v-model="tableParam.purchasingAgent" placeholder="请输入采购员"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item label="供应商">
-                            <el-select v-model="superFormData.supplier" placeholder="请输入采购员">
+                            <el-select v-model="tableParam.sellerId" placeholder="请输入采购员">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购单位">
-                            <el-select v-model="superFormData.purchaseCompany" placeholder="请输入采购单位">
+                            <el-select v-model="tableParam.buyerId" placeholder="请输入采购单位">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库仓库">
-                            <el-select v-model="superFormData.inRepository" placeholder="请输入入库仓库">
+                            <el-select v-model="tableParam.purchaseHouseId" placeholder="请输入入库仓库">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -49,14 +49,14 @@
                         </el-form-item>
                         <br>
                         <el-form-item label="入库状态">
-                            <el-select v-model="superFormData.inState" placeholder="请输入入库状态">
+                            <el-select v-model="tableParam.storeStatus" placeholder="请输入入库状态">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="审核状态">
-                            <el-select v-model="superFormData.reviewState" placeholder="请输入审核状态">
+                            <el-select v-model="tableParam.auditStatus" placeholder="请输入审核状态">
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="区域一" value="shanghai"></el-option>
                                 <el-option label="区域二" value="beijing"></el-option>
@@ -64,7 +64,6 @@
                         </el-form-item>
                         <el-form-item label="作废时间">
                             <el-date-picker
-                                v-model="superFormData.purchaseDate"
                                 type="daterange"
                                 :editable="false"
                                 range-separator="至"
@@ -118,7 +117,17 @@
             </div>
         </div>
         <div class="model_footer">
-            <el-button size="small" style="width: 90px; margin-left: 25px;">返 回</el-button>
+            <el-button size="small" style="width: 90px; margin-left: 25px;float: left">返 回</el-button>
+            <el-pagination
+                :style="{float: 'right'}"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="1"
+                :page-sizes="[5, 10, 50, 100]"
+                :page-size="10"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalPage">
+            </el-pagination>
         </div>
     </div>
 </template>
@@ -132,33 +141,37 @@ export default {
     data(){
         return {
             serchText: '',
-            currentPage: 2,
+            totalPage: 10,
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
-            superFormData: {
-                purchaseList: '7758521',
-                supplier: '',
-                purchaseCompany: '',
-                inRepository: '402',
-                purchaseRMB: '888,000,00',
-                makeListMan: '李明珠',
-                purchaseMan: '官人',
-                purchaseDate: '2018-05-16',
-                inState: '已入库',
-                reviewState: '已审核',
-                prop: ''
+            tableParam: {
+                storeNo: "",
+                startTime: "",
+                endTime: "",
+                pageNo: 1,
+                pageSize: 5,
+                searchStr: "",
+                purchaseOrderNo: "",
+                creator: "",
+                purchasingAgent: "",
+                sellerId: "",
+                buyerId: "",
+                purchaseHouseId: "",
+                auditStatus: "",
+                storeStatus: ""
             },
+
             isExportShow: false
 
         }
     },
     computed:{},
     methods:{
-        handleSizeChange(){
+        handleSizeChange(val){
 
         },
-        handleCurrentChange(){
+        handleCurrentChange(val){
 
         },
         inRepositoryEvent(){
@@ -254,5 +267,8 @@ export default {
 }
 .invalidRecord_wrap{
     overflow: auto;
+}
+.el-pagination{
+    padding-top: 0px;
 }
 </style>

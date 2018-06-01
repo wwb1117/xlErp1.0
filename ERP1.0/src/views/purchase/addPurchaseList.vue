@@ -380,7 +380,7 @@ export default {
         saveBtn(){
             this.$refs['addPurchaseListForm'].validate((valid) => {
                 if (valid) {
-                    this.addFormData.orderTime = Date.parse(this.addFormData.orderTime) / 1000
+                    this.addFormData.orderTime = Math.round(this.addFormData.orderTime / 1000)
                     this.saveBtnEvent()
                 }
             })

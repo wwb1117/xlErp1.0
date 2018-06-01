@@ -117,6 +117,7 @@
                 </el-tab-pane>
             </el-tabs>
             <div v-show="tabActive == 'detail'" style="position: absolute; right: 10px; top: 7px">
+
                 <el-button size="small" style="width: 90px">导出</el-button>
                 <el-button size="small" style="width: 90px">编辑</el-button>
                 <el-button size="small" @click="deleteEvent" style="width: 90px">删除</el-button>

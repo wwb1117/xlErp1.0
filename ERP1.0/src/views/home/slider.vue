@@ -7,6 +7,7 @@
         <ul id="firstMenu_ul">
           <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.name" :text="item.text" :type="item.name" :class="[item.icon, index == 0 ? 'active' : '']" v-text="item.text"></li>
         </ul>
+
       </div>
       <div v-show="$store.state.home.isNextMenuShow" class="silder_right">
         <div class="silder_right_top">
@@ -93,6 +94,7 @@ export default {
     background: #2c303c;
     float: left;
     box-sizing: border-box;
+    position: relative;
   }
   .silder_left .active{
     background: #f5f5f5;
