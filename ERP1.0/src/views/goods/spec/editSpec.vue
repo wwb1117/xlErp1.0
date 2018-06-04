@@ -12,7 +12,7 @@
                     <el-form-item v-model="editNum" label="规格名称" required>
                         <el-input v-model="editNum.skuPropertyName" style="width:338px" size='small'></el-input>
                     </el-form-item>
-                    <el-form-item label="规格值" required :style="{height: (this.length)*50 + 'px'}">
+                    <el-form-item label="规格值" required :style="{height: (editNum.list.length)*50 + 'px'}">
                         <el-table
                             :data='editNum.list'
                             border
@@ -90,6 +90,7 @@ export default {
     methods: {
         addEditnum() {
             let obj = {
+                skuPropertyId: '',
                 skuPropertyValueName: '',
                 isDeleted: 0
             }
@@ -107,9 +108,10 @@ export default {
         },
         trueconfim() {
 
+
             let obj = {
                 skuPropertys : JSON.stringify({
-                    id: this.editNum.id,
+                    skuPropertyId: this.editNum.id,
                     skuPropertyName: this.editNum.skuPropertyName,
                     itemSkuPropertyValueDTOS: this.editNum.list
                 })
@@ -170,6 +172,7 @@ export default {
     color: #5e6161;
     background: white;
     padding: 30px;
+    overflow: auto;
 }
 .edit_box .el-form-item{
     height: 50px

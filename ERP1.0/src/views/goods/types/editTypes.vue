@@ -10,11 +10,11 @@
             <div class="editTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <el-form ref="types"  label-width="100px">
                     <el-form-item label="规格名称" required >
-                        <el-input v-model="supplyMsg" style="width:338px" size='small' disabled></el-input>
+                        <el-input v-model="from.unitMsg" style="width:338px" size='small' disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="规格值" required :style="{height: (from.length)*50 + 'px'}">
+                    <el-form-item label="规格值" required :style="{height: (from.itemSupplyPropertyVOs.length)*50 + 'px'}">
                         <el-table
-                            :data='from'
+                            :data='from.itemSupplyPropertyVOs'
                             border
                             style="width:658px">
                             <el-table-column
@@ -89,9 +89,9 @@ export default {
             // 规格值   // 规格名称、备注
 
             text: '',
-            supplyMsg: '',
             remark: '',
-            from: []
+            from: [],
+            goodid: ''
 
             // disabled: false
 
@@ -100,13 +100,12 @@ export default {
     methods: {
         editTypesnum() {
             let obj = {
-                id: '',
                 skuNumber: '',
                 supplyMsg: '',
                 isDeleted: '0'
             }
 
-            this.from.push(obj)
+            this.from.itemSupplyPropertyVOs.push(obj)
 
         },
         // removeTypesnum(data) {
@@ -122,13 +121,16 @@ export default {
         trueconfim() {
 
             let obj = {
-                itemSupplyPropertyParams : JSON.stringify(this.from)
+                unitId: this.goodid,
+                remark: this.from.remark,
+                itemSupplyPropertyValueForms : JSON.stringify(this.from.itemSupplyPropertyVOs)
             }
 
             console.log(this.from)
-            api.putsupplyPropertyupdate(obj).then((response)=>{
-                this.$router.go(-1)
-                // console.log(response)
+
+            api.putitemsupplyPropertyupdate(obj).then((response)=>{
+                // this.$router.go(-1)
+                console.log(response)
             }).catch((error)=>{
                 console.log(error)
             })
@@ -139,12 +141,8 @@ export default {
     created() {
         var msg = this.$store.state.home.typesMsg
 
-        let obj = {
-            supplyMsg: msg
-        }
-
-        this.supplyMsg = msg
-        api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
+        this.goodid = msg
+        api.getitemsupplyPropertyunitId(msg).then((response)=>{
             this.from = response.data
             // console.log(response.data)
 
@@ -156,12 +154,9 @@ export default {
     activated() {
         var msg = this.$store.state.home.typesMsg
 
-        let obj = {
-            supplyMsg: msg
-        }
-
-        this.supplyMsg = msg
-        api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
+        this.goodid = msg
+        api.getitemsupplyPropertyunitId(msg).then((response)=>{
+            // console.log(response)
             this.from = response.data
 
         }).catch((error)=>{
