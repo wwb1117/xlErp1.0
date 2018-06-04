@@ -320,8 +320,11 @@ export default {
             }
 
         },
-        editTable() {
-
+        editTable(index, data) {
+            this.$router.push({
+                name: '编辑调拨单',
+                params: {id: data.id}
+            })
         },
         // 删除
         deleteTable(index, data) {

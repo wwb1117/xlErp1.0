@@ -94,11 +94,11 @@ export default {
             this.addFormData.cityId = data[1]
             this.addFormData.areaId = data[2]
         },
-        // 产生六位随机数并加到编码
-        MathRand() {
+        // 产生随机数并加到编码
+        MathRand(data) {
             let sixNum = ''
 
-            for (let i = 0; i < 7; i++) {
+            for (let i = 0; i < data; i++) {
                 sixNum += Math.floor(Math.random() * 10);
             }
             this.addFormData.warehouseNo = 's' + sixNum
@@ -136,7 +136,7 @@ export default {
     },
     activated() {
         this.clear()
-        this.MathRand()
+        this.MathRand(7)
     }
 }
 </script>

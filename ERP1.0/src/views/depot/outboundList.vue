@@ -318,9 +318,12 @@ export default {
         inBoundDetail(index, data){
             this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'outbound'}})
         },
-        // 编辑
-        editTable() {
-
+        // 修改
+        editTable(index, data) {
+            this.$router.push({
+                name: '编辑出入库',
+                params: {type: 'outbound', id: data.id}
+            })
         },
         // 删除
         deleteTable(index, data) {
@@ -378,6 +381,9 @@ export default {
     mounted(){
         this.getOutboundList()
         this.getPurchaseList()
+    },
+    activated() {
+        this.getOutboundList()
     }
 }
 </script>

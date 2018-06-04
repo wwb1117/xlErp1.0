@@ -188,7 +188,7 @@
                                 <!--审核中-->
                                 <el-button
                                     :style="{marginLeft: '12px'}"
-                                    @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
+                                    @click.native.prevent="undo(scope.$index, scope.row)"
                                     type="text"
                                     size="small">
                                     撤回
@@ -316,6 +316,35 @@ export default {
                 this.$message({
                     type: 'info',
                     message: '已取消删除'
+                });
+            })
+        },
+        // 撤回
+        undo(index, data) {
+            console.log(data, "dasddsadsad")
+            this.$confirm('此操作将撤回该审核订单, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let obj = {
+                    processType: 3,
+                    orderId: data.id,
+                    submitterId: data.id // 本地账户的信息id
+                }
+
+                API.undoAudit(3, obj).then(res => {
+                    if (res.result == 1) {
+                        this.$message({
+                            type: 'success',
+                            message: '撤回成功!'
+                        });
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消撤回'
                 });
             })
         },

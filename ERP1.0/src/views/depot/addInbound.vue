@@ -197,17 +197,17 @@
 
                     <div class="goodInfoBox">
                         <el-form-item prop="storeNo" label="入库单号" v-if="inbound">
-                            <el-input v-model="addFormData.storeNo" placeholder="请输入入库单号"></el-input>
+                            <el-input v-model="addFormData.storeNo" placeholder="请输入入库单号" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item prop="storeNo" label="出库单号" v-if="outbound">
-                            <el-input v-model="addFormData.storeNo" placeholder="请输入出库单号"></el-input>
+                            <el-input v-model="addFormData.storeNo" placeholder="请输入出库单号" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item prop="operator" label="经办人">
                             <el-input v-model="addFormData.operator" placeholder="请输入经办人"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item prop="creator" label="制单人">
-                            <el-input v-model="addFormData.creator" placeholder="请输入制单人" disabled="true"></el-input>
+                            <el-input v-model="addFormData.creator" placeholder="请输入制单人" :disabled="true"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item class="marker" :style="{width: '700px'}" prop="storeRemark" label="备注">
@@ -238,19 +238,10 @@ export default {
             inbound: false,
             outbound: false,
             goodsInfoData: [{
-                oper: '',
-                itemId: '',
-                itemSpec: '',
-                currentStoreNumber: '',
-                barCode: '',
-                goodName: '',
-                SKU: '',
-                qualityDate: '',
-                productData: '',
-                unit: '',
-                unitPrice: '',
-                unitTotal: '',
-                remark: ''
+                itemSku: '2',
+                currentStoreNumber: 5,
+                itemId: 2,
+                remark: '出库备注'
             }],
             addFormData: {
                 storeType: '',
@@ -419,6 +410,18 @@ export default {
             this.$router.push({
                 path: '/chooseGood'
             });
+        },
+        // 产生随机数并加到编码
+        MathRand(data, type) {
+            let sixNum = ''
+            let myDate = new Date()
+            let monthArr = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+            let day = myDate.getDate().toString() > 9 ? myDate.getDate() : '0' + myDate.getDate()
+
+            for (let i = 0; i < data; i++) {
+                sixNum += Math.floor(Math.random() * 10);
+            }
+            this.addFormData.storeNo = type + '-' + myDate.getFullYear() + monthArr[myDate.getMonth()] + day + '-' + sixNum
         },
         // 保存结果
         save() {
@@ -625,6 +628,17 @@ export default {
             this.outbound = true
             this.inbound = false
         }
+        if (this.outbound) {
+            this.MathRand(6, 'OUT')
+        }
+        if (this.inbound) {
+            this.MathRand(6, 'IN')
+        }
+
+        // 更新制单人
+        const USER = sessionStorage.getItem('user')
+
+        this.addFormData.creator = JSON.parse(USER).loginCode
         console.log(this.inbound, this.outbound)
     }
 }
