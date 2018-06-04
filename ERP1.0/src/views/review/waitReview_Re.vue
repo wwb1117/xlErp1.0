@@ -17,10 +17,10 @@
                 </div>
                 <div class="base_info">
                     <span>提交人 : </span>
-                    <span>浩克</span>
+                    <span v-text="$store.state.home.userInfo.user.userName"></span>
                     <br>
                     <span>提交时间 : </span>
-                    <span>2018-05-22</span>
+                    <span>{{Date.parse(new Date()) / 1000 | time_m}}</span>
                 </div>
                 <div class="banner">
 
@@ -134,6 +134,7 @@
 </template>
 
 <script>
+import api from 'api/review'
 export default {
     data(){
         return {
@@ -158,6 +159,21 @@ export default {
             this.$router.push({
                 path: '/lookWaitReviewRe'
             })
+        },
+        getReviewRecord(){
+            var idArr = this.$store.state.home.currentModelId.split(";")
+            var orderId = idArr[0]
+            var reviewProcessId = idArr[1]
+            var paramobj = {
+                orderId: orderId,
+                reviewProcessId: reviewProcessId
+            }
+
+            api.getReviewRecord(paramobj).then((response) => {
+                console.log(response)
+            })
+
+
         }
 
     },

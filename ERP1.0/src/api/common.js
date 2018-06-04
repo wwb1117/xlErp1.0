@@ -13,5 +13,8 @@ export default {
     },
     getUserInfo(){
         return HttpClient.get('/user/info');
+    },
+    getUserPerssion(){
+        return HttpClient.get('/user/status');
     }
 }

@@ -9,6 +9,7 @@ export default {
         },
         modelContentHeight: null,
         currentModelId: '',
+        userInfo: null,
         nextMenuMap: {
             home: [
                 {
@@ -144,6 +145,10 @@ export default {
         setCurrentModelId(state, value){
             state.currentModelId = value
             window.localStorage.setItem("currentModelId", JSON.stringify(state.currentModelId))
+        },
+        setUserInfo(state, value){
+            state.userInfo = value
+            window.localStorage.setItem("userInfo", JSON.stringify(value))
         },
         // 商品包装类型
         setTypes(state, value){

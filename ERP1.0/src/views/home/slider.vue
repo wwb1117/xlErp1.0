@@ -8,6 +8,26 @@
           <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.name" :text="item.text" :type="item.name" :class="[item.icon, index == 0 ? 'active' : '']" v-text="item.text"></li>
         </ul>
 
+        <el-popover
+        placement="bottom"
+        v-model="popoverisShow"
+        width="127"
+        trigger="click"
+        :style="{textAlign: 'center'}"
+        >
+        <el-dropdown-item :style="{textAlign: 'center', width: '100px'}">修改密码</el-dropdown-item>
+        <el-dropdown-item :style="{textAlign: 'center', width: '100px'}">退出系统</el-dropdown-item>
+        <div slot="reference" class="userInfoWrap">
+            <div style="color: #E0E0DE; padding-top: 17px; text-align: center; cursor: pointer">
+                <img src="static/img/login/adm.png" alt="头像">
+                <br>
+                <span>admin</span>
+                <span :class="[popoverisShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom']"></span>
+            </div>
+        </div>
+        </el-popover>
+
+
       </div>
       <div v-show="$store.state.home.isNextMenuShow" class="silder_right">
         <div class="silder_right_top">
@@ -26,6 +46,7 @@ export default {
     props: ["menuList"],
     data() {
         return {
+            popoverisShow: false,
             nextMenuList: [],
             nextMenuMap:{},
             nextMenuTitle: '商品'
@@ -86,7 +107,6 @@ export default {
       width: 100%;
       height: 90px;
       line-height: 90px;
-
   }
   .silder_left {
     width: 90px;
@@ -150,6 +170,22 @@ export default {
   }
   .silder_left ::before{
       margin-right: 10px;
+  }
+  .silder_left .el-icon-caret-bottom:before{
+       margin-right: 0px;
+   }
+   .silder_left .el-icon-caret-top:before{
+       margin-right: 0px;
+   }
+  .userInfoWrap{
+      width: 100%;
+      height: 75px;
+      background: #374455;
+      position: absolute;
+      bottom: 0;
+  }
+  .el-popover{
+      min-width: 0;
   }
 
 </style>

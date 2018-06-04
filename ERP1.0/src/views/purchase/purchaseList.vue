@@ -140,12 +140,15 @@
                         label="制单人">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseMan"
+                        prop="purchasingAgent"
                         label="采购员">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseDate"
+                        prop="orderTime"
                         label="采购时间">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.orderTime | time_m}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="storeStatus"
@@ -467,8 +470,26 @@ export default {
                     path: '/purchaseListDetail'
                 })
             }
+            if (type == 7) {
+                this.myBase.confirmDelet('你确定要永久删除此采购单信息?', () => {
+                    api.deletePurchaseList(rowid).then((response) => {
+                        this.$message({
+                            type: 'success',
+                            duration: 1500,
+                            showClose: true,
+                            message: '删除成功'
+                        })
+
+                        this.tableParam.pageSize = 10
+                        this.tableParam.pageNo = 1
+                        this.getTableData()
+
+                    })
+                })
+            }
 
         }
+
 
 
     },

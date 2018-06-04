@@ -75,8 +75,8 @@
                             <el-option
                             v-for="item in SKUSelectData"
                             :key="item.id"
-                            :label="item.skuPropertieyNames"
-                            :value="item.skuPropertieyNames">
+                            :label="item.skuPropertyNames"
+                            :value="item.skuPropertyNames">
                             </el-option>
                         </el-select>
                         <span @click="getPopoverData(scope.row.id)" slot="reference" class="color_blue myCur">查看</span>
@@ -237,6 +237,10 @@ export default {
     activated(){
         this.getTableData()
         this.getGoodsItemSelect()
+        this.SKUSelectData = []
+        this.selectTableData.forEach((item, index) => {
+            item.skuGroups = ""
+        })
     },
     created(){},
     mounted(){}
