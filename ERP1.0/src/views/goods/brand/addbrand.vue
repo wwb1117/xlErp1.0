@@ -15,7 +15,7 @@
                     <el-form-item required label='品牌名称' :label-width='formLabelWidth' style="height:50px">
                         <el-input type='text' suffix-text='0/15'  size='small' style="width:338px" v-model="from.brandName"></el-input>
                     </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:10px">
+                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:30px">
                         <el-select
                             placeholder="请选择"
                             size='small'
@@ -24,7 +24,8 @@
                             multiple
                             filterable
                             allow-create
-                            default-first-option>
+                            default-first-option
+                            @change="selectVal">
                             <el-option
                                 v-for="item in options"
                                 :key="item.id"
@@ -34,7 +35,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in list" :key='index' v-model='text' >
-                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='pltext'></el-input>
+                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='pltextx[index]'></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
                         <el-upload
@@ -120,21 +121,7 @@ export default {
             ]
         }
     },
-    computed: {
-        pltext: function() {
-            var that = this
 
-            for (var i in that.list){
-                for (var k in that.options){
-                    if (this.list[i] == that.options[k].id){
-
-                        that.pltextx.push(that.options[k].categoryName)
-                    }
-                }
-            }
-            return that.pltextx
-        }
-    },
     methods: {
         // 上传
         handleRemove(file, fileList) {
@@ -143,6 +130,16 @@ export default {
         handlePictureCardPreview(file) {
             this.from.brandImg = file.url;
             this.dialogVisible = true;
+        },
+        selectVal() {
+            this.pltextx = this.list
+            for (var i in this.pltextx){
+                for (var k in this.options){
+                    if (this.pltextx[i] == this.options[k].id){
+                        this.pltextx[i] = this.options[k].categoryName
+                    }
+                }
+            }
         },
         trueconfim() {
             if (this.list.length != this.uplist.length){

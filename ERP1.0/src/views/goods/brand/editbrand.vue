@@ -15,7 +15,7 @@
                     <el-form-item required label='品牌名称' :label-width='formLabelWidth' style="height:50px">
                         <el-input type='text' suffix-text='0/15'  size='small' style="width:338px" v-model="from.brandName"></el-input>
                     </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:10px" >
+                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:30px" >
                         <el-select
                             placeholder="请选择"
                             size='small'
@@ -24,17 +24,18 @@
                             multiple
                             filterable
                             allow-create
-                            default-first-option>
+                            default-first-option
+                            @change="selectVal">
                             <el-option
                                 v-for="item in options"
-                                :key="item.categoryName"
+                                :key="item.id"
                                 :label="item.categoryName"
-                                :value="item.categoryName">
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
-                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
+                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='pltextx[index]'></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
                         <el-upload
@@ -92,7 +93,8 @@ export default {
 
             value: '',
             options: [],
-            text:[]
+            text:[],
+            pltextx: []
 
         }
     },
@@ -104,6 +106,16 @@ export default {
         handlePictureCardPreview(file) {
             this.from.brandImg = file.url;
             this.dialogVisible = true;
+        },
+        selectVal() {
+            this.pltextx = this.from.itemBrandCategories
+            for (var i in this.pltextx){
+                for (var k in this.options){
+                    if (this.pltextx[i] == this.options[k].id){
+                        this.pltextx[i] = this.options[k].categoryName
+                    }
+                }
+            }
         },
         trueconfim() {
             console.log(this.from)
@@ -154,7 +166,7 @@ export default {
 
         api.getcategorylist().then((response)=>{
             this.options = response.data.list
-            console.log(response.data.list)
+            // console.log(response.data.list)
         }).catch((error)=>{
             console.log(error)
         })
