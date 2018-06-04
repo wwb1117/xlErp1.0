@@ -70,10 +70,11 @@ export default {
 
             api.login(this.userInfo).then((reponse) => {
                 sessionStorage.setItem("user", JSON.stringify(this.userInfo))
+                this.$store.commit('setUserInfo', reponse.data)
                 this.$router.push({
                     path: '/main'
                 });
-
+                console.log(reponse)
             })
 
         }

@@ -26,6 +26,7 @@
                             <el-table
                                 :data="goodsInfoData"
                                 show-summary
+                                :summary-method="getSummaries"
                                 border
                             style="width: 100%">
                                 <el-table-column
@@ -47,11 +48,11 @@
                                 label="商品">
                                 </el-table-column>
                                 <el-table-column
-                                prop="SKU"
+                                prop="itemSpec"
                                 label="规格-SKU">
                                 </el-table-column>
                                 <el-table-column
-                                prop="qualityDate"
+                                prop="itemExp"
                                 label="保质期">
                                 </el-table-column>
                                 <el-table-column
@@ -63,7 +64,7 @@
                                 label="采购数">
                                 </el-table-column>
                                 <el-table-column
-                                prop="unit"
+                                prop="itemQuantifierUnit"
                                 label="单位">
                                 </el-table-column>
                                 <el-table-column
@@ -185,6 +186,37 @@ export default {
                 this.storeBaseInfo = response.data.obj
                 this.storeListData = response.data.list
             })
+        },
+        getSummaries(param){
+            var columns = param.columns
+            var data = param.data
+            var sums = []
+
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                if (column.property == 'purchasingNumber' || column.property == 'purchaseTotalPrice'){
+                    const values = data.map(item => Number(item[column.property]));
+
+                    if (!values.every(value => isNaN(value))) {
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+
+                    }
+                } else {
+                    sums[index] = ''
+                }
+            })
+            return sums
         }
     },
     activated(){

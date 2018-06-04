@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import api from 'api/purchase'
 import itemRecord from 'views/purchase/childComponents/invalidRecord'
 export default {
     components: {
@@ -203,10 +204,18 @@ export default {
                     path: '/purchaseListDetail'
                 })
             }
+        },
+        getTableData(){
+            api.getInvalidRecordList(this.tableParam).then((response) => {
+                console.log(response)
+            })
         }
 
     },
     created(){},
+    activated(){
+        this.getTableData()
+    },
     mounted(){}
 }
 </script>

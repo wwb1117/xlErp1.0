@@ -33,6 +33,9 @@ export default {
     addPurchaseList(data){
         return HttpClient.postJSON('/purchase/insertOrder', data);
     },
+    deletePurchaseList(data){
+        return HttpClient.delete('/purchase/' + data);
+    },
     addStoreList(data){
         return HttpClient.postJSON('/store/insertOrder', data);
     },
@@ -56,6 +59,9 @@ export default {
     },
     invalidStoreRecode(data){
         return HttpClient.put('/store/invalidOrder', data);
+    },
+    getInvalidRecordList(data){
+        return HttpClient.get('/store/findByInvalidCondition', data);
     },
     /************************采购单位****************************** */
     getPurchaseComList(data){

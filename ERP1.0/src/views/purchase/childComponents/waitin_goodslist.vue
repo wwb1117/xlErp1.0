@@ -87,7 +87,7 @@
                 <el-form-item prop="orderTime" label="入库时间">
                     <el-date-picker
                     v-model="formData.orderTime"
-                    format="yyyy-MM-dd HH:mm"
+                    format="yyyy-MM-dd"
                     value-format="timestamp"
                     type="date"
                     placeholder="选择日期">
@@ -141,7 +141,7 @@
                 <span class="title_title">商品种类 : </span>
                 <span v-text="goodsInfoData.length" class="title_data"></span><br>
                 <span class="title_title">商品数量 : </span>
-                <span >100</span>
+                <span v-text="totalStoreNumber"></span>
             </div>
 
 
@@ -213,6 +213,14 @@ export default {
         },
         rukuBtnEvent(){
             this.dialogVisible = true
+            this.totalStoreNumber = 0
+            this.goodsInfoData.forEach((item, index) => {
+                console.log(item.currentStoreNumber)
+                if (!item.currentStoreNumber) {
+                    item.currentStoreNumber = 0
+                }
+                this.totalStoreNumber += parseFloat(item.currentStoreNumber)
+            })
         },
         getRepositorySelectData(){
             api.getRepoSelectData().then((response) => {
@@ -225,10 +233,6 @@ export default {
             })
         },
         addStoreList(){
-            this.totalStoreNumber = 0
-            this.goodsInfoData.forEach((item, index) => {
-                this.totalStoreNumber += parseFloat(item.currentStoreNumber)
-            })
 
             var paramobj = {
                 purchaseOrderId: this.$store.state.home.currentModelId,
@@ -248,6 +252,8 @@ export default {
                 storeRemark: this.formData.remark,
                 list: this.goodsInfoData
             }
+
+            console.log(paramobj)
 
             api.addStoreList(paramobj).then((response) => {
                 this.$message({

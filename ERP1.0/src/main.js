@@ -48,8 +48,10 @@ store.commit('setModelContentHeight', winheight - 100);
 
 //获取local数据
 var currentModelId = JSON.parse(window.localStorage.getItem("currentModelId"))
+var userInfo = JSON.parse(window.localStorage.getItem("userInfo"))
 
 store.commit('setCurrentModelId', currentModelId);
+store.commit('setUserInfo', userInfo);
 
 // 定义过滤器
 Object.keys(filters).forEach(key => {

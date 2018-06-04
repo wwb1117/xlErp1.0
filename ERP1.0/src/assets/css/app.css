@@ -52,6 +52,9 @@ ul{
 input[type="file"] {
     display: none;
 }
+.el-popover{
+    min-width: 0;
+}
 /****************************elementUI消息弹框位置修改**************************************************/
 .el-message{
     top: 30%;

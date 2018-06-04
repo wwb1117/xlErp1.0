@@ -70,7 +70,7 @@
                         label="操作">
                          <template slot-scope="scope">
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 3)"
+                            @click.native="tablePropEvent(scope.row, 3)"
                             type="text"
                             size="small">
                             审核
@@ -88,7 +88,7 @@
                 :page-sizes="[10, 30, 50, 100]"
                 :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
@@ -103,6 +103,7 @@ export default {
             currentPage: 2,
             selectTableData: [],
             tableHeight: 500,
+            totalPage: 0,
             tableParam: {
                 auditorId: '1',
                 startTime: '',
@@ -124,7 +125,8 @@ export default {
             this.tableParam.pageNo = val
             this.getTableData()
         },
-        tablePropEvent(index, type){
+        tablePropEvent(rowdata, type){
+            this.$store.commit('setCurrentModelId', rowdata.orderId + ';' + rowdata.reviewProcessId)
             this.$router.push({
                 path: '/waitReviewRe'
             })
@@ -136,6 +138,8 @@ export default {
         getTableData(){
             api.getWaitReviewList(this.tableParam).then((response) => {
                 this.tableData = response.data.list
+                this.totalPage = response.data.total
+                console.log(response)
             })
         },
         datePickerChange(data){

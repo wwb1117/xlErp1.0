@@ -102,7 +102,7 @@ export default {
             totalPage: 1,
             tableParam: {
                 pageNo: 1,
-                pageSize: 15,
+                pageSize: 10,
                 sellerName: ''
             },
             tableData: []
@@ -148,7 +148,7 @@ export default {
                             message: '删除成功'
                         })
 
-                        this.tableParam.pageSize = 15
+                        this.tableParam.pageSize = 10
                         this.tableParam.pageNo = 1
                         this.getTableData()
 
@@ -168,7 +168,7 @@ export default {
 
     },
     activated(){
-        this.tableParam.pageSize = 15
+        this.tableParam.pageSize = 10
         this.tableParam.pageNo = 1
         this.getTableData()
     },
