@@ -154,7 +154,7 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item prop="creator" label="制单人">
-                            <el-input v-model="addFormData.creator" placeholder="制单人" ></el-input>
+                            <el-input v-model="addFormData.creator" placeholder="制单人" :disabled="true" ></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item class="marker" :style="{width: '700px'}" prop="remark" label="备注">
@@ -411,13 +411,18 @@ export default {
     },
     created(){},
     mounted(){
+
         this.getPurchaseList()
     },
     activated() {
 
         for (let key in this.addFormData) {
-            this.addFormData[key] = ''
+            this.addFormData[key] = null
         }
+        // 更新制单人
+        const USER = sessionStorage.getItem('user')
+
+        this.addFormData.creator = JSON.parse(USER).loginCode
     }
 }
 </script>

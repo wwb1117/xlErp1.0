@@ -290,7 +290,10 @@ export default {
         },
         // 修改
         editTable(index, data) {
-
+            this.$router.push({
+                name: '编辑出入库',
+                params: {type: 'inbound', id: data.id}
+            })
         },
         // 删除
         deleteTable(index, data) {

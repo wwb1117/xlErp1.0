@@ -1,8 +1,9 @@
 <template>
     <div>
         <div class="model_topcol">
-            <span style="color: #409EFF">{{$route.params.type}}单</span>
-            <span> - 新增{{$route.params.type}}单</span>
+            <span style="color: #409EFF" v-if="inbound">入库单</span>
+            <span style="color: #409EFF" v-if="outbound">出库单</span>
+            <span> - 编辑</span>
         </div>
         <div class="model_content" >
             <div class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
@@ -18,8 +19,8 @@
                                 <el-option label="其他" value="3"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="storeType" label= "出库类型" v-if = "outbound">
-                            <el-select v-model="addFormData.storeType" placeholder="请选择出库类型">
+                        <el-form-item prop="deliverType" label= "出库类型" v-if = "outbound">
+                            <el-select v-model="addFormData.deliverType" placeholder="请选择出库类型">
                                 <el-option label="商城订单" value="0"></el-option>
                                 <el-option label="线下订单" value="1"></el-option>
                                 <el-option label="采购退货" value="2"></el-option>
@@ -27,9 +28,9 @@
                                 <el-option label="其他" value="4"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="storeHouseId" label="入库仓库" v-if = "inbound">
+                        <el-form-item prop="storeHouseName" label="入库仓库" v-if = "inbound">
                             <el-select
-                                v-model="addFormData.storeHouseId"
+                                v-model="addFormData.storeHouseName"
                                 filterable
                                 remote
                                 reserve-keyword
@@ -44,9 +45,9 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="storeHouseId" label="出库仓库" v-if = "outbound">
+                        <el-form-item prop="deliverHouseId" label="出库仓库" v-if = "outbound">
                             <el-select
-                                v-model="addFormData.storeHouseId"
+                                v-model="addFormData.deliverHouseId"
                                 filterable
                                 remote
                                 reserve-keyword
@@ -61,8 +62,8 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="buyerId" label="采购单位">
-                            <el-select v-model="addFormData.buyerId" placeholder="请选择">
+                        <el-form-item prop="buyerName" label="采购单位">
+                            <el-select v-model="addFormData.buyerName" placeholder="请选择">
                                 <el-option
                                     v-for="item in buyerId_option"
                                     :key="item.id"
@@ -85,7 +86,7 @@
                         </el-form-item>
                         <el-form-item prop="storeTime" label="出库时间" v-if="outbound">
                             <el-date-picker
-                                v-model="addFormData.storeTime"
+                                v-model="addFormData.deliverTime"
                                 type="datetime"
                                 placeholder="请选择出库时间">
                             </el-date-picker>
@@ -96,7 +97,7 @@
                     </div>
                     <div style="padding: 10px;">
                         <el-table
-                            :data="goodsInfoData"
+                            :data="addFormData.list"
                             show-summary
                             :span-method="arraySpanMethod"
                             border
@@ -207,7 +208,7 @@
                         </el-form-item>
                         <br>
                         <el-form-item prop="creator" label="制单人">
-                            <el-input v-model="addFormData.creator" placeholder="请输入制单人" disabled="true"></el-input>
+                            <el-input v-model="addFormData.creator" placeholder="请输入制单人" :disabled="true"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item class="marker" :style="{width: '700px'}" prop="storeRemark" label="备注">
@@ -237,6 +238,7 @@ export default {
             loading: false,
             inbound: false,
             outbound: false,
+            changeObj: {},
             goodsInfoData: [{
                 oper: '',
                 itemId: '',
@@ -309,16 +311,15 @@ export default {
                 unitTotal: ''
             }
 
-            this.goodsInfoData.push(itemobj)
+            this.addFormData.list.push(itemobj)
         },
         goodTableReduceEvent(data){
-            if (this.goodsInfoData.length > 1){
-                this.goodsInfoData.splice(data.$index, 1)
+            if (this.addFormData.list.length > 1){
+                this.addFormData.list.splice(data.$index, 1)
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
-            console.log(rowIndex)
-            console.log(this.goodsInfoData.length)
+
             if (columnIndex === 2) {
                 if (row.itemId == ""){
                     return [1, 3];
@@ -365,18 +366,11 @@ export default {
 
         },
         unitTatalEvent(data){
-            data.row.unitPrice = data.row.unitPrice.replace(/[^\d\.]/g, '')
             data.row.currentStoreNumber = data.row.currentStoreNumber.replace(/[^\d\.]/g, '')
             if (data.row.unitPrice == '' || data.row.currentStoreNumber == ''){
                 data.row.unitTotal = ''
                 return
             }
-            var price = parseFloat(data.row.unitPrice)
-            var num = parseFloat(data.row.currentStoreNumber)
-
-
-
-            data.row.unitTotal = price * num
         },
         getSummaries(param){
             var columns = param.columns
@@ -423,28 +417,16 @@ export default {
         // 保存结果
         save() {
             this.addFormData.totalStoreNumber = 0
-            this.addFormData.list = []
-            // 将表中商品信息添加到addFormData
-            this.goodsInfoData.forEach(res => {
-                let obj = {
-                    itemId: '',
-                    currentStoreNumber: '',
-                    purchasingNumber: '',
-                    remark: '',
-                    itemSpec: ''
-                }
 
-                obj.itemId = res.itemId
-                obj.remark = res.remark
-                obj.itemSpec = res.itemSpec
-                obj.currentStoreNumber = res.currentStoreNumber
-                this.addFormData.totalStoreNumber += parseInt(obj.currentStoreNumber, 10)
-                this.addFormData.list.push(obj)
+            // 将表中商品信息添加到addFormData
+            this.addFormData.list.forEach(res => {
+
+                this.addFormData.totalStoreNumber += parseInt(res.currentStoreNumber, 10)
             })
             this.addFormData.creatorId = '12346'
             // 通过仓库ID和采购单ID赋值给addFormData的name
             this.houseId_option.forEach(res => {
-                if (res.id === this.addFormData.storeHouseId) {
+                if (res.id === this.addFormData.storeHouseName) {
                     this.addFormData.storeHouseName = res.warehouseName
                 }
             })
@@ -454,10 +436,15 @@ export default {
                 }
             })
             this.postData = ME.deepCopy(this.addFormData)
-            this.postData.storeTime = Date.parse(this.postData.storeTime) / 1000
+            if (isNaN(this.postData.storeTime)) {
+                this.postData.storeTime = Date.parse(this.postData.storeTime) / 1000
+            } else {
+                this.postData.storeTime = this.postData.storeTime / 1000
+            }
+
             console.log(JSON.stringify(this.postData), "添加数据")
             // 出入库操作
-            if (this.$route.params.type === '入库') {
+            if (this.inbound) {
                 // 数据判空
                 for (let key in this.postData) {
                     if (!this.postData[key]) {
@@ -522,7 +509,7 @@ export default {
                 }).catch(error => {
 
                 })
-            } else if (this.$route.params.type === '出库') {
+            } else if (this.outbound) {
                 this.$set(this.postData, 'deliverHouseId', this.postData.storeHouseId)
                 this.$set(this.postData, 'deliverHouseName', this.postData.storeHouseName)
                 this.$set(this.postData, 'deliverNo', this.postData.storeNo)
@@ -607,6 +594,25 @@ export default {
 
                 })
             }
+        },
+        // 获取详情
+        getboundDetail() {
+            if (this.inbound) { // 入库单
+                console.log("入库")
+                API.getInboundDetail(this.$route.params.id).then(res => {
+                    this.addFormData = ME.deepCopy(res.data)
+                    // 数据转化
+                    this.addFormData.storeTime = this.addFormData.storeTime * 1000
+                    this.addFormData.storeType = this.$allEnumeration.storeType[this.addFormData.storeType]
+                })
+
+            } else if (this.outbound) { // 出库单
+                console.log("出库")
+                API.getOutboundDetail(this.$route.params.id).then(res => {
+                    this.addFormData = ME.deepCopy(res.data)
+                    console.log(this.addFormData, '数据')
+                })
+            }
         }
     },
     created(){},
@@ -615,16 +621,14 @@ export default {
         this.getPurchaseList()
     },
     activated () {
-        for (let key in this.addFormData) {
-            this.addFormData[key] = ''
-        }
-        if (this.$route.params.type === '入库') {
+        if (this.$route.params.type === 'inbound') {
             this.inbound = true
             this.outbound = false
-        } else if (this.$route.params.type === '出库') {
+        } else if (this.$route.params.type === 'outbound') {
             this.outbound = true
             this.inbound = false
         }
+        this.getboundDetail()
         console.log(this.inbound, this.outbound)
     }
 }
