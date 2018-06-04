@@ -24,18 +24,17 @@
                             multiple
                             filterable
                             allow-create
-                            default-first-option
-                            @change="selectVal">
+                            default-first-option>
                             <el-option
                                 v-for="item in options"
-                                :key="item.id"
+                                :key="item.categoryName"
                                 :label="item.categoryName"
-                                :value="item.id">
+                                :value="item.categoryName">
                             </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in list" :key='index' v-model='text' >
-                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='pltextx[index]'></el-input>
+                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
                         <el-upload
@@ -96,8 +95,6 @@ export default {
             list: [],
             text: [],
 
-            pltextx: [],
-
             uplist: [
                 {
                     itemCategoryId: '',
@@ -131,17 +128,15 @@ export default {
             this.from.brandImg = file.url;
             this.dialogVisible = true;
         },
-        selectVal() {
-            this.pltextx = this.list
-            for (var i in this.pltextx){
-                for (var k in this.options){
-                    if (this.pltextx[i] == this.options[k].id){
-                        this.pltextx[i] = this.options[k].categoryName
+        trueconfim() {
+            for (var w in this.list){
+                for (var e in this.options){
+                    if (this.list[w] == this.options[e].categoryName){
+                        this.list[w] = this.options[e].id
                     }
                 }
             }
-        },
-        trueconfim() {
+
             if (this.list.length != this.uplist.length){
 
                 for (var a = 0 ; a < this.list.length - 1 ; a++){
@@ -215,6 +210,20 @@ export default {
         }
     },
     created() {
+        this.list = []
+        this.text = []
+
+        this.from = {
+            id: '',
+            brandName: '',
+            isControl: 0,
+            rateList: '',
+            brandImg: '',
+            sort: '',
+            isRecommended: 0,
+            shopGroupIds: ''
+        }
+
         api.getcategorylist().then((response)=>{
             this.options = response.data.list
             // console.log(response)
@@ -223,9 +232,23 @@ export default {
         })
     },
     activated() {
+        this.list = []
+        this.text = []
+
+        this.from = {
+            id: '',
+            brandName: '',
+            isControl: 0,
+            rateList: '',
+            brandImg: '',
+            sort: '',
+            isRecommended: 0,
+            shopGroupIds: ''
+        }
+
         api.getcategorylist().then((response)=>{
             this.options = response.data.list
-            console.log(response.data.list)
+            // console.log(response.data.list)
         }).catch((error)=>{
             console.log(error)
         })

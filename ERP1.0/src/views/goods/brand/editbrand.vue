@@ -24,18 +24,17 @@
                             multiple
                             filterable
                             allow-create
-                            default-first-option
-                            @change="selectVal">
+                            default-first-option>
                             <el-option
                                 v-for="item in options"
-                                :key="item.id"
+                                :key="item.categoryName"
                                 :label="item.categoryName"
-                                :value="item.id">
+                                :value="item.categoryName">
                             </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
-                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='pltextx[index]'></el-input>
+                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
                         <el-upload
@@ -93,8 +92,7 @@ export default {
 
             value: '',
             options: [],
-            text:[],
-            pltextx: []
+            text:[]
 
         }
     },
@@ -107,18 +105,45 @@ export default {
             this.from.brandImg = file.url;
             this.dialogVisible = true;
         },
-        selectVal() {
-            this.pltextx = this.from.itemBrandCategories
-            for (var i in this.pltextx){
-                for (var k in this.options){
-                    if (this.pltextx[i] == this.options[k].id){
-                        this.pltextx[i] = this.options[k].categoryName
+        trueconfim() {
+            for (var w in this.from.itemBrandCategories){
+                for (var e in this.options){
+                    if (this.from.itemBrandCategories[w] == this.options[e].categoryName){
+                        this.from.itemBrandCategories[w] = this.options[e].id
                     }
                 }
             }
-        },
-        trueconfim() {
-            console.log(this.from)
+
+            if (this.from.isControl == true){
+                this.from.isControl = 1
+            } else {
+                this.from.isControl = 0
+            }
+
+            if (this.from.isRecommended == true){
+                this.from.isRecommended = 1
+            } else {
+                this.from.isRecommended = 0
+            }
+
+
+            let obj = {
+                id: this.from.id,
+                brandName: this.from.brandName,
+                isControl: this.from.isControl,
+                rateList: JSON.stringify(this.from.itemBrandCategories),
+                brandImg: this.from.brandImg,
+                sort: this.from.sort,
+                isRecommended: this.from.isRecommended,
+                shopGroupIds:''
+            }
+
+            api.putitemitemBrandupdate(obj).then((response)=>{
+
+            }).catch((error)=>{
+                console.log(error)
+            })
+
         },
         returnprev() {
             this.from = {
