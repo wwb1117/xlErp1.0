@@ -177,6 +177,12 @@ export default {
             console.log(error)
         })
 
+        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
+
     },
     activated() {
 
@@ -192,6 +198,12 @@ export default {
         api.getcategorylist().then((response)=>{
             this.options = response.data.list
             // console.log(response.data.list)
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            console.log(response)
         }).catch((error)=>{
             console.log(error)
         })

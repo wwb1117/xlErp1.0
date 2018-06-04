@@ -14,10 +14,10 @@
                         size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
-                        v-model="input"
+                        v-model="page.brandName"
                         style="width:378px">
                     </el-input>
-                    <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
+                    <el-button type="primary" size='small' style="margin-left:10px" @click="findthat">搜索</el-button>
                 </div>
                 <ul class="brand_list">
                     <li style="width:200px">品牌名称</li>
@@ -96,14 +96,13 @@ export default {
             // 分页
             currentPage: 2,
             totalPage: 1,
-            // 搜索
-            input: '',
             // 关联分类
             // 删除
             del: false,
             page: {
                 pageNo: 1,
-                pageSize: 30
+                pageSize: 30,
+                brandName: ''
             },
 
             brand: []
@@ -129,6 +128,16 @@ export default {
         openedit(data) {
             this.$store.commit('setBrand', data)
             this.$router.push('editBrand')
+        },
+        findthat() {
+            api.getitemBrandlist(this.page).then((response)=>{
+                // console.log(response.data.itemVOs)
+                this.brand = response.data.itemVOs
+            }).catch((error)=>{
+
+                console.log(error)
+
+            })
         },
         get() {
 
