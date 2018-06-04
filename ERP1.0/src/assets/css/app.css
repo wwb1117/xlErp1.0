@@ -262,10 +262,13 @@ input[type="file"] {
 }
 
 .add_box .el-tag__close:hover{
-    font-size: 10px
+    font-size: 12px
+}
+.addbrand_box .el-tag__close:hover{
+    font-size: 12px
 }
 .el-dialog__body .el-tag__close:hover{
-    font-size: 10px
+    font-size: 12px
 }
 .editTypes_box .el-form-item__content, .addTypes_box .el-form-item__content, .edit_box .el-form-item__content, .addSpec_box .el-form-item__content, .addbrand_box .el-form-item__content{
     height: 100px;

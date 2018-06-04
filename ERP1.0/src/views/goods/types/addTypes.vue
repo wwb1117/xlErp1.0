@@ -100,72 +100,7 @@ export default {
                     id:''
                 }
             ],
-            options: [
-                // {
-                //     value: '1',
-                //     label: '灌装'
-                // },
-                // {
-                //     value: '2',
-                //     label: '袋装'
-                // },
-                // {
-                //     value: '3',
-                //     label: '包装'
-                // },
-                // {
-                //     value: '4',
-                //     label: '盒装'
-                // },
-                // {
-                //     value: '5',
-                //     label: '瓶装'
-                // },
-                // {
-                //     value: '6',
-                //     label: '箱'
-                // },
-                // {
-                //     value: '7',
-                //     label: '组'
-                // },
-                // {
-                //     value: '8',
-                //     label: '套'
-                // },
-                // {
-                //     value: '9',
-                //     label: '个'
-                // },
-                // {
-                //     value: '10',
-                //     label: '条'
-                // },
-                // {
-                //     value: '11',
-                //     label: '支'
-                // },
-                // {
-                //     value: '12',
-                //     label: '本'
-                // },
-                // {
-                //     value: '13',
-                //     label: '把'
-                // },
-                // {
-                //     value: '14',
-                //     label: '枚'
-                // },
-                // {
-                //     value: '15',
-                //     label: '根'
-                // },
-                // {
-                //     value: '16',
-                //     label: '双'
-                // }
-            ],
+            options: [],
             value: '',
             text: '',
             unitId: []
@@ -200,19 +135,10 @@ export default {
             this.$router.go(-1)
         },
         trueconfim() {
-            var num = ''
-
-            for (var k in this.unitId){
-                num = this.unitId[k]
-            }
-
-            for (var i in this.typesNum){
-                this.typesNum[i].id = num
-            }
 
             // console.log(num)
             let obj = {
-                unitId: num,
+                unitId: this.unitId,
                 remark: this.text,
                 itemSupplyPropertyValueForms: JSON.stringify(this.typesNum)
             }
@@ -232,7 +158,7 @@ export default {
             }).catch((error)=>{
                 console.log(error)
             })
-            // this.$router.go(-1)
+
         }
     },
     created() {

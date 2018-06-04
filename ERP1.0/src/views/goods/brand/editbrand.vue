@@ -15,26 +15,26 @@
                     <el-form-item required label='品牌名称' :label-width='formLabelWidth' style="height:50px">
                         <el-input type='text' suffix-text='0/15'  size='small' style="width:338px" v-model="from.brandName"></el-input>
                     </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:10px" >
                         <el-select
                             placeholder="请选择"
                             size='small'
                             style="width:338px"
-                            v-model="from.rateList"
+                            v-model="from.itemBrandCategories"
                             multiple
                             filterable
                             allow-create
                             default-first-option>
                             <el-option
                                 v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                :key="item.categoryName"
+                                :label="item.categoryName"
+                                :value="item.categoryName">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" >
-                        <el-input type='text'  size='small' style="width:338px" v-model="from.rateList"></el-input>
+                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
+                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
                         <el-upload
@@ -84,29 +84,16 @@ export default {
                 id: '',
                 brandName: '',
                 isControl: '',
-                rateList: '',
+                itemBrandCategories: [],
                 brandImg: '',
                 sort: '',
-                isRecommended: '',
-                shopGroupIds: ''
+                isRecommended: ''
             },
 
+            value: '',
+            options: [],
+            text:[]
 
-            options: [
-                {
-                    value: '1',
-                    label: '灌装'
-                },
-                {
-                    value: '2',
-                    label: '袋装'
-                },
-                {
-                    value: '3',
-                    label: '包装'
-                }
-            ],
-            value: ''
         }
     },
     methods: {
@@ -119,18 +106,17 @@ export default {
             this.dialogVisible = true;
         },
         trueconfim() {
-
+            console.log(this.from)
         },
         returnprev() {
             this.from = {
                 id: '',
                 brandName: '',
                 isControl: '',
-                rateList: [],
+                itemBrandCategories: [],
                 brandImg: '',
                 sort: '',
-                isRecommended: '',
-                shopGroupIds: ''
+                isRecommended: ''
             }
             this.value = ''
             this.$router.go(-1)
@@ -141,7 +127,15 @@ export default {
         var id = this.$store.state.home.brandId
 
         api.getitemBrandid(id).then((response)=>{
-            console.log(response)
+            // console.log(response.data.list)
+            this.from = response.data.list
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+        api.getcategorylist().then((response)=>{
+            this.options = response.data.list
+            // console.log(response)
         }).catch((error)=>{
             console.log(error)
         })
@@ -152,7 +146,15 @@ export default {
         var id = this.$store.state.home.brandId
 
         api.getitemBrandid(id).then((response)=>{
-            console.log(response)
+            // console.log(response.data.list)
+            this.from = response.data.list
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+        api.getcategorylist().then((response)=>{
+            this.options = response.data.list
+            console.log(response.data.list)
         }).catch((error)=>{
             console.log(error)
         })
@@ -180,7 +182,6 @@ export default {
     padding: 48px 20px 0 20px;
     overflow: auto
 }
-
 /* 底部 */
 .addbrand_footer{
     border-top:1px solid #e5e8e8;

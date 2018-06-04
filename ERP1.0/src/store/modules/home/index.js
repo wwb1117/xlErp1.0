@@ -128,7 +128,8 @@ export default {
         // 流程配置名称
         flowName: '',
         // 角色id
-        userId: ''
+        userId: '',
+        userName: ''
     },
     mutations: {
         setDevice(state, value){
@@ -173,6 +174,9 @@ export default {
         // 根据角色ID获取资源权限
         setUserid(state, value){
             state.userId = value
+        },
+        setRoleName(state, value){
+            state.userName = value
         }
     }
 };

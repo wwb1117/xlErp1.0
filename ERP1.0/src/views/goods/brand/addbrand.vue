@@ -15,7 +15,7 @@
                     <el-form-item required label='品牌名称' :label-width='formLabelWidth' style="height:50px">
                         <el-input type='text' suffix-text='0/15'  size='small' style="width:338px" v-model="from.brandName"></el-input>
                     </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:10px">
                         <el-select
                             placeholder="请选择"
                             size='small'
@@ -27,14 +27,14 @@
                             default-first-option>
                             <el-option
                                 v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                :key="item.id"
+                                :label="item.categoryName"
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in list" :key='index' v-model='text'>
-                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]"></el-input>
+                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in list" :key='index' v-model='text' >
+                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='pltext'></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
                         <el-upload
@@ -73,6 +73,7 @@
 </template>
 <script>
 import api from 'api/goods'
+
 export default {
     data() {
         return {
@@ -94,6 +95,8 @@ export default {
             list: [],
             text: [],
 
+            pltextx: [],
+
             uplist: [
                 {
                     itemCategoryId: '',
@@ -102,20 +105,34 @@ export default {
             ],
 
             options: [
-                {
-                    value: '1',
-                    label: '灌装'
-                },
-                {
-                    value: '2',
-                    label: '袋装'
-                },
-                {
-                    value: '3',
-                    label: '包装'
+                // {
+                //     value: '1',
+                //     label: '灌装'
+                // },
+                // {
+                //     value: '2',
+                //     label: '袋装'
+                // },
+                // {
+                //     value: '3',
+                //     label: '包装'
+                // }
+            ]
+        }
+    },
+    computed: {
+        pltext: function() {
+            var that = this
+
+            for (var i in that.list){
+                for (var k in that.options){
+                    if (this.list[i] == that.options[k].id){
+
+                        that.pltextx.push(that.options[k].categoryName)
+                    }
                 }
-            ],
-            value: ''
+            }
+            return that.pltextx
         }
     },
     methods: {
@@ -129,7 +146,7 @@ export default {
         },
         trueconfim() {
             if (this.list.length != this.uplist.length){
-                alert(1)
+
                 for (var a = 0 ; a < this.list.length - 1 ; a++){
 
                     let obj = {
@@ -167,14 +184,23 @@ export default {
             }
 
             api.postitemBrandadd(this.from).then((response)=>{
-                console.log(response)
+                // console.log(response)
+                this.from = {
+                    id: '',
+                    brandName: '',
+                    isControl: '',
+                    rateList: [],
+                    brandImg: '',
+                    sort: '',
+                    isRecommended: '',
+                    shopGroupIds: ''
+                }
+                this.value = ''
+                this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)
             })
 
-            console.log(this.text)
-            console.log(this.list)
-            console.log(this.from)
         },
         returnprev() {
             this.from = {
@@ -190,6 +216,22 @@ export default {
             this.value = ''
             this.$router.go(-1)
         }
+    },
+    created() {
+        api.getcategorylist().then((response)=>{
+            this.options = response.data.list
+            // console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
+    },
+    activated() {
+        api.getcategorylist().then((response)=>{
+            this.options = response.data.list
+            console.log(response.data.list)
+        }).catch((error)=>{
+            console.log(error)
+        })
     }
 }
 </script>

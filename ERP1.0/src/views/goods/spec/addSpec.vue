@@ -124,10 +124,11 @@ export default {
 
 
             let obj = {
-                skuProperties:{
+                itemSupplyPropertyValueForms:JSON.stringify({
                     skuPropertyName: this.specNum.skuPropertyName,
+                    remark: this.text,
                     itemSkuPropertyValueDTOS: this.specNum
-                }
+                })
             }
 
             console.log(obj)
@@ -142,7 +143,6 @@ export default {
                 this.specNum.skuPropertyName = ''
                 this.text = ''
                 this.$router.go(-1)
-
             }).catch((error)=>{
                 console.log(error)
             })

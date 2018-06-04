@@ -54,7 +54,7 @@
                             <span>此操作将永久删除该项</span>
                             <span slot="footer" class="dialog-footer">
                                 <el-button @click="del = false">取 消</el-button>
-                                <el-button type="primary" @click="del = false">确 定</el-button>
+                                <el-button type="primary" @click="del = false" disabled>确 定</el-button>
                             </span>
                         </el-dialog>
                     </li>
@@ -103,7 +103,7 @@ export default {
             del: false,
             page: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 30
             },
 
             brand: []
@@ -146,10 +146,10 @@ export default {
         // console.log(this.form)
         this.get()
 
+    },
+    activated() {
+        this.get()
     }
-    // activated() {
-    //     this.get()
-    // }
 }
 </script>
 <style scoped>
@@ -179,7 +179,8 @@ export default {
 .brand_box{
     border: 1px solid #e6e9eb;
     color: #5e6161;
-    background: white
+    background: white;
+    overflow: auto
 }
 .box_top{
     display: flex;

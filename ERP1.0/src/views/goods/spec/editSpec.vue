@@ -111,7 +111,7 @@ export default {
         trueconfim() {
 
             let obj = {
-                skuPropertys : JSON.stringify({
+                skuProperties : JSON.stringify({
                     skuPropertyId: this.editNum.id,
                     skuPropertyName: this.editNum.skuPropertyName,
                     itemSkuPropertyValueDTOS: this.editNum.list
