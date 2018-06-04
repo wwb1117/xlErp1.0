@@ -2,8 +2,8 @@
     <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
         <header class="addTypes_header">
             <el-breadcrumb separator='-' style="line-height:45px;font-size:15px">
-                <el-breadcrumb-item :to="{ path: '/goodsTypes' }">商品规格</el-breadcrumb-item>
-                <el-breadcrumb-item>新增规格</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/goodsTypes' }">包装类型</el-breadcrumb-item>
+                <el-breadcrumb-item>新增类型</el-breadcrumb-item>
             </el-breadcrumb>
         </header>
         <section class="addTypes_conent" >
@@ -210,7 +210,7 @@ export default {
                 this.typesNum[i].id = num
             }
 
-            console.log(num)
+            // console.log(num)
             let obj = {
                 unitId: num,
                 remark: this.text,
@@ -234,6 +234,18 @@ export default {
             })
             // this.$router.go(-1)
         }
+    },
+    created() {
+        this.typesNum = [
+            {
+                skuNumber: '',
+                supplyMsg: '',
+                isDeleted: false,
+                id:''
+            }
+        ]
+        this.text = ''
+        this.value = ''
     }
 
 }

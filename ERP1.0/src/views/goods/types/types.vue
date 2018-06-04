@@ -11,7 +11,7 @@
                     size="small"
                     placeholder="请输入内容"
                     prefix-icon="el-icon-search"
-                    v-model="input"
+                    v-model="page.unitMsg"
                     style="width:378px">
                 </el-input>
                 <el-button type="primary" size='small' style="margin-left:10px" @click='findthat'>搜索</el-button>
@@ -24,11 +24,11 @@
             </ul>
             <div class="types_box" :style="{height: $store.state.home.modelContentHeight-128 + 'px'}">
                 <ul class="types_list types_text" v-for='(item,index) in this.types' :key='index'>
-                    <li style="width:210px">{{item.supplyMsg}}</li>
-                    <li style="width:500px">{{item.skuNumber}}</li>
+                    <li style="width:210px">{{item.unitMsg}}</li>
+                    <li style="width:500px"><span v-for='(date,index) in item.itemSupplyPropertyVOs' :key='index' style="margin-right:5px">{{date.supplyMsg}}</span></li>
                     <li style="width:300px">{{item.remark}}</li>
                     <li style="width:110px">
-                        <el-button type='text' @click='gotoEdit(item.supplyMsg)'>编辑</el-button>
+                        <el-button type='text' @click='gotoEdit(item.id)'>编辑</el-button>
                         <el-button type="text" @click="del = true">删除</el-button>
                         <el-dialog
                             title="温馨提示"
@@ -67,16 +67,6 @@ import api from 'api/goods'
 export default {
     data() {
         return {
-            msg: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
             dialogFormVisible: false,
             formLabelWidth: '120px',
             value1: true,
@@ -86,31 +76,7 @@ export default {
             currentPage: 2,
             totalPage: 1,
 
-            input: '',
             // 关联分类
-            options: [
-                {
-                    value: '选项1',
-                    label: '黄金糕'
-                },
-                {
-                    value: '选项2',
-                    label: '双皮奶'
-                },
-                {
-                    value: '选项3',
-                    label: '蚵仔煎'
-
-                },
-                {
-                    value: '选项4',
-                    label: '龙须面'
-                },
-                {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }
-            ],
             value: '',
             checked: false,
             // 删除
@@ -118,7 +84,8 @@ export default {
 
             page:{
                 pageSize: 10,
-                pageNo: 1
+                pageNo: 1,
+                unitMsg: ''
             },
 
             types:[]
@@ -144,13 +111,9 @@ export default {
         },
         // 搜索
         findthat() {
-            let obj = {
-                unitMsg: this.input
-            }
+            api.getitemsupplyPropertylist(this.page).then((response)=>{
 
-            api.getitemsupplyPropertyfindByUnitMsg(obj).then((response)=>{
-
-                this.types = response.data
+                this.types = response.data.list
                 // console.log(response)
             }).catch((error)=>{
                 console.log(error)

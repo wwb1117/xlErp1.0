@@ -75,33 +75,30 @@ export default {
         return HttpClient.put('/item/skuProperty/update', data)
     },
 
-    // 商品包装类型/供货规格！
-    // 商品单位列表
+    // 供货规格！
+    // 查询商品单位列表(商品添加单位和新增包装规格下拉框)
     getitemunitlist(data) {
         return HttpClient.get('/item/unit/list', data)
-    },
-    // 查询单位详情
-    getitemunitid(id) {
-        return HttpClient.get(`/item/unit/${id}`)
     },
     // 新增单位
     postitemunitadd(data) {
         return HttpClient.post('/item/unit/add', data)
     },
-    // 新增供货规格
-    postitemsupplyPropertyadd(data) {
-        return HttpClient.post('/item/supplyProperty/add', data)
-    },
-    // 根据包装名称查询
-    getitemsupplyPropertyfindByUnitMsg(data) {
-        return HttpClient.get('/item/supplyProperty/findBySupplyMsg', data)
-    },
-    // 查询包装类型列表
+    // 供货规格列表
     getitemsupplyPropertylist(data) {
         return HttpClient.get('/item/supplyProperty/list', data)
     },
-    // 更新供货规格
-    putsupplyPropertyupdate(data) {
+    // 供货规格详情
+    getitemsupplyPropertyunitId(unitId) {
+        return HttpClient.get(`/item/supplyProperty/${unitId}`)
+    },
+    // 新增包装类型
+    postitemsupplyPropertyadd(data) {
+        return HttpClient.post('/item/supplyProperty/add', data)
+    },
+    // 更新包装类型
+    putitemsupplyPropertyupdate(data) {
         return HttpClient.put('/item/supplyProperty/update', data)
     }
+
 }
