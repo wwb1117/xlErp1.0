@@ -43,6 +43,7 @@ import addAllot from '@/views/depot/addAllot'
 import allotDetail from '@/views/depot/allotDetail'
 import addRepertory from '@/views/depot/addRepertory'
 import editRepertory from '@/views/depot/editRepertory'
+import editBound from '@/views/depot/editBound'
 
 /**************************************************审批模块*********************************************/
 import waitReview from '@/views/review/waitReview'
@@ -113,12 +114,14 @@ var router = new Router({
                 {name: "库存盘点", path: '/repertoryCheck', component: repertoryCheck},
                 {name: "仓库管理", path: '/repertoryManage', component: repertoryManage},
                 {name: "新增入库", path: '/addInbound', component: addInbound},
+                {name: "编辑出入库", path: '/editBound/:id', component: editBound},
                 {name: "出入库详情", path: '/boundDetail/:type/:id', component: boundDetail},
                 {name: "出入库明细", path: '/inoutBound', component: inoutBound},
                 {name: "新增调拨单", path: '/addAllot', component: addAllot},
                 {name: "调拨单详情", path: '/allotDetail/:id', component: allotDetail},
                 {name: "新增仓库", path: '/addRepertory', component: addRepertory},
                 {name: "编辑仓库", path: '/editRepertory/:type/:id', component: editRepertory},
+
 
                 /*************************** 审批模块*************************************/
                 {name: "待我审批", path: '/waitReview', component: waitReview},
