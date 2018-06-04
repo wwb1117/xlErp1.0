@@ -72,5 +72,14 @@ export default {
     // 工作日志
     getactionloglist(data){
         return HttpClient.get('/actionlog/list', data)
+    },
+
+    // 权限配置
+    getresourcelist(data) {
+        return HttpClient.get('/resource/list', data)
+    },
+    // 获取权限
+    getuserstatus(data) {
+        return HttpClient.get('/user/status', data)
     }
 }

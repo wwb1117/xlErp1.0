@@ -12,7 +12,7 @@
                     <el-form-item v-model="editNum" label="规格名称" required>
                         <el-input v-model="editNum.skuPropertyName" style="width:338px" size='small'></el-input>
                     </el-form-item>
-                    <el-form-item label="规格值" required :style="{height: (editNum.list.length)*50 + 'px'}">
+                    <el-form-item label="规格值" required :style="{height: (this.length)*50 + 'px'}">
                         <el-table
                             :data='editNum.list'
                             border
@@ -84,18 +84,20 @@ export default {
                 // }
             ],
 
-            length: ''
+            length: '1'
+
         }
     },
     methods: {
         addEditnum() {
             let obj = {
-                skuPropertyId: '',
+                skuPropertyId: this.editNum.id,
                 skuPropertyValueName: '',
                 isDeleted: 0
             }
 
             this.editNum.list.push(obj)
+            this.length = this.editNum.list.length
         },
         // removeEditnum(data) {
         //     if (this.editNum.length > 1){
@@ -107,7 +109,6 @@ export default {
             this.$router.go(-1)
         },
         trueconfim() {
-
 
             let obj = {
                 skuPropertys : JSON.stringify({
@@ -133,8 +134,8 @@ export default {
         api.getitemskupropertyid(msg).then((response)=>{
 
             this.editNum = response.data
-            this.length = response.data.list.length
-            // console.log(response)
+            this.length = this.editNum.list.length
+            console.log(response.data)
         }).catch((error)=>{
             console.log(error)
         })
@@ -145,7 +146,7 @@ export default {
         api.getitemskupropertyid(msg).then((response)=>{
 
             this.editNum = response.data
-            this.length = response.data.list.length
+            this.length = this.editNum.list.length
         }).catch((error)=>{
             console.log(error)
         })

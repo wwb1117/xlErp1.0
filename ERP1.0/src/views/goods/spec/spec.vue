@@ -12,7 +12,7 @@
                         size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
-                        v-model="input"
+                        v-model="page.skuPropertyName"
                         style="width:378px">
                     </el-input>
                     <el-button type="primary" size='small' style="margin-left:10px" @click='findthat'>搜索</el-button>
@@ -68,37 +68,10 @@ export default {
     data() {
         return {
 
-            value1: true,
-            value2: true,
-
-
             currentPage: 2,
             totalPage: 1,
 
-            input: '',
-            // 关联分类
-            options: [
-                {
-                    value: '选项1',
-                    label: '黄金糕'
-                },
-                {
-                    value: '选项2',
-                    label: '双皮奶'
-                },
-                {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                },
-                {
-                    value: '选项4',
-                    label: '龙须面'
-                },
-                {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }
-            ],
+
             value: '',
             checked: false,
             // 删除
@@ -106,7 +79,8 @@ export default {
 
             page: {
                 pageSize: 10,
-                pageNo: 1
+                pageNo: 1,
+                skuPropertyName: ''
             },
 
             spec: []
@@ -129,13 +103,8 @@ export default {
             this.page.pageNo = val
         },
         findthat() {
-            let obj = {
-                pageSize: 10,
-                pageNo: '',
-                skuPropertyName: this.input
-            }
 
-            api.getitemskuPropertylist(obj).then((response)=>{
+            api.getitemskuPropertylist(this.page).then((response)=>{
                 this.spec = response.data.list
 
             }).catch((error)=>{
@@ -217,6 +186,11 @@ export default {
     font-weight: 500;
     border-color:  #d6e3ec;
     background: white
+}
+.spec_text li{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
 }
 /* 底部 */
 .spec_footer{

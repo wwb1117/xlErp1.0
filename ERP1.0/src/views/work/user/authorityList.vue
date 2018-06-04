@@ -21,7 +21,7 @@
                     label="操作"
                     width="200">
                     <template  slot-scope="scope">
-                        <el-button type="text" size="small" @click="gotoAuthority">权限管理</el-button>
+                        <el-button type="text" size="small" @click="gotoAuthority(scope.row.id)">权限管理</el-button>
                         <el-button type="text" size="small" @click="edittrue(scope)" >编辑</el-button>
                         <el-button type="text" size="small" @click='deltrue(scope)' >删除</el-button>
                     </template>
@@ -141,7 +141,8 @@ export default {
             }
             this.index = ''
         },
-        gotoAuthority() {
+        gotoAuthority(data) {
+            this.$store.commit('setUserid', data)
             this.$router.push('permissionManage')
         },
 

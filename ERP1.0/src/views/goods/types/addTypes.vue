@@ -13,9 +13,9 @@
                         <el-select v-model="unitId" placeholder="请选择" style="width:338px" size='small'>
                             <el-option
                                 v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                :key="item.id"
+                                :label="item.unitMsg"
+                                :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -101,70 +101,70 @@ export default {
                 }
             ],
             options: [
-                {
-                    value: '1',
-                    label: '灌装'
-                },
-                {
-                    value: '2',
-                    label: '袋装'
-                },
-                {
-                    value: '3',
-                    label: '包装'
-                },
-                {
-                    value: '4',
-                    label: '盒装'
-                },
-                {
-                    value: '5',
-                    label: '瓶装'
-                },
-                {
-                    value: '6',
-                    label: '箱'
-                },
-                {
-                    value: '7',
-                    label: '组'
-                },
-                {
-                    value: '8',
-                    label: '套'
-                },
-                {
-                    value: '9',
-                    label: '个'
-                },
-                {
-                    value: '10',
-                    label: '条'
-                },
-                {
-                    value: '11',
-                    label: '支'
-                },
-                {
-                    value: '12',
-                    label: '本'
-                },
-                {
-                    value: '13',
-                    label: '把'
-                },
-                {
-                    value: '14',
-                    label: '枚'
-                },
-                {
-                    value: '15',
-                    label: '根'
-                },
-                {
-                    value: '16',
-                    label: '双'
-                }
+                // {
+                //     value: '1',
+                //     label: '灌装'
+                // },
+                // {
+                //     value: '2',
+                //     label: '袋装'
+                // },
+                // {
+                //     value: '3',
+                //     label: '包装'
+                // },
+                // {
+                //     value: '4',
+                //     label: '盒装'
+                // },
+                // {
+                //     value: '5',
+                //     label: '瓶装'
+                // },
+                // {
+                //     value: '6',
+                //     label: '箱'
+                // },
+                // {
+                //     value: '7',
+                //     label: '组'
+                // },
+                // {
+                //     value: '8',
+                //     label: '套'
+                // },
+                // {
+                //     value: '9',
+                //     label: '个'
+                // },
+                // {
+                //     value: '10',
+                //     label: '条'
+                // },
+                // {
+                //     value: '11',
+                //     label: '支'
+                // },
+                // {
+                //     value: '12',
+                //     label: '本'
+                // },
+                // {
+                //     value: '13',
+                //     label: '把'
+                // },
+                // {
+                //     value: '14',
+                //     label: '枚'
+                // },
+                // {
+                //     value: '15',
+                //     label: '根'
+                // },
+                // {
+                //     value: '16',
+                //     label: '双'
+                // }
             ],
             value: '',
             text: '',
@@ -236,6 +236,15 @@ export default {
         }
     },
     created() {
+
+        api.getitemunitlist().then((response)=>{
+            this.options = response.data.itemUnitList
+            // console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+
         this.typesNum = [
             {
                 skuNumber: '',
@@ -246,6 +255,14 @@ export default {
         ]
         this.text = ''
         this.value = ''
+    },
+    activated() {
+        api.getitemunitlist().then((response)=>{
+            // console.log(response)
+            this.options = response.data.itemUnitList
+        }).catch((error)=>{
+            console.log(error)
+        })
     }
 
 }

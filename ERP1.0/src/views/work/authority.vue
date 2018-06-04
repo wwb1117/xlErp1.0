@@ -29,6 +29,8 @@
     </section>
 </template>
 <script>
+// import api from 'api/work'
+
 export default {
     data() {
         return {
@@ -109,13 +111,27 @@ export default {
             defaultProps: {
                 children: 'children',
                 label: 'label'
-            }
+            },
+
+            userid: ''
         }
     },
     methods: {
         prevuser() {
             this.$router.push('userManage')
+        },
+        get() {
+
         }
+    },
+    created() {
+        this.userid = this.$store.state.home.userId
+
+        // api.
+    },
+    activated() {
+        this.userid = this.$store.state.home.userId
+
     }
 }
 </script>

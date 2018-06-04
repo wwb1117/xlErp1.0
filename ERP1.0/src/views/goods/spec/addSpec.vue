@@ -113,15 +113,25 @@ export default {
             this.$router.go(-1)
         },
         trueconfim() {
+            for (var i in this.specNum){
+                if (this.specNum[i].isDeleted == false){
+                    this.specNum[i].isDeleted = 0
+                }
+                if (this.specNum[i].isDeleted == true){
+                    this.specNum[i].isDeleted = 1
+                }
+            }
+
 
             let obj = {
-                skuProperties : JSON.stringify({
+                skuProperties:{
                     skuPropertyName: this.specNum.skuPropertyName,
                     itemSkuPropertyValueDTOS: this.specNum
-                })
+                }
             }
 
             console.log(obj)
+            // console.log(obj)
             api.postitemskuPropertyadd(obj).then((response)=>{
                 this.specNum = [
                     {
