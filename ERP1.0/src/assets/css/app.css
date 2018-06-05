@@ -152,7 +152,12 @@ input[type="file"] {
 .items_top input[type="file"] {
     display: none;
 }
-.items_top .el-upload--picture-card{
+.edititems_box .el-upload--picture-card{
+    width: 100px;
+    height: 100px;
+    line-height: 100px
+}
+.additems_box .el-upload--picture-card{
     width: 100px;
     height: 100px;
     line-height: 100px

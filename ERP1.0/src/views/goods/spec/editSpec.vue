@@ -112,6 +112,7 @@ export default {
                 skuProperties : JSON.stringify({
                     skuPropertyId: this.editNum.id,
                     skuPropertyName: this.editNum.skuPropertyName,
+                    remark: this.editNum.remark,
                     itemSkuPropertyValueDTOS: this.editNum.list
                 })
             }

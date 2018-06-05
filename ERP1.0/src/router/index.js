@@ -57,7 +57,9 @@ import IReviewed from '@/views/review/IReviewed'
 /**************************************************商品模块*********************************************/
 import goods from '@/views/goods/list/goods'
 import addGoods from '@/views/goods/list/addGoods'
-import items from '@/views/goods/items'
+import items from '@/views/goods/items/items'
+import additems from '@/views/goods/items/additems'
+import edititems from '@/views/goods/items/edititems'
 import brand from '@/views/goods/brand/brand'
 import addbrand from '@/views/goods/brand/addbrand'
 import editbrand from '@/views/goods/brand/editbrand'
@@ -141,6 +143,8 @@ var router = new Router({
                 {name: "商品详情", path: '/goodsDetails', component: dteails},
 
                 {name: "商品分类", path: '/goodsItems', component: items},
+                {name: "新增分类", path: '/addItems', component: additems},
+                {name: "编辑分类", path: '/editItems', component: edititems},
 
                 {name: "商品品牌", path: '/goodsBrand', component: brand},
                 {name: "新增品牌", path: '/addBrand', component: addbrand},

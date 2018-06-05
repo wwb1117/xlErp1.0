@@ -2,7 +2,7 @@
     <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
         <!-- 顶部 -->
         <header class="configuration_top">
-            <p class='configuration_title'>权限管理</p>
+            <p class='configuration_title'>流程配置</p>
         </header>
         <section class="configuration_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="configuration_box" :style="{height: $store.state.home.modelContentHeight-20 + 'px'}">
