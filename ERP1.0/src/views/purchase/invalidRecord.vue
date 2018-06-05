@@ -109,8 +109,7 @@
                 </div>
 
                 <div :style="{height: $store.state.home.modelContentHeight-124 + 'px'}" class="invalidRecord_wrap">
-                    <item-record></item-record>
-                    <item-record></item-record>
+                    <item-record v-for="item in baseData" :key="item.id" :fatherValue="item"></item-record>
                 </div>
 
 

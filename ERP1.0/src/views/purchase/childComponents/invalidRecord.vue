@@ -118,6 +118,7 @@
 
 <script>
 export default {
+    props: ['fatherValue'],
     data(){
         return {
             dialogVisible: false,
