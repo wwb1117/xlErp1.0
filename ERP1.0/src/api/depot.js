@@ -71,6 +71,10 @@ export default {
     delOutboundOrder(id) {
         return HttpClient.delete(`/deliver/${id}`);
     },
+    // 撤销审核
+    undoAudit(processType, data) {
+        return HttpClient.put(`/approval/creator/${processType}`, data);
+    },
     /********** 库存 *********/
     // 库存列表
     getInventoryList(data) {

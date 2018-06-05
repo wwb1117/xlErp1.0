@@ -52,9 +52,13 @@ export default {
     deleteitemBranddeleteid(id) {
         return HttpClient.delete(`/item/brand/delete/${id}`)
     },
+    // 获取门店分组列表
+    getshopgrouplist(data) {
+        return HttpClient.get('/shop/group/list', data)
+    },
     // 通过商品品牌id查询门店分组
     getitemitemBrandShopGroupitemBrandId(itemBrandId) {
-        return HttpClient.get(`/item/itemBrandShopGroup${itemBrandId}`)
+        return HttpClient.get(`/item/itemBrandShopGroup/${itemBrandId}`)
     },
 
     // 商品规格！

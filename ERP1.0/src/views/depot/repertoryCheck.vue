@@ -36,7 +36,7 @@
                         <el-upload
                             ref="upload"
                             :style="{width: '450px', display: 'inline-block'}"
-                            action=""
+                            :action= upLoadUrl
                             :auto-upload="false">
                             <el-input style="width: 280px" slot="trigger" placeholder="添加盘点数据" readonly="true"><i style="margin-top: 13px" slot="prefix" class="fa fa-paperclip fa-lg"></i></el-input>
                             <el-button slot="trigger" style="margin-left: 10px; width: 90px" type="primary">导入</el-button>
@@ -85,7 +85,8 @@ export default {
             currentStep: 1,
             houseId: null,
             houseId_option: '',
-            loading: true
+            loading: true,
+            upLoadUrl: process.env.API_ROOT + '/storage/stockCount/import'
         }
     },
     methods: {
@@ -117,6 +118,7 @@ export default {
         },
         nextStep() {
             this.currentStep = 2
+            this.$refs.upload.submit();
         },
         // 下载商品库存
         exportInventory() {
@@ -127,7 +129,7 @@ export default {
                 })
                 return
             }
-            window.open(`/api/storage/stockCount/export/${this.houseId}`)
+            window.open(process.env.API_ROOT + `storage/stockCount/export/${this.houseId}`)
         }
     },
     activated() {

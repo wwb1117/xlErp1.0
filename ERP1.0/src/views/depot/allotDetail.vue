@@ -20,7 +20,7 @@
                     </div>
                     <div>
                         <span class="title_title">调拨时间 : </span>
-                        <span class="title_data">{{tableData.inventoryAllocationTime}}</span>
+                        <span class="title_data">{{tableData.inventoryAllocationTime | time_s}}</span>
                     </div>
                     <div>
                         <span class="title_title">制单人 : </span>
@@ -143,15 +143,17 @@ export default {
                 const values = data.map(item => Number(item[column.property]));
 
                 if (!values.every(value => isNaN(value))) {
-                    sums[7] = values.reduce((prev, curr) => {
-                        let value = Number(curr);
-
-                        if (!isNaN(value)) {
-                            return prev + curr;
-                        } else {
-                            return prev;
-                        }
-                    }, 0);
+                    // sums[7] = values.reduce((prev, curr) => {
+                    //     let value = Number(curr);
+                    //
+                    //     if (!isNaN(value)) {
+                    //         return prev + curr;
+                    //     } else {
+                    //         return prev;
+                    //     }
+                    //
+                    // }, 0);
+                    sums[7] = this.tableData.totalInventoryNumber
 
                 } else {
                     sums[index] = '';
@@ -168,13 +170,14 @@ export default {
                 console.log(this.tableData, "测试数据")
 
             })
-
         }
     },
     mounted(){
-        this.getTableData()
+
     },
-    activated(){}
+    activated(){
+        this.getTableData()
+    }
 }
 </script>
 

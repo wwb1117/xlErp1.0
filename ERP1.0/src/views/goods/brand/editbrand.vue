@@ -15,26 +15,26 @@
                     <el-form-item required label='品牌名称' :label-width='formLabelWidth' style="height:50px">
                         <el-input type='text' suffix-text='0/15'  size='small' style="width:338px" v-model="from.brandName"></el-input>
                     </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:30px" >
                         <el-select
                             placeholder="请选择"
                             size='small'
                             style="width:338px"
-                            v-model="from.rateList"
+                            v-model="from.itemBrandCategories"
                             multiple
                             filterable
                             allow-create
                             default-first-option>
                             <el-option
                                 v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                :key="item.categoryName"
+                                :label="item.categoryName"
+                                :value="item.categoryName">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" >
-                        <el-input type='text'  size='small' style="width:338px" v-model="from.rateList"></el-input>
+                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
+                        <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
                         <el-upload
@@ -53,12 +53,28 @@
                         <el-input  placeholder="数值越大越靠前"  size='small' style="width:338px" v-model="from.sort"></el-input>
                     </el-form-item>
                     <el-form-item  label="控货品牌" :label-width="formLabelWidth" style="height:50px">
-                        <el-checkbox v-model="from.isControl">勾选为控货品牌</el-checkbox>
+                        <el-checkbox v-model="from.isControl" @change="changes">勾选为控货品牌</el-checkbox>
+                    </el-form-item>
+                    <el-form-item label="控货门店" :label-width="formLabelWidth" style="height:50px;margin-bottom:30px" v-if='showhiddden'>
+                        <el-select
+                            v-model="groupName"
+                            multiple
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择控货门店"
+                            size='small'
+                            style="width:338px">
+                            <el-option
+                            v-for="item in group"
+                            :key="item.id"
+                            :label="item.groupName"
+                            :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="是否推荐" required :label-width="formLabelWidth" style="height:50px">
                         <el-switch
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
                             v-model="from.isRecommended">
                         </el-switch>
                     </el-form-item>
@@ -84,29 +100,22 @@ export default {
                 id: '',
                 brandName: '',
                 isControl: '',
-                rateList: '',
+                itemBrandCategories: [],
                 brandImg: '',
                 sort: '',
-                isRecommended: '',
-                shopGroupIds: ''
+                isRecommended: ''
             },
 
+            value: '',
+            options: [],
+            text:[],
 
-            options: [
-                {
-                    value: '1',
-                    label: '灌装'
-                },
-                {
-                    value: '2',
-                    label: '袋装'
-                },
-                {
-                    value: '3',
-                    label: '包装'
-                }
-            ],
-            value: ''
+            // 是否出现门店
+            showhiddden: false,
+
+            group: [],
+            groupName: []
+
         }
     },
     methods: {
@@ -119,6 +128,43 @@ export default {
             this.dialogVisible = true;
         },
         trueconfim() {
+            for (var w in this.from.itemBrandCategories){
+                for (var e in this.options){
+                    if (this.from.itemBrandCategories[w] == this.options[e].categoryName){
+                        this.from.itemBrandCategories[w] = this.options[e].id
+                    }
+                }
+            }
+
+            if (this.from.isControl == true){
+                this.from.isControl = 1
+            } else {
+                this.from.isControl = 0
+            }
+
+            if (this.from.isRecommended == true){
+                this.from.isRecommended = 1
+            } else {
+                this.from.isRecommended = 0
+            }
+
+
+            let obj = {
+                id: this.from.id,
+                brandName: this.from.brandName,
+                isControl: this.from.isControl,
+                rateList: JSON.stringify(this.from.itemBrandCategories),
+                brandImg: this.from.brandImg,
+                sort: this.from.sort,
+                isRecommended: this.from.isRecommended,
+                shopGroupIds:this.groupName.toString()
+            }
+
+            api.putitemitemBrandupdate(obj).then((response)=>{
+
+            }).catch((error)=>{
+                console.log(error)
+            })
 
         },
         returnprev() {
@@ -126,36 +172,76 @@ export default {
                 id: '',
                 brandName: '',
                 isControl: '',
-                rateList: [],
+                itemBrandCategories: [],
                 brandImg: '',
                 sort: '',
-                isRecommended: '',
-                shopGroupIds: ''
+                isRecommended: ''
             }
             this.value = ''
             this.$router.go(-1)
+        },
+        changes() {
+            if (this.from.isControl == true){
+                this.showhiddden = true
+            } else {
+                this.showhiddden = false
+            }
         }
     },
     created() {
 
         var id = this.$store.state.home.brandId
 
-        api.getitemBrandid(id).then((response)=>{
-            console.log(response)
+        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            this.group = response.data
+            // console.log(response)
         }).catch((error)=>{
             console.log(error)
         })
+
+        api.getitemBrandid(id).then((response)=>{
+            // console.log(response.data.list)
+            this.from = response.data.list
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+        api.getcategorylist().then((response)=>{
+            this.options = response.data.list
+            // console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+
 
     },
     activated() {
 
         var id = this.$store.state.home.brandId
 
-        api.getitemBrandid(id).then((response)=>{
-            console.log(response)
+        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            this.group = response.data
+            // console.log(response)
         }).catch((error)=>{
             console.log(error)
         })
+
+        api.getitemBrandid(id).then((response)=>{
+            // console.log(response.data.list)
+            this.from = response.data.list
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+        api.getcategorylist().then((response)=>{
+            this.options = response.data.list
+            // console.log(response.data.list)
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+
     }
 }
 </script>
@@ -180,7 +266,6 @@ export default {
     padding: 48px 20px 0 20px;
     overflow: auto
 }
-
 /* 底部 */
 .addbrand_footer{
     border-top:1px solid #e5e8e8;

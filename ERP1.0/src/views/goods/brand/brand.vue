@@ -14,10 +14,10 @@
                         size="small"
                         placeholder="请输入内容"
                         prefix-icon="el-icon-search"
-                        v-model="input"
+                        v-model="page.brandName"
                         style="width:378px">
                     </el-input>
-                    <el-button type="primary" size='small' style="margin-left:10px">搜索</el-button>
+                    <el-button type="primary" size='small' style="margin-left:10px" @click="findthat">搜索</el-button>
                 </div>
                 <ul class="brand_list">
                     <li style="width:200px">品牌名称</li>
@@ -37,9 +37,7 @@
                     </li>
                     <li style="width:180px">
                         <el-switch
-                            v-model="item.isRecommended"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
+                            v-model="item.isRecommended">
                         </el-switch>
                     </li>
                     <li style="width:110px">{{item.sort}}</li>
@@ -54,7 +52,7 @@
                             <span>此操作将永久删除该项</span>
                             <span slot="footer" class="dialog-footer">
                                 <el-button @click="del = false">取 消</el-button>
-                                <el-button type="primary" @click="del = false">确 定</el-button>
+                                <el-button type="primary" @click="del = false" disabled>确 定</el-button>
                             </span>
                         </el-dialog>
                     </li>
@@ -96,14 +94,13 @@ export default {
             // 分页
             currentPage: 2,
             totalPage: 1,
-            // 搜索
-            input: '',
             // 关联分类
             // 删除
             del: false,
             page: {
                 pageNo: 1,
-                pageSize: 10
+                pageSize: 30,
+                brandName: ''
             },
 
             brand: []
@@ -130,6 +127,16 @@ export default {
             this.$store.commit('setBrand', data)
             this.$router.push('editBrand')
         },
+        findthat() {
+            api.getitemBrandlist(this.page).then((response)=>{
+                // console.log(response.data.itemVOs)
+                this.brand = response.data.itemVOs
+            }).catch((error)=>{
+
+                console.log(error)
+
+            })
+        },
         get() {
 
             api.getitemBrandlist(this.page).then((response)=>{
@@ -146,10 +153,10 @@ export default {
         // console.log(this.form)
         this.get()
 
+    },
+    activated() {
+        this.get()
     }
-    // activated() {
-    //     this.get()
-    // }
 }
 </script>
 <style scoped>
@@ -179,7 +186,8 @@ export default {
 .brand_box{
     border: 1px solid #e6e9eb;
     color: #5e6161;
-    background: white
+    background: white;
+    overflow: auto
 }
 .box_top{
     display: flex;

@@ -11,9 +11,9 @@
                         基本信息
                     </div>
                     <div class="baseInfoBox">
-                        <el-form-item prop="warehouseId" label="调拨仓库">
+                        <el-form-item prop="warehouseName" label="调拨仓库">
                             <el-select
-                                v-model="addFormData.warehouseId"
+                                v-model="addFormData.warehouseName"
                                 filterable
                                 remote
                                 reserve-keyword
@@ -28,8 +28,8 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="inventoryOutId" label="调出单位">
-                            <el-select v-model="addFormData.inventoryOutId" placeholder="请选择">
+                        <el-form-item prop="inventoryOutName" label="调出单位">
+                            <el-select v-model="addFormData.inventoryOutName" placeholder="请选择">
                                 <el-option
                                     v-for="item in buyerId_option"
                                     :key="item.id"
@@ -38,8 +38,8 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="inventoryInId" label="调入单位">
-                            <el-select v-model="addFormData.inventoryInId" placeholder="请选择">
+                        <el-form-item prop="inventoryInName" label="调入单位">
+                            <el-select v-model="addFormData.inventoryInName" placeholder="请选择">
                                 <el-option
                                     v-for="item in buyerId_option"
                                     :key="item.id"
@@ -54,7 +54,7 @@
                     </div>
                     <div style="padding: 10px;">
                         <el-table
-                            :data="goodsInfoData"
+                            :data="addFormData.list"
                             :span-method="arraySpanMethod"
                             border
                             show-summary
@@ -242,11 +242,11 @@ export default {
                 inventoryNumber: ''
             }
 
-            this.goodsInfoData.push(itemobj)
+            this.addFormData.list.push(itemobj)
         },
         goodTableReduceEvent(data){
-            if (this.goodsInfoData.length > 1){
-                this.goodsInfoData.splice(data.$index, 1)
+            if (this.addFormData.list.length > 1){
+                this.addFormData.list.splice(data.$index, 1)
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
@@ -269,16 +269,7 @@ export default {
 
         },
         unitTatalEvent(data){
-            data.row.unitPrice = data.row.unitPrice.replace(/[^\d\.]/g, '')
-            data.row.purchaseNum = data.row.purchaseNum.replace(/[^\d\.]/g, '')
-            if (data.row.unitPrice == '' || data.row.purchaseNum == ''){
-                data.row.unitTotal = ''
-                return
-            }
-            var price = parseFloat(data.row.unitPrice)
-            var num = parseFloat(data.row.purchaseNum)
 
-            data.row.unitTotal = price * num
         },
         getSummaries(param){
             var columns = param.columns
@@ -290,7 +281,7 @@ export default {
                     sums[index] = '合计';
                     return;
                 }
-                if (column.property == 'inventoryNumber' || column.property == 'unitTotal'){
+                if (column.property == 'inventoryNumber'){
                     const values = data.map(item => Number(item[column.property]));
 
                     if (!values.every(value => isNaN(value))) {
@@ -348,26 +339,22 @@ export default {
         },
         // 保存
         save() {
-            this.addFormData.list = []
             this.addFormData.totalInventoryNumber = 0
             // 将表中商品信息添加到addFormData
-            this.goodsInfoData.forEach(res => {
-                let obj = {
-                    itemId: '',
-                    inventoryNumber: '',
-                    purchasingNumber: '',
-                    remark: '',
-                    itemSpec: ''
-                }
-
-                obj.itemId = res.itemId
-                obj.remark = res.remark
-                obj.itemSpec = res.itemSpec
-                obj.inventoryNumber = res.inventoryNumber
-                this.addFormData.list.push(obj)
-                this.addFormData.totalInventoryNumber += parseInt(obj.inventoryNumber, 10)
+            this.addFormData.list.forEach(res => {
+                this.addFormData.totalInventoryNumber += parseInt(res.inventoryNumber, 10)
             })
             this.addFormData.creatorId = '12346'
+            if (!isNaN(this.addFormData.warehouseName)) {
+                this.addFormData.warehouseId = this.addFormData.warehouseName
+            }
+            if (!isNaN(this.addFormData.inventoryOutName)) {
+                this.addFormData.inventoryOutId = this.addFormData.inventoryOutName
+            }
+            if (!isNaN(this.addFormData.inventoryInName)) {
+                this.addFormData.inventoryInId = this.addFormData.inventoryInName
+            }
+
             // 通过仓库ID和采购单ID赋值给addFormData的name
             this.houseId_option.forEach(res => {
                 if (res.id === this.addFormData.warehouseId) {
@@ -383,8 +370,52 @@ export default {
                 }
             })
             this.postData = ME.deepCopy(this.addFormData)
-            this.postData.inventoryAllocationTime = Date.parse(this.postData.inventoryAllocationTime) / 1000
+            if (isNaN(this.postData.inventoryAllocationTime)) {
+                this.postData.inventoryAllocationTime = Date.parse(this.postData.inventoryAllocationTime) / 1000
+            } else {
+                this.postData.inventoryAllocationTime = this.postData.inventoryAllocationTime / 1000
+            }
             console.log(this.postData, "添加的数据")
+            // 数据判空
+            for (let key in this.postData) {
+                if (!this.postData[key]) {
+                    if (key == 'warehouseId') {
+                        this.$message({
+                            type: 'warning',
+                            message: '请选择调拨仓库'
+                        })
+                        return
+                    }
+                    if (key == 'inventoryOutId') {
+                        this.$message({
+                            type: 'warning',
+                            message: '请选择调出单位'
+                        })
+                        return
+                    }
+                    if (key == 'inventoryInId') {
+                        this.$message({
+                            type: 'warning',
+                            message: '请选择调入单位'
+                        })
+                        return
+                    }
+                    if (key == 'inventoryAllocationTime') {
+                        this.$message({
+                            type: 'warning',
+                            message: '请选择调拨时间'
+                        })
+                        return
+                    }
+                    if (key == 'list') {
+                        this.$message({
+                            type: 'warning',
+                            message: '请选择商品'
+                        })
+                        return
+                    }
+                }
+            }
             // 调取新增调拨单的接口
             API.addAllotOrder(this.postData).then(res => {
                 this.$message({
@@ -411,6 +442,18 @@ export default {
             this.$router.push({
                 path: '/chooseGood'
             });
+        },
+        // 获取调拨单详情
+        getTableData() {
+            let id = this.$route.params.id
+
+            API.getAllotDetail(id).then(res => {
+                this.addFormData = ME.deepCopy(res.data)
+                // 数据转化
+                this.addFormData.inventoryAllocationTime = this.addFormData.inventoryAllocationTime * 1000
+
+                console.log(this.addFormData, "测试数据")
+            })
         }
     },
     created(){},
@@ -419,10 +462,8 @@ export default {
         this.getPurchaseList()
     },
     activated() {
+        this.getTableData()
 
-        for (let key in this.addFormData) {
-            this.addFormData[key] = null
-        }
         // 更新制单人
         const USER = sessionStorage.getItem('user')
 

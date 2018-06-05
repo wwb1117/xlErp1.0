@@ -3,9 +3,9 @@
         <!-- 顶部 -->
         <header class="items_top">
             <p class='items_title'>商品分类</p>
-            <el-button type="primary" @click="dialogFormVisible = true" size='small' style="height:30px;margin-top:-3px">新增表单</el-button>
+            <el-button type="primary" size='small' style="height:30px;margin-top:-3px"  @click="additems">新增分类</el-button>
             <!-- 新增表单内容 -->
-            <el-dialog title="新增分类" :visible.sync="dialogFormVisible">
+            <!-- <el-dialog title="新增分类" :visible.sync="dialogFormVisible">
                 <el-form :model="msg">
                     <el-form-item label="分类名称" required :label-width="formLabelWidth">
                         <el-input v-model="msg.name" type='text' suffix-text='0/15' size='small'></el-input>
@@ -18,7 +18,7 @@
                             :on-remove="handleRemove">
                             <i class="el-icon-plus"></i>
                         </el-upload>
-                        <!-- action上传地址 -->
+                        action上传地址
                         <el-dialog :visible.sync="dialogVisible">
                             <img width="100%" :src="dialogImageUrl" alt="">
                         </el-dialog>
@@ -28,9 +28,7 @@
                     </el-form-item>
                     <el-form-item label="是否显示" required :label-width="formLabelWidth">
                         <el-switch
-                            v-model="value2"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
+                            v-model="value2">
                         </el-switch>
                     </el-form-item>
                 </el-form>
@@ -38,7 +36,7 @@
                     <el-button @click="dialogFormVisible = false" size='medium'>取 消</el-button>
                     <el-button type="primary" @click="dialogFormVisible = false" size='medium'>保 存</el-button>
                 </div>
-            </el-dialog>
+            </el-dialog> -->
         </header>
         <!-- 内容 -->
         <section class="item_conent" >
@@ -58,7 +56,7 @@
                     :expand-on-click-node="false">
                     <ul class="item_box_conent"  slot-scope="{ node, data }" >
                         <li >
-                            <el-button type='text'>编辑</el-button>
+                            <el-button type='text' @click="editconfim">编辑</el-button>
                             <el-button type="text" @click="del = true">删除</el-button>
                             <el-dialog
                                 title="温馨提示"
@@ -75,9 +73,7 @@
                         <li>{{ data.sort }}</li>
                         <li >
                             <el-switch
-                                v-model="data.isDisplay"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949">
+                                v-model="data.isDisplay">
                             </el-switch>
                         </li>
                         <li>
@@ -111,42 +107,19 @@ import api from 'api/goods'
 export default {
     data() {
         return {
-            value2: true,
             currentPage: 2,
             totalPage: 1,
             items:[],
             // 新增
-            msg: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            dialogFormVisible: false,
-            formLabelWidth: '120px',
-            // 上传
-            dialogImageUrl: '',
-            dialogVisible: false,
             del: false,
             defaultProps: {
                 children: 'itemCategories',
                 label: 'categoryName'
             }
+
         }
     },
     methods: {
-        // 上传
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
         handleClose(done) {
             this.$confirm('确认关闭？')
                 .then(_ => {
@@ -154,12 +127,19 @@ export default {
                 })
                 .catch(_ => {});
         },
+
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
             console.log(this.items)
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+        editconfim() {
+            this.$router.push('edititems')
+        },
+        additems() {
+            this.$router.push('additems')
         },
 
         get() {

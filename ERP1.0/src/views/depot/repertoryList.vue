@@ -206,6 +206,23 @@
                 </el-table>
             </div>
         </div>
+        <el-dialog title="修改库存信息" :visible.sync="dialogFormVisible">
+            <el-form :model="form">
+                <el-form-item label="库存上限" :label-width="formLabelWidth">
+                    <el-input v-model="form.inventoryUpperLimit" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="库存下限" :label-width="formLabelWidth">
+                    <el-input v-model="form.inventoryLowerLimit" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="效期" :label-width="formLabelWidth">
+                    <el-input v-model="form.itemValid" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editRepertory">确 定</el-button>
+            </div>
+        </el-dialog>
         <div class="model_footer">
             <el-pagination
                 @size-change="handleSizeChange"
@@ -231,6 +248,14 @@ export default {
             serchText: '',
             currentPage: 1,
             loading: false,
+            dialogFormVisible: false,
+            formLabelWidth: '120px',
+            form: {
+                id: null,
+                itemValid: null,
+                inventoryLowerLimit: null,
+                inventoryUpperLimit: null
+            },
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
@@ -297,7 +322,24 @@ export default {
             $('#secondMenu_ul li').eq(3).addClass('active')
         },
         editTable(index, data) {
+            this.dialogFormVisible = true
+            this.form.inventoryLowerLimit = data.inventoryLowerLimit
+            this.form.inventoryUpperLimit = data.inventoryUpperLimit
+            this.form.itemValid = data.itemValid
+            this.form.id = data.id
 
+        },
+        editRepertory() {
+            API.editInventory(this.form).then(res => {
+                if (res.result === 1) {
+                    this.$message({
+                        type:'success',
+                        message:'编辑成功'
+                    })
+                    this.getTableList()
+                }
+            })
+            this.dialogFormVisible = false
         },
         search() {
             if (this.searchFormData.date) {

@@ -2,7 +2,7 @@
     <section :style="{height: $store.state.home.modelContentHeight + 'px'}">
         <!-- 顶部 -->
         <header class="configuration_top">
-            <p class='configuration_title'>权限管理</p>
+            <p class='configuration_title'>流程配置</p>
         </header>
         <section class="configuration_conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="configuration_box" :style="{height: $store.state.home.modelContentHeight-20 + 'px'}">
@@ -17,7 +17,8 @@
                         default-first-option
                         size='small'
                         style="width:388px;margin-left:20px"
-                        @focus='focus()'>
+                        @focus="focus()"
+                        @change="change()">
                         <el-option
                             v-for="date in name"
                             :key="date.id"
@@ -77,7 +78,9 @@ export default {
                 }
             ],
 
-            date:[]
+            date:[],
+
+            options:[]
 
         }
     },
@@ -94,6 +97,22 @@ export default {
             this.num.push(obj)
             this.upname.push(obje)
 
+            this.options = []
+            for (var i in this.num){
+                for (var k in this.num[i].namelist){
+                    if (JSON.stringify(this.options).indexOf(this.num[i].namelist[k]) == -1){
+                        this.options.push(this.num[i].namelist[k])
+                    }
+                }
+            }
+            for (var a in this.name){
+                this.name[a].disabled = false
+                for (var b in this.options){
+                    if (this.options[b] == this.name[a].id){
+                        this.name[a].disabled = true
+                    }
+                }
+            }
         },
         closethat(data) {
             if (this.num.length > 1){
@@ -166,7 +185,6 @@ export default {
                 console.log(error)
             })
         },
-
         get() {
             api.getuseruserList().then((response)=>{
                 this.name = response.data
@@ -182,9 +200,7 @@ export default {
 
 
         },
-
         list() {
-
             api.getprocessmoreid(this.shu).then((response)=>{
                 this.num = [
                     {
@@ -229,42 +245,62 @@ export default {
 
                 this.num.splice(this.num.length - 1, 1)
                 // console.log(this.num)
-                for (var z in this.num){
+                // for (var z in this.num){
 
-                    for (var x in this.num[z].namelist){
+                //     for (var x in this.num[z].namelist){
 
-                        for (var c in this.name){
+                //         for (var c in this.name){
 
-                            if (this.name[c].id == this.num[z].namelist[x]){
-                                this.name[c].disabled = true
-                            }
+                //             if (this.name[c].id == this.num[z].namelist[x]){
+                //                 this.name[c].disabled = true
+                //             }
 
-                        }
+                //         }
 
-                    }
+                //     }
 
-                }
+                // }
 
             }).catch((error)=>{
                 console.log(error)
             })
         },
-
         focus() {
-            for (var z in this.num){
-
-                for (var x in this.num[z].namelist){
-
-                    for (var c in this.name){
-
-                        if (this.name[c].id == this.num[z].namelist[x]){
-                            this.name[c].disabled = true
-                        }
-
+            this.options = []
+            for (var i in this.num){
+                for (var k in this.num[i].namelist){
+                    if (JSON.stringify(this.options).indexOf(this.num[i].namelist[k]) == -1){
+                        this.options.push(this.num[i].namelist[k])
                     }
-
                 }
+            }
 
+            for (var a in this.name){
+                this.name[a].disabled = false
+                for (var b in this.options){
+                    if (this.options[b] == this.name[a].id){
+                        this.name[a].disabled = true
+                    }
+                }
+            }
+
+        },
+        change() {
+            this.options = []
+            for (var i in this.num){
+                for (var k in this.num[i].namelist){
+                    if (JSON.stringify(this.options).indexOf(this.num[i].namelist[k]) == -1){
+                        this.options.push(this.num[i].namelist[k])
+                    }
+                }
+            }
+            for (var a in this.name){
+                this.name[a].disabled = false
+                for (var b in this.options){
+                    if (this.options[b] == this.name[a].id){
+                        this.name[a].disabled = true
+                    }
+                }
             }
         }
 

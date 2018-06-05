@@ -81,5 +81,9 @@ export default {
     // 获取权限
     getuserstatus(data) {
         return HttpClient.get('/user/status', data)
+    },
+    // 设置权限
+    postrolesetaccess(data) {
+        return HttpClient.post('/role/set/access', data)
     }
 }

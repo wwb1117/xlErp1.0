@@ -1,8 +1,9 @@
 <template>
     <div>
         <div class="model_topcol">
-            <span style="color: #409EFF">{{$route.params.type}}单</span>
-            <span> - 新增{{$route.params.type}}单</span>
+            <span style="color: #409EFF" v-if="inbound">入库单</span>
+            <span style="color: #409EFF" v-if="outbound">出库单</span>
+            <span> - 编辑</span>
         </div>
         <div class="model_content" >
             <div class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
@@ -18,8 +19,8 @@
                                 <el-option label="其他" value="3"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="storeType" label= "出库类型" v-if = "outbound">
-                            <el-select v-model="addFormData.storeType" placeholder="请选择出库类型">
+                        <el-form-item prop="deliverType" label= "出库类型" v-if = "outbound">
+                            <el-select v-model="addFormData.deliverType" placeholder="请选择出库类型">
                                 <el-option label="商城订单" value="0"></el-option>
                                 <el-option label="线下订单" value="1"></el-option>
                                 <el-option label="采购退货" value="2"></el-option>
@@ -27,9 +28,9 @@
                                 <el-option label="其他" value="4"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="storeHouseId" label="入库仓库" v-if = "inbound">
+                        <el-form-item prop="storeHouseName" label="入库仓库" v-if = "inbound">
                             <el-select
-                                v-model="addFormData.storeHouseId"
+                                v-model="addFormData.storeHouseName"
                                 filterable
                                 remote
                                 reserve-keyword
@@ -44,9 +45,9 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="storeHouseId" label="出库仓库" v-if = "outbound">
+                        <el-form-item prop="deliverHouseId" label="出库仓库" v-if = "outbound">
                             <el-select
-                                v-model="addFormData.storeHouseId"
+                                v-model="addFormData.deliverHouseName"
                                 filterable
                                 remote
                                 reserve-keyword
@@ -61,8 +62,8 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item prop="buyerId" label="采购单位">
-                            <el-select v-model="addFormData.buyerId" placeholder="请选择">
+                        <el-form-item prop="buyerName" label="采购单位">
+                            <el-select v-model="addFormData.buyerName" placeholder="请选择">
                                 <el-option
                                     v-for="item in buyerId_option"
                                     :key="item.id"
@@ -83,9 +84,9 @@
                                 placeholder="请选择入库时间">
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item prop="storeTime" label="出库时间" v-if="outbound">
+                        <el-form-item prop="deliverTime" label="出库时间" v-if="outbound">
                             <el-date-picker
-                                v-model="addFormData.storeTime"
+                                v-model="addFormData.deliverTime"
                                 type="datetime"
                                 placeholder="请选择出库时间">
                             </el-date-picker>
@@ -96,7 +97,7 @@
                     </div>
                     <div style="padding: 10px;">
                         <el-table
-                            :data="goodsInfoData"
+                            :data="addFormData.list"
                             show-summary
                             :span-method="arraySpanMethod"
                             border
@@ -172,7 +173,7 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="currentStoreNumber"
+                                prop="deliverNumber"
                                 label="出库数"
                                 v-if="outbound">
                                 <template slot-scope="scope">
@@ -180,7 +181,7 @@
                                         <span></span>
                                     </div>
                                     <div v-if="scope.row.itemId !== ''">
-                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currentStoreNumber"></el-input>
+                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.deliverNumber"></el-input>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -194,13 +195,12 @@
                             </el-table-column>
                         </el-table>
                     </div>
-
                     <div class="goodInfoBox">
                         <el-form-item prop="storeNo" label="入库单号" v-if="inbound">
                             <el-input v-model="addFormData.storeNo" placeholder="请输入入库单号" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item prop="storeNo" label="出库单号" v-if="outbound">
-                            <el-input v-model="addFormData.storeNo" placeholder="请输入出库单号" :disabled="true"></el-input>
+                            <el-input v-model="addFormData.deliverNo" placeholder="请输入出库单号" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item prop="operator" label="经办人">
                             <el-input v-model="addFormData.operator" placeholder="请输入经办人"></el-input>
@@ -210,7 +210,10 @@
                             <el-input v-model="addFormData.creator" placeholder="请输入制单人" :disabled="true"></el-input>
                         </el-form-item>
                         <br>
-                        <el-form-item class="marker" :style="{width: '700px'}" prop="storeRemark" label="备注">
+                        <el-form-item class="marker" :style="{width: '700px'}" prop="deliverRemark" label="备注" v-if="outbound">
+                            <el-input type="textarea" :style="{width: '530px'}" :rows="4" v-model="addFormData.deliverRemark" placeholder="请输入备注信息，最多不超过100字"></el-input>
+                        </el-form-item>
+                        <el-form-item class="marker" :style="{width: '700px'}" prop="storeRemark" label="备注" v-if="inbound">
                             <el-input type="textarea" :style="{width: '530px'}" :rows="4" v-model="addFormData.storeRemark" placeholder="请输入备注信息，最多不超过100字"></el-input>
                         </el-form-item>
                     </div>
@@ -237,11 +240,8 @@ export default {
             loading: false,
             inbound: false,
             outbound: false,
+            changeObj: {},
             goodsInfoData: [{
-                itemSku: '2',
-                currentStoreNumber: 5,
-                itemId: 2,
-                remark: '出库备注'
             }],
             addFormData: {
                 storeType: '',
@@ -269,10 +269,13 @@ export default {
                     { required: true, message: '请选择采购单位', trigger: 'blur' }
                 ],
                 storeTime: [
-                    { required: true, message: '请选择采购时间', trigger: 'blur' }
+                    { required: true, message: '请选择入库时间', trigger: 'blur' }
                 ],
                 creator: [
                     { required: true, message: '请输入制单人', trigger: 'blur' }
+                ],
+                deliverTime: [
+                    { required: true, message: '请选择出库时间', trigger: 'blur' }
                 ],
                 storeNo: [
                     { required: true, message: '请输入入库单号', trigger: 'blur' }
@@ -287,10 +290,12 @@ export default {
         goodTableAddEvent(){
             let itemobj = {
                 oper: '',
+                itemSku: '',
                 itemId: '',
                 itemSpec: '',
                 barCode: '',
                 goodName: '',
+                itemExp: '',
                 SKU: '',
                 qualityDate: '',
                 productData: '',
@@ -300,16 +305,15 @@ export default {
                 unitTotal: ''
             }
 
-            this.goodsInfoData.push(itemobj)
+            this.addFormData.list.push(itemobj)
         },
         goodTableReduceEvent(data){
-            if (this.goodsInfoData.length > 1){
-                this.goodsInfoData.splice(data.$index, 1)
+            if (this.addFormData.list.length > 1){
+                this.addFormData.list.splice(data.$index, 1)
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
-            console.log(rowIndex)
-            console.log(this.goodsInfoData.length)
+
             if (columnIndex === 2) {
                 if (row.itemId == ""){
                     return [1, 3];
@@ -356,18 +360,16 @@ export default {
 
         },
         unitTatalEvent(data){
-            data.row.unitPrice = data.row.unitPrice.replace(/[^\d\.]/g, '')
-            data.row.currentStoreNumber = data.row.currentStoreNumber.replace(/[^\d\.]/g, '')
+            if (data.row.currentStoreNumber) {
+                data.row.currentStoreNumber = data.row.currentStoreNumber.replace(/[^\d\.]/g, '')
+            }
+            if (data.row.deliverNumber) {
+                data.row.deliverNumber = data.row.deliverNumber.replace(/[^\d\.]/g, '')
+            }
             if (data.row.unitPrice == '' || data.row.currentStoreNumber == ''){
                 data.row.unitTotal = ''
                 return
             }
-            var price = parseFloat(data.row.unitPrice)
-            var num = parseFloat(data.row.currentStoreNumber)
-
-
-
-            data.row.unitTotal = price * num
         },
         getSummaries(param){
             var columns = param.columns
@@ -379,7 +381,7 @@ export default {
                     sums[index] = '合计';
                     return;
                 }
-                if (column.property == 'currentStoreNumber' || column.property == 'unitTotal'){
+                if (column.property == 'currentStoreNumber' || column.property == 'deliverNumber'){
                     const values = data.map(item => Number(item[column.property]));
 
                     if (!values.every(value => isNaN(value))) {
@@ -412,7 +414,7 @@ export default {
             });
         },
         // 产生随机数并加到编码
-        MathRand(data, type) {
+        MathRand(data) {
             let sixNum = ''
             let myDate = new Date()
             let monthArr = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
@@ -421,34 +423,32 @@ export default {
             for (let i = 0; i < data; i++) {
                 sixNum += Math.floor(Math.random() * 10);
             }
-            this.addFormData.storeNo = type + '-' + myDate.getFullYear() + monthArr[myDate.getMonth()] + day + '-' + sixNum
+            if (this.inbound) {
+                this.addFormData.storeNo = 'IN' + '-' + myDate.getFullYear() + monthArr[myDate.getMonth()] + day + '-' + sixNum
+            }
+            if (this.outbound) {
+                this.addFormData.deliverNo = 'OUT' + '-' + myDate.getFullYear() + monthArr[myDate.getMonth()] + day + '-' + sixNum
+            }
         },
         // 保存结果
         save() {
-            this.addFormData.totalStoreNumber = 0
-            this.addFormData.list = []
-            // 将表中商品信息添加到addFormData
-            this.goodsInfoData.forEach(res => {
-                let obj = {
-                    itemId: '',
-                    currentStoreNumber: '',
-                    purchasingNumber: '',
-                    remark: '',
-                    itemSpec: ''
-                }
-
-                obj.itemId = res.itemId
-                obj.remark = res.remark
-                obj.itemSpec = res.itemSpec
-                obj.currentStoreNumber = res.currentStoreNumber
-                this.addFormData.totalStoreNumber += parseInt(obj.currentStoreNumber, 10)
-                this.addFormData.list.push(obj)
-            })
             this.addFormData.creatorId = '12346'
+            if (!isNaN(this.addFormData.storeHouseName)) {
+                this.addFormData.storeHouseId = this.addFormData.storeHouseName
+            }
+            if (!isNaN(this.addFormData.deliverHouseName)) {
+                this.addFormData.deliverHouseId = this.addFormData.deliverHouseName
+            }
+            if (!isNaN(this.addFormData.buyerName)) {
+                this.addFormData.buyerId = this.addFormData.buyerName
+            }
             // 通过仓库ID和采购单ID赋值给addFormData的name
             this.houseId_option.forEach(res => {
                 if (res.id === this.addFormData.storeHouseId) {
                     this.addFormData.storeHouseName = res.warehouseName
+                }
+                if (res.id === this.addFormData.deliverHouseId) {
+                    this.addFormData.deliverHouseName = res.warehouseName
                 }
             })
             this.buyerId_option.forEach(res => {
@@ -457,10 +457,19 @@ export default {
                 }
             })
             this.postData = ME.deepCopy(this.addFormData)
-            this.postData.storeTime = Date.parse(this.postData.storeTime) / 1000
             console.log(JSON.stringify(this.postData), "添加数据")
             // 出入库操作
-            if (this.$route.params.type === '入库') {
+            if (this.inbound) {
+                if (isNaN(this.postData.storeTime)) {
+                    this.postData.storeTime = Date.parse(this.postData.storeTime) / 1000
+                } else {
+                    this.postData.storeTime = this.postData.storeTime / 1000
+                }
+                this.postData.totalStoreNumber = 0
+                // 将表中商品信息添加到addFormData
+                this.postData.list.forEach(res => {
+                    this.postData.totalStoreNumber += parseInt(res.currentStoreNumber, 10)
+                })
                 // 数据判空
                 for (let key in this.postData) {
                     if (!this.postData[key]) {
@@ -519,31 +528,23 @@ export default {
                 API.addInboundOrder(this.postData).then(res => {
                     this.$message({
                         type:'success',
-                        message:'入库单添加成功'
+                        message:'入库单编辑成功'
                     })
                     this.$router.push({ name: "入库列表" })
                 }).catch(error => {
 
                 })
-            } else if (this.$route.params.type === '出库') {
-                this.$set(this.postData, 'deliverHouseId', this.postData.storeHouseId)
-                this.$set(this.postData, 'deliverHouseName', this.postData.storeHouseName)
-                this.$set(this.postData, 'deliverNo', this.postData.storeNo)
-                this.$set(this.postData, 'deliverTime', this.postData.storeTime)
-                this.$set(this.postData, 'deliverType', this.postData.storeType)
-                this.$set(this.postData, 'totalDeliverNumber', this.postData.totalStoreNumber)
-                this.$set(this.postData, 'deliverRemark', this.postData.storeRemark)
+            } else if (this.outbound) {
+                if (isNaN(this.postData.deliverTime)) {
+                    this.postData.deliverTime = Date.parse(this.postData.deliverTime) / 1000
+                } else {
+                    this.postData.deliverTime = this.postData.deliverTime / 1000
+                }
+                this.postData.totalDeliverNumber = 0
+                // 将表中商品信息添加到addFormData
                 this.postData.list.forEach(res => {
-                    this.$set(res, 'deliverNumber', res.currentStoreNumber)
-                    this.$delete(res, 'currentStoreNumber')
+                    this.postData.totalDeliverNumber += parseInt(res.deliverNumber, 10)
                 })
-                this.$delete(this.postData, 'storeHouseId')
-                this.$delete(this.postData, 'storeHouseName')
-                this.$delete(this.postData, 'storeNo')
-                this.$delete(this.postData, 'storeTime')
-                this.$delete(this.postData, 'storeType')
-                this.$delete(this.postData, 'totalStoreNumber')
-                this.$delete(this.postData, 'storeRemark')
                 console.log(this.postData, '转化数据')
                 // 数据判空
                 for (let key in this.postData) {
@@ -603,11 +604,34 @@ export default {
                 API.addOutboundOrder(this.postData).then(res => {
                     this.$message({
                         type:'success',
-                        message:'出库单添加成功'
+                        message:'出库单编辑成功'
                     })
                     this.$router.push({ name: "出库列表" })
                 }).catch(error => {
 
+                })
+            }
+        },
+        // 获取详情
+        getboundDetail() {
+            if (this.inbound) { // 入库单
+                console.log("入库")
+                API.getInboundDetail(this.$route.params.id).then(res => {
+                    this.addFormData = ME.deepCopy(res.data)
+                    // 数据转化
+                    this.addFormData.storeTime = this.addFormData.storeTime * 1000
+                    this.addFormData.storeType = this.$allEnumeration.storeType[this.addFormData.storeType]
+                    this.MathRand(6)
+                })
+
+            } else if (this.outbound) { // 出库单
+                console.log("出库")
+                API.getOutboundDetail(this.$route.params.id).then(res => {
+                    this.addFormData = ME.deepCopy(res.data)
+                    this.addFormData.deliverTime = this.addFormData.deliverTime * 1000
+                    this.addFormData.deliverType = this.$allEnumeration.deliverType[this.addFormData.deliverType]
+                    this.MathRand(6)
+                    console.log(this.addFormData, '数据')
                 })
             }
         }
@@ -618,27 +642,15 @@ export default {
         this.getPurchaseList()
     },
     activated () {
-        for (let key in this.addFormData) {
-            this.addFormData[key] = ''
-        }
-        if (this.$route.params.type === '入库') {
+        if (this.$route.params.type === 'inbound') {
             this.inbound = true
             this.outbound = false
-        } else if (this.$route.params.type === '出库') {
+        } else if (this.$route.params.type === 'outbound') {
             this.outbound = true
             this.inbound = false
         }
-        if (this.outbound) {
-            this.MathRand(6, 'OUT')
-        }
-        if (this.inbound) {
-            this.MathRand(6, 'IN')
-        }
 
-        // 更新制单人
-        const USER = sessionStorage.getItem('user')
-
-        this.addFormData.creator = JSON.parse(USER).loginCode
+        this.getboundDetail()
         console.log(this.inbound, this.outbound)
     }
 }

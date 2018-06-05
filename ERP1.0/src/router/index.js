@@ -44,6 +44,8 @@ import addAllot from '@/views/depot/addAllot'
 import allotDetail from '@/views/depot/allotDetail'
 import addRepertory from '@/views/depot/addRepertory'
 import editRepertory from '@/views/depot/editRepertory'
+import editBound from '@/views/depot/editBound'
+import editAllot from '@/views/depot/editAllot'
 
 /**************************************************审批模块*********************************************/
 import waitReview from '@/views/review/waitReview'
@@ -56,7 +58,9 @@ import IReviewed from '@/views/review/IReviewed'
 /**************************************************商品模块*********************************************/
 import goods from '@/views/goods/list/goods'
 import addGoods from '@/views/goods/list/addGoods'
-import items from '@/views/goods/items'
+import items from '@/views/goods/items/items'
+import additems from '@/views/goods/items/additems'
+import edititems from '@/views/goods/items/edititems'
 import brand from '@/views/goods/brand/brand'
 import addbrand from '@/views/goods/brand/addbrand'
 import editbrand from '@/views/goods/brand/editbrand'
@@ -114,12 +118,15 @@ var router = new Router({
                 {name: "库存盘点", path: '/repertoryCheck', component: repertoryCheck},
                 {name: "仓库管理", path: '/repertoryManage', component: repertoryManage},
                 {name: "新增入库", path: '/addInbound', component: addInbound},
+                {name: "编辑出入库", path: '/editBound/:id', component: editBound},
                 {name: "出入库详情", path: '/boundDetail/:type/:id', component: boundDetail},
                 {name: "出入库明细", path: '/inoutBound', component: inoutBound},
                 {name: "新增调拨单", path: '/addAllot', component: addAllot},
                 {name: "调拨单详情", path: '/allotDetail/:id', component: allotDetail},
+                {name: "编辑调拨单", path: '/editAllot/:id', component: editAllot},
                 {name: "新增仓库", path: '/addRepertory', component: addRepertory},
                 {name: "编辑仓库", path: '/editRepertory/:type/:id', component: editRepertory},
+
 
                 /*************************** 审批模块*************************************/
                 {name: "待我审批", path: '/waitReview', component: waitReview},
@@ -137,6 +144,8 @@ var router = new Router({
                 {name: "商品详情", path: '/goodsDetails', component: dteails},
 
                 {name: "商品分类", path: '/goodsItems', component: items},
+                {name: "新增分类", path: '/addItems', component: additems},
+                {name: "编辑分类", path: '/editItems', component: edititems},
 
                 {name: "商品品牌", path: '/goodsBrand', component: brand},
                 {name: "新增品牌", path: '/addBrand', component: addbrand},

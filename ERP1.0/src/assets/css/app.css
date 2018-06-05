@@ -152,7 +152,12 @@ input[type="file"] {
 .items_top input[type="file"] {
     display: none;
 }
-.items_top .el-upload--picture-card{
+.edititems_box .el-upload--picture-card{
+    width: 100px;
+    height: 100px;
+    line-height: 100px
+}
+.additems_box .el-upload--picture-card{
     width: 100px;
     height: 100px;
     line-height: 100px
@@ -262,11 +267,14 @@ input[type="file"] {
 }
 
 .add_box .el-tag__close:hover{
-    font-size: 10px
+    font-size: 12px
+}
+.addbrand_box .el-tag__close:hover{
+    font-size: 12px
 }
 .el-dialog__body .el-tag__close:hover{
-    font-size: 10px
+    font-size: 12px
 }
-.editTypes_box .el-form-item__content, .addTypes_box .el-form-item__content, .edit_box .el-form-item__content, .addSpec_box .el-form-item__content, .addbrand_box .el-form-item__content{
+.editTypes_box .el-form-item__content, .addTypes_box .el-form-item__content, .edit_box .el-form-item__content, .addSpec_box .el-form-item__content, .addbrand_box .el-form-item__content, .additems_box .el-form-item__content, .edititems_box .el-form-item__content{
     height: 100px;
 }

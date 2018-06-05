@@ -41,9 +41,7 @@
                                 label='是否启用'>
                             <template slot-scope="scope">
                                 <el-switch
-                                    v-model="scope.row.isDeleted"
-                                    active-color="#13ce66"
-                                    inactive-color="#ff4949">
+                                    v-model="scope.row.isDeleted">
                                 </el-switch>
                             </template>
                             </el-table-column>
@@ -111,9 +109,10 @@ export default {
         trueconfim() {
 
             let obj = {
-                skuPropertys : JSON.stringify({
+                skuProperties : JSON.stringify({
                     skuPropertyId: this.editNum.id,
                     skuPropertyName: this.editNum.skuPropertyName,
+                    remark: this.editNum.remark,
                     itemSkuPropertyValueDTOS: this.editNum.list
                 })
             }
