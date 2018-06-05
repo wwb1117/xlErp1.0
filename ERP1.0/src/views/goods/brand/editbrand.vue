@@ -53,7 +53,25 @@
                         <el-input  placeholder="数值越大越靠前"  size='small' style="width:338px" v-model="from.sort"></el-input>
                     </el-form-item>
                     <el-form-item  label="控货品牌" :label-width="formLabelWidth" style="height:50px">
-                        <el-checkbox v-model="from.isControl">勾选为控货品牌</el-checkbox>
+                        <el-checkbox v-model="from.isControl" @change="changes">勾选为控货品牌</el-checkbox>
+                    </el-form-item>
+                    <el-form-item label="控货门店" :label-width="formLabelWidth" style="height:50px;margin-bottom:30px" v-if='showhiddden'>
+                        <el-select
+                            v-model="groupName"
+                            multiple
+                            filterable
+                            allow-create
+                            default-first-option
+                            placeholder="请选择控货门店"
+                            size='small'
+                            style="width:338px">
+                            <el-option
+                            v-for="item in group"
+                            :key="item.id"
+                            :label="item.groupName"
+                            :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="是否推荐" required :label-width="formLabelWidth" style="height:50px">
                         <el-switch
@@ -90,7 +108,13 @@ export default {
 
             value: '',
             options: [],
-            text:[]
+            text:[],
+
+            // 是否出现门店
+            showhiddden: false,
+
+            group: [],
+            groupName: []
 
         }
     },
@@ -133,7 +157,7 @@ export default {
                 brandImg: this.from.brandImg,
                 sort: this.from.sort,
                 isRecommended: this.from.isRecommended,
-                shopGroupIds:''
+                shopGroupIds:this.groupName.toString()
             }
 
             api.putitemitemBrandupdate(obj).then((response)=>{
@@ -155,11 +179,25 @@ export default {
             }
             this.value = ''
             this.$router.go(-1)
+        },
+        changes() {
+            if (this.from.isControl == true){
+                this.showhiddden = true
+            } else {
+                this.showhiddden = false
+            }
         }
     },
     created() {
 
         var id = this.$store.state.home.brandId
+
+        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            this.group = response.data
+            // console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
 
         api.getitemBrandid(id).then((response)=>{
             // console.log(response.data.list)
@@ -175,16 +213,19 @@ export default {
             console.log(error)
         })
 
-        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
-            console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
+
 
     },
     activated() {
 
         var id = this.$store.state.home.brandId
+
+        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            this.group = response.data
+            // console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
 
         api.getitemBrandid(id).then((response)=>{
             // console.log(response.data.list)
@@ -200,11 +241,7 @@ export default {
             console.log(error)
         })
 
-        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
-            console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
+
     }
 }
 </script>

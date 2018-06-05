@@ -41,7 +41,7 @@
         </section>
         <footer class="additems_footer">
             <el-button size='small' type='primary' style="width:90px">保存</el-button>
-            <el-button size='small' style="width:90px">返回</el-button>
+            <el-button size='small' style="width:90px" @click='returnitems'>返回</el-button>
         </footer>
     </section>
 </template>
@@ -74,6 +74,9 @@ export default {
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
+        },
+        returnitems() {
+            this.$router.go(-1)
         }
 
     }
