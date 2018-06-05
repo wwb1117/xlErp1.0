@@ -2,7 +2,14 @@ export default {
     state: {
         version: '1.0',
         baseUrl: '',
-        isNextMenuShow: true, //二级菜单是否显示
+        menuSetting: {
+            isNextMenuShow: false, //二级菜单是否显示
+            currFid: 0,
+            currSid: null,
+            currSlist: [],
+            currRoutUrl: '/main',
+            perssionArr: []
+        },
         device: {
             width: null,
             height: null
@@ -10,113 +17,6 @@ export default {
         modelContentHeight: null,
         currentModelId: '',
         userInfo: null,
-        nextMenuMap: {
-            home: [
-                {
-                    name: '首页',
-                    path: '/main'
-                }
-            ],
-            goods: [
-                {
-                    name: '商品列表',
-                    path: '/goodsList'
-                },
-                {
-                    name: '商品分类',
-                    path: '/goodsItems'
-                },
-                {
-                    name: '商品品牌',
-                    path: '/goodsBrand'
-                },
-                {
-                    name: '商品规格',
-                    path: '/goodsSpec'
-                },
-                {
-                    name: '包装类型',
-                    path: '/goodsTypes'
-                }
-            ],
-            purchase: [
-                {
-                    name: '采购单',
-                    path: '/purchaseList'
-                },
-                {
-                    name: '采购退货',
-                    path: '/purchaseReject'
-                },
-                {
-                    name: '供应商',
-                    path: '/purchaseSupplier'
-                },
-                {
-                    name: '采购单位',
-                    path: '/purchaseCompany'
-                }
-            ],
-            depot: [
-                {
-                    name: '入库列表',
-                    path: '/inboundList'
-                },
-                {
-                    name: '出库列表',
-                    path: '/outboundList'
-                },
-                {
-                    name: '商品库存',
-                    path: '/repertoryList'
-                },
-                {
-                    name: '出入库明细',
-                    path: '/inoutBound'
-                },
-                {
-                    name: '库存调拨',
-                    path: '/repertoryAllot'
-                },
-                {
-                    name: '库存盘点',
-                    path: '/repertoryCheck'
-                },
-                {
-                    name: '仓库管理',
-                    path: '/repertoryManage'
-                }
-            ],
-            review: [
-                {
-                    name: '待我审批',
-                    path: '/waitReview'
-                },
-                {
-                    name: '我发起的',
-                    path: '/Ilaunched'
-                },
-                {
-                    name: '我已审批',
-                    path: '/IReviewed'
-                }
-            ],
-            system: [
-                {
-                    name: '流程配置',
-                    path: '/workflowConfig'
-                },
-                {
-                    name: '用户管理',
-                    path: '/userManage'
-                },
-                {
-                    name: '操作日志',
-                    path: '/operationLog'
-                }
-            ]
-        },
-
         // 商品包装类型
         typesMsg: '',
         // 商品规格
@@ -136,9 +36,6 @@ export default {
             state.device.height = value.height
             window.localStorage.setItem("device", JSON.stringify(state.device))
         },
-        setNextMenuShow(state, value){
-            state.isNextMenuShow = value
-        },
         setModelContentHeight(state, value){
             state.modelContentHeight = value
         },
@@ -149,6 +46,34 @@ export default {
         setUserInfo(state, value){
             state.userInfo = value
             window.localStorage.setItem("userInfo", JSON.stringify(value))
+        },
+        setCurrFid(state, value){
+            state.menuSetting.currFid = value
+            window.localStorage.setItem("menuSetting", JSON.stringify(state.menuSetting))
+        },
+        setCurrSid(state, value){
+            state.menuSetting.currSid = value
+            window.localStorage.setItem("menuSetting", JSON.stringify(state.menuSetting))
+        },
+        setCurrSlist(state, value){
+            state.menuSetting.currSlist = value
+            window.localStorage.setItem("menuSetting", JSON.stringify(state.menuSetting))
+        },
+        setCurrRoutUrl(state, value){
+            state.menuSetting.currRoutUrl = value
+            window.localStorage.setItem("menuSetting", JSON.stringify(state.menuSetting))
+        },
+        setNextMenuShow(state, value){
+            state.menuSetting.isNextMenuShow = value
+            window.localStorage.setItem("menuSetting", JSON.stringify(state.menuSetting))
+        },
+        setMenuSetting(state, value){
+            state.menuSetting = value
+            window.localStorage.setItem("menuSetting", JSON.stringify(state.menuSetting))
+        },
+        setPerssionArr(state, value){
+            state.menuSetting.perssionArr = value
+            window.localStorage.setItem("menuSetting", JSON.stringify(state.menuSetting))
         },
         // 商品包装类型
         setTypes(state, value){

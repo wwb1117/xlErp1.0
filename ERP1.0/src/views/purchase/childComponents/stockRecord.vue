@@ -60,7 +60,7 @@
                 label="采购数">
                 </el-table-column>
                 <el-table-column
-                prop="inRepositoryNum"
+                prop="inventoryNumber"
                 label="已入库数">
                 </el-table-column>
                 <el-table-column
@@ -194,6 +194,7 @@ export default {
         fatherValue(newvalue){
             this.formData = newvalue
             this.goodsInfoData = newvalue.list
+            console.log(this.goodsInfoData)
         },
         baseInfo(newvalue){
             this.baseInfoData = newvalue

@@ -11,5 +11,11 @@ export default {
     },
     getIReviewList(data){
         return HttpClient.get('/approval/audited/findByCondition', data);
+    },
+    auditorReview(data){
+        return HttpClient.post('/approval/auditor', data);
+    },
+    waitRe_look(processType, orderId){
+        return HttpClient.get(`/approval/getOrder/${processType}/${orderId}`);
     }
 }

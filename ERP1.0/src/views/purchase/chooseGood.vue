@@ -228,6 +228,8 @@ export default {
             } else {
                 this.$router.go(-1)
             }
+
+            this.$router.go(-1)
         },
         cancelBtnEvent(){
             this.$store.commit('setGoodsInfoData', this.goodsInfoData)

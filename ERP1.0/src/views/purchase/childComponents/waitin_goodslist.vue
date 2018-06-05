@@ -215,7 +215,6 @@ export default {
             this.dialogVisible = true
             this.totalStoreNumber = 0
             this.goodsInfoData.forEach((item, index) => {
-                console.log(item.currentStoreNumber)
                 if (!item.currentStoreNumber) {
                     item.currentStoreNumber = 0
                 }
@@ -252,8 +251,6 @@ export default {
                 storeRemark: this.formData.remark,
                 list: this.goodsInfoData
             }
-
-            console.log(paramobj)
 
             api.addStoreList(paramobj).then((response) => {
                 this.$message({
@@ -292,7 +289,7 @@ export default {
     },
     watch: {
         fatherValue(newvalue){
-            this.formData = this.fatherValue
+            this.formData = this.myBase.deepCopy(this.fatherValue)
             this.formData.orderTime *= 1000
             this.formData.storeType = '1'
             this.goodsInfoData = this.fatherValue.list

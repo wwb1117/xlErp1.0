@@ -185,6 +185,7 @@ export default {
             api.getStoreRecord(purId).then((response) => {
                 this.storeBaseInfo = response.data.obj
                 this.storeListData = response.data.list
+                console.log(response)
             })
         },
         getSummaries(param){

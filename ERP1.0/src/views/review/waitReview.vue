@@ -126,7 +126,7 @@ export default {
             this.getTableData()
         },
         tablePropEvent(rowdata, type){
-            this.$store.commit('setCurrentModelId', rowdata.orderId + ';' + rowdata.reviewProcessId)
+            this.$store.commit('setCurrentModelId', rowdata)
             this.$router.push({
                 path: '/waitReviewRe'
             })

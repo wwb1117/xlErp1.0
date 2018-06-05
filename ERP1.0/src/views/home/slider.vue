@@ -5,9 +5,9 @@
             <img src="static/img/logo.png" alt="妈妈去哪儿">
         </div>
         <ul id="firstMenu_ul">
-          <li @click="firstMenuClickEvent($event)" v-for="(item, index) in menuList" :key="item.name" :text="item.text" :type="item.name" :class="[item.icon, index == 0 ? 'active' : '']" v-text="item.text"></li>
+          <li @click="firstMenuClickEvent($event)" :type="0" :text="'首页'" :class="[$store.state.home.menuSetting.currFid ? '' : 'active' , 'fa fa-desktop']">首页</li>
+          <li @click="firstMenuClickEvent($event)" v-for="(item, index) in baseMenu" :key="item.id" :text="item.resourceName" :type="item.id" :class="[$store.state.home.menuSetting.currFid == item.id ? 'active' : '', iconArr[index]]" v-text="item.resourceName"></li>
         </ul>
-
         <el-popover
         placement="bottom"
         v-model="popoverisShow"
@@ -15,8 +15,12 @@
         trigger="click"
         :style="{textAlign: 'center'}"
         >
-        <el-dropdown-item :style="{textAlign: 'center', width: '100px'}">修改密码</el-dropdown-item>
-        <el-dropdown-item :style="{textAlign: 'center', width: '100px'}">退出系统</el-dropdown-item>
+        <div class="dropdown">
+            修改密码
+        </div>
+        <div @click="loginOutEvent" class="dropdown">
+            退出系统
+        </div>
         <div slot="reference" class="userInfoWrap">
             <div style="color: #E0E0DE; padding-top: 17px; text-align: center; cursor: pointer">
                 <img src="static/img/login/adm.png" alt="头像">
@@ -29,25 +33,28 @@
 
 
       </div>
-      <div v-show="$store.state.home.isNextMenuShow" class="silder_right">
+      <div v-show="$store.state.home.menuSetting.isNextMenuShow" class="silder_right">
         <div class="silder_right_top">
           <h4 :style="{textAlign: 'center', margin: '0', padding: '0', lineHeight: '45px', color: '#313131'}" v-text="nextMenuTitle"></h4>
         </div>
         <ul id="secondMenu_ul">
-          <li @click="secondMenuClickEvent($event)" v-for="(item, index) in nextMenuList" :class="[index == 0 ? 'active' : '']" :routerUrl="item.path" :key="item.path" v-text="item.name"></li>
+          <li @click="secondMenuClickEvent($event)" v-for="(item, index) in nextMenuList" :class="[index == 0 && !$store.state.home.menuSetting.currSid ? 'active' : '', $store.state.home.menuSetting.currSid == item.id ? 'active' : '']" :routerUrl="item.frontPath" :type="item.id" :key="item.id" v-text="item.resourceName"></li>
         </ul>
       </div>
   </div>
 </template>
 
 <script>
+import api from 'api/login'
 export default {
     name: "slider",
     props: ["menuList"],
     data() {
         return {
+            baseMenu: null,
+            iconArr: ["fa fa-th", "fa fa-file-text", "fa fa-cubes", "fa fa-user-o", "fa fa-gear"],
             popoverisShow: false,
-            nextMenuList: [],
+            nextMenuList: this.$store.state.home.menuSetting.currSlist,
             nextMenuMap:{},
             nextMenuTitle: '商品'
         };
@@ -61,7 +68,7 @@ export default {
             var text = $(tha).attr('text')
 
             $(tha).addClass('active')
-            if (type == 'home'){
+            if (type == '0'){
                 this.$store.commit('setNextMenuShow', false)
                 this.$router.push({
                     path: '/main'
@@ -70,30 +77,64 @@ export default {
             } else {
                 this.$store.commit('setNextMenuShow', true)
             }
-            this.nextMenuList = this.nextMenuMap[type]
-            this.nextMenuTitle = text
-
-            this.$router.push({
-                path: this.nextMenuList[0].path
+            this.baseMenu.forEach((item, index) => {
+                if (type == item.id) {
+                    this.nextMenuList = item.childMenus
+                    this.$store.commit("setCurrFid", type)
+                    this.$store.commit("setCurrSid", this.nextMenuList[0].id)
+                    this.$store.commit("setCurrSlist", this.nextMenuList)
+                }
             });
 
-
+            this.nextMenuTitle = text
+            this.$router.push({
+                path: this.nextMenuList[0].frontPath
+            });
         },
         secondMenuClickEvent($event){
             $('#secondMenu_ul>li').removeClass('active')
             var tha = $event.currentTarget
             var path = $(tha).attr('routerUrl')
+            var type = $(tha).attr('type')
+
+            this.$store.commit("setCurrSid", type)
 
             $(tha).addClass('active')
             this.$router.push({
                 path: path
             });
 
+        },
+        loginOutEvent(){
+            this.myBase.confirm('你确定要退出登录?', () => {
+                api.loginOut().then(() => {
+                    this.$router.push({
+                        path: '/login'
+                    })
+                })
+            })
         }
     },
     created() {
+        this.baseMenu = this.$store.state.home.userInfo.menuList
         this.nextMenuMap = this.$store.state.home.nextMenuMap
+        var perssionArr = []
+
+        for (var item0 of this.baseMenu) {
+            if (item0.childMenus) {
+                for (var item1 of item0.childMenus) {
+                    if (item1.childMenus) {
+                        for (var item2 of item1.childMenus) {
+                            perssionArr.push(item2.resourceName)
+                        }
+                    }
+                }
+            }
+        }
+
+        this.$store.commit("setPerssionArr", perssionArr)
     }
+
 };
 
 </script>
@@ -185,7 +226,17 @@ export default {
       bottom: 0;
   }
   .el-popover{
-      min-width: 0;
+      min-width: 100;
+  }
+  .dropdown{
+      text-align: center;
+      margin: 5px 0;
+      padding: 5px 0;
+      cursor: pointer;
+  }
+  .dropdown:hover{
+      background: #ECF5FF;
+      color: #66B1FF;
   }
 
 </style>

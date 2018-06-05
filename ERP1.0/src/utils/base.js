@@ -1,5 +1,6 @@
 import { MessageBox } from 'element-ui';
 import { Message } from 'element-ui';
+import store from 'store'
 
 // noinspection JSAnnotator
 export default {
@@ -18,6 +19,15 @@ export default {
 
         //禁止后退键  作用于IE、Chrome
         document.onkeydown = doKey;
+    },
+    isHasPerssion(keyvalue){
+        var perssionArr = store.state.home.menuSetting.perssionArr
+        var res = perssionArr.indexOf(keyvalue)
+
+        if (res === -1) {
+            return false
+        }
+        return true
     },
     confirm(text, success, cancel){
         MessageBox.confirm(text, '温馨提示', {

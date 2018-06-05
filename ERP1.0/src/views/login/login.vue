@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import api from 'api/login'
+import lapi from 'api/login'
 export default {
     data() {
         return {
@@ -68,13 +68,14 @@ export default {
                 return
             }
 
-            api.login(this.userInfo).then((reponse) => {
+            lapi.login(this.userInfo).then((reponse) => {
                 sessionStorage.setItem("user", JSON.stringify(this.userInfo))
                 this.$store.commit('setUserInfo', reponse.data)
+                this.$store.commit('setCurrFid', 0)
+                this.$store.commit('setNextMenuShow', false)
                 this.$router.push({
                     path: '/main'
                 });
-                console.log(reponse)
             })
 
         }
