@@ -5,7 +5,7 @@
             <div>
                 <el-button @click="invalidRecordEvent" size="small">作废记录</el-button>
                 <el-button @click="importEvent" size="small">导入采购单</el-button>
-                <el-button type="primary" @click="purchaseAddEvent" size="small">新增采购单</el-button>
+                <el-button type="primary" v-perss="'新建采购单'" @click="purchaseAddEvent" size="small">新增采购单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -400,6 +400,9 @@ export default {
             }
         },
         purchaseAddEvent(){
+            var ishas = this.myBase.isHasPerssion('新建采购单')
+
+            console.log(ishas)
             this.$router.push({
                 path: '/addPurchaseList'
             })

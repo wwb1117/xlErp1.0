@@ -122,6 +122,7 @@ export default {
         return {
             dialogVisible: false,
             invalidRecord: '',
+            totalChecked: "",
             formData: {
                 inrepository: '',
                 purchaseCom: '',

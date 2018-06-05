@@ -132,6 +132,8 @@ export default {
             }
         }
 
+        console.log(perssionArr)
+
         this.$store.commit("setPerssionArr", perssionArr)
     }
 
