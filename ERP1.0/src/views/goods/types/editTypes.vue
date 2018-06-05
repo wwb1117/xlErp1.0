@@ -88,10 +88,16 @@ export default {
 
             text: '',
             remark: '',
-            from: [],
+            from: {
+                itemSupplyPropertyVOs:[
+                    {
+                        skuNumber: '',
+                        supplyMsg: '',
+                        isDeleted: '0'
+                    }
+                ]
+            },
             goodid: ''
-
-            // disabled: false
 
         }
     },
@@ -127,8 +133,8 @@ export default {
             console.log(this.from)
 
             api.putitemsupplyPropertyupdate(obj).then((response)=>{
-                // this.$router.go(-1)
-                console.log(response)
+                this.$router.go(-1)
+                // console.log(response)
             }).catch((error)=>{
                 console.log(error)
             })
@@ -154,7 +160,7 @@ export default {
 
         this.goodid = msg
         api.getitemsupplyPropertyunitId(msg).then((response)=>{
-            // console.log(response)
+            console.log(response)
             this.from = response.data
 
         }).catch((error)=>{

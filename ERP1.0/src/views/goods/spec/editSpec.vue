@@ -110,7 +110,7 @@ export default {
 
             let obj = {
                 skuProperties : JSON.stringify({
-                    skuPropertyId: this.editNum.id,
+                    id: this.editNum.id,
                     skuPropertyName: this.editNum.skuPropertyName,
                     remark: this.editNum.remark,
                     itemSkuPropertyValueDTOS: this.editNum.propertyValueList

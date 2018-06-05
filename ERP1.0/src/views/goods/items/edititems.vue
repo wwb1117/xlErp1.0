@@ -12,10 +12,10 @@
             <div class="edititems_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <!-- conents -->
                 <el-form :model="msg">
-                    <el-form-item label="分类名称" required :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item label="分类名称" required :label-width="formLabelWidth">
                         <el-input v-model="msg.categoryName" type='text' suffix-text='0/15' size='small' style="width:338px"></el-input>
                     </el-form-item>
-                    <el-form-item label="分类图片" :label-width="formLabelWidth"  style="height:100px">
+                    <el-form-item label="分类图片" :label-width="formLabelWidth" >
                         <el-upload
                             action=""
                             list-type="picture-card"
@@ -28,10 +28,10 @@
                             <img width="100%" :src="msg.categoryImg" alt="">
                         </el-dialog>
                     </el-form-item>
-                    <el-form-item label="排序" required :label-width="formLabelWidth"  style="height:50px">
+                    <el-form-item label="排序" required :label-width="formLabelWidth"  >
                         <el-input v-model="msg.sort" placeholder="数值越大越靠前"  size='small' style="width:338px"></el-input>
                     </el-form-item>
-                    <el-form-item label="是否显示" required :label-width="formLabelWidth"  style="height:50px" >
+                    <el-form-item label="是否显示" required :label-width="formLabelWidth"  >
                         <el-switch
                             v-model="msg.isDisplay">
                         </el-switch>
@@ -148,6 +148,7 @@ export default {
     color: #5e6161;
     background: white;
     padding: 48px 20px 0 20px;
+    overflow: auto
 }
 
 /* 底部 */

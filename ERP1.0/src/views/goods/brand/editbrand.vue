@@ -12,10 +12,10 @@
             <div class="addbrand_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <!-- conents -->
                 <el-form v-model="from">
-                    <el-form-item required label='品牌名称' :label-width='formLabelWidth' style="height:50px">
+                    <el-form-item required label='品牌名称' :label-width='formLabelWidth' >
                         <el-input type='text' suffix-text='0/15'  size='small' style="width:338px" v-model="from.brandName"></el-input>
                     </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:30px" >
+                    <el-form-item label="关联分类" required :label-width="formLabelWidth"  >
                         <el-select
                             placeholder="请选择"
                             size='small'
@@ -33,10 +33,10 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
+                    <el-form-item label='服务费率' required :label-width='formLabelWidth'  v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
                         <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
                     </el-form-item>
-                    <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
+                    <el-form-item label="品牌LOGO" :label-width="formLabelWidth" >
                         <el-upload
                             action=""
                             list-type="picture-card"
@@ -49,13 +49,13 @@
                             <img width="100%" :src="from.brandImg" alt="">
                         </el-dialog>
                     </el-form-item>
-                    <el-form-item label="排序" required :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item label="排序" required :label-width="formLabelWidth" >
                         <el-input  placeholder="数值越大越靠前"  size='small' style="width:338px" v-model="from.sort"></el-input>
                     </el-form-item>
-                    <el-form-item  label="控货品牌" :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item  label="控货品牌" :label-width="formLabelWidth" >
                         <el-checkbox v-model="from.isControl" @change="changes">勾选为控货品牌</el-checkbox>
                     </el-form-item>
-                    <el-form-item label="控货门店" :label-width="formLabelWidth" style="height:50px;margin-bottom:30px" v-if='showhiddden'>
+                    <el-form-item label="控货门店" :label-width="formLabelWidth" v-if='showhiddden'>
                         <el-select
                             v-model="groupName"
                             multiple
@@ -73,7 +73,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="是否推荐" required :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item label="是否推荐" required :label-width="formLabelWidth" >
                         <el-switch
                             v-model="from.isRecommended">
                         </el-switch>
