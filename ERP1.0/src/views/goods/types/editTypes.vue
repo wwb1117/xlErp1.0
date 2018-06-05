@@ -52,9 +52,7 @@
                                 width="80">
                                 <template slot-scope="scope">
                                     <el-switch
-                                        v-model="scope.row.isDeleted"
-                                        active-color="#13ce66"
-                                        inactive-color="#ff4949">
+                                        v-model="scope.row.isDeleted">
                                     </el-switch>
                                 </template>
                             </el-table-column>

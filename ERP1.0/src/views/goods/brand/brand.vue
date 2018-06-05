@@ -37,9 +37,7 @@
                     </li>
                     <li style="width:180px">
                         <el-switch
-                            v-model="item.isRecommended"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
+                            v-model="item.isRecommended">
                         </el-switch>
                     </li>
                     <li style="width:110px">{{item.sort}}</li>

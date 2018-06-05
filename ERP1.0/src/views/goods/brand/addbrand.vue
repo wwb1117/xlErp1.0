@@ -57,8 +57,6 @@
                     </el-form-item>
                     <el-form-item label="是否推荐" required :label-width="formLabelWidth" style="height:50px">
                         <el-switch
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
                             v-model="from.isRecommended">
                         </el-switch>
                     </el-form-item>

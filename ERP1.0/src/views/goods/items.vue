@@ -28,9 +28,7 @@
                     </el-form-item>
                     <el-form-item label="是否显示" required :label-width="formLabelWidth">
                         <el-switch
-                            v-model="value2"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
+                            v-model="value2">
                         </el-switch>
                     </el-form-item>
                 </el-form>
@@ -75,9 +73,7 @@
                         <li>{{ data.sort }}</li>
                         <li >
                             <el-switch
-                                v-model="data.isDisplay"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949">
+                                v-model="data.isDisplay">
                             </el-switch>
                         </li>
                         <li>
