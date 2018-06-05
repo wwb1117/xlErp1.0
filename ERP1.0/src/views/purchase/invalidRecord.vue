@@ -143,6 +143,7 @@ export default {
         return {
             serchText: '',
             totalPage: 10,
+            baseData: [],
             selectTableData: [],
             isSupperBoxShow: false,
             checked: 0,
@@ -171,10 +172,12 @@ export default {
     computed:{},
     methods:{
         handleSizeChange(val){
-
+            this.tableParam.pageSize = val
+            this.getTableData()
         },
         handleCurrentChange(val){
-
+            this.tableParam.pageNo = val
+            this.getTableData()
         },
         inRepositoryEvent(){
 
@@ -182,14 +185,6 @@ export default {
         closeExportWrap(){
             this.isExportShow = false
             this.$refs.purchaseListTable.clearSelection()
-        },
-        handleSelectionChange(val){
-            this.selectTableData = val
-            if (this.selectTableData.length > 0){
-                this.isExportShow = true
-            } else {
-                this.isExportShow = false
-            }
         },
         supperBoxShow(){
             this.isSupperBoxShow = !this.isSupperBoxShow
@@ -208,7 +203,10 @@ export default {
         },
         getTableData(){
             api.getInvalidRecordList(this.tableParam).then((response) => {
+                console.log("123")
                 console.log(response)
+                this.totalPage = response.data.total
+                this.baseData = response.data.list
             })
         }
 
