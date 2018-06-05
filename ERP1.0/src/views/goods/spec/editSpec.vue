@@ -14,7 +14,7 @@
                     </el-form-item>
                     <el-form-item label="规格值" required :style="{height: (this.length)*50 + 'px'}">
                         <el-table
-                            :data='editNum.list'
+                            :data='editNum.propertyValueList'
                             border
                             style="width:658px">
                             <el-table-column
@@ -94,8 +94,8 @@ export default {
                 isDeleted: 0
             }
 
-            this.editNum.list.push(obj)
-            this.length = this.editNum.list.length
+            this.editNum.propertyValueList.push(obj)
+            this.length = this.editNum.propertyValueList.length
         },
         // removeEditnum(data) {
         //     if (this.editNum.length > 1){
@@ -113,7 +113,7 @@ export default {
                     skuPropertyId: this.editNum.id,
                     skuPropertyName: this.editNum.skuPropertyName,
                     remark: this.editNum.remark,
-                    itemSkuPropertyValueDTOS: this.editNum.list
+                    itemSkuPropertyValueDTOS: this.editNum.propertyValueList
                 })
             }
 
@@ -133,7 +133,7 @@ export default {
         api.getitemskupropertyid(msg).then((response)=>{
 
             this.editNum = response.data
-            this.length = this.editNum.list.length
+            this.length = this.editNum.propertyValueList.length
             console.log(response.data)
         }).catch((error)=>{
             console.log(error)
@@ -143,9 +143,10 @@ export default {
         var msg = this.$store.state.home.specMsg
 
         api.getitemskupropertyid(msg).then((response)=>{
-
+            console.log(response)
             this.editNum = response.data
-            this.length = this.editNum.list.length
+            this.length = this.editNum.propertyValueList.length
+
         }).catch((error)=>{
             console.log(error)
         })

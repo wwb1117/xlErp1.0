@@ -27,7 +27,7 @@
                             default-first-option>
                             <el-option
                                 v-for="item in options"
-                                :key="item.categoryName"
+                                :key="item.itemCategoryId"
                                 :label="item.categoryName"
                                 :value="item.categoryName">
                             </el-option>
@@ -97,13 +97,7 @@ export default {
             formLabelWidth: '120px',
 
             from: {
-                id: '',
-                brandName: '',
-                isControl: '',
-                itemBrandCategories: [],
-                brandImg: '',
-                sort: '',
-                isRecommended: ''
+
             },
 
             value: '',
@@ -199,16 +193,21 @@ export default {
             console.log(error)
         })
 
-        api.getitemBrandid(id).then((response)=>{
-            // console.log(response.data.list)
-            this.from = response.data.list
+        api.getcategorylist().then((response)=>{
+            this.options = response.data.list
+            // console.log(response)
         }).catch((error)=>{
             console.log(error)
         })
 
-        api.getcategorylist().then((response)=>{
-            this.options = response.data.list
-            // console.log(response)
+        api.getitemBrandid(id).then((response)=>{
+            // console.log(response.data.list)
+            this.from = response.data.list
+            for (var i in this.from.itemBrandCategories){
+                this.text[i] = this.from.itemBrandCategories[i].rate
+                this.from.itemBrandCategories[i] = this.from.itemBrandCategories[i].categoryName
+            }
+
         }).catch((error)=>{
             console.log(error)
         })
@@ -227,20 +226,27 @@ export default {
             console.log(error)
         })
 
-        api.getitemBrandid(id).then((response)=>{
-            // console.log(response.data.list)
-            this.from = response.data.list
-        }).catch((error)=>{
-            console.log(error)
-        })
 
         api.getcategorylist().then((response)=>{
             this.options = response.data.list
             // console.log(response.data.list)
+
         }).catch((error)=>{
             console.log(error)
         })
 
+        api.getitemBrandid(id).then((response)=>{
+
+            this.from = response.data.list
+            // console.log(response.data.list)
+            for (var i in this.from.itemBrandCategories){
+                this.text[i] = this.from.itemBrandCategories[i].rate
+                this.from.itemBrandCategories[i] = this.from.itemBrandCategories[i].categoryName
+            }
+
+        }).catch((error)=>{
+            console.log(error)
+        })
 
     }
 }

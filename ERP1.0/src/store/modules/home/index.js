@@ -29,7 +29,11 @@ export default {
         flowName: '',
         // 角色id
         userId: '',
-        userName: ''
+        userName: '',
+        // 商品分类查询详情ID
+        itemId: '',
+        // 商品分类新增父ID
+        parentId: ''
     },
     mutations: {
         setDevice(state, value){
@@ -102,6 +106,14 @@ export default {
         },
         setRoleName(state, value){
             state.userName = value
+        },
+        // 商品分类查询详情ID
+        setItemid(state, value){
+            state.itemId = value
+        },
+        // 商品分类新增父ID
+        setparentid(state, value){
+            state.parentId = value
         }
     }
 };

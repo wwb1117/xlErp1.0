@@ -13,7 +13,7 @@
                 <!-- conents -->
                 <el-form :model="msg">
                     <el-form-item label="分类名称" required :label-width="formLabelWidth" style="height:50px">
-                        <el-input v-model="msg.name" type='text' suffix-text='0/15' size='small' style="width:338px"></el-input>
+                        <el-input v-model="msg.categoryName" type='text' suffix-text='0/15' size='small' style="width:338px"></el-input>
                     </el-form-item>
                     <el-form-item label="分类图片" :label-width="formLabelWidth"  style="height:100px">
                         <el-upload
@@ -25,44 +25,35 @@
                         </el-upload>
                         <!-- action上传地址 -->
                         <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="dialogImageUrl" alt="">
+                            <img width="100%" :src="msg.categoryImg" alt="">
                         </el-dialog>
                     </el-form-item>
                     <el-form-item label="排序" required :label-width="formLabelWidth"  style="height:50px">
-                        <el-input v-model="msg.name" placeholder="数值越大越靠前"  size='small' style="width:338px"></el-input>
+                        <el-input v-model="msg.sort" placeholder="数值越大越靠前"  size='small' style="width:338px"></el-input>
                     </el-form-item>
-                    <el-form-item label="是否显示" required :label-width="formLabelWidth"  style="height:50px">
+                    <el-form-item label="是否显示" required :label-width="formLabelWidth"  style="height:50px" >
                         <el-switch
-                            v-model="value2">
+                            v-model="msg.isDisplay">
                         </el-switch>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
         <footer class="edititems_footer">
-            <el-button size='small' type='primary' style="width:90px">保存</el-button>
+            <el-button size='small' type='primary' style="width:90px" @click="trueconfim">保存</el-button>
             <el-button size='small' style="width:90px" @click='returnitems'>返回</el-button>
         </footer>
     </section>
 </template>
 <script>
+import api from 'api/goods'
+
 export default {
     data() {
         return {
-            msg: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            value2: true,
+            msg: {},
             formLabelWidth: '120px',
             // 上传
-            dialogImageUrl: '',
             dialogVisible: false
 
         }
@@ -72,12 +63,68 @@ export default {
             console.log(file, fileList);
         },
         handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
+            this.msg.categoryImg = file.url;
             this.dialogVisible = true;
         },
         returnitems() {
             this.$router.go(-1)
+        },
+        trueconfim() {
+            if (this.msg.isDisplay == true){
+                this.msg.isDisplay = 1
+            } else {
+                this.msg.isDisplay = 0
+            }
+
+            let obj = {
+                id: this.msg.id,
+                parentId: this.msg.parentId,
+                categoryImg: this.msg.categoryImg,
+                categoryName: this.msg.categoryName,
+                isDisplay: this.msg.isDisplay,
+                sort: this.msg.sort
+            }
+
+            api.putitemcategoryupdate(obj).then((response)=>{
+                this.msg = {}
+                this.$router.go(-1)
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
+
+
+    },
+    created() {
+        var id = this.$store.state.home.itemId
+
+        api.getcategoryid(id).then((response)=>{
+            console.log(response.data[0])
+            this.msg = response.data[0]
+            if (this.msg.isDisplay == 1){
+                this.msg.isDisplay = true
+            } else {
+                this.msg.isDisplay = false
+            }
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+    },
+    activated() {
+        var id = this.$store.state.home.itemId
+
+        api.getcategoryid(id).then((response)=>{
+            console.log(response.data[0])
+            this.msg = response.data[0]
+            if (this.msg.isDisplay == 1){
+                this.msg.isDisplay = true
+            } else {
+                this.msg.isDisplay = false
+            }
+        }).catch((error)=>{
+            console.log(error)
+        })
 
     }
 }

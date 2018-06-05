@@ -25,45 +25,45 @@
                         </el-upload>
                         <!-- action上传地址 -->
                         <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="dialogImageUrl" alt="">
+                            <img width="100%" :src="msg.dialogImageUrl" alt="">
                         </el-dialog>
                     </el-form-item>
                     <el-form-item label="排序" required :label-width="formLabelWidth"  style="height:50px">
-                        <el-input v-model="msg.name" placeholder="数值越大越靠前"  size='small' style="width:338px"></el-input>
+                        <el-input v-model="msg.sort" placeholder="数值越大越靠前"  size='small' style="width:338px"></el-input>
                     </el-form-item>
                     <el-form-item label="是否显示" required :label-width="formLabelWidth"  style="height:50px">
                         <el-switch
-                            v-model="value2">
+                            v-model="msg.value">
                         </el-switch>
                     </el-form-item>
                 </el-form>
             </div>
         </section>
         <footer class="additems_footer">
-            <el-button size='small' type='primary' style="width:90px">保存</el-button>
+            <el-button size='small' type='primary' style="width:90px" @click="tryeconfim">保存</el-button>
             <el-button size='small' style="width:90px" @click='returnitems'>返回</el-button>
         </footer>
     </section>
 </template>
 <script>
+import api from 'api/goods'
+
 export default {
     data() {
         return {
             msg: {
                 name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+                dialogImageUrl: '',
+                sort:'',
+                value: true
             },
-            value2: true,
+
             formLabelWidth: '120px',
             // 上传
-            dialogImageUrl: '',
-            dialogVisible: false
+
+            dialogVisible: false,
+
+            parentid : ''
 
         }
     },
@@ -75,10 +75,58 @@ export default {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
         },
+        tryeconfim() {
+
+            if (this.msg.value == true){
+                this.msg.value = 1
+            } else {
+                this.msg.value = 0
+            }
+
+            let obj = {
+                parentId: this.parentid,
+                categoryImg: this.msg.dialogImageUrl,
+                categoryName: this.msg.name,
+                isDisplay: this.msg.value,
+                sort: this.msg.sort
+            }
+
+            console.log(obj.categoryImg)
+            api.postitemcategoryadd(obj).then((response)=>{
+                this.msg = {
+                    name: '',
+                    dialogImageUrl: '',
+                    sort:'',
+                    value: true
+                }
+                this.parentid = ''
+                // this.$router.go(-1)
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
         returnitems() {
+            this.msg = {
+                name: '',
+                dialogImageUrl: '',
+                sort:'',
+                value: true
+            }
+            this.parentid = ''
             this.$router.go(-1)
         }
 
+    },
+    // created() {
+    //     var parent = this.$store.state.home.parentId
+
+    //     this.parentid = parent
+
+    // },
+    activated() {
+        var parent = this.$store.state.home.parentId
+
+        this.parentid = parent
     }
 }
 </script>
