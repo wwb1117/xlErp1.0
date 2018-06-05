@@ -2,7 +2,7 @@
   <div class="slider">
       <div class="silder_left">
         <div class="slider_logo">
-            <img src="static/img/logo.png" alt="妈妈去哪儿">
+            <img src="../../../static/img/logo.png" alt="妈妈去哪儿">
         </div>
         <ul id="firstMenu_ul">
           <li @click="firstMenuClickEvent($event)" :type="0" :text="'首页'" :class="[$store.state.home.menuSetting.currFid ? '' : 'active' , 'fa fa-desktop']">首页</li>
@@ -23,7 +23,7 @@
         </div>
         <div slot="reference" class="userInfoWrap">
             <div style="color: #E0E0DE; padding-top: 17px; text-align: center; cursor: pointer">
-                <img src="static/img/login/adm.png" alt="头像">
+                <img src="../../../static/img/login/adm.png" alt="头像">
                 <br>
                 <span>admin</span>
                 <span :class="[popoverisShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom']"></span>
