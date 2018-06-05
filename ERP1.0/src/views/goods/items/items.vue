@@ -4,39 +4,7 @@
         <header class="items_top">
             <p class='items_title'>商品分类</p>
             <el-button type="primary" size='small' style="height:30px;margin-top:-3px"  @click="additems">新增分类</el-button>
-            <!-- 新增表单内容 -->
-            <!-- <el-dialog title="新增分类" :visible.sync="dialogFormVisible">
-                <el-form :model="msg">
-                    <el-form-item label="分类名称" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" type='text' suffix-text='0/15' size='small'></el-input>
-                    </el-form-item>
-                    <el-form-item label="分类图片" :label-width="formLabelWidth">
-                        <el-upload
-                            action=""
-                            list-type="picture-card"
-                            :on-preview="handlePictureCardPreview"
-                            :on-remove="handleRemove">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                        action上传地址
-                        <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="dialogImageUrl" alt="">
-                        </el-dialog>
-                    </el-form-item>
-                    <el-form-item label="排序" required :label-width="formLabelWidth">
-                        <el-input v-model="msg.name" placeholder="数值越大越靠前"  size='small'></el-input>
-                    </el-form-item>
-                    <el-form-item label="是否显示" required :label-width="formLabelWidth">
-                        <el-switch
-                            v-model="value2">
-                        </el-switch>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false" size='medium'>取 消</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false" size='medium'>保 存</el-button>
-                </div>
-            </el-dialog> -->
+
         </header>
         <!-- 内容 -->
         <section class="item_conent" >
@@ -56,7 +24,8 @@
                     :expand-on-click-node="false">
                     <ul class="item_box_conent"  slot-scope="{ node, data }" >
                         <li >
-                            <el-button type='text' @click="editconfim">编辑</el-button>
+                            <el-button type='text' @click="addconfim(data.parentId)">新增下级</el-button>
+                            <el-button type='text' @click="editconfim(data.id)">编辑</el-button>
                             <el-button type="text" @click="del = true">删除</el-button>
                             <el-dialog
                                 title="温馨提示"
@@ -76,9 +45,8 @@
                                 v-model="data.isDisplay">
                             </el-switch>
                         </li>
-                        <li>
-                            <div style='width:28px;height:28px;background:black;margin-top:6px'></div>
-                            <!-- <img :src="date.categoryImg" alt=""> -->
+                        <li class="imgbox_img">
+                            <img :src="node.categoryImg" alt="">
                         </li>
                         <li>{{ data.categoryName }}</li>
                     </ul>
@@ -135,10 +103,16 @@ export default {
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
         },
-        editconfim() {
+        editconfim(data) {
+            this.$store.commit('setItemid', data)
             this.$router.push('edititems')
         },
         additems() {
+            this.$store.commit('setparentid', 0)
+            this.$router.push('additems')
+        },
+        addconfim(data) {
+            this.$store.commit('setparentid', data)
             this.$router.push('additems')
         },
 
@@ -146,8 +120,6 @@ export default {
             api.getcategorylist().then((response)=>{
                 // console.log(response.data.list)
                 this.items = response.data.list
-
-
             }).catch((error)=>{
                 console.log(error)
             })
@@ -157,10 +129,10 @@ export default {
         // console.log(this.form)
         this.get()
 
+    },
+    activated() {
+        this.get()
     }
-    // activated() {
-    //     this.get()
-    // }
 
 }
 </script>
@@ -234,6 +206,10 @@ export default {
 .item_box_conent{
     padding: 0 20px;
 }
+.imgbox_img img{
+    width: 28px;
+    height: 28px
+}
 .item_box_conent{
     width: 100%;
     margin: 0;
@@ -244,7 +220,7 @@ export default {
     float: right;
 }
 .item_box_conent li:nth-child(1){
-    margin-right: 90px
+    margin-right: 20px
 }
 .item_box_conent li:nth-child(2){
     width: 20px;
