@@ -2,7 +2,7 @@
     <div class="login_wrap">
         <div class="login_box">
             <div class="login_logo">
-                <img src="static/img/login/login_logo.png" alt="妈妈去哪儿">
+                <img src="../../../static/img/login/login_logo.png" alt="妈妈去哪儿">
             </div>
             <div class="login_content">
                 <div class="login_title">登录</div>
