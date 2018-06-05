@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/views/home/home'
+import store from 'store'
 import login from '@/views/login/login'
 import { Message } from 'element-ui'
 
@@ -209,5 +210,9 @@ router.beforeEach((to, from, next) => {
             return
         }
     }
+})
+
+router.afterEach((to, from) => {
+    store.commit('setCurrRoutUrl', to.fullPath)
 })
 export default router

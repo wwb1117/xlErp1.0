@@ -105,7 +105,7 @@
                 </div>
 
                 <div class="checkBox_wrap">
-                    <el-checkbox v-model="totalChecked">全选</el-checkbox>
+                    <el-checkbox :true-label="1" :false-label="0" v-model="checked">全选</el-checkbox>
                 </div>
 
                 <div :style="{height: $store.state.home.modelContentHeight-124 + 'px'}" class="invalidRecord_wrap">
@@ -145,6 +145,7 @@ export default {
             totalPage: 10,
             selectTableData: [],
             isSupperBoxShow: false,
+            checked: 0,
             tableHeight: 500,
             tableParam: {
                 storeNo: "",

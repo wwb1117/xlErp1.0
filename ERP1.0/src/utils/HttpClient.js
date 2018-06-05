@@ -9,7 +9,7 @@ import base from 'utils/base'
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 50000;
 // 根据实际情况，调整为服务器地址
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = process.env.API_ROOT_BASE;
 
 // http request 拦截器
 axios.interceptors.request.use(

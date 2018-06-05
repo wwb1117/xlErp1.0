@@ -49,9 +49,17 @@ store.commit('setModelContentHeight', winheight - 100);
 //获取local数据
 var currentModelId = JSON.parse(window.localStorage.getItem("currentModelId"))
 var userInfo = JSON.parse(window.localStorage.getItem("userInfo"))
+var menuSetting = JSON.parse(window.localStorage.getItem("menuSetting"))
 
-store.commit('setCurrentModelId', currentModelId);
-store.commit('setUserInfo', userInfo);
+if (currentModelId) {
+    store.commit('setCurrentModelId', currentModelId);
+}
+if (userInfo) {
+    store.commit('setUserInfo', userInfo);
+}
+if (menuSetting) {
+    store.commit('setMenuSetting', menuSetting);
+}
 
 // 定义过滤器
 Object.keys(filters).forEach(key => {
@@ -64,9 +72,10 @@ new Vue({
     components: { App },
     template: '<App/>'
 })
-// router.push({
-//     path: '/main'
-// });
+
+router.push({
+    path: store.state.home.menuSetting.currRoutUrl
+});
 
 window.onresize = function(){
     winheight = document.documentElement.clientHeight

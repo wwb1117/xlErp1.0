@@ -17,16 +17,16 @@
                 </div>
                 <div class="base_info">
                     <span>提交人 : </span>
-                    <span v-text="$store.state.home.userInfo.user.userName"></span>
+                    <span v-text="$store.state.home.currentModelId.creator"></span>
                     <br>
                     <span>提交时间 : </span>
-                    <span>{{Date.parse(new Date()) / 1000 | time_m}}</span>
+                    <span>{{$store.state.home.currentModelId.created | time_m}}</span>
                 </div>
                 <div class="banner">
 
                 </div>
                 <div class="maincontent">
-                    <div class="item_wrap">
+                    <div v-for="item in reviewRecordData" :key="item.id" class="item_wrap">
                         <span class="item_state_pass"></span>
                         <span style="margin-left: 15px">审核通过</span><br>
                         <span style="margin-left: 15px">审核人 : </span>
@@ -35,15 +35,14 @@
                         <span>2018-05-22</span><br>
                         <span>审核意见 : </span>
                         <span>审核通过</span>
-
                     </div>
                     <div class="item_wrap item_wrap_curr">
                         <span class="item_state_curr"></span>
-                        <span style="margin-left: 15px">审核通过</span><br>
+                        <span class="color_brown" style="margin-left: 15px">审核中</span><br>
                         <span style="margin-left: 15px">审核人 : </span>
                         <span> wwb </span><br>
                         <span>审核时间 : </span>
-                        <span>2018-05-22</span><br>
+                        <span>{{Date.parse(new Date()) / 1000 | time_m}}</span><br>
                         <el-form :inline="true" :rules="rules" :model="formData" label-position="left" size="small" label-width="80px">
                             <el-form-item prop="maker" label="审核意见">
                                 <el-input type="textarea" :rows="4" style="width: 404px" v-model="formData.maker" placeholder="请输入审核意见"></el-input>
@@ -54,9 +53,9 @@
             </div>
         </div>
         <div class="model_footer">
-            <el-button type="primary" size="small" style="width: 90px; margin-left: 25px;">审核通过</el-button>
-            <el-button size="small" style="width: 90px; margin-left: 25px;">审核未通过</el-button>
-            <el-button size="small" style="width: 90px; margin-left: 25px;">返 回</el-button>
+            <el-button type="primary" @click="reviewOperEvent(2)" size="small" style="width: 90px; margin-left: 25px;">审核通过</el-button>
+            <el-button size="small" @click="reviewOperEvent(1)" style="width: 90px; margin-left: 25px;">审核未通过</el-button>
+            <el-button v-RouterBack size="small" style="width: 90px; margin-left: 25px;">返 回</el-button>
             <el-button type="primary" @click="talkWindowEvent" size="small" style="width: 90px; margin-left: 25px; float: right">沟通反馈</el-button>
         </div>
 
@@ -139,6 +138,7 @@ export default {
     data(){
         return {
             dialogVisible: false,
+            reviewRecordData: [],
             formData: {
                 maker: ''
             },
@@ -161,21 +161,48 @@ export default {
             })
         },
         getReviewRecord(){
-            var idArr = this.$store.state.home.currentModelId.split(";")
-            var orderId = idArr[0]
-            var reviewProcessId = idArr[1]
+            var idObj = this.$store.state.home.currentModelId
+            var orderId = idObj.orderId
+            var reviewProcessId = idObj.reviewProcessId
             var paramobj = {
                 orderId: orderId,
                 reviewProcessId: reviewProcessId
             }
 
             api.getReviewRecord(paramobj).then((response) => {
-                console.log(response)
+                this.reviewRecordData = response.list
             })
+        },
+        reviewOperEvent(type){
+            var paramobj = {
 
+                orderId: this.$store.state.home.currentModelId.orderId,
+                reviewProcessId: this.$store.state.home.currentModelId.reviewProcessId,
+                reviewProcessUserName: this.$store.state.home.userInfo.user.userName,
+                reviewProcessStatus: type,
+                reviewProcessUserId: this.$store.state.home.userInfo.user.id,
+                reviewProcessTime: Date.parse(new Date()) / 1000,
+                reviewProcessRemark: this.formData.maker
 
+            }
+
+            api.auditorReview(paramobj).then((response) => {
+
+                this.$message({
+                    type: 'success',
+                    duration: 1500,
+                    showClose: true,
+                    message: '操作成功'
+                });
+
+                this.$router.go(-1)
+            })
         }
 
+    },
+    activated(){
+        this.getReviewRecord()
+        this.formData.maker = ""
     },
     created(){},
     mounted(){}
