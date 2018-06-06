@@ -56,9 +56,9 @@
                                 <el-select v-model="morefrom.deduct" placeholder="全部">
                                     <el-option
                                         v-for="item in deductOptions"
-                                        :key="item.id"
-                                        :label="item.categoryName"
-                                        :value="item.id">
+                                        :key="item.promoteGroupId"
+                                        :label="item.promoteGroupName"
+                                        :value="item.promoteGroupId">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -450,17 +450,27 @@ export default {
             }).catch((error)=>{
                 console.log(error)
             })
+        },
+        // 查询提成方式
+        getdeduct() {
+            api.getitempromotes().then((response)=>{
+                this.deductOptions = response.data.list
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
     },
     created() {
         this.get()
         this.getcategoryName()
         this.getbrandName()
+        this.getdeduct()
     },
     activated() {
         this.get()
         this.getcategoryName()
         this.getbrandName()
+        this.getdeduct()
     }
 }
 </script>

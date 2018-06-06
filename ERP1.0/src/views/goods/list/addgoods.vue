@@ -61,37 +61,37 @@
                     <li class="msg_conent">
                         <el-form ref="form" :model="form" label-width="100px">
                             <el-form-item label="商品名称" required>
-                                <el-input v-model="form.name" size="small" placeholder="长度<64" style="width:688px"></el-input>
+                                <el-input v-model="form.title" size="small" placeholder="长度<64" style="width:688px"></el-input>
                             </el-form-item>
                             <el-form-item label="商品卖点" style="margin-bottom:35px">
-                                <el-input type="textarea" v-model="form.name" size="small" placeholder="长度<300" rows='2'></el-input>
+                                <el-input type="textarea" v-model="form.sellingPoint" size="small" placeholder="长度<300" rows='2'></el-input>
                             </el-form-item>
                             <el-form-item label="购买提醒" style="margin-bottom:35px">
-                                <el-input type="textarea" v-model="form.name" size="small" placeholder="长度<300" rows='2'></el-input>
+                                <el-input type="textarea" v-model="form.buyRemind" size="small" placeholder="长度<300" rows='2'></el-input>
                             </el-form-item>
                             <el-col :span='24'>
                                 <el-col :span='6'>
                                     <el-form-item label="商品条码" required >
-                                        <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
+                                        <el-input v-model="form.barCode" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span='6' style="margin-left:25px">
                                     <el-form-item label="商品编码" required >
-                                        <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
+                                        <el-input v-model="form.itemCode" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
                             <el-col :span='24'>
                                 <el-col :span='6'>
                                     <el-form-item label="商品品牌" required >
-                                        <el-select v-model="value" placeholder="请选择"  size='small'>
+                                        <el-select v-model="form.brandId" placeholder="请选择"  size='small'>
                                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span='6' style="margin-left:25px">
                                     <el-form-item label="商品分类" required >
-                                        <el-select v-model="value" placeholder="请选择"  size='small'>
+                                        <el-select v-model="form.categoryId" placeholder="请选择"  size='small'>
                                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                         </el-select>
                                     </el-form-item>
@@ -100,28 +100,28 @@
                             <el-col :span='24'>
                                 <el-col :span='6'>
                                     <el-form-item label="贸易类型" required >
-                                        <el-select v-model="value" placeholder="请选择"  size='small'>
+                                        <el-select v-model="form.sendWay" placeholder="请选择"  size='small'>
                                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span='6' style="margin-left:25px">
                                     <el-form-item label="建议零售价"  class="money">
-                                        <el-input v-model="form.name" size="small" placeholder="长度<64" ></el-input>
+                                        <el-input v-model="form.money" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
                             <el-col :span='24'>
                                 <el-col :span='6'>
                                     <el-form-item label="单位" >
-                                        <el-select v-model="value" placeholder="请选择"  size='small'>
+                                        <el-select v-model="form.unitId" placeholder="请选择"  size='small'>
                                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span='6' style="margin-left:25px">
                                     <el-form-item label="保质期" required >
-                                        <el-input v-model="form.name" size="small" placeholder="长度<64" suffix="月"></el-input>
+                                        <el-input v-model="form.expirationDate" size="small" placeholder="长度<64" suffix="月"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
@@ -412,14 +412,17 @@ export default {
             radio1:0,
             // 信息内容
             form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+                title: '',
+                sellingPoint: '',
+                buyRemind: '',
+                barCode: '',
+                itemCode: '',
+                brandId: [],
+                categoryId: [],
+                sendWay: [],
+                money: '',
+                unitId: [],
+                expirationDate: ''
             },
             // 信息表单选项
             options: [
@@ -432,7 +435,7 @@ export default {
                     label: '爸爸去哪了'
                 }
             ],
-            value : '',
+
             // 规格表单
             standard: {
                 name: '',
@@ -575,6 +578,14 @@ export default {
         tinymce,
         bar,
         updata
+    },
+    created() {
+        this.currentStep = 1
+        this.conent1 = true
+        this.conent2 = false
+    },
+    activated() {
+
     }
 
 
