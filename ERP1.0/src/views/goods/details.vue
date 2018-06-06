@@ -91,7 +91,7 @@
     </section>
 </template>
 <script>
-import api from 'api/goodslist'
+import api from 'api/goods'
 
 export default {
     data() {
