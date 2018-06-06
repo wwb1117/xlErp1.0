@@ -4,58 +4,58 @@
         <div id='k'  class="conent" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div style="border: 1px solid #dcdfe6;background:white;overflow:hidden" :style="{height: $store.state.home.modelContentHeight-20 + 'px'}">
                 <div>
-                    <el-card :style="{width: '98.8%'}" v-show="dialogFormVisible" class="box_card">
+                    <el-card  v-show="morefind" class="box_card">
                         <div slot="header" class="clearfix">
                             <span :style="{fontSize: '16px'}">高级搜索</span>
-                            <i @click="dialogFormVisible = false" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
+                            <i @click="morefind = false" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                         </div>
-                        <el-form class="myForm" :inline="true" :model="form" label-position="right" size="small" label-width="80px">
+                        <el-form class="morefrom" :inline="true" :model="form" label-position="right" size="small" label-width="80px">
                             <el-form-item label="商品名称">
-                                <el-input v-model="form.name1" placeholder="请输入商品名称"></el-input>
+                                <el-input v-model="morefrom.name1" placeholder="请输入商品名称"></el-input>
                             </el-form-item>
                             <el-form-item label="商品编号">
-                                <el-input v-model="form.name2" placeholder="请输入商品编号"></el-input>
+                                <el-input v-model="morefrom.name2" placeholder="请输入商品编号"></el-input>
                             </el-form-item>
                             <el-form-item label="商品条码">
-                                <el-input v-model="form.name3" placeholder="请输入商品条码"></el-input>
+                                <el-input v-model="morefrom.name3" placeholder="请输入商品条码"></el-input>
                             </el-form-item>
                             <br>
                             <el-form-item label="商品分类">
-                                <el-select  v-model="form.name4" placeholder="全部">
+                                <el-select  v-model="morefrom.name4" placeholder="全部">
                                     <el-option label="母婴类" value="12"></el-option>
                                     <el-option label="服务类" value="123"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="商品品牌">
-                                <el-select  v-model="form.name5" placeholder="全部">
+                                <el-select  v-model="morefrom.name5" placeholder="全部">
                                     <el-option label="母婴类" value="123"></el-option>
                                     <el-option label="服务类" value="12312"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="商品类型">
-                                <el-select  v-model="form.name6" placeholder="全部">
+                                <el-select  v-model="morefrom.name6" placeholder="全部">
                                     <el-option label="母婴类" value="324"></el-option>
                                     <el-option label="服务类" value="145"></el-option>
                                 </el-select>
                             </el-form-item>
                             <br>
                             <el-form-item label="贸易类型">
-                                <el-select v-model="form.name7" placeholder="全部">
+                                <el-select v-model="morefrom.name7" placeholder="全部">
                                     <el-option label="母婴类" value="145"></el-option>
                                     <el-option label="服务类" value="1345"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="提成方式">
-                                <el-select v-model="form.name8" placeholder="全部">
+                                <el-select v-model="morefrom.name8" placeholder="全部">
                                     <el-option label="母婴类" value="13451"></el-option>
                                     <el-option label="服务类" value="1435143"></el-option>
                                 </el-select>
                             </el-form-item>
                             <br>
                             <el-form-item>
-                                <el-button @click="dialogFormVisible = false" style="padding:9px 15px;width: 90px" type="primary" >确定</el-button>
-                                <el-button @click="dialogFormVisible = false" style="padding:9px 15px;width: 90px">取消</el-button>
-                                <el-button class="color_hover" @click="clear" type="text" style="padding:9px 15px;width: 40px; color: #636365">清空</el-button>
+                                <el-button @click="morefind = false" style="padding:9px 15px;width: 90px" type="primary" >确定</el-button>
+                                <el-button @click="morefind = false" style="padding:9px 15px;width: 90px">取消</el-button>
+                                <el-button class="color_hover"  type="text" style="padding:9px 15px;width: 40px; color: #636365">清空</el-button>
                             </el-form-item>
                         </el-form>
                     </el-card>
@@ -77,7 +77,7 @@
                         </li>
                         <!-- 高级搜索表单 -->
                         <li class="morefind">
-                            <el-button type="text" @click="dialogFormVisible = true">高级搜索</el-button>
+                            <el-button type="text" @click="morefind = true">高级搜索</el-button>
                         </li>
                         <!-- 高级搜索表单内容 -->
                     </ul>
@@ -258,12 +258,12 @@ export default {
 
             // 弹出框状态  查看规格/高级搜索表单/更改供应商
             dialogTableVisible: false,
-            dialogFormVisible: false,
+            morefind: false,
             dialogVisible1: false,
             dialogVisible2: false,
 
             // 高级搜索表单内容
-            form: {
+            morefrom: {
                 // 更改供应商内容
                 get : '',
                 // 高级搜索表单内容
@@ -318,12 +318,7 @@ export default {
             this.hidden_show = false;
             this.$refs.goodTable.clearSelection()
         },
-        // 高级搜索表单清除选项
-        clear() {
-            for (let i in this.form){
-                this.form[i] = ''
-            }
-        },
+
         // 停止报价弹出框
         open() {
             this.$confirm('此操作将会停止商品报价, 是否继续?', '提示', {
@@ -357,7 +352,7 @@ export default {
                 this.hidden_show = false
             }
         },
-        // 查看规格    异常
+        // 查看规格
         lookgoodsku(scope) {
             this.dialogTableVisible = true
             // console.log(scope.row.id)
@@ -367,7 +362,7 @@ export default {
 
             console.log(obj)
             api.getitemskuProperty(obj).then((response)=>{
-                console.log(response.data)
+                // console.log(response.data)
             }).catch((error)=>{
                 console.log(error)
             })
