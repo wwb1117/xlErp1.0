@@ -89,7 +89,6 @@ export default {
     methods: {
         addEditnum() {
             let obj = {
-                skuPropertyId: this.editNum.id,
                 skuPropertyValueName: '',
                 isDeleted: 0
             }
@@ -117,12 +116,10 @@ export default {
             }
 
             let obj = {
-                skuProperties : JSON.stringify({
-                    id: this.editNum.id,
-                    skuPropertyName: this.editNum.skuPropertyName,
-                    remark: this.editNum.remark,
-                    itemSkuPropertyValueDTOS: this.editNum.propertyValueList
-                })
+                id: this.editNum.id,
+                skuPropertyName: JSON.stringify(this.editNum.skuPropertyName),
+                remark: JSON.stringify(this.editNum.remark),
+                itemSkuPropertyValueDTOS: JSON.stringify(this.editNum.propertyValueList)
             }
 
             api.putitemskuPropertyupdate(obj).then((response)=>{

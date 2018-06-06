@@ -154,7 +154,7 @@
                             prop='title'
                             width="300">
                             <template slot-scope="scope">
-                                <div @click="openGoods(scope)">{{ scope.row.title }}</div>
+                                <div @click="openGoods(scope.row.id)" class="goodmore">{{ scope.row.title }}</div>
                             </template>
                         </el-table-column>
                         <!-- 条码 -->
@@ -374,6 +374,7 @@ export default {
         },
 
         openGoods(data) {
+            this.$store.commit('setgoodsmoreid', data)
             this.$router.push('goodsDetails')
         },
 
@@ -386,9 +387,9 @@ export default {
             })
         }
     },
-    // created() {
-    //     this.get()
-    // },
+    created() {
+        this.get()
+    },
     activated() {
         this.get()
     }
@@ -422,7 +423,7 @@ export default {
     z-index: 10;
     width: 98%;
     line-height: 60px;
-    padding: 0
+    padding: 0;
 }
 .conent_hidden>li{
     margin-left: 30px
@@ -436,6 +437,10 @@ export default {
     padding: 0
 }
 /* 商品内容样式 */
+.goodmore:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
 .center .el-checkbox{
     display: block;
     margin: 0

@@ -84,6 +84,8 @@
     </section>
 </template>
 <script>
+import api from 'api/goodslist'
+
 export default {
     data() {
         return {
@@ -115,6 +117,21 @@ export default {
         returnPrev() {
             this.$router.push('goodsList')
         }
+    },
+    // created() {
+    //     var id = this.$store.state.home.goodsmoreId
+
+    //     alert (id)
+    // },
+    activated() {
+        var id = this.$store.state.home.goodsmoreId
+
+        api.getitemitemId(id).then((response)=>{
+            console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
+
     }
 }
 </script>

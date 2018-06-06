@@ -83,7 +83,7 @@ export default {
             del: false,
 
             page:{
-                pageSize: 10,
+                pageSize: 100,
                 pageNo: 1,
                 unitMsg: ''
             },
