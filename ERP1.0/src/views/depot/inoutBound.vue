@@ -158,8 +158,10 @@
                         label="出入库单号">
                     </el-table-column>
                     <el-table-column
-                        prop="orderTime"
                         label="出入库时间">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.orderTime | time_m}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="orderNumber"
@@ -189,7 +191,7 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page.sync="currentPage"
                 :page-sizes="[10, 30, 50, 100]"
                 :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
@@ -208,7 +210,7 @@ export default {
         return {
             warnState: '',
             searchText: '',
-            currentPage: 2,
+            currentPage: 1,
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
@@ -221,6 +223,8 @@ export default {
                 itemSku: null,
                 itemMac: null,
                 itemName: null,
+                deliverType: null,
+                storeType: null,
                 itemTypeId: null,
                 houseId: null,
                 buyerId: null,
@@ -282,17 +286,18 @@ export default {
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(data){
+            this.getInoutBoundList({pageNo: this.currentPage, pageSize: data})
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(data){
+            this.getInoutBoundList({pageNo: data})
         },
         // 获取出入库列表
         getInoutBoundList(data) {
             API.inoutBound(data).then(res => {
                 this.tableData = res.data.list
                 this.total = res.data.total || 0
+                this.tableData.orderTime = this.tableData.orderTime * 1000
             })
         },
         // 获取采购列表
@@ -319,10 +324,20 @@ export default {
             if (this.searchFormData.date) {
                 this.searchFormData.startTime = Date.parse(this.searchFormData.date[0]) / 1000
                 this.searchFormData.endTime = Date.parse(this.searchFormData.date[1]) / 1000
+            } else {
+                this.searchFormData.startTime = null
+                this.searchFormData.endTime = null
+            }
+            if (this.outInboundType.length == 1) {
+                this.searchFormData.storeType = this.outInboundType
+                this.searchFormData.deliverType = null
+            } else if (this.outInboundType.length == 2) {
+                this.searchFormData.storeType = null
+                this.searchFormData.deliverType = this.outInboundType.slice(1)
             }
             this.postData = ME.deepCopy(this.searchFormData)
             this.$delete(this.postData, 'date')
-            console.log(this.postData)
+            // console.log(this.postData)
             this.getInoutBoundList(this.postData)
             this.isSupperBoxShow = false
         },
@@ -393,6 +408,8 @@ export default {
         this.getItemList()
     },
     activated() {
+        this.getInoutBoundList()
+        this.currentPage = 1;
         // 商品库存页进入
         if (this.$route.params.id) {
             this.clear()

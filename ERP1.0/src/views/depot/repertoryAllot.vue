@@ -206,7 +206,7 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page.sync="currentPage"
                 :page-sizes="[10, 30, 50, 100]"
                 :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
@@ -225,7 +225,7 @@ export default {
         return {
             warnState: '',
             serchText: '',
-            currentPage: 2,
+            currentPage: 1,
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
@@ -262,11 +262,11 @@ export default {
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(data){
+            this.getAllotList({pageNo: this.currentPage, pageSize: data})
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(data){
+            this.getAllotList({pageNo: data})
         },
         getAllotList(data) {
             console.log("调拨单列表res1")
@@ -389,11 +389,10 @@ export default {
     created(){},
     mounted(){
         this.getPurchaseList()
-        this.getAllotList()
     },
     activated(from, to, next) {
-        console.log(from, '从哪来')
-
+        this.currentPage = 1
+        this.getAllotList()
     }
 }
 </script>

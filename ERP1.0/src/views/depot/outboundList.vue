@@ -158,6 +158,7 @@
                         label="操作">
                         <template slot-scope="scope">
                             <el-button
+                                :style="{marginRight: '12px'}"
                                 @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
@@ -165,13 +166,13 @@
                             </el-button>
                             <div v-if="scope.row.auditStatus == 0" style="display: inline-block">
                                 <!--待审核-->
-                                <el-button
-                                    :style="{marginLeft: '12px'}"
-                                    @click.native.prevent="editTable(scope.$index, scope.row)"
-                                    type="text"
-                                    size="small">
-                                    修改
-                                </el-button>
+                                <!--<el-button-->
+                                    <!--:style="{marginLeft: '12px'}"-->
+                                    <!--@click.native.prevent="editTable(scope.$index, scope.row)"-->
+                                    <!--type="text"-->
+                                    <!--size="small">-->
+                                    <!--修改-->
+                                <!--</el-button>-->
                                 <el-button
                                     @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                     type="text"
@@ -183,7 +184,7 @@
                                 <!--审核中-->
                                 <el-button
                                     :style="{marginLeft: '12px'}"
-                                    @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
+                                    @click.native.prevent="undo(scope.$index, scope.row)"
                                     type="text"
                                     size="small">
                                     撤回
@@ -198,9 +199,9 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page.sync="currentPage"
                 :page-sizes="[10, 30, 50, 100]"
-                :page-size="100"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
             </el-pagination>
@@ -215,8 +216,9 @@ import API from 'api/depot'
 export default {
     data(){
         return {
+            userInfo: {},
             serchText: '',
-            currentPage: 2,
+            currentPage: 1,
             selectTableData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
@@ -255,11 +257,11 @@ export default {
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(data){
+            this.getOutboundList({pageNo: this.currentPage, pageSize: data})
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(data){
+            this.getOutboundList({pageNo: data})
         },
         // 获取出库列表
         getOutboundList(data) {
@@ -325,6 +327,34 @@ export default {
                 params: {type: 'outbound', id: data.id}
             })
         },
+        // 撤回
+        undo(index, data) {
+            this.$confirm('此操作将撤回该审核订单, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let obj = {
+                    processType: 4,
+                    orderId: data.id,
+                    submitterId: this.userInfo.user.id // 本地账户的信息id
+                }
+
+                API.undoAudit(3, obj).then(res => {
+                    if (res.result == 1) {
+                        this.$message({
+                            type: 'success',
+                            message: '撤回成功!'
+                        });
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消撤回'
+                });
+            })
+        },
         // 删除
         deleteTable(index, data) {
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -379,11 +409,12 @@ export default {
     },
     created(){},
     mounted(){
-        this.getOutboundList()
         this.getPurchaseList()
     },
     activated() {
+        this.userInfo = localStorage.getItem('userInfo')
         this.getOutboundList()
+        this.currentPage = 1
     }
 }
 </script>
