@@ -239,6 +239,7 @@ export default {
                 shopGroupIds: ''
             }
             this.value = ''
+            this.$refs['addbrand'].resetFields();
             this.$router.go(-1)
         },
         changes() {

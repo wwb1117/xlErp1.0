@@ -26,27 +26,17 @@
                         <li >
                             <el-button type='text' @click="addconfim(data.parentId)">新增下级</el-button>
                             <el-button type='text' @click="editconfim(data.id)">编辑</el-button>
-                            <el-button type="text" @click="del = true">删除</el-button>
-                            <el-dialog
-                                title="温馨提示"
-                                :visible.sync="del"
-                                width="30%"
-                                :before-close="handleClose">
-                                <span>此操作将永久删除该项</span>
-                                <span slot="footer" class="dialog-footer">
-                                    <el-button @click="del = false">取 消</el-button>
-                                    <el-button type="primary" @click="del = false">确 定</el-button>
-                                </span>
-                            </el-dialog>
+                            <el-button type="text" disabled>删除</el-button>
                         </li>
                         <li>{{ data.sort }}</li>
                         <li >
                             <el-switch
-                                v-model="data.isDisplay">
+                                v-model="data.isDisplay"
+                                @change="change(data.isDisplay, data.id)">
                             </el-switch>
                         </li>
                         <li class="imgbox_img">
-                            <img :src="node.categoryImg" alt="">
+                            <img :src="data.categoryImg" alt="">
                         </li>
                         <li>{{ data.categoryName }}</li>
                     </ul>
@@ -78,23 +68,17 @@ export default {
             currentPage: 2,
             totalPage: 1,
             items:[],
-            // 新增
-            del: false,
+
             defaultProps: {
                 children: 'itemCategories',
                 label: 'categoryName'
-            }
+            },
+
+            msg: []
 
         }
     },
     methods: {
-        handleClose(done) {
-            this.$confirm('确认关闭？')
-                .then(_ => {
-                    done();
-                })
-                .catch(_ => {});
-        },
 
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
@@ -115,11 +99,53 @@ export default {
             this.$store.commit('setparentid', data)
             this.$router.push('additems')
         },
+        change(data, item){
 
+            api.getcategoryid(item).then((response)=>{
+                // console.log(response.data[0])
+
+                this.msg = response.data[0]
+                let obj = {
+                    id: this.msg.id,
+                    parentId: this.msg.parentId,
+                    categoryImg: this.msg.categoryImg,
+                    categoryName: this.msg.categoryName,
+                    isDisplay: data,
+                    sort: this.msg.sort
+                }
+
+                if (obj.isDisplay == true){
+                    obj.isDisplay = 1
+                } else {
+                    obj.isDisplay = 0
+                }
+
+                api.putitemcategoryupdate(obj).then((responses)=>{
+
+                }).catch((error)=>{
+                    console.log(error)
+                })
+
+            }).catch((error)=>{
+                console.log(error)
+            })
+
+
+        },
         get() {
             api.getcategorylist().then((response)=>{
-                // console.log(response.data.list)
+                console.log(response.data.list)
                 this.items = response.data.list
+
+                for (var i in this.items){
+                    if (this.items[i].isDisplay == 1){
+                        this.items[i].isDisplay = true
+                    } else {
+                        this.items[i].isDisplay = false
+                    }
+                }
+
+
             }).catch((error)=>{
                 console.log(error)
             })

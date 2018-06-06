@@ -39,11 +39,11 @@
                             <el-table-column
                                 prop='isDeleted'
                                 label='是否启用'>
-                            <template slot-scope="scope">
-                                <el-switch
-                                    v-model="scope.row.isDeleted">
-                                </el-switch>
-                            </template>
+                                <template slot-scope="scope">
+                                    <el-switch
+                                        v-model="scope.row.isDeleted">
+                                    </el-switch>
+                                </template>
                             </el-table-column>
                         </el-table>
 
@@ -107,6 +107,14 @@ export default {
             this.$router.go(-1)
         },
         trueconfim() {
+
+            for (var i in this.editNum.propertyValueList){
+                if (this.editNum.propertyValueList[i].isDeleted == true){
+                    this.editNum.propertyValueList[i].isDeleted = 1
+                } else {
+                    this.editNum.propertyValueList[i].isDeleted = 0
+                }
+            }
 
             let obj = {
                 skuProperties : JSON.stringify({

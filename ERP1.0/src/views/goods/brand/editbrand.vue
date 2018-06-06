@@ -67,9 +67,9 @@
                             style="width:338px">
                             <el-option
                             v-for="item in group"
-                            :key="item.id"
+                            :key="item.groupId"
                             :label="item.groupName"
-                            :value="item.id">
+                            :value="item.groupId">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -177,11 +177,7 @@ export default {
 
         },
         returnprev() {
-            this.from = {}
-            this.value = ''
-            this.options = []
-            this.group = []
-            this.groupName = []
+            this.$refs['addbrand'].resetFields();
             this.$router.go(-1)
         },
         changes() {
