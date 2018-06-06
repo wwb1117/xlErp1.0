@@ -13,6 +13,7 @@
                 <div class="step" style="height:80px">
                     <bar :step-texts="testText" :step-nums="stepNums" :current-step="currentStep"></bar>
                 </div>
+                <!-- 第一步 -->
                 <ul style='margin:0' v-if='conent1' >
                     <!-- 商品title -->
                     <li class="good_title">
@@ -54,8 +55,7 @@
                     <!-- 信息title -->
                     <li class="good_title">
                         <p>基本信息</p>
-                        <input type='checkbox' style="margin-left:20px;margin-top:14px;outline:none;">
-                        <span style="margin-left:10px">有无保质期</span>
+                        <el-checkbox style="margin-left:30px"><span style="font-size:10px">有无保质期</span></el-checkbox>
                     </li>
                     <!-- 信息内容 -->
                     <li class="msg_conent">
@@ -248,6 +248,7 @@
                         </div>
                     </li>
                 </ul>
+                <!-- 第二步 -->
                 <ul style='margin:0' v-if='conent2'>
                     <!-- 供货设置title -->
                     <li class="good_title">
@@ -365,13 +366,13 @@
         </section>
         <!-- 控制步骤 -->
         <div class="add_bottom" v-if='conent1'>
-            <el-button @click="reset" size='small'>重置</el-button>
-            <el-button @click="next" size='small' type="primary">下一步</el-button>
+            <el-button @click="reset" size='small' style="width:90px">重置</el-button>
+            <el-button @click="next" size='small' type="primary" style="width:90px">下一步</el-button>
         </div>
         <!-- 控制步骤 -->
         <div class="add_bottom" v-if='conent2'>
-            <el-button @click="prev" size='small' type="primary">上一步</el-button>
-            <el-button @click="submit" size='small'>保存</el-button>
+            <el-button @click="prev" size='small' type="primary" style="width:90px">上一步</el-button>
+            <el-button @click="submit" size='small' style="width:90px">保存</el-button>
         </div>
     </section>
 
@@ -546,8 +547,8 @@ export default {
         option($event) {
             var type = $event.currentTarget
 
-            $(type).siblings().find('.jiao').removeClass('active')
-            $(type).find('.jiao').addClass('active')
+            $(type).siblings().removeClass('border').find('.jiao').removeClass('active')
+            $(type).addClass('border').find('.jiao').addClass('active')
         },
         // 添加规格值
         addSpec() {
@@ -595,6 +596,10 @@ export default {
 }
 .active{
     display: block
+}
+.border{
+    border: 1px solid #3ea0fc;
+    color: #3ea0fc
 }
 #add{
     position: relative;

@@ -3,8 +3,7 @@
         <!-- 顶部 -->
         <header class="brand_top">
             <p class='brand_title'>商品品牌</p>
-            <el-button type="primary" @click="openAddbrand" size='small' style="height:32px;margin-top:-3px">新增品牌</el-button>
-            <!-- 新增表单内容 -->
+            <el-button type="primary" @click="openAddbrand" size='small' style="height:32px;margin-top:-3px" v-perss="'增加商品品牌'">新增品牌</el-button>
 
         </header>
         <section class="brand_conent" >
@@ -28,7 +27,7 @@
                     <li style="width:110px">排序</li>
                     <li style="width:130px">操作</li>
                 </ul>
-                <ul class="brand_list brand_text" v-for='(item,index) in this.brand' :key='index'>
+                <ul class="brand_list brand_text" v-for='(item,index) in this.brand' :key='index' style="font-size:12px">
                     <li style="width:200px">{{item.brandName}}</li>
                     <li style="width:170px"><span v-for="(date,index) in item.itemBrandCategories" :key='index' style="margin-right:5px">{{date.categoryName}}</span></li>
                     <li style="width:150px">40%</li>
@@ -43,8 +42,8 @@
                     </li>
                     <li style="width:110px">{{item.sort}}</li>
                     <li style="width:130px">
-                        <el-button type='text'  @click="openedit(item.id)">编辑</el-button>
-                        <el-button type="text" disabled>删除</el-button>
+                        <el-button type='text'  @click="openedit(item.id)"><span style="font-size:12px">编辑</span></el-button>
+                        <el-button type="text" disabled  v-perss="'删除商品品牌'"><span style="font-size:12px">删除</span></el-button>
                     </li>
                 </ul>
             </div>

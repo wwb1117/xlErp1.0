@@ -82,7 +82,7 @@
             </div>
         </section>
         <footer class="addbrand_footer">
-            <el-button type="primary" size='small' style="width:90px" @click='trueconfim'>保存</el-button>
+            <el-button type="primary" size='small' style="width:90px" @click='trueconfim' v-perss="'修改商品品牌'">保存</el-button>
             <el-button size='small' style="width:90px" @click="returnprev">返回</el-button>
         </footer>
     </section>

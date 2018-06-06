@@ -3,7 +3,7 @@
         <!-- 顶部 -->
         <header class="items_top">
             <p class='items_title'>商品分类</p>
-            <el-button type="primary" size='small' style="height:30px;margin-top:-3px"  @click="additems">新增分类</el-button>
+            <el-button type="primary" size='small' style="height:30px;margin-top:-3px"  @click="additems" v-perss="'增加商品分类'">新增分类</el-button>
 
         </header>
         <!-- 内容 -->
@@ -22,11 +22,11 @@
                     default-expand-all
                     :props="defaultProps"
                     :expand-on-click-node="false">
-                    <ul class="item_box_conent"  slot-scope="{ node, data }" >
+                    <ul class="item_box_conent"  slot-scope="{ node, data }" style="font-size:12px">
                         <li >
-                            <el-button type='text' @click="addconfim(data.parentId)">新增下级</el-button>
-                            <el-button type='text' @click="editconfim(data.id)">编辑</el-button>
-                            <el-button type="text" disabled>删除</el-button>
+                            <el-button type='text' @click="addconfim(data.parentId)" v-perss="'增加商品分类'"><span style="font-size:12px">新增下级</span></el-button>
+                            <el-button type='text' @click="editconfim(data.id)" v-perss="'修改商品类目'"><span style="font-size:12px">编辑</span></el-button>
+                            <el-button type="text" disabled v-perss="'删除商品类目'"><span style="font-size:12px">删除</span></el-button>
                         </li>
                         <li>{{ data.sort }}</li>
                         <li >

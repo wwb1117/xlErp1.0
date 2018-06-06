@@ -70,7 +70,7 @@
             </div>
         </section>
         <footer class="editTypes_footer">
-            <el-button type="primary" size='small' @click="trueconfim" style="width:90px">保存</el-button>
+            <el-button type="primary" size='small' @click="trueconfim" style="width:90px" v-perss="'更新供货规格'">保存</el-button>
             <el-button size='small' @click='returnPrev' style="width:90px">取消</el-button>
         </footer>
     </section>

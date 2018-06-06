@@ -23,13 +23,13 @@
                 <li style="width:110px">操作</li>
             </ul>
             <div class="types_box" :style="{height: $store.state.home.modelContentHeight-128 + 'px'}">
-                <ul class="types_list types_text" v-for='(item,index) in this.types' :key='index'>
+                <ul class="types_list types_text" v-for='(item,index) in this.types' :key='index' style="font-size:12px">
                     <li style="width:210px">{{item.unitMsg}}</li>
                     <li style="width:500px"><span v-for='(date,index) in item.itemSupplyPropertyVOs' :key='index' style="margin-right:5px">{{date.supplyMsg}}</span></li>
                     <li style="width:300px">{{item.remark}}</li>
                     <li style="width:110px">
-                        <el-button type='text' @click='gotoEdit(item.id)'>编辑</el-button>
-                        <el-button type="text" @click="del = true">删除</el-button>
+                        <el-button type='text' @click='gotoEdit(item.id)'><span style="font-size:12px">编辑</span></el-button>
+                        <el-button type="text" @click="del = true"><span style="font-size:12px">删除</span></el-button>
                         <el-dialog
                             title="温馨提示"
                             :visible.sync="del"
