@@ -8,7 +8,7 @@ export default {
     },
     // 查询sku属性列表
     getitemskuProperty(data) {
-        return HttpClient.get('/item/skuProperty', data)
+        return HttpClient.get('/item/sku/list', data)
     },
     // 添加商品
     postitemadd(data) {

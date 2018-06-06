@@ -275,4 +275,7 @@ input[type="file"] {
 .el-dialog__body .el-tag__close:hover{
     font-size: 12px
 }
+.el-dialog{
+    box-shadow: none
+}
 

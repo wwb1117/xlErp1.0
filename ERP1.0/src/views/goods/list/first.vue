@@ -172,7 +172,7 @@
                             label="规格-SKU">
                             <template slot-scope="scope">
                                 <el-button type="text" @click="lookgoodsku(scope)">查看</el-button>
-                                <el-dialog title="规格明细" :visible.sync="dialogTableVisible">
+                                <el-dialog title="规格明细" :visible.sync="dialogTableVisible" >
                                     <el-table :data="gridData">
                                         <el-table-column property="specification" label="规格" width="320"></el-table-column>
                                         <el-table-column property="coding" label="SKU编码" width="600"></el-table-column>
