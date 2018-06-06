@@ -5,7 +5,8 @@
             <span> - 新增调拨单</span>
         </div>
         <div class="model_content" >
-            <div class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
+            <add-good v-if="isShowAddGoods" @saveAddgoodsFn="fromAddGoods"></add-good>
+            <div v-if="!isShowAddGoods" class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
                 <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="110px">
                     <div class="banner">
                         基本信息
@@ -75,7 +76,6 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="itemSku"
                                 label="编号"
                                 width="180">
                                 <template slot-scope="scope">
@@ -93,7 +93,7 @@
                                         <span @click="chooseGoodEvent" class="el-icon-more"></span>
                                     </div>
                                     <div v-if="scope.row.itemId !== ''">
-                                        <span v-text="scope.row.itemSku"></span>
+                                        <span v-text="scope.row.itemCode"></span>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -134,8 +134,16 @@
                                 label="单位">
                             </el-table-column>
                             <el-table-column
-                                prop="remark"
                                 label="备注">
+                                <template slot-scope="scope">
+                                    <div class="addRemark" @click="addRemark(scope.$index, scope.row)" v-if="scope.row.remark === ''">
+                                        <i class="el-icon-plus" style="font-weight: 900;font-size: 16px"></i>
+                                    </div>
+                                    <div class="addRemark" @click="addRemark(scope.$index, scope.row)" v-else style="line-height: 20px;max-height: 40px;overflow: hidden;text-overflow: ellipsis">
+                                        <i class="el-icon-edit" style="font-weight: 900;font-size: 16px"></i>
+                                        <span>{{scope.row.remark}}</span>
+                                    </div>
+                                </template>
                             </el-table-column>
                         </el-table>
                     </div>
@@ -165,7 +173,22 @@
                 </el-form>
             </div>
         </div>
-        <div class="model_footer">
+        <el-dialog
+            title="备注说明"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <el-input
+                type="textarea"
+                :rows="4"
+                placeholder="请输入备注信息，不得超过200字"
+                v-model="remarkTextarea">
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+                            <el-button @click="remarkCancle">取 消</el-button>
+                            <el-button type="primary" @click="remarkSure">确 定</el-button>
+                        </span>
+        </el-dialog>
+        <div class="model_footer" v-if="!isShowAddGoods">
             <el-button style="width: 90px" type="primary" size="small" @click="save">保存</el-button>
             <el-button style="width: 90px" size="small" v-RouterBack>取消</el-button>
         </div>
@@ -174,11 +197,18 @@
 
 <script>
 import 'utils/allEnumeration'
+import addGood from './forms/addGoods'
 import ME from 'utils/base'
 import API from 'api/depot'
 export default {
+    components: {
+        addGood
+    },
     data(){
         return {
+            dialogVisible: false,
+            remarkTextarea: '',
+            remarkIndex: 0,
             chooseDate: '',
             querySearchText: '',
             goodsInfoData: [{
@@ -230,8 +260,55 @@ export default {
             loading: true
         }
     },
-    computed:{},
+    computed:{
+        isShowAddGoods() {
+            return this.$store.state.depot.showAddGoods.id > 0
+        }
+    },
     methods:{
+        // 添加商品备注
+        addRemark(index, data) {
+            this.dialogVisible = true
+            this.remarkTextarea = data.remark
+            this.remarkIndex = index
+        },
+        remarkCancle() {
+            this.dialogVisible = false
+        },
+        remarkSure() {
+            this.dialogVisible = false
+            this.goodsInfoData[this.remarkIndex].remark = this.remarkTextarea
+        },
+        fromAddGoods(data) {
+            this.goodsInfoData = []
+            console.log(data, '接收的数据')
+            data.forEach(res => {
+                let obj = {
+                    itemMac: res.barCode,
+                    itemCode: res.itemCode,
+                    itemName: res.title,
+                    itemSpec: res.skuGroups,
+                    itemExp: res.expirationDate,
+                    productionDate: '',
+                    itemId: res.id,
+                    inventoryNumber: res.mount,
+                    itemQuantifierUnit: res.unit,
+                    remark: ''
+                }
+
+                this.goodsInfoData.push(obj)
+            })
+        },
+        clearAll() {
+            for (let key in this.addFormData) {
+                this.addFormData[key] = null
+            }
+            this.goodsInfoData = [{
+                itemCode: '',
+                currentStoreNumber: '',
+                itemId: ''
+            }]
+        },
         goodTableAddEvent(){
             var itemobj = {
                 oper: '',
@@ -244,9 +321,14 @@ export default {
 
             this.goodsInfoData.push(itemobj)
         },
-        goodTableReduceEvent(data){
-            if (this.goodsInfoData.length > 1){
-                this.goodsInfoData.splice(data.$index, 1)
+        goodTableReduceEvent(data) {
+            this.goodsInfoData.splice(data.$index, 1)
+            if (this.goodsInfoData.length < 1){
+                let obj = {
+                    itemId: ''
+                }
+
+                this.goodsInfoData.push(obj)
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
@@ -367,7 +449,9 @@ export default {
                 this.addFormData.list.push(obj)
                 this.addFormData.totalInventoryNumber += parseInt(obj.inventoryNumber, 10)
             })
-            this.addFormData.creatorId = '12346'
+            let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+            this.addFormData.creatorId = userInfo.user.id
             // 通过仓库ID和采购单ID赋值给addFormData的name
             this.houseId_option.forEach(res => {
                 if (res.id === this.addFormData.warehouseId) {
@@ -408,9 +492,7 @@ export default {
             this.addFormData.inventoryAllocationNo = type + '-' + myDate.getFullYear() + monthArr[myDate.getMonth()] + day + '-' + sixNum
         },
         chooseGoodEvent(){
-            this.$router.push({
-                path: '/chooseGood'
-            });
+            this.$store.commit('showAddGoods')
         }
     },
     created(){},
@@ -419,10 +501,7 @@ export default {
         this.getPurchaseList()
     },
     activated() {
-
-        for (let key in this.addFormData) {
-            this.addFormData[key] = null
-        }
+        this.clearAll()
         // 更新制单人
         const USER = sessionStorage.getItem('user')
 
@@ -464,5 +543,8 @@ export default {
     }
     .goodInfoBox .el-form-item{
         width: 400px;
+    }
+    .addRemark{
+        cursor: pointer;
     }
 </style>

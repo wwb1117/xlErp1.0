@@ -116,7 +116,7 @@ export default {
     },
     // 获取商品类目
     getItemAll() {
-        return HttpClient.get(`/category/list`);
+        return HttpClient.get(`/item/category/list`);
     },
     // 盘点导出
     exportInventory(id, data) {

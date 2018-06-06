@@ -227,9 +227,9 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page.sync="currentPage"
                 :page-sizes="[10, 30, 50, 100]"
-                :page-size="100"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
             </el-pagination>
@@ -295,11 +295,11 @@ export default {
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(data){
+            this.getTableList({pageNo: this.currentPage, pageSize: data})
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(data){
+            this.getTableList({pageNo: data})
         },
         // 获取库存列表
         getTableList(data) {
@@ -415,6 +415,7 @@ export default {
         this.getPurchaseList()
     },
     activated() {
+        this.currentPage = 1
         this.getTableList()
 
     }
