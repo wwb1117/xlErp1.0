@@ -124,6 +124,10 @@ export default {
 
             api.putitemskuPropertyupdate(obj).then((response)=>{
                 this.editNum = []
+                this.$message({
+                    type: 'success',
+                    message: '更新商品规格成功！'
+                });
                 this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)

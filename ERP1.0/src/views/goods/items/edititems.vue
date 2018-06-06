@@ -87,6 +87,10 @@ export default {
 
             api.putitemcategoryupdate(obj).then((response)=>{
                 this.msg = {}
+                this.$message({
+                    type: 'success',
+                    message: '更新商品分类成功！'
+                });
                 this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)

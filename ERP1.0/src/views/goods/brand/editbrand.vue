@@ -167,6 +167,10 @@ export default {
                         this.groupName = []
                         this.options = []
                         this.from = {}
+                        this.$message({
+                            type: 'success',
+                            message: '更新商品品牌成功！'
+                        });
                         this.$router.go(-1)
                     }).catch((error)=>{
                         console.log(error)

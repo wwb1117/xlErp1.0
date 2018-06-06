@@ -152,6 +152,10 @@ export default {
                 ]
                 this.text = ''
                 this.value = ''
+                this.$message({
+                    type: 'success',
+                    message: '新增包装类型成功！'
+                });
                 this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)

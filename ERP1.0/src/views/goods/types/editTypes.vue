@@ -133,6 +133,10 @@ export default {
             console.log(this.from)
 
             api.putitemsupplyPropertyupdate(obj).then((response)=>{
+                this.$message({
+                    type: 'success',
+                    message: '更新包装类型成功！'
+                });
                 this.$router.go(-1)
                 // console.log(response)
             }).catch((error)=>{
