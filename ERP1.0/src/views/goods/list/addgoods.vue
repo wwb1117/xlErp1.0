@@ -24,18 +24,19 @@
                         <el-button
                             plain
                             @click="option($event)"
-                            style="position:relative">
-                            <div id='goodbutton'>
+                            style="position:relative"
+                            class="border">
+                            <div class='goodbutton'>
                                 <p>实物类商品</p>
                                 <span style='color:#8f9294'>（物流发货）</span>
-                                <em class="jiao"><i class="el-icon-check" style="position:absolute;bottom:-20px;right:0"></i></em>
+                                <em class="jiao active"><i class="el-icon-check" style="position:absolute;bottom:-20px;right:0"></i></em>
                             </div>
                         </el-button>
                         <el-button
                             plain
                             @click="option($event)"
                             style="position:relative">
-                            <div id='goodbutton'>
+                            <div class='goodbutton'>
                                 <p>服务类商品</p>
                                 <span style='color:#8f9294'>（无需物流）</span>
                                 <em class="jiao"><i class="el-icon-check" style="position:absolute;bottom:-20px;right:0"></i></em>
@@ -45,7 +46,7 @@
                             plain
                             @click="option($event)"
                             style="position:relative">
-                            <div id='goodbutton'>
+                            <div class='goodbutton'>
                                 <p>赠品</p>
                                 <span style='color:#8f9294'>（非售商品）</span>
                                 <em class="jiao"><i class="el-icon-check" style="position:absolute;bottom:-20px;right:0"></i></em>
@@ -85,14 +86,22 @@
                                 <el-col :span='6'>
                                     <el-form-item label="商品品牌" required >
                                         <el-select v-model="form.brandId" placeholder="请选择"  size='small'>
-                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                            <el-option
+                                                v-for="item in brandIdoptions"
+                                                :key="item.id"
+                                                :label="item.brandName"
+                                                :value="item.id"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span='6' style="margin-left:25px">
                                     <el-form-item label="商品分类" required >
                                         <el-select v-model="form.categoryId" placeholder="请选择"  size='small'>
-                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                            <el-option
+                                                v-for="item in categoryIdoptions"
+                                                :key="item.id"
+                                                :label="item.categoryName"
+                                                :value="item.id"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -101,7 +110,11 @@
                                 <el-col :span='6'>
                                     <el-form-item label="贸易类型" required >
                                         <el-select v-model="form.sendWay" placeholder="请选择"  size='small'>
-                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                            <el-option
+                                                v-for="item in sendWayoptions"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -115,7 +128,11 @@
                                 <el-col :span='6'>
                                     <el-form-item label="单位" >
                                         <el-select v-model="form.unitId" placeholder="请选择"  size='small'>
-                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                            <el-option
+                                                v-for="item in unitIdoptions"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -198,16 +215,17 @@
                     </li>
                     <!-- 商品属性 -->
                     <li class="good_attr">
-                        <div class="add_attr">
+                        <div class="add_attr" >
                             <el-form ref="attr" label-width="100px" >
                                 <el-form-item label="商品规格">
-                                    <el-col :span="24"  v-for='(attrnum,index) in attr' :key="index" >
+                                    <el-col :span="24"  v-for='(attrnum,index) in property' :key="index" >
                                         <el-col :span="2">
-                                            <el-input size="small" placeholder="属性名" v-model="attrnum.name" ref="input"></el-input>
+                                            <el-input size="small" placeholder="属性名" v-model="attrnum.propertyName" ></el-input>
                                         </el-col>
-                                        <el-col :span="21   " style="margin-left:10px">
-                                            <el-input size="small" placeholder="属性值" v-model="attrnum.region" ></el-input>
+                                        <el-col :span="18" style="margin-left:10px">
+                                            <el-input size="small" placeholder="属性值" v-model="attrnum.propertyValue" ></el-input>
                                         </el-col>
+                                        <i class="el-icon-close" style="margin-left:10px" @click="removeattr(index)"></i>
                                     </el-col>
                                 </el-form-item>
                             </el-form>
@@ -244,7 +262,7 @@
                     <!-- 富编辑器 -->
                     <li>
                         <div style="padding:10px;background:white">
-                            <tinymce></tinymce>
+                            <div id='editor1'></div>
                         </div>
                     </li>
                 </ul>
@@ -316,7 +334,7 @@
                             </el-form-item>
                             <el-form-item label="分享内容">
                                 <div style="background:white">
-                                    <tinymce></tinymce>
+                                    <div id='editor2'></div>
                                 </div>
                             </el-form-item>
                         </el-form>
@@ -360,7 +378,6 @@
                             </el-form-item>
                         </el-form>
                     </li>
-
                 </ul>
             </div>
         </section>
@@ -378,18 +395,13 @@
 
 </template>
 <script>
-import tinymce from '@/components/tinymce'
 import bar from '@/components/stepBar'
 import updata from '@/components/updata'
-
-let goodAttr =
-
-{
-    name: '',
-    region: ''
-}
+import api from 'api/goods'
+import WangEditor from 'wangeditor'
 
 export default {
+    name: 'addGoods',
     data () {
         return {
 
@@ -406,12 +418,10 @@ export default {
 
             // 内容1
 
-            // 类型选择
-            radio:0,
-            // 保质期
-            radio1:0,
             // 信息内容
             form: {
+                itemType: 1,
+                isPresent: 0,
                 title: '',
                 sellingPoint: '',
                 buyRemind: '',
@@ -425,16 +435,10 @@ export default {
                 expirationDate: ''
             },
             // 信息表单选项
-            options: [
-                {
-                    value: '选项1',
-                    label: '妈妈去哪了'
-                },
-                {
-                    value: '选项2',
-                    label: '爸爸去哪了'
-                }
-            ],
+            brandIdoptions:[],
+            categoryIdoptions:[],
+            sendWayoptions:[],
+            unitIdoptions:[],
 
             // 规格表单
             standard: {
@@ -448,15 +452,17 @@ export default {
                 desc: ''
             },
             // 属性表单
-            attr: [
+            property: [
                 {
-                    name: '',
-                    region: ''
+                    propertyName: '',
+                    propertyValue: ''
                 }
             ],
             // 商品主图
             dialogImageUrl: '',
             dialogVisible: false,
+
+            tinymce: '',
 
             // 商品规格
             checked: true,
@@ -508,23 +514,78 @@ export default {
         }
     },
     methods:{
-        // 下一步
+        // 下一步保存数据请求接口
         next() {
             this.currentStep = 2
             this.conent1 = false
             this.conent2 = true
-            window.scroll(0, 0)
+
+            this.$nextTick(() => {
+                this.editor2 = new WangEditor('#editor2')
+                this.editor2.create()
+            })
+            // 判断商品类型
+            var that = this
+
+            $(".goodbutton").each(function(i){
+                if ($(".goodbutton").eq(i).find('.jiao').hasClass('active')){
+                    if ($(".goodbutton").eq(i).find('p').text() == '实物类商品'){
+                        // alert(1)
+                        that.form.itemType = 1
+                        that.form.isPresent = 0
+                    }
+                    if ($(".goodbutton").eq(i).find('p').text() == '服务类商品'){
+                        // alert(2)
+                        that.form.itemType = 0
+                        that.form.isPresent = 0
+                    }
+                    if ($(".goodbutton").eq(i).find('p').text() == '赠品'){
+                        // alert(3)
+                        that.form.itemType = 1
+                        that.form.isPresent = 1
+                    }
+                }
+            });
+
+            let obj = {
+                // 商品信息
+                itemType: this.form.itemType,
+                isPresent: this.form.isPresent,
+                title: this.form.title,
+                sellingPoint: this.form.sellingPoint,
+                buyRemind: this.form.buyRemind,
+                barCode: this.form.barCode,
+                itemCode: this.form.itemCode,
+                brandId: this.form.brandId,
+                categoryId: this.form.categoryId,
+                sendWay: this.form.sendWay,
+                money: this.form.money,
+                unitId: this.form.unitId,
+                expirationDate: this.form.expirationDate,
+                // 商品属性
+                property: JSON.stringify(this.property),
+                // 商品图片
+                itemImgs: JSON.stringify(this.dialogImageUrl),
+                // 商品描述
+                description: ''
+            }
+
+            console.log(obj)
         },
         prev() {
             this.currentStep = 1
             this.conent1 = true
             this.conent2 = false
-            window.scroll(0, 0)
+
+            this.$nextTick(() => {
+                this.editor1 = new WangEditor('#editor1')
+                this.editor1.create()
+            })
         },
         // submit() {
         //     console.log(1)
         // },
-        // 商品主图
+        // 上传图片
         handleRemove(file, fileList) {
             console.log(file, fileList);
         },
@@ -532,28 +593,44 @@ export default {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
         },
+        // 重置
         reset() {
             this.$router.reload()
         },
+        // 添加规格
         add() {
             this.shu.push('1')
         },
+        // 删除规格
         delet(index){
             if (this.shu.length != 1) {
                 this.shu.splice(index, 1)
             }
 
         },
+        // 添加属性
         pushAttr() {
-            this.attr.push(goodAttr);
+            let obj = {
+                propertyName: '',
+                propertyValue: ''
+            }
+
+            this.property.push(obj)
         },
+        // 移除属性
+        removeattr(data) {
+            if (this.property.length > 1){
+                this.property.splice(data, 1)
+            }
+        },
+        // 分类样式
         option($event) {
             var type = $event.currentTarget
 
             $(type).siblings().removeClass('border').find('.jiao').removeClass('active')
             $(type).addClass('border').find('.jiao').addClass('active')
         },
-        // 添加规格值
+        // 添加规格
         addSpec() {
             let obj = {
                 name: '红色',
@@ -570,12 +647,44 @@ export default {
             // // 添加规格的时候，循环添加的对象，如果有和当前已经有的对象相同熟悉。那么添加到当前已经有的对象后面。如果没有直接添
 
             this.spec.push(obj)
+        },
+
+        // 获取商品品牌选项
+        getbrandId() {
+            let obj = {
+                pageNo: 1,
+                pageSize: 999999
+            }
+
+            api.getitemBrandlist(obj).then((response)=>{
+                // console.log(response)
+                this.brandIdoptions = response.data.itemVOs
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+        // 获取商品分类选项
+        getcategoryId() {
+            api.getcategorylist().then((response)=>{
+                // console.log(response)
+                this.categoryIdoptions = response.data.list
+
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+        // 获取贸易类型选项
+        getsendWay() {
+
+        },
+        // 获取单位选项
+        getunitId() {
+
         }
-        // 规格明细
+
 
     },
     components: {
-        tinymce,
         bar,
         updata
     },
@@ -583,8 +692,20 @@ export default {
         this.currentStep = 1
         this.conent1 = true
         this.conent2 = false
+
+
+
     },
     activated() {
+        this.getbrandId()
+        this.getcategoryId()
+
+    },
+    mounted() {
+        this.editor1 = new WangEditor('#editor1')
+
+        this.editor1.create()
+
 
     }
 

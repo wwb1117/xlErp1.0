@@ -10,15 +10,15 @@
                             <span :style="{fontSize: '16px'}">高级搜索</span>
                             <i @click="morefind = false" class="el-icon-close" style="float: right; padding: 3px 0; cursor: pointer"></i>
                         </div>
-                        <el-form  :inline="true" :model="morefrom" label-position="right" size="small" label-width="80px" ref="morefind" >
+                        <el-form class="myForm" :inline="true" :model="morefrom" label-position="right" size="small" label-width="80px" ref="morefind" >
                             <el-form-item label="商品名称" prop='title'>
-                                <el-input v-model="morefrom.title" placeholder="请输入商品名称" style="width:215px"></el-input>
+                                <el-input v-model="morefrom.title" placeholder="请输入商品名称" ></el-input>
                             </el-form-item>
                             <el-form-item label="商品编号" prop='itemCode'>
-                                <el-input v-model="morefrom.itemCode" placeholder="请输入商品编号" style="width:215px"></el-input>
+                                <el-input v-model="morefrom.itemCode" placeholder="请输入商品编号" ></el-input>
                             </el-form-item>
                             <el-form-item label="商品条码" prop='barCode'>
-                                <el-input v-model="morefrom.barCode" placeholder="请输入商品条码" style="width:215px"></el-input>
+                                <el-input v-model="morefrom.barCode" placeholder="请输入商品条码" ></el-input>
                             </el-form-item>
                             <br>
                             <el-form-item label="商品分类" prop='categoryName'>

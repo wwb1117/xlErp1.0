@@ -161,7 +161,7 @@ export default {
         get() {
 
             api.getitemBrandlist(this.page).then((response)=>{
-                console.log(response.data.itemVOs)
+                // console.log(response.data.itemVOs)
                 this.brand = response.data.itemVOs
 
                 for (var i in this.brand){

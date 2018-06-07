@@ -163,6 +163,7 @@ export default {
                         }
                     }
 
+                    // 遍历传输的数据结构出来
                     if (this.list.length >= this.uplist.length){
 
                         for (var a = 0 ; a < this.list.length - 1 ; a++){
@@ -274,7 +275,7 @@ export default {
 
         api.getshopgrouplist(this.page).then((response)=>{
             this.group = response.data.list
-            // console.log(response)
+            console.log(response)
         }).catch((error)=>{
             console.log(error)
         })

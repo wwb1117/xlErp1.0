@@ -35,6 +35,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
+                        <!--
                         <el-form-item label="调出单位">
                             <el-select v-model="searchFormData.inventoryOutId" placeholder="请选择">
                                 <el-option
@@ -45,7 +46,9 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <br>
+                        -->
+
+                        <!--
                         <el-form-item label="调入单位">
                             <el-select v-model="searchFormData.inventoryInId" placeholder="请选择">
                                 <el-option
@@ -59,6 +62,7 @@
                         <el-form-item label="制单人">
                             <el-input v-model="searchFormData.creator" placeholder="请输入制单人"></el-input>
                         </el-form-item>
+                        -->
                         <el-form-item label="审核状态">
                             <el-select v-model="searchFormData.auditStatus" placeholder="请选择">
                                 <el-option label="待审核" value="0"></el-option>
@@ -93,7 +97,7 @@
                         placeholder="请输入调拨单号"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="inventoryAllocationNo">
+                        v-model="searchFormData.inventoryAllocationNo">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small" @click="search">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
@@ -263,6 +267,7 @@ export default {
     computed:{},
     methods:{
         handleSizeChange(data){
+            this.currentPage = 1
             this.getAllotList({pageNo: this.currentPage, pageSize: data})
         },
         handleCurrentChange(data){
