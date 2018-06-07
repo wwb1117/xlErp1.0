@@ -401,6 +401,7 @@ import api from 'api/goods'
 import WangEditor from 'wangeditor'
 
 export default {
+    name: 'addGoods',
     data () {
         return {
 
@@ -515,11 +516,14 @@ export default {
     methods:{
         // 下一步保存数据请求接口
         next() {
-            // this.currentStep = 2
-            // this.conent1 = false
-            // this.conent2 = true
-            // window.scroll(0, 0)
+            this.currentStep = 2
+            this.conent1 = false
+            this.conent2 = true
 
+            this.$nextTick(() => {
+                this.editor2 = new WangEditor('#editor2')
+                this.editor2.create()
+            })
             // 判断商品类型
             var that = this
 
@@ -572,7 +576,11 @@ export default {
             this.currentStep = 1
             this.conent1 = true
             this.conent2 = false
-            window.scroll(0, 0)
+
+            this.$nextTick(() => {
+                this.editor1 = new WangEditor('#editor1')
+                this.editor1.create()
+            })
         },
         // submit() {
         //     console.log(1)
@@ -674,6 +682,7 @@ export default {
 
         }
 
+
     },
     components: {
         bar,
@@ -684,15 +693,18 @@ export default {
         this.conent1 = true
         this.conent2 = false
 
-        this.editor1 = new WangEditor('#editor1')
-        this.editor1.create()
 
-        this.editor2 = new WangEditor('#editor2')
-        this.editor2.create()
+
     },
     activated() {
         this.getbrandId()
         this.getcategoryId()
+
+    },
+    mounted() {
+        this.editor1 = new WangEditor('#editor1')
+
+        this.editor1.create()
 
 
     }
