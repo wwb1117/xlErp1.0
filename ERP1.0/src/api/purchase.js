@@ -82,5 +82,14 @@ export default {
     /************************采购退货****************************** */
     getRejectListData(data){
         return HttpClient.get('/returnOrder/findByCondition', data);
+    },
+    addRejectList(data){
+        return HttpClient.postJSON('/returnOrder/insertOrder', data);
+    },
+    getRejectItemData(data){
+        return HttpClient.get('/store/' + data);
+    },
+    deleteRejectItem(data){
+        return HttpClient.delete('/returnOrder/' + data);
     }
 }

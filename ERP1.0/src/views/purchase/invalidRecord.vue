@@ -27,45 +27,42 @@
                         </el-form-item>
                         <br>
                         <el-form-item label="供应商">
-                            <el-select v-model="tableParam.sellerId" placeholder="请输入采购员">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select @change="selectChangeEvent(1)" v-model="tableParam.sellerId" placeholder="请选择供应商">
+                                <el-option v-for="item in supplierSelectData" :key="item.id" :label="item.sellerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购单位">
-                            <el-select v-model="tableParam.buyerId" placeholder="请输入采购单位">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select @change="selectChangeEvent(2)" v-model="tableParam.buyerId" placeholder="请选择采购单位">
+                                <el-option v-for="item in buyerNameSelectData" :key="item.id" :label="item.buyerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库仓库">
-                            <el-select v-model="tableParam.purchaseHouseId" placeholder="请输入入库仓库">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select @change="selectChangeEvent(3)" v-model="tableParam.purchaseHouseId" placeholder="请选择入库仓库">
+                                <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <br>
                         <el-form-item label="入库状态">
                             <el-select v-model="tableParam.storeStatus" placeholder="请输入入库状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                                <el-option label="待入库" value="0"></el-option>
+                                <el-option label="部分入库" value="1"></el-option>
+                                <el-option label="已入库" value="2"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="审核状态">
                             <el-select v-model="tableParam.auditStatus" placeholder="请输入审核状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                                <el-option label="待审核" value="0"></el-option>
+                                <el-option label="审核中" value="1"></el-option>
+                                <el-option label="通过" value="2"></el-option>
+                                <el-option label="不通过" value="3"></el-option>
+                                <el-option label="撤销" value="4"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="作废时间">
                             <el-date-picker
                                 type="daterange"
                                 :editable="false"
+                                @change="datePickerChangeEvent"
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期">
@@ -73,7 +70,7 @@
                         </el-form-item>
                         <br>
                         <el-form-item>
-                            <el-button style="width: 90px" type="primary" >确定</el-button>
+                            <el-button @click="supperSureBoxShow" style="width: 90px" type="primary" >确定</el-button>
                             <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
                             <el-button type="text" style="width: 40px; color: #636365">清空</el-button>
                         </el-form-item>
@@ -144,6 +141,9 @@ export default {
             totalPage: 10,
             baseData: [],
             selectTableData: [],
+            supplierSelectData: [],
+            repositorySelectData: [],
+            buyerNameSelectData: [],
             isSupperBoxShow: false,
             checked: 0,
             tableHeight: 500,
@@ -170,6 +170,34 @@ export default {
     },
     computed:{},
     methods:{
+        selectChangeEvent(){
+
+        },
+        supperSureBoxShow () {
+            this.isSupperBoxShow = !this.isSupperBoxShow
+            this.getTableData().then(() => {
+                this.resetBtnEvent()
+            })
+        },
+        datePickerChangeEvent (val) {
+            this.tableParam.startTime = Math.round(val[0] / 1000)
+            this.tableParam.endTime = Math.round(val[1] / 1000)
+        },
+        getSupplierSelectData(){
+            api.getSupplierSelectData().then((response) => {
+                this.supplierSelectData = response.data.list
+            })
+        },
+        getRepositorySelectData(){
+            api.getRepoSelectData().then((response) => {
+                this.repositorySelectData = response.data
+            })
+        },
+        getBuyerComSelectData(){
+            api.getBuyerComSelectData().then((response) => {
+                this.buyerNameSelectData = response.data
+            })
+        },
         handleSizeChange(val){
             this.tableParam.pageSize = val
             this.getTableData()
@@ -202,8 +230,6 @@ export default {
         },
         getTableData(){
             api.getInvalidRecordList(this.tableParam).then((response) => {
-                console.log("123")
-                console.log(response)
                 this.totalPage = response.data.total
                 this.baseData = response.data.list
             })

@@ -39,6 +39,11 @@ Vue.prototype.$allEnumeration = { //仓库枚举类型
     notBool: {
         false: 0,
         true: 1
+    },
+    // 入库状态
+    storeStatus: {
+        0: '待入库',
+        1: '部分入库',
+        2: '已入库'
     }
-
 }

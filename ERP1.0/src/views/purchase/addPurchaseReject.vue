@@ -5,7 +5,7 @@
             <span> - 新增退货单</span>
         </div>
         <div class="content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
-            <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="100px">
+            <el-form ref="addPurRejectForm" class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="100px">
                 <div class="banner">
                     基本信息
                 </div>
@@ -20,26 +20,16 @@
                             </i>
                         </el-input>
                     </el-form-item>
-                    <el-form-item prop="inRepository" label="退货仓库">
-                        <el-select v-model="addFormData.inRepository" placeholder="请选择退货仓库">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
+                    <el-form-item prop="returnHouseId" label="退货仓库">
+                        <el-select @change="selectChangeEvent(3)" v-model="addFormData.returnHouseId" placeholder="请选择入库仓库">
+                            <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item prop="supplier" label="供应商">
-                        <el-select v-model="addFormData.supplier" placeholder="请输入供应商">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
+                    <el-form-item prop="sellerId" label="供应商 : ">
+                        <span v-text="addFormData.sellerName"></span>
                     </el-form-item>
-                    <el-form-item prop="purchaseCompany" label="采购单位">
-                        <el-select v-model="addFormData.purchaseCompany" placeholder="请输入采购单位">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
+                    <el-form-item prop="purchaseCompany" label="采购单位 : ">
+                        <span v-text="addFormData.buyerName"></span>
                     </el-form-item>
                 </div>
                 <div class="banner">
@@ -50,6 +40,7 @@
                         :data="goodsInfoData"
                         :span-method="arraySpanMethod"
                         show-summary
+                        :summary-method="getSummaries"
                         border
                     style="width: 100%">
                         <el-table-column
@@ -67,71 +58,80 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                        prop="selfNum"
+                        prop="itemSku"
                         label="编号"
                         width="180">
                         <template slot-scope="scope">
-                            <div v-if="scope.row.selfNum === ''">
+                            <div v-if="scope.row.itemSku === ''">
                                 <el-autocomplete
                                 v-model="querySearchText"
                                 :style="{width: '270px'}"
-                                :fetch-suggestions="querySearchAsync"
+                                :disabled="true"
                                 placeholder="输入商品名称/编号"
-                                @select="querySearchAsynSelect"
                                 >
                                 </el-autocomplete>
 
-                                <span @click="chooseGoodEvent" class="el-icon-more"></span>
+                                <span class="el-icon-more"></span>
                             </div>
-                            <div v-if="scope.row.selfNum !== ''">
-                                <span v-text="scope.row.selfNum"></span>
+                            <div v-if="scope.row.itemSku !== ''">
+                                <span v-text="scope.row.itemSku"></span>
                             </div>
                         </template>
                         </el-table-column>
                         <el-table-column
-                        prop="barCode"
+                        prop="itemMac"
                         label="条码">
                         </el-table-column>
                         <el-table-column
-                        prop="goodName"
+                        prop="itemName"
                         label="商品">
                         </el-table-column>
                         <el-table-column
-                        prop="SKU"
+                        prop="itemSpec"
                         label="规格-SKU">
                         </el-table-column>
                         <el-table-column
-                        prop="qualityDate"
-                        label="保质期">
+                        prop="itemExp"
+                        label="保质期(月)">
                         </el-table-column>
                         <el-table-column
                         prop="productData"
                         label="生产日期">
                         </el-table-column>
                         <el-table-column
-                        prop="purchaseNum"
-                        label="采购数">
+                        prop="productData"
+                        label="剩余可退数">
                             <template slot-scope="scope">
-                                <div v-if="scope.row.selfNum === ''">
+                                <span v-if="scope.row.returnNumber">{{scope.row.purchasingNumber - scope.row.storeNumber - scope.row.returnNumber}}</span>
+                                <span v-else>{{scope.row.purchasingNumber - scope.row.storeNumber}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                        prop="currReturnNum"
+                        label="退货数">
+                            <template slot-scope="scope">
+                                <div v-if="scope.row.itemSku === ''">
                                     <span></span>
                                 </div>
-                                <div v-if="scope.row.selfNum !== ''">
-                                    <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.purchaseNum"></el-input>
+                                <div v-if="scope.row.itemSku !== ''">
+                                    <el-tooltip class="item" effect="dark" :content="'不得大于' + (scope.row.purchasingNumber - scope.row.storeNumber - scope.row.returnNumber)" placement="top">
+                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currReturnNum"></el-input>
+                                    </el-tooltip>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column
-                        prop="unit"
+                        prop="itemQuantifierUnit"
                         label="单位">
                         </el-table-column>
                         <el-table-column
                         prop="unitPrice"
-                        label="采购单价(元)">
+                        label="退货单价(元)">
                             <template slot-scope="scope">
-                                <div v-if="scope.row.selfNum === ''">
+                                <div v-if="scope.row.itemSku === ''">
                                     <span></span>
                                 </div>
-                                <div v-if="scope.row.selfNum !== ''">
+                                <div v-if="scope.row.itemSku !== ''">
                                     <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.unitPrice"></el-input>
                                 </div>
                             </template>
@@ -142,119 +142,128 @@
                         </el-table-column>
                     </el-table>
                     <div class="tableBottom">
-                        <div style="width: 350px; float: right;padding-top: 10px">
-                            <el-form-item prop="carriage" label="运费">
-                                <el-input v-model="addFormData.carriage" placeholder="请输入运费"></el-input>
+                        <div style="width: 460px; float: right;padding-top: 10px">
+                            <el-form-item label-width="200px" prop="carriage" label="协商后,修改退货金额">
+                                <el-input @keyup.native="editCostEvent" v-model="addFormData.consultPrice" placeholder="退货金额"></el-input>
                             </el-form-item>
-                            <el-form-item prop="extraCost" label="其他费用">
-                                <el-input v-model="addFormData.extraCost" placeholder="请输入其他费用"></el-input>
-                            </el-form-item>
-                            <el-form-item prop="totalCost" label="应付金额">
-                                <span style="color: #f56c6b" v-text="addFormData.totalCost"></span>
+                            <br>
+                            <el-form-item label-width="200px" prop="totalReturnMoney" label="退货金额">
+                                <span style="color: #f56c6b" v-text="addFormData.totalReturnMoney"></span>
                             </el-form-item>
                         </div>
                     </div>
                 </div>
 
                 <div class="goodInfoBox" style="width: 650px">
-                    <el-form-item prop="purchaseDate" label="退货时间">
+                    <el-form-item prop="returnTime" label="退货时间">
                         <el-date-picker
-                        v-model="addFormData.purchaseDate"
+                        v-model="addFormData.returnTime"
                         format="yyyy-MM-dd"
                         value-format="timestamp"
                         type="date"
                         placeholder="选择日期">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item prop="purchaseList" label="退货单号">
-                        <el-input v-model="addFormData.purchaseList" placeholder="请输入采购单号"></el-input>
+                    <el-form-item prop="ReturnOrderNo" label="退货单号">
+                        <el-input :disabled="true" v-model="addFormData.ReturnOrderNo" placeholder="请输入采购单号"></el-input>
                     </el-form-item>
                     <br>
-                    <el-form-item prop="purchaseMan" label="经办人">
-                        <el-input v-model="addFormData.purchaseMan" placeholder="请输入采购员"></el-input>
+                    <el-form-item prop="operator" label="经办人">
+                        <el-input v-model="addFormData.operator" placeholder="请输入经办人"></el-input>
                     </el-form-item>
-                    <el-form-item prop="makeListMan" label="制单人">
-                        <el-input v-model="addFormData.makeListMan" placeholder="请输入制单人"></el-input>
+                    <el-form-item prop="creator" label="制单人">
+                        <el-input :disabled="true" v-model="addFormData.creator" placeholder="请输入制单人"></el-input>
                     </el-form-item>
                     <br>
-                    <el-form-item class="marker" :style="{width: '100%'}" prop="maker" label="备注">
-                        <el-input type="textarea" :rows="4" v-model="addFormData.maker" placeholder="请输入制单人"></el-input>
+                    <el-form-item class="marker" :style="{width: '100%'}" prop="remark" label="备注">
+                        <el-input style="width: 500px" type="textarea" :rows="4" v-model="addFormData.remark" placeholder="请输入备注"></el-input>
                     </el-form-item>
                 </div>
             </el-form>
         </div>
         <div class="model_footer">
             <el-button @click="saveBtnEvent" style="width: 90px" type="primary" size="small">保存</el-button>
-            <el-button style="width: 90px" size="small">取消</el-button>
+            <el-button v-RouterBack style="width: 90px" size="small">取消</el-button>
         </div>
     </div>
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
             querySearchText: '',
-            goodsInfoData: [{
-                oper: '',
-                selfNum: '11111',
-                barCode: '',
-                goodName: '',
-                SKU: '',
-                qualityDate: '',
-                productData: '',
-                purchaseNum: '',
-                unit: '',
-                unitPrice: '',
-                unitTotal: ''
-            }],
+            supplierSelectData: [],
+            repositorySelectData: [],
+            buyerNameSelectData: [],
+            tabelTotalCost: "",
+            goodsInfoData: [],
             addFormData: {
-                supplier: '',
-                relePurchaseList: '',
-                inRepository: '',
-                purchaseCompany: '',
-                purchaseDate: '',
-                purchaseList: '',
-                purchaseMan: '',
-                makeListMan: '',
-                maker: '',
-                carriage: '0',
-                extraCost: '0',
-                totalCost: '00'
+                purchaseOrderId: '',
+                purchaseOrderNo: '',
+                buyerId: '',
+                buyerName: '',
+                returnHouseId: '',
+                returnHouseName: '',
+                sellerId: '',
+                sellerName: '',
+                totalReturnMoney: '',
+                totalReturnNumber: '',
+                creator: '',
+                creatorId: '1',
+                ReturnOrderNo: '',
+                returnTime: '',
+                consultPrice: '',
+                remark: '',
+                operator: '',
+                list: []
             },
             rules: {
                 relePurchaseList: [
-                    { required: true, message: '请选择关联采购单', trigger: 'blur' }
+                    { required: true, message: '', trigger: 'blur' }
                 ],
-                inRepository: [
+                returnHouseId: [
                     { required: true, message: '请选择入库仓库', trigger: 'blur' }
                 ],
 
-                purchaseDate: [
-                    { required: true, message: '请选择采购时间', trigger: 'blur' }
-                ],
-                purchaseList: [
-                    { required: true, message: '请输入采购单号', trigger: 'blur' }
-                ],
-                makeListMan: [
-                    { required: true, message: '请输入制单人', trigger: 'blur' }
+                returnTime: [
+                    { required: true, message: '请选择退货时间', trigger: 'blur' }
                 ]
+
             }
         }
     },
-    computed:{},
+    computed:{
+
+    },
     methods:{
+        getSupplierSelectData(){
+            api.getSupplierSelectData().then((response) => {
+                this.supplierSelectData = response.data.list
+            })
+        },
+        getRepositorySelectData(){
+            api.getRepoSelectData().then((response) => {
+                this.repositorySelectData = response.data
+            })
+        },
+        getBuyerComSelectData(){
+            api.getBuyerComSelectData().then((response) => {
+                this.buyerNameSelectData = response.data
+            })
+        },
         goodTableAddEvent(){
             var itemobj = {
                 oper: '',
-                selfNum: '',
-                barCode: '',
-                goodName: '',
-                SKU: '',
-                qualityDate: '',
+                itemSku: '',
+                itemMac: '',
+                itemName: '',
+                itemSpec: '',
+                itemExp: '',
                 productData: '',
                 purchaseNum: '',
-                unit: '',
+                itemQuantifierUnit: '',
                 unitPrice: '',
                 unitTotal: ''
             }
@@ -267,10 +276,8 @@ export default {
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
-            console.log(rowIndex)
-            console.log(this.goodsInfoData.length)
             if (columnIndex === 2) {
-                if (row.selfNum == ""){
+                if (row.itemSku == ""){
                     return [1, 3];
                 } else {
                     return [1, 1];
@@ -279,60 +286,174 @@ export default {
                 return [1, 1];
             }
         },
-        querySearchAsync(){
-
+        editCostEvent(){
+            this.addFormData.consultPrice = this.addFormData.consultPrice.replace(/[^\d\.]/g, '')
+            if (this.addFormData.consultPrice == "") {
+                this.addFormData.totalReturnMoney = this.tabelTotalCost
+            } else {
+                this.addFormData.totalReturnMoney = this.addFormData.consultPrice
+            }
         },
-        querySearchAsynSelect(){
+        getSummaries(param){
+            var columns = param.columns
+            var data = param.data
+            var sums = []
 
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                if (column.property == 'currReturnNum' || column.property == 'unitTotal'){
+                    const values = data.map(item => Number(item[column.property]));
+
+                    if (!values.every(value => isNaN(value))) {
+                        sums[index] = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+
+                    }
+
+                    if (column.property == 'currReturnNum'){
+                        this.addFormData.totalReturnNumber = sums[index]
+                    }
+
+                    if (column.property == 'unitTotal'){
+                        this.tabelTotalCost = sums[index]
+                        if (this.addFormData.consultPrice == "") {
+                            this.addFormData.totalReturnMoney = this.tabelTotalCost
+                        } else {
+                            this.addFormData.totalReturnMoney = this.addFormData.consultPrice
+                        }
+                    }
+                } else {
+                    sums[index] = ''
+                }
+            })
+
+            return sums
         },
         unitTatalEvent(data){
             data.row.unitPrice = data.row.unitPrice.replace(/[^\d\.]/g, '')
-            data.row.purchaseNum = data.row.purchaseNum.replace(/[^\d\.]/g, '')
-            if (data.row.unitPrice == '' || data.row.purchaseNum == ''){
-                data.row.unitTotal = ''
-                return
+            data.row.currReturnNum = data.row.currReturnNum.replace(/[^\d\.]/g, '')
+            if (data.row.unitPrice == '' || data.row.currReturnNum == ''){
+                data.row.unitTotal = 0
+            } else {
+                var price = parseFloat(data.row.unitPrice)
+                var num = parseFloat(data.row.currReturnNum)
+
+                if (num > (data.row.purchasingNumber - data.row.storeNumber - data.row.returnNumber)) {
+                    num = data.row.purchasingNumber - data.row.storeNumber - data.row.returnNumber
+                    data.row.currReturnNum = num
+                }
+
+                data.row.unitTotal = price * num
             }
-            var price = parseFloat(data.row.unitPrice)
-            var num = parseFloat(data.row.purchaseNum)
 
-
-
-            data.row.unitTotal = price * num
         },
-        chooseGoodEvent(){
-            this.$router.push({
-                path: '/chooseGood'
-            });
-        },
+
         relePurchaseListIconEvent(){
             this.$router.push({
                 path: '/chooseRelePurchaseList'
             });
         },
         saveBtnEvent(){
-            this.$confirm('<span>是否确定修改采购单 ? </span><br><strong style="color: #f7b65d">注 : </strong><span>修改采购单后,将清除已选择的商品数据</span>', '温馨提示', {
-                dangerouslyUseHTMLString: true
-            }).then(() => {
-                this.$router.push({
-                    path: '/addPurchaseRejectSuccess'
-                })
+            this.$refs['addPurRejectForm'].validate((valid) => {
+                if (valid) {
+                    this.$confirm('<span>是否确定修改采购单 ? </span><br><strong style="color: #f7b65d">注 : </strong><span>修改采购单后,将清除已选择的商品数据</span>', '温馨提示', {
+                        dangerouslyUseHTMLString: true
+                    }).then(() => {
+                        this.saveEvent()
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            showClose: true,
+                            duration: 1500,
+                            message: '已取消操作'
+                        });
+                    });
+                }
+            })
+        },
+        addFormDataInit(){
+            for (var kk in this.addFormData) {
+                this.addFormData[kk] = ""
+            }
+        },
+        saveEvent(){
+
+            this.addFormData.returnTime = Math.round(this.addFormData.returnTime / 1000)
+            this.addFormData.list = this.goodsInfoData
+            api.addRejectList(this.addFormData).then(() => {
                 this.$message({
                     type: 'success',
                     showClose: true,
                     duration: 1500,
                     message: '保存成功!'
                 });
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    showClose: true,
-                    duration: 1500,
-                    message: '已取消操作'
-                });
-            });
+                this.$router.push({
+                    path: '/addPurchaseRejectSuccess'
+                })
+            })
+        },
+        setGoodsInfoData(arr){
+            var resArr = []
+
+            arr.forEach((item, index) => {
+                var itemobj = this.myBase.deepCopy(item)
+
+                itemobj.currReturnNum = "1"
+                itemobj.unitPrice = '0'
+                itemobj.unitTotal = "0"
+
+                resArr.push(itemobj)
+            })
+
+            this.goodsInfoData = resArr
         }
     },
-    created(){},
+    created(){
+        this.getSupplierSelectData()
+        this.getRepositorySelectData()
+        this.getBuyerComSelectData()
+    },
+    activated(){
+        var id = this.$store.state.home.currentModelId
+
+        this.addFormDataInit()
+
+        if (id != "") {
+            api.getPurchaseListItem(id).then((response) => {
+                var puraseInfo = response.data
+
+                this.addFormData.relePurchaseList = puraseInfo.purchaseOrderNo
+                this.addFormData.purchaseOrderId = id
+                this.addFormData.purchaseOrderNo = puraseInfo.purchaseOrderNo
+                this.addFormData.buyerId = puraseInfo.buyerId
+                this.addFormData.buyerName = puraseInfo.buyerName
+                this.addFormData.returnHouseId = puraseInfo.purchaseHouseId
+                this.addFormData.returnHouseName = puraseInfo.purchaseHouseName
+                this.addFormData.sellerId = puraseInfo.sellerId
+                this.addFormData.sellerName = puraseInfo.sellerName
+                this.addFormData.creator = puraseInfo.creator
+                // this.addFormData.creatorId = puraseInfo.creatorId
+                this.addFormData.ReturnOrderNo = this.myBase.MathRand('CG_R')
+
+                this.addFormData.list = puraseInfo.list
+
+                this.setGoodsInfoData(this.addFormData.list)
+
+                console.log(response)
+
+            })
+        }
+    },
     mounted(){}
 }
 </script>

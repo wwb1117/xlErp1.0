@@ -6,7 +6,8 @@
         </div>
         <div class="model_content" >
             <add-good v-if="isShowAddGoods" @saveAddgoodsFn="fromAddGoods"></add-good>
-            <div v-if="!isShowAddGoods" class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
+            <add-purchase v-if="isShowPurchase" @saveAddpurchaseFn="fromeAddPurchase"></add-purchase>
+            <div v-if="!isShowAddGoods && !isShowPurchase" class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
                 <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="110px">
                     <div class="banner">
                         基本信息
@@ -75,7 +76,7 @@
                         <el-form-item prop="purchaseOrderNo" label="关联采购单号">
                             <el-input v-model="addFormData.purchaseOrderNo" placeholder="请选择采购单号">
                             </el-input>
-                            <span @click="chooseGoodEvent" class="el-icon-more" style="position: absolute; right: 5px;top: 9px;"></span>
+                            <span @click="choosePurchaseEvent" class="el-icon-more" style="position: absolute; right: 5px;top: 9px;"></span>
                         </el-form-item>
                         <el-form-item prop="storeTime" label="入库时间" v-if="inbound">
                             <el-date-picker
@@ -123,7 +124,7 @@
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.itemId === ''">
                                         <el-autocomplete
-                                            disabled="true"
+                                            disabled
                                             v-model="querySearchText"
                                             :style="{width: '270px'}"
                                             :fetch-suggestions="querySearchAsync"
@@ -221,17 +222,17 @@
 
                     <div class="goodInfoBox">
                         <el-form-item prop="storeNo" label="入库单号" v-if="inbound">
-                            <el-input v-model="addFormData.storeNo" placeholder="请输入入库单号" :disabled="true"></el-input>
+                            <el-input v-model="addFormData.storeNo" placeholder="请输入入库单号" disabled></el-input>
                         </el-form-item>
                         <el-form-item prop="storeNo" label="出库单号" v-if="outbound">
-                            <el-input v-model="addFormData.storeNo" placeholder="请输入出库单号" :disabled="true"></el-input>
+                            <el-input v-model="addFormData.storeNo" placeholder="请输入出库单号" disabled></el-input>
                         </el-form-item>
                         <el-form-item prop="operator" label="经办人">
                             <el-input v-model="addFormData.operator" placeholder="请输入经办人"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item prop="creator" label="制单人">
-                            <el-input v-model="addFormData.creator" placeholder="请输入制单人" :disabled="true"></el-input>
+                            <el-input v-model="addFormData.creator" placeholder="请输入制单人" disabled></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item class="marker" :style="{width: '700px'}" prop="storeRemark" label="备注">
@@ -241,7 +242,7 @@
                 </el-form>
             </div>
         </div>
-        <div class="model_footer" v-if="!isShowAddGoods">
+        <div class="model_footer" v-if="!isShowAddGoods && !isShowPurchase">
             <el-button style="width: 90px" type="primary" size="small" @click="save">保存</el-button>
             <el-button style="width: 90px" size="small" v-RouterBack>取消</el-button>
         </div>
@@ -251,11 +252,13 @@
 <script>
 import 'utils/allEnumeration'
 import addGood from './forms/addGoods'
+import addPurchase from './forms/addPurchaseNo'
 import ME from 'utils/base'
 import API from 'api/depot'
 export default {
     components: {
-        addGood
+        addGood,
+        addPurchase
     },
     data(){
         return {
@@ -315,6 +318,9 @@ export default {
     computed:{
         isShowAddGoods() {
             return this.$store.state.depot.showAddGoods.id > 0
+        },
+        isShowPurchase() {
+            return this.$store.state.depot.showPurchase.id > 0
         }
     },
     methods:{
@@ -341,6 +347,12 @@ export default {
                 itemId: ''
             }]
         },
+        // 添加采购单
+        fromeAddPurchase(data) {
+            this.addFormData.purchaseOrderNo = data[0].purchaseOrderNo
+            console.log(data, "接收的采购单")
+        },
+        // 添加商品
         fromAddGoods(data) {
             this.goodsInfoData = []
             console.log(data, '接收的数据')
@@ -484,6 +496,9 @@ export default {
         },
         chooseGoodEvent(){
             this.$store.commit('showAddGoods')
+        },
+        choosePurchaseEvent() {
+            this.$store.commit('showPurchase')
         },
         // 产生随机数并加到编码
         MathRand(data, type) {
@@ -698,6 +713,8 @@ export default {
     },
     activated () {
         this.clearAll()
+        this.$store.commit('hideChooseGoods')
+        this.$store.commit('hidePurchase')
         if (this.$route.params.type === '入库') {
             this.inbound = true
             this.outbound = false

@@ -25,32 +25,28 @@
                         </el-form-item>
                         <br>
                         <el-form-item label="供应商">
-                            <el-select v-model="tableParam.supplier" placeholder="请输入采购员">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select @change="selectChangeEvent(1)" v-model="tableParam.sellerId" placeholder="请选择供应商">
+                                <el-option v-for="item in supplierSelectData" :key="item.id" :label="item.sellerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购单位">
-                            <el-select v-model="tableParam.buyerId" placeholder="请输入采购单位">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select @change="selectChangeEvent(3)" v-model="tableParam.buyerId" placeholder="请选择采购单位">
+                                <el-option v-for="item in buyerNameSelectData" :key="item.id" :label="item.buyerCompanyName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="退货仓库">
-                            <el-select v-model="tableParam.houseId" placeholder="请输入入库仓库">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                            <el-select @change="selectChangeEvent(2)" v-model="tableParam.houseId" placeholder="请选择入库仓库">
+                                <el-option v-for="item in repositorySelectData" :key="item.id" :label="item.warehouseName" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <br>
                         <el-form-item label="审核状态">
                             <el-select v-model="tableParam.auditStatus" placeholder="请输入审核状态">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                                <el-option label="待审核" value="0"></el-option>
+                                <el-option label="审核中" value="1"></el-option>
+                                <el-option label="通过" value="2"></el-option>
+                                <el-option label="不通过" value="3"></el-option>
+                                <el-option label="撤回" value="4"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="采购时间">
@@ -68,7 +64,7 @@
                         <el-form-item>
                             <el-button style="width: 90px" type="primary" >确定</el-button>
                             <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
-                            <el-button type="text" style="width: 40px; color: #636365">清空</el-button>
+                            <el-button @click="resetBtnEvent" type="text" style="width: 40px; color: #636365">清空</el-button>
                         </el-form-item>
                     </el-form>
                 </el-card>
@@ -108,67 +104,94 @@
                         width="55">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseList"
+                        prop="returnOrderNo"
                         label="退货单号"
                         >
                     </el-table-column>
                     <el-table-column
-                        prop="supplier"
+                        prop="sellerName"
                         label="供应商"
                        >
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseCompany"
+                        prop="buyerName"
                         label="采购单位">
                     </el-table-column>
                     <el-table-column
-                        prop="inRepository"
+                        prop="returnHouseName"
                         label="退货仓库">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseRMB"
+                        prop="totalReturnMoney"
                         label="退货金额">
                     </el-table-column>
                     <el-table-column
-                        prop="makeListMan"
+                        prop="creator"
                         label="制单人">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseMan"
+                        prop="operator"
                         label="经办人">
                     </el-table-column>
                     <el-table-column
-                        prop="purchaseDate"
+                        prop="returnTime"
                         label="退货时间">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.returnTime | time_m}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="reviewState"
+                        prop="auditStatus"
                         label="审核状态">
+                        <template slot-scope="scope">
+                            <span style="color: #f37069" v-if="scope.row.auditStatus == 0">待审核</span>
+                            <span style="color: #e7a03d" v-if="scope.row.auditStatus == 1">审核中</span>
+                            <span v-if="scope.row.auditStatus == 2">审核通过</span>
+                            <span style="color: #f37069" v-if="scope.row.auditStatus == 3">审核不通过</span>
+                            <span style="color: #f37069" v-if="scope.row.auditStatus == 4">撤回</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="prop"
                         width="150"
                         label="操作">
                          <template slot-scope="scope">
-                            <el-button
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            入库
-                            </el-button>
-                            <el-button
-                            :style="{marginRight: '10px'}"
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            编辑
-                            </el-button>
-                            <el-button
-                            @click.native.prevent="inRepositoryEvent(scope.$index, tableData)"
-                            type="text"
-                            size="small">
-                            查看
-                            </el-button>
+                            <div v-if="scope.row.auditStatus == 0">
+                                <el-button
+                                    @click.native.prevent="tableOperEvent(scope.row.id, 1)"
+                                    type="text"
+                                    size="small">
+                                    查看
+                                </el-button>
+                                <el-button
+                                    @click.native.prevent="tableOperEvent(scope.row.id, 2)"
+                                    type="text"
+                                    size="small">
+                                    删除
+                                </el-button>
+                            </div>
+                            <div v-else-if="scope.row.auditStatus == 1">
+                                <el-button
+                                    @click.native.prevent="tableOperEvent(scope.row.id, 1)"
+                                    type="text"
+                                    size="small">
+                                    查看
+                                </el-button>
+                                <el-button
+                                    @click.native.prevent="tableOperEvent(scope.row.id, 3)"
+                                    type="text"
+                                    size="small">
+                                    撤回
+                                </el-button>
+                            </div>
+                            <div v-else>
+                                <el-button
+                                    @click.native.prevent="tableOperEvent(scope.row.id, 1)"
+                                    type="text"
+                                    size="small">
+                                    查看
+                                </el-button>
+                            </div>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -179,22 +202,26 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
-            serchText: '',
+            totalPage: 1,
             currentPage: 2,
             selectTableData: [],
+            supplierSelectData: [],
+            buyerNameSelectData: [],
+            repositorySelectData: [],
             isSupperBoxShow: false,
             tableHeight: 500,
             tableParam: {
@@ -210,58 +237,67 @@ export default {
                 searchStr: ''
             },
             isExportShow: false,
-            tableData: [
-                {
-                    purchaseList: '7758521',
-                    supplier: '布加迪',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '888,000,00',
-                    makeListMan: '李明珠',
-                    purchaseMan: '官人',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                },
-                {
-                    purchaseList: '6969996',
-                    supplier: '迈巴赫',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '874,000,00',
-                    makeListMan: '张作霖',
-                    purchaseMan: '客官',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                },
-                {
-                    purchaseList: '5555587',
-                    supplier: '法拉利',
-                    purchaseCompany: '联星贸易',
-                    inRepository: '402',
-                    purchaseRMB: '562,000,00',
-                    makeListMan: '段祺瑞',
-                    purchaseMan: '小二',
-                    purchaseDate: '2018-05-16',
-                    inState: '已入库',
-                    reviewState: '已审核',
-                    prop: ''
-                }
-            ]
+            tableData: []
         }
     },
     computed:{},
     methods:{
-        handleSizeChange(){
+        selectChangeEvent(){
 
         },
-        handleCurrentChange(){
-
+        resetBtnEvent () {
+            for (var key in this.tableParam) {
+                this.tableParam[key] = ""
+            }
         },
-        inRepositoryEvent(){
+        getSupplierSelectData(){
+            api.getSupplierSelectData().then((response) => {
+                this.supplierSelectData = response.data.list
+            })
+        },
+        getRepositorySelectData(){
+            api.getRepoSelectData().then((response) => {
+                this.repositorySelectData = response.data
+            })
+        },
+        getBuyerComSelectData(){
+            api.getBuyerComSelectData().then((response) => {
+                this.buyerNameSelectData = response.data
+            })
+        },
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
+            this.getTableData()
+        },
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
+            this.getTableData()
+        },
+        tableOperEvent(rowid, type){
+            this.$store.commit('setCurrentModelId', rowid)
+
+            if (type == 1) {
+                this.$router.push({
+                    path: '/lookPurchaseReject'
+                })
+            }
+            if (type == 2) {
+                this.myBase.confirmDelet('你确定要永久删除此退货单信息?', () => {
+                    api.deleteRejectItem(rowid).then((response) => {
+                        this.$message({
+                            type: 'success',
+                            duration: 1500,
+                            showClose: true,
+                            message: '删除成功'
+                        })
+
+                        this.tableParam.pageSize = 10
+                        this.tableParam.pageNo = 1
+                        this.getTableData()
+
+                    })
+                })
+            }
 
         },
         closeExportWrap(){
@@ -292,17 +328,31 @@ export default {
             }
         },
         addRejectEvent(){
+            this.$store.commit('setCurrentModelId', "")
             this.$router.push({
                 path: '/addPurchaseReject'
             })
         },
         datePickerChange(data){
-            this.tableParam.startTime = data[0] / 1000
-            this.tableParam.endTime = data[1] / 1000
+            this.tableParam.startTime = Math.round(data[0] / 1000)
+            this.tableParam.endTime = Math.round(data[1] / 1000)
+        },
+        getTableData(){
+            api.getRejectListData(this.tableParam).then((response) => {
+                this.tableData = response.data.list
+                this.totalPage = response.data.total
+            })
         }
 
     },
-    created(){},
+    created(){
+        this.getSupplierSelectData()
+        this.getRepositorySelectData()
+        this.getBuyerComSelectData()
+    },
+    activated(){
+        this.getTableData()
+    },
     mounted(){}
 }
 </script>
