@@ -4,7 +4,8 @@ import store from 'store'
 
 // noinspection JSAnnotator
 export default {
-    backSpaceBiden(){ //禁止返回键
+    ///////////////////////////////////////////////////////////////////////禁止返回键
+    backSpaceBiden(){
         function doKey(e){
             var ev = e || window.event; //获取event对象
             var obj = ev.target || ev.srcElement;//获取事件源
@@ -20,6 +21,7 @@ export default {
         //禁止后退键  作用于IE、Chrome
         document.onkeydown = doKey;
     },
+    //////////////////////////////////////////////////////////////////////是否有权限
     isHasPerssion(keyvalue){
         var perssionArr = store.state.home.menuSetting.perssionArr
         var res = perssionArr.indexOf(keyvalue)
@@ -29,6 +31,7 @@ export default {
         }
         return true
     },
+    //////////////////////////////////////////////////////////////////////验证弹框
     confirm(text, success, cancel){
         MessageBox.confirm(text, '温馨提示', {
             confirmButtonText: '确定',
@@ -72,11 +75,13 @@ export default {
             });
         });
     },
+    //////////////////////////////////////////////////////////////////////深拷贝
     deepCopy(initalObj) {
         var obj = {};
         obj = JSON.parse(JSON.stringify(initalObj));
         return obj;
     },
+    //////////////////////////////////////////////////////////////////////随机编码
     MathRand(type) {
         let sixNum = ''
         let myDate = new Date()
@@ -87,7 +92,23 @@ export default {
             sixNum += Math.floor(Math.random() * 10);
         }
         return type + '-' + myDate.getFullYear() + monthArr[myDate.getMonth()] + day + '-' + sixNum
-    }
+    },
+    //////////////////////////////////////////////////////////////////////时间戳计算时间
+    computeTime(start, end){
+        var contTime = parseFloat(end) - parseFloat(start)
+        var day = Math.round(contTime / 86400)
+        var reshour = contTime % 86400
+        var hour = Math.round(reshour / 3600)
+        var resmin = reshour % 3600
+        var min = Math.round(resmin / 3600)
 
+        if (hour < 10) {
+            hour = '0' + hour
+        }
+        if (min < 10) {
+            min = '0' + min
+        }
+        return day + '天' + hour + '小时' + min + '分'
+    }
 
 }

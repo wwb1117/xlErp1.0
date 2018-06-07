@@ -74,7 +74,7 @@
                         label="操作">
                          <template slot-scope="scope">
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 1)"
+                            @click.native="tablePropEvent(scope.row)"
                             type="text"
                             size="small">
                             详情
@@ -132,9 +132,10 @@ export default {
             this.tableParam.pageNo = val
             this.getTableData()
         },
-        tablePropEvent(index, type){
+        tablePropEvent(rowData){
+            this.$store.commit('setCurrentModelId', rowData)
             this.$router.push({
-                path: '/waitReviewRe'
+                path: '/IReviewDetail'
             })
         },
 
