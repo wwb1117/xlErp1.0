@@ -501,6 +501,7 @@ export default {
         this.getPurchaseList()
     },
     activated() {
+        this.$store.commit('hideChooseGoods')
         this.clearAll()
         // 更新制单人
         const USER = sessionStorage.getItem('user')

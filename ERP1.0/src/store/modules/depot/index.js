@@ -3,6 +3,9 @@ export default {
         showAddGoods: {
             id: 0
         },
+        showPurchase: {
+            id: 0
+        },
         goodsInfoBound: []
 
     },
@@ -15,6 +18,12 @@ export default {
         },
         showAddGoods(state){
             state.showAddGoods.id = 1
+        },
+        showPurchase(state){
+            state.showPurchase.id = 1
+        },
+        hidePurchase(state){
+            state.showPurchase.id = 0
         }
     }
 };
