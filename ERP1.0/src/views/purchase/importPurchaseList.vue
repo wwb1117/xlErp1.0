@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="model_footer">
-            <el-button size="small" style="width: 90px; margin-left: 25px;">返 回</el-button>
+            <el-button v-RouterBack size="small" style="width: 90px; margin-left: 25px;">返 回</el-button>
         </div>
     </div>
 </template>

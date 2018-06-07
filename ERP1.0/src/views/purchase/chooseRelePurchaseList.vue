@@ -6,121 +6,137 @@
         </div>
         <div class="head color_gray">
             选择关联采购单
-            <i style="float: right; line-height: 60px" class="el-icon-close"></i>
+            <i v-RouterBack style="float: right; line-height: 60px" class="el-icon-close"></i>
         </div>
         <div class="banner">
-            <el-form :inline="true" :model="searchData" label-position="right" size="small" label-width="80px">
+            <el-form :inline="true" :model="tableParam" label-position="right" size="small" label-width="80px">
                 <el-form-item>
                     <el-input
                         size="small"
                         placeholder="请输入采购单号"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px', marginLeft: '17px'}"
-                        v-model="serchText">
+                        v-model="tableParam.purchaseOrderNo">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button @click="getTableData" :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div class="content" :style="{height: $store.state.home.modelContentHeight - 126 + 'px'}">
             <el-table
-            :data="tableData"
-            style="width: 100%">
+                :data="tableData"
+                ref="chooseReleTable"
+                :height="$store.state.home.modelContentHeight - 146"
+                @select="tableSelectEvent"
+                @selection-change="tableChangeEvent"
+                highlight-current-row
+                style="width: 100%">
                 <el-table-column
                     type="selection"
                     width="55">
                 </el-table-column>
                 <el-table-column
-                    prop="good"
-                    label="商品"
-                    width="280">
+                    prop="purchaseOrderNo"
+                    label="采购单号"
+                    >
+                </el-table-column>
+                <el-table-column
+                    prop="sellerName"
+                    label="供应商"
+                    >
+                </el-table-column>
+                <el-table-column
+                    prop="buyerName"
+                    label="采购单位">
+                </el-table-column>
+                <el-table-column
+                    prop="purchaseHouseName"
+                    label="入库仓库">
+                </el-table-column>
+                <el-table-column
+                    prop="receivedPrice"
+                    label="采购金额">
+                </el-table-column>
+                <el-table-column
+                    prop="creator"
+                    label="制单人">
+                </el-table-column>
+                <el-table-column
+                    prop="purchasingAgent"
+                    label="采购员">
+                </el-table-column>
+                <el-table-column
+                    prop="orderTime"
+                    label="采购时间">
                     <template slot-scope="scope">
-                        <img :src="scope.row.good.img" style="float: left;">
-                        <span class="color_blue" v-text="scope.row.good.text"></span>
+                        <span>{{scope.row.orderTime | time_m}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="num"
-                    label="编号"
-                    width="180">
-                </el-table-column>
-                <el-table-column
-                    prop="barcode"
-                    label="条码">
-                </el-table-column>
-                <el-table-column
-                    prop="size_sku"
-                    label="规格-SKU">
-                </el-table-column>
-                <el-table-column
-                    prop="qualityDate"
-                    label="保质期">
-                </el-table-column>
-                <el-table-column
-                    prop="mount"
-                    width="90"
-                    label="数量">
+                    prop="storeStatus"
+                    label="入库状态">
                     <template slot-scope="scope">
-                        <el-input @change.native="mountFormat(scope)" @keyup.native="mountFormat(scope)" v-model="scope.row.mount" size="small"></el-input>
+                        <span style="color: #f37069" v-if="scope.row.storeStatus == 0">待入库</span>
+                        <span style="color: #e7a03d" v-if="scope.row.storeStatus == 1">部分入库</span>
+                        <span v-if="scope.row.storeStatus == 2">已入库</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="address"
-                    label="单位">
+                    prop="auditStatus"
+                    label="审核状态">
+                    <template slot-scope="scope">
+                        <span style="color: #f37069" v-if="scope.row.auditStatus == 0">待审核</span>
+                        <span style="color: #e7a03d" v-if="scope.row.auditStatus == 1">审核中</span>
+                        <span v-if="scope.row.auditStatus == 2">审核通过</span>
+                        <span style="color: #f37069" v-if="scope.row.auditStatus == 3">审核不通过</span>
+                        <span style="color: #f37069" v-if="scope.row.auditStatus == 4">撤回</span>
+                    </template>
                 </el-table-column>
             </el-table>
         </div>
         <div class="model_footer">
             <el-button @click="saveBtnEvent" style="width: 90px" type="primary" size="small">确定</el-button>
-            <el-button @click="canselBtnEvent" style="width: 90px" size="small">取消</el-button>
+            <el-button v-RouterBack style="width: 90px" size="small">取消</el-button>
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :page-sizes="[10, 30, 50, 100]"
+                :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
+import api from 'api/purchase'
 export default {
     data(){
         return {
-            searchData: {
-                goodsType: '',
-                serchText: ''
+            tableParam: {
+                searchText: '',
+                purchaseOrderNo: '',
+                buyerId: '',
+                purchaseDate: '',
+                storeStatus: '',
+                auditStatus: '',
+                startTime: "",
+                endTime: "",
+                sellerName: "",
+                sellerId: "",
+                buyerName: "",
+                repositoryId: "",
+                repositoryName: "",
+                pageNo: 1,
+                pageSize: 10
             },
-            currentPage: 2,
-            tableData: [
-                {
-                    good: {
-                        img: 'static/img/purchase/test.png',
-                        text: '再牛逼的肖邦也弹不出老子的忧伤'
-                    },
-                    num : '85211414',
-                    barcode: 'WSSS',
-                    size_sku: '2018年1月',
-                    qualityDate: '24',
-                    mount: '1',
-                    unit: '罐'
-                },
-                {
-                    good: {
-                        img: 'static/img/purchase/test.png',
-                        text: '情缘为你画地为牢'
-                    },
-                    num : '456522555',
-                    barcode: 'SSSs22',
-                    size_sku: '2018年1月',
-                    qualityDate: '24',
-                    mount: '1',
-                    unit: '罐'
-                }
-            ]
+            selectTableData: [],
+            totalPage: 1,
+            currentPage: 1,
+            tableData: []
+
         }
     },
     computed:{},
@@ -128,19 +144,47 @@ export default {
         mountFormat(data){
             data.row.mount = data.row.mount.replace(/[^\d\.]/g, '')
         },
-        handleSizeChange(){
-
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
+            this.getTableData()
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
+            this.getTableData()
+        },
+        tableSelectEvent(selection, row){
+            this.$refs.chooseReleTable.clearSelection()
+            this.$refs.chooseReleTable.toggleRowSelection(row);
+        },
+        getTableData(){
+            return api.getPurchaseList(this.tableParam).then((response) => {
+                this.totalPage = response.data.total
+                this.tableData = response.data.list
+            })
+        },
+        tableChangeEvent(selection){
+            this.selectTableData = selection
         },
         saveBtnEvent(){
-
+            if (this.selectTableData.length && this.selectTableData.length >= 1) {
+                this.$store.commit('setCurrentModelId', this.selectTableData[0].id)
+                this.$router.go(-1)
+            } else {
+                this.$message({
+                    type: 'warning',
+                    showClose: true,
+                    duration: 1500,
+                    message: '请选择表格数据!'
+                });
+            }
         }
 
 
     },
     created(){},
+    activated(){
+        this.getTableData()
+    },
     mounted(){}
 }
 </script>
