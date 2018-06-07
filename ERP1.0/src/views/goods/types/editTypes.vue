@@ -12,7 +12,7 @@
                     <el-form-item label="规格名称" required >
                         <el-input v-model="from.unitMsg" style="width:338px" size='small' disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="规格值" required :style="{height: (from.itemSupplyPropertyVOs.length)*50 + 'px'}">
+                    <el-form-item label="规格值" required :style="{height: (from.itemSupplyPropertyVOs.length + 1)*50 + 'px'}" >
                         <el-table
                             :data='from.itemSupplyPropertyVOs'
                             border
@@ -151,6 +151,16 @@ export default {
 
         this.goodid = msg
         api.getitemsupplyPropertyunitId(msg).then((response)=>{
+            if (response.data.itemSupplyPropertyVOs == []){
+                response.data.itemSupplyPropertyVOs = [
+                    {
+                        skuNumber: '',
+                        supplyMsg: '',
+                        isDeleted: '0'
+                    }
+                ]
+            }
+
             this.from = response.data
             // console.log(response.data)
 
@@ -164,8 +174,18 @@ export default {
 
         this.goodid = msg
         api.getitemsupplyPropertyunitId(msg).then((response)=>{
-            console.log(response)
+            if (response.data.itemSupplyPropertyVOs == []){
+                response.data.itemSupplyPropertyVOs = [
+                    {
+                        skuNumber: '',
+                        supplyMsg: '',
+                        isDeleted: '0'
+                    }
+                ]
+            }
+
             this.from = response.data
+
 
         }).catch((error)=>{
             console.log(error)

@@ -196,14 +196,6 @@ export default {
 
         var id = this.$store.state.home.brandId
 
-        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
-            this.group = []
-            this.group = response.data
-            // console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
-
         api.getcategorylist().then((response)=>{
             this.options = []
             this.options = response.data.list
@@ -221,24 +213,30 @@ export default {
                 this.from.itemBrandCategories[i] = this.from.itemBrandCategories[i].categoryName
             }
 
+            if (this.from.isControl == 1){
+                this.from.isControl = true
+                this.showhiddden = true
+            } else {
+                this.from.isControl = false
+            }
         }).catch((error)=>{
             console.log(error)
         })
 
+        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            this.group = []
+            this.group = response.data
+            this.groupName = this.from.itemBrandShopGroups
+            // console.log(response)
+        }).catch((error)=>{
+            console.log(error)
+        })
 
 
     },
     activated() {
 
         var id = this.$store.state.home.brandId
-
-        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
-            this.group = response.data
-            // console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
-
 
         api.getcategorylist().then((response)=>{
             this.options = response.data.list
@@ -251,12 +249,28 @@ export default {
         api.getitemBrandid(id).then((response)=>{
 
             this.from = response.data.list
-            // console.log(response.data.list)
+            console.log(response.data.list)
             for (var i in this.from.itemBrandCategories){
                 this.text[i] = this.from.itemBrandCategories[i].rate
                 this.from.itemBrandCategories[i] = this.from.itemBrandCategories[i].categoryName
             }
 
+            if (this.from.isControl == 1){
+                this.from.isControl = true
+                this.showhiddden = true
+            } else {
+                this.from.isControl = false
+            }
+
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            this.group = []
+            this.group = response.data
+            this.groupName = this.from.itemBrandShopGroups
+            // console.log(response)
         }).catch((error)=>{
             console.log(error)
         })

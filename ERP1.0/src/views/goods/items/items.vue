@@ -143,6 +143,20 @@ export default {
                     } else {
                         this.items[i].isDisplay = false
                     }
+                    for (var k in this.items[i].itemCategories){
+                        if (this.items[i].itemCategories[k].isDisplay == 1){
+                            this.items[i].itemCategories[k].isDisplay = true
+                        } else {
+                            this.items[i].itemCategories[k].isDisplay = false
+                        }
+                        for (var y in this.items[i].itemCategories[k].itemCategories){
+                            if (this.items[i].itemCategories[k].itemCategories[y].isDisplay == 1){
+                                this.items[i].itemCategories[k].itemCategories[y].isDisplay = true
+                            } else {
+                                this.items[i].itemCategories[k].itemCategories[y].isDisplay = false
+                            }
+                        }
+                    }
                 }
 
 
