@@ -28,9 +28,12 @@
                         <br>
                         <el-form-item label="商品分类">
                             <el-select v-model="searchFormData.itemTypeId" placeholder="请选择">
-                                <el-option label="全部" value=""></el-option>
-                                <el-option label="区域一" value="shanghai"></el-option>
-                                <el-option label="区域二" value="beijing"></el-option>
+                                <el-option
+                                    v-for="item in item_option"
+                                    :key="item.id"
+                                    :label="item.categoryName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="选择仓库">
@@ -82,13 +85,13 @@
                         placeholder="请输入编码/条码/名称"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="searchFormData.itemSku">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small" @click="search">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
                     <div :style="{display: 'inline-block', marginLeft: '45px'}">
                         <span>预警状态</span>
-                        <el-select v-model="searchFormData.houseStatus" placeholder="请选择">
+                        <el-select v-model="searchFormData.houseStatus" @change="changeStatus" placeholder="请选择">
                             <el-option label="高于上限" value="1"></el-option>
                             <el-option label="低于下限" value="2"></el-option>
                             <el-option label="低于效期" value="3"></el-option>
@@ -245,7 +248,7 @@ export default {
     data(){
         return {
             warnState: '',
-            serchText: '',
+            item_option: '',
             currentPage: 1,
             loading: false,
             dialogFormVisible: false,
@@ -296,10 +299,15 @@ export default {
     computed:{},
     methods:{
         handleSizeChange(data){
+            this.currentPage = 1
             this.getTableList({pageNo: this.currentPage, pageSize: data})
         },
         handleCurrentChange(data){
             this.getTableList({pageNo: data})
+        },
+        changeStatus(data) {
+            this.searchFormData.houseStatus = data
+            this.search()
         },
         // 获取库存列表
         getTableList(data) {
@@ -375,6 +383,12 @@ export default {
             }
 
         },
+        // 获取商品类目列表
+        getItemList() {
+            API.getItemAll().then(res => {
+                this.item_option = res.data.list
+            })
+        },
         // 搜索清空
         clear() {
             for (let key in this.searchFormData) {
@@ -413,6 +427,8 @@ export default {
     created(){},
     mounted(){
         this.getPurchaseList()
+        this.getItemList()
+        this.getTableList()
     },
     activated() {
         this.currentPage = 1

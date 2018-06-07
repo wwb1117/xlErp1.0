@@ -258,6 +258,7 @@ export default {
     computed:{},
     methods:{
         handleSizeChange(data){
+            this.currentPage = 1
             this.getOutboundList({pageNo: this.currentPage, pageSize: data})
         },
         handleCurrentChange(data){

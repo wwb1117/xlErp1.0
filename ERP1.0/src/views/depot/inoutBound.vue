@@ -102,7 +102,7 @@
                         placeholder="请输入编号/条码/名称"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="searchText">
+                        v-model="searchFormData.itemSku">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" type="primary" size="small" @click="search">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
@@ -209,7 +209,6 @@ export default {
     data(){
         return {
             warnState: '',
-            searchText: '',
             currentPage: 1,
             selectTableData: [],
             isSupperBoxShow: false,
@@ -287,6 +286,7 @@ export default {
     computed:{},
     methods:{
         handleSizeChange(data){
+            this.currentPage = 1
             this.getInoutBoundList({pageNo: this.currentPage, pageSize: data})
         },
         handleCurrentChange(data){
@@ -310,7 +310,8 @@ export default {
         // 获取商品类目列表
         getItemList() {
             API.getItemAll().then(res => {
-                this.item_option = res.data
+                this.item_option = res.data.list
+                console.log(this.item_option, "sdadsada")
             })
         },
         // 搜索清空
@@ -318,6 +319,7 @@ export default {
             for (let key in this.searchFormData) {
                 this.searchFormData[key] = null
             }
+            this.outInboundType = ''
         },
         // 搜索
         search() {
@@ -409,14 +411,13 @@ export default {
     },
     activated() {
         this.getInoutBoundList()
+        this.clear()
         this.currentPage = 1;
         // 商品库存页进入
         if (this.$route.params.id) {
             this.clear()
             this.searchFormData.itemSku = this.$route.params.id
             this.search()
-            this.clear()
-            this.searchText = this.$route.params.id
         }
     }
 }
