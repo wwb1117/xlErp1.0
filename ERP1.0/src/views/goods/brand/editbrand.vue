@@ -248,8 +248,8 @@ export default {
 
         api.getitemBrandid(id).then((response)=>{
 
-            this.from = response.data.list
-            console.log(response.data.list)
+            this.from = response.data
+            console.log(response.data)
             for (var i in this.from.itemBrandCategories){
                 this.text[i] = this.from.itemBrandCategories[i].rate
                 this.from.itemBrandCategories[i] = this.from.itemBrandCategories[i].categoryName

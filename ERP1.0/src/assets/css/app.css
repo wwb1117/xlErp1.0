@@ -177,14 +177,22 @@ input[type="file"] {
 .addbrand_box .el-upload--picture-card{
     width: 100px;
     height: 100px;
-    line-height: 100px
+    line-height: 100px;
+
 }
 .pic_up .el-upload--picture-card{
     width: 108px;
     height: 108px;
     line-height: 108px;
-    margin-left: 100px;
-    margin-bottom: 40px
+    margin-left: 30px;
+    margin-bottom: 40px;
+}
+.pic_up .el-upload-list{
+    margin-left: 30px
+}
+.pic_up .el-upload-list__item{
+    width: 108px;
+    height: 108px;
 }
 .supply_check .el-tag .el-tag__close{
     top:-20px;

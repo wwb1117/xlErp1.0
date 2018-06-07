@@ -72,11 +72,11 @@ export default {
     },
     // 新增商品规格
     postitemskuPropertyadd(data) {
-        return HttpClient.post('/item/skuProperty/add', data)
+        return HttpClient.postJSON('/item/skuProperty/add', data)
     },
     // 批量更新商品规格选项!
     putitemskuPropertyupdate(data) {
-        return HttpClient.put('/item/skuProperty/update', data)
+        return HttpClient.putJSON('/item/skuProperty/update', data)
     },
 
     // 供货规格！
@@ -114,13 +114,21 @@ export default {
     getitemskuProperty(data) {
         return HttpClient.get('/item/sku/list', data)
     },
-    // 添加商品
-    postitemadd(data) {
-        return HttpClient.post('/item/add', data)
+    // 添加商品第一页
+    postitemaddItemFirstStep(data) {
+        return HttpClient.post('/item/addItemFirstStep', data)
     },
-    // 编辑商品
-    putitemupdate(data) {
-        return HttpClient.put('/item/update', data)
+    // 添加商品第二页
+    postitemaddItemSecondStep(data) {
+        return HttpClient.post('/item/addItemSecondStep', data)
+    },
+    // 编辑商品第一页
+    putitemupdateFirstStep(data) {
+        return HttpClient.put('/item/updateFirstStep', data)
+    },
+    // 编辑商品第一页
+    putitemupdateSecondStep(data) {
+        return HttpClient.put('/item/updateSecondStep', data)
     },
     // 根据商品id获取商品信息
     getitemitemId(itemId) {

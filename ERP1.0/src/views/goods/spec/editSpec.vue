@@ -117,9 +117,9 @@ export default {
 
             let obj = {
                 id: this.editNum.id,
-                skuPropertyName: JSON.stringify(this.editNum.skuPropertyName),
-                remark: JSON.stringify(this.editNum.remark),
-                itemSkuPropertyValueDTOS: JSON.stringify(this.editNum.propertyValueList)
+                skuPropertyName: this.editNum.skuPropertyName,
+                remark: this.editNum.remark,
+                itemSkuPropertyValueDTOS: this.editNum.propertyValueList
             }
 
             api.putitemskuPropertyupdate(obj).then((response)=>{

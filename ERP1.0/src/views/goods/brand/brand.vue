@@ -30,7 +30,7 @@
                 <ul class="brand_list brand_text" v-for='(item,index) in this.brand' :key='index' style="font-size:12px">
                     <li style="width:200px">{{item.brandName}}</li>
                     <li style="width:170px"><span v-for="(date,index) in item.itemBrandCategories" :key='index' style="margin-right:5px">{{date.categoryName}}</span></li>
-                    <li style="width:150px">40%</li>
+                    <li style="width:150px"><span v-for="(date,index) in item.itemBrandCategories" :key='index' style="margin-right:5px">{{date.rate}}%</span></li>
                     <li style="width:190px" class="brand_list_img">
                         <img :src="item.brandImg" alt="">
                     </li>

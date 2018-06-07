@@ -76,7 +76,7 @@
                                         <el-input v-model="form.barCode" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span='6' style="margin-left:25px">
+                                <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="商品编码" required >
                                         <el-input v-model="form.itemCode" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
@@ -94,7 +94,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span='6' style="margin-left:25px">
+                                <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="商品分类" required >
                                         <el-select v-model="form.categoryId" placeholder="请选择"  size='small'>
                                             <el-option
@@ -118,7 +118,7 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span='6' style="margin-left:25px">
+                                <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="建议零售价"  class="money">
                                         <el-input v-model="form.money" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
@@ -130,13 +130,13 @@
                                         <el-select v-model="form.unitId" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in unitIdoptions"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"></el-option>
+                                                :key="item.id"
+                                                :label="item.unit"
+                                                :value="item.id"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span='6' style="margin-left:25px">
+                                <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="保质期" required >
                                         <el-input v-model="form.expirationDate" size="small" placeholder="长度<64" suffix="月"></el-input>
                                     </el-form-item>
@@ -150,7 +150,7 @@
                     </li>
                     <!-- 商品规格 -->
                     <li class="standard">
-                        <el-form ref="standard" label-width="100px">
+                        <el-form label-width="100px">
                             <el-form-item label="商品规格" required>
                                 <div class="add_standard">
                                     <div class="add_small_standard add_standard">
@@ -243,10 +243,12 @@
                     <li class="pic_up">
                         <div class="updata_box">
                             <el-upload
-                                action=""
+                                :action="this.upDateImgUrl"
+                                :data='sentData'
                                 list-type="picture-card"
                                 :on-preview="handlePictureCardPreview"
-                                :on-remove="handleRemove">
+                                :on-remove="handleRemove"
+                                :on-success='handleAvatarSuccess'>
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <!-- action上传地址 -->
@@ -274,17 +276,17 @@
                     </li>
                     <!-- 供货设置 -->
                     <li class="supply">
-                        <el-form ref="standard" :model="standard" label-width="100px">
+                        <el-form  :model="nextform" label-width="100px">
                             <el-form-item label="包装类型">
                                 <div class="add_standard">
                                     <div class="add_small_standard add_standard">
                                         <el-form-item label="类型名" label-width="70px">
-                                            <el-select v-model="value" placeholder="选择类型" size='small'>
+                                            <el-select v-model="nextform.typesname" placeholder="选择类型名" size='small'  @change='gettypevalue'>
                                                 <el-option
-                                                v-for="item in goods"
-                                                :key="item.num"
-                                                :label="item.label"
-                                                :value="item.num">
+                                                v-for="item in typenameoptions"
+                                                :key="item.id"
+                                                :label="item.unitMsg"
+                                                :value="item.id">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
@@ -292,12 +294,12 @@
                                     <div style="padding:10px;display:flex" class="supply_check">
                                         <el-form-item label="类型值" label-width="70px">
                                             <span style="position:relative;margin-right:20px" v-for="item in shu" :key="item" >
-                                                <el-select v-model="value" placeholder="选择类型" size='small'>
+                                                <el-select v-model="nextform.typesvalue" placeholder="选择类型值" size='small'>
                                                     <el-option
-                                                    v-for="item in goods"
-                                                    :key="item.num"
-                                                    :label="item.label"
-                                                    :value="item.num">
+                                                    v-for="item in typevalueoptions"
+                                                    :key="item.id"
+                                                    :label="item.supplyMsg"
+                                                    :value="item.id">
                                                     </el-option>
                                                 </el-select>
                                                 <i class="el-icon-circle-close" @click="delet(index)" style="position:relative;right:13px;top:-15px;font-size:16px;cursor: pointer"></i>
@@ -315,19 +317,21 @@
                     </li>
                     <!-- 分享设置 -->
                     <li class="share">
-                        <el-form ref="standard" :model="standard" label-width="100px">
+                        <el-form  :model="nextform" label-width="100px">
                             <el-form-item label="分享图片">
                                 <div class="updata_box">
                                     <el-upload
-                                        action=""
+                                        :action="this.upDateImgUrl2"
+                                        :data='sentData2'
                                         list-type="picture-card"
-                                        :on-preview="handlePictureCardPreview"
-                                        :on-remove="handleRemove">
+                                        :on-preview="handlePictureCardPreview2"
+                                        :on-remove="handleRemove2"
+                                        :on-success='handleAvatarSuccess2'>
                                         <i class="el-icon-plus" style="font-size:16px"></i>
                                     </el-upload>
                                     <!-- action上传地址 -->
-                                    <el-dialog :visible.sync="dialogVisible">
-                                        <img width="100%" :src="dialogImageUrl" alt="">
+                                    <el-dialog :visible.sync="otherVisible">
+                                        <img width="100%" :src="otherImgUrl" alt="">
                                     </el-dialog>
                                 </div>
                                 <p style="color:#a1a4a4">最多上传9张图片，建议尺寸为：640px X 640px</p>
@@ -345,14 +349,14 @@
                     </li>
                     <!-- 其他设置 -->
                     <li class="other">
-                         <el-form ref="standard" :model="standard" label-width="100px">
+                         <el-form  :model="nextform" label-width="100px">
                             <el-form-item label="报价设置"  style="margin:0">
-                                <el-select v-model="value" placeholder="选择类型" size='small'>
+                                <el-select v-model="nextform.setmoneny" placeholder="选择类型" size='small'>
                                     <el-option
-                                        v-for="item in goods"
-                                        :key="item.num"
-                                        :label="item.label"
-                                        :value="item.num">
+                                        v-for="item in setmonenyoptions"
+                                        :key="item.id"
+                                        :label="item.value"
+                                        :value="item.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -360,19 +364,19 @@
                                 <el-tag size="small" closable>供应商分组</el-tag>
                             </el-form-item>
                             <el-form-item label="商品热度" >
-                                <el-input v-model="goodhot" size='small' style="width:215px"></el-input>
+                                <el-input v-model="nextform.goodhot" size='small' style="width:215px"></el-input>
                             </el-form-item>
                             <el-form-item label="减库存设置">
-                                <el-radio v-model="delnum" label="1">下单减库存</el-radio>
-                                <el-radio v-model="delnum" label="2">支付减库存</el-radio>
+                                <el-radio v-model="nextform.delnum" label="1">下单减库存</el-radio>
+                                <el-radio v-model="nextform.delnum" label="2">支付减库存</el-radio>
                             </el-form-item>
                             <el-form-item label="提成设置">
-                                <el-select v-model="value" placeholder="选择类型" size='small'>
+                                <el-select v-model="nextform.deduct" placeholder="选择类型" size='small'>
                                     <el-option
-                                        v-for="item in goods"
-                                        :key="item.num"
-                                        :label="item.label"
-                                        :value="item.num">
+                                        v-for="item in deductoptions"
+                                        :key="item.id"
+                                        :label="item.value"
+                                        :value="item.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -404,6 +408,28 @@ export default {
     name: 'addGoods',
     data () {
         return {
+
+            // 商品主图
+            dialogImageUrl: '',
+            dialogVisible: false,
+
+            // 分享图片
+            otherImgUrl: '',
+            otherVisible: false,
+
+            upDateImgUrl: process.env.API_ROOT + '/f/upload',
+            sentData: {
+                file: '',
+                uploadType: 'cms-address'
+            },
+            fileList1:[],
+
+            upDateImgUrl2: process.env.API_ROOT + '/f/upload',
+            sentData2: {
+                file: '',
+                uploadType: 'cms-address'
+            },
+            fileList2:[],
 
             // 步骤条
             testText: ['1. 编辑基本信息', '2. 设置商品参数'],
@@ -439,6 +465,11 @@ export default {
             categoryIdoptions:[],
             sendWayoptions:[],
             unitIdoptions:[],
+            itemImgs1:[
+                {
+                    imgUrl:''
+                }
+            ],
 
             // 规格表单
             standard: {
@@ -451,19 +482,6 @@ export default {
                 resource: '',
                 desc: ''
             },
-            // 属性表单
-            property: [
-                {
-                    propertyName: '',
-                    propertyValue: ''
-                }
-            ],
-            // 商品主图
-            dialogImageUrl: '',
-            dialogVisible: false,
-
-            tinymce: '',
-
             // 商品规格
             checked: true,
             // 规格值
@@ -491,26 +509,38 @@ export default {
                     }
                 }
             ],
-            updata: false,
+
+            // 属性表单
+            property: [
+                {
+                    propertyName: '',
+                    propertyValue: ''
+                }
+            ],
 
             // 内容2
 
-            // 商品选择类型
-            goods: [
-                {
-                    num: '选项1',
-                    label: '黄金糕'
-                },
-                {
-                    num: '选项2',
-                    label: '双皮奶'
-                }
-            ],
+            // 商品选择包装类型
+            nextform: {
+                typesname: [],
+                typesvalue: [],
+                setmoneny:[],
+                goodhot:'',
+                delnum: '1',
+                deduct: []
+            },
+
+            // 包装类型
+            typenameoptions:[],
+            typevalueoptions:[],
+
+            // 报价提成
+            setmonenyoptions: [],
+            deductoptions:[],
+
             num: '',
             // 规格数
-            shu: ['1'],
-            goodhot: '',
-            delnum: '1'
+            shu: ['1']
         }
     },
     methods:{
@@ -547,6 +577,20 @@ export default {
                 }
             });
 
+            if (this.fileList1.length >= this.itemImgs1.length){
+                for (var a = 0 ; a < this.fileList1.length - 1 ; a ++){
+                    let obj = {
+                        imgUrl:''
+                    }
+
+                    this.itemImgs1.push(obj)
+                }
+            }
+
+            for (var i in this.fileList1){
+                this.itemImgs1[i].imgUrl = this.fileList1[i].data.url
+            }
+
             let obj = {
                 // 商品信息
                 itemType: this.form.itemType,
@@ -561,16 +605,25 @@ export default {
                 sendWay: this.form.sendWay,
                 money: this.form.money,
                 unitId: this.form.unitId,
+
                 expirationDate: this.form.expirationDate,
+                // 商品规格
+                skuProperty: '',
                 // 商品属性
                 property: JSON.stringify(this.property),
                 // 商品图片
-                itemImgs: JSON.stringify(this.dialogImageUrl),
+                itemImgs: JSON.stringify(this.itemImgs1),
                 // 商品描述
-                description: ''
+                description: this.editor1.txt.text()
             }
 
             console.log(obj)
+            // api.postitemaddItemFirstStep(obj).then((response)=>{
+            //     alert(1)
+            // }).catch((error)=>{
+            //     console.log(error)
+            // })
+
         },
         prev() {
             this.currentStep = 1
@@ -582,20 +635,54 @@ export default {
                 this.editor1.create()
             })
         },
-        // submit() {
-        //     console.log(1)
-        // },
+        submit() {
+            let obj = {
+                typesname: this.nextform.typesname.toString(),
+                typesvalue: this.nextform.typesvalue.toString(),
+                setmoneny:this.nextform.setmoneny.toString(),
+                goodhot:this.nextform.setmoneny,
+                delnum: this.nextform.setmoneny,
+                deduct: this.nextform.deduct.toString(),
+                sharetext:this.editor2.txt.text()
+            }
+
+            console.log(obj)
+            // api.postitemaddItemSecondStep(obj).then((response)=>{
+            //     alert(1)
+            // }).catch((error)=>{
+            //     console.log(error)
+            // })
+        },
         // 上传图片
+        // 移除
         handleRemove(file, fileList) {
             console.log(file, fileList);
         },
+        // 变大查看
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
         },
+        // 成功回调
+        handleAvatarSuccess(file, fileList) {
+            this.fileList1.push(file)
+            console.log(this.fileList1)
+        },
+        // 分享图片
+        handleRemove2(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePictureCardPreview2(file) {
+            this.otherImgUrl = file.url;
+            this.otherVisible = true;
+        },
+        handleAvatarSuccess2(file, fileList) {
+            this.fileList2.push(file)
+            // console.log(this.fileList2)
+        },
         // 重置
         reset() {
-            this.$router.reload()
+
         },
         // 添加规格
         add() {
@@ -649,6 +736,7 @@ export default {
             this.spec.push(obj)
         },
 
+        // 第一页
         // 获取商品品牌选项
         getbrandId() {
             let obj = {
@@ -679,7 +767,37 @@ export default {
         },
         // 获取单位选项
         getunitId() {
+            api.getitemunitlist().then((response)=>{
+                this.unitIdoptions = response.data.itemUnitList
+                // console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
 
+        // 第二页
+        // 获取包装类型规格
+        gettypename() {
+            let obj = {
+                pageNo: 1,
+                pageSize: 999999
+            }
+
+            api.getitemsupplyPropertylist(obj).then((response)=>{
+                // console.log(response)
+                this.typenameoptions = response.data.list
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+        gettypevalue() {
+
+            api.getitemsupplyPropertyunitId(this.nextform.typesname.toString()).then((response)=>{
+                console.log(response)
+                this.typevalueoptions = response.data.itemSupplyPropertyVOs
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
 
 
@@ -693,20 +811,16 @@ export default {
         this.conent1 = true
         this.conent2 = false
 
-
-
     },
     activated() {
         this.getbrandId()
         this.getcategoryId()
-
+        this.gettypename()
+        this.getunitId()
     },
     mounted() {
         this.editor1 = new WangEditor('#editor1')
-
         this.editor1.create()
-
-
     }
 
 
@@ -847,6 +961,7 @@ export default {
     background: white;
     padding: 10px 40px;
 }
+
 /* 控制步骤 */
 .add_bottom{
     height: 50px;

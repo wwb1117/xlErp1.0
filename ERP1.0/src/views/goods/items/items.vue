@@ -133,7 +133,12 @@ export default {
 
         },
         get() {
-            api.getcategorylist().then((response)=>{
+            let page = {
+                pageNo: 1,
+                pageSize: 30
+            }
+
+            api.getcategorylist(page).then((response)=>{
                 // console.log(response.data.list)
                 this.items = response.data.list
 
