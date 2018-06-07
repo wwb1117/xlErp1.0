@@ -30,21 +30,21 @@
                         <el-button plain style="margin-left: 10px" icon="el-icon-download" @click="exportInventory">下载商品库存数据</el-button>
                     </div>
                 </div>
-                    <div class="import_wrap">
-                    <p class="import_title">2.添加盘点数据</p>
-                    <div class="greyBg">
-                        <el-upload
-                            ref="upload"
-                            :style="{width: '450px', display: 'inline-block'}"
-                            :action.sync= upLoadUrl
-                            :before-upload="beforeUpload"
-                            :on-success="handleAvatarSuccess"
-                            :auto-upload="false">
-                            <el-input style="width: 280px" slot="trigger" placeholder="添加盘点数据" readonly="true"><i style="margin-top: 13px" slot="prefix" class="fa fa-paperclip fa-lg"></i></el-input>
-                            <el-button slot="trigger" style="margin-left: 10px; width: 90px" type="primary">导入</el-button>
-                        </el-upload>
+                    <div class="import_wrap" v-perss="'盘点导入'">
+                        <p class="import_title">2.添加盘点数据</p>
+                        <div class="greyBg">
+                            <el-upload
+                                ref="upload"
+                                :style="{width: '450px', display: 'inline-block'}"
+                                :action.sync= upLoadUrl
+                                :before-upload="beforeUpload"
+                                :on-success="handleAvatarSuccess"
+                                :auto-upload="false">
+                                <el-input style="width: 280px" slot="trigger" placeholder="添加盘点数据" readonly="true"><i style="margin-top: 13px" slot="prefix" class="fa fa-paperclip fa-lg"></i></el-input>
+                                <el-button slot="trigger" style="margin-left: 10px; width: 90px" type="primary">导入</el-button>
+                            </el-upload>
+                        </div>
                     </div>
-                </div>
                 </div>
                 <div v-if="currentStep == 2" class="secondStep mt40">
                     <div class="textCenter">
@@ -55,7 +55,7 @@
                             <p>1、系统中没有指定商品存在</p>
                             <p>2、盘点数量不能为空</p>
                             <p>3、商品编码、商品名称、商品规格完全相同的多条商品</p>
-                            <el-button plain icon="el-icon-download" style="padding: 8px 15px" @click="downLoadData">下载商品库存数据</el-button>
+                            <el-button v-perss="'盘点异常数据导出'" plain icon="el-icon-download" style="padding: 8px 15px" @click="downLoadData">下载商品库存数据</el-button>
                             <p class="grey">按上述要求检查修改后，重新上传</p>
                         </div>
                     </div>

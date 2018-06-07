@@ -369,9 +369,9 @@ export default {
         // 进入详情页
         inBoundDetail(index, data) {
             if (data.type == 1) { //出库
-                this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'outbound'}})
+                this.$router.push({name: '出入库详情', params: {id: data.id, type: 'outbound'}})
             } else if (data.type == 0) { //入库
-                this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'inbound'}})
+                this.$router.push({name: '出入库详情', params: {id: data.id, type: 'inbound'}})
             }
         },
         closeExportWrap(){
