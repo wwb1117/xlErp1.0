@@ -463,11 +463,6 @@ export default {
     },
     activated() {
         this.getTableData()
-
-        // 更新制单人
-        const USER = sessionStorage.getItem('user')
-
-        this.addFormData.creator = JSON.parse(USER).loginCode
         this.MathRand(6, 'DB')
     }
 }

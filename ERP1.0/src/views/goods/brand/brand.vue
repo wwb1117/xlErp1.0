@@ -3,8 +3,7 @@
         <!-- 顶部 -->
         <header class="brand_top">
             <p class='brand_title'>商品品牌</p>
-            <el-button type="primary" @click="openAddbrand" size='small' style="height:32px;margin-top:-3px">新增品牌</el-button>
-            <!-- 新增表单内容 -->
+            <el-button type="primary" @click="openAddbrand" size='small' style="height:32px;margin-top:-3px" v-perss="'增加商品品牌'">新增品牌</el-button>
 
         </header>
         <section class="brand_conent" >
@@ -28,7 +27,7 @@
                     <li style="width:110px">排序</li>
                     <li style="width:130px">操作</li>
                 </ul>
-                <ul class="brand_list brand_text" v-for='(item,index) in this.brand' :key='index'>
+                <ul class="brand_list brand_text" v-for='(item,index) in this.brand' :key='index' style="font-size:12px">
                     <li style="width:200px">{{item.brandName}}</li>
                     <li style="width:170px"><span v-for="(date,index) in item.itemBrandCategories" :key='index' style="margin-right:5px">{{date.categoryName}}</span></li>
                     <li style="width:150px">40%</li>
@@ -37,24 +36,14 @@
                     </li>
                     <li style="width:180px">
                         <el-switch
-                            v-model="item.isRecommended">
+                            v-model="item.isRecommended"
+                            @change='change(item.isRecommended, item.id)'>
                         </el-switch>
                     </li>
                     <li style="width:110px">{{item.sort}}</li>
                     <li style="width:130px">
-                        <el-button type='text'  @click="openedit(item.id)">编辑</el-button>
-                        <el-button type="text" @click="del = true">删除</el-button>
-                        <el-dialog
-                            title="温馨提示"
-                            :visible.sync="del"
-                            width="30%"
-                            :before-close="handleClose">
-                            <span>此操作将永久删除该项</span>
-                            <span slot="footer" class="dialog-footer">
-                                <el-button @click="del = false">取 消</el-button>
-                                <el-button type="primary" @click="del = false" disabled>确 定</el-button>
-                            </span>
-                        </el-dialog>
+                        <el-button type='text'  @click="openedit(item.id)"><span style="font-size:12px">编辑</span></el-button>
+                        <el-button type="text" disabled  v-perss="'删除商品品牌'"><span style="font-size:12px">删除</span></el-button>
                     </li>
                 </ul>
             </div>
@@ -95,25 +84,19 @@ export default {
             currentPage: 2,
             totalPage: 1,
             // 关联分类
-            // 删除
-            del: false,
+
             page: {
                 pageNo: 1,
                 pageSize: 30,
                 brandName: ''
             },
 
-            brand: []
+            brand: [],
+
+            brandtext:{}
         }
     },
     methods: {
-        handleClose(done) {
-            this.$confirm('确认关闭？')
-                .then(_ => {
-                    done();
-                })
-                .catch(_ => {});
-        },
         handleSizeChange(val) {
             this.page.pageSize = val
         },
@@ -137,11 +120,58 @@ export default {
 
             })
         },
+        change(data, item){
+            api.getitemBrandid(item).then((response)=>{
+                // console.log(response.data.list)
+                this.brandtext = response.data.list
+
+                var arr = []
+
+                for (var i in this.brandtext.itemBrandShopGroups){
+                    arr[i] = this.brandtext.itemBrandShopGroups[i].groupId
+                }
+
+                let obj = {
+                    id: this.brandtext.id,
+                    brandName: this.brandtext.brandName,
+                    isControl: this.brandtext.isControl,
+                    rateList: JSON.stringify(this.brandtext.itemBrandCategories),
+                    brandImg: this.brandtext.brandImg,
+                    sort: this.brandtext.sort,
+                    isRecommended: data,
+                    shopGroupIds: arr.toString()
+                }
+
+                if (obj.isRecommended == true){
+                    obj.isRecommended = 1
+                } else {
+                    obj.isRecommended = 0
+                }
+
+                api.putitemitemBrandupdate(obj).then((responses)=>{
+
+                }).catch((error)=>{
+                    console.log(error)
+                })
+
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
         get() {
 
             api.getitemBrandlist(this.page).then((response)=>{
-                // console.log(response.data.itemVOs)
+                console.log(response.data.itemVOs)
                 this.brand = response.data.itemVOs
+
+                for (var i in this.brand){
+                    if (this.brand[i].isRecommended == 1){
+                        this.brand[i].isRecommended = true
+                    } else {
+                        this.brand[i].isRecommended = false
+                    }
+                }
+
             }).catch((error)=>{
 
                 console.log(error)

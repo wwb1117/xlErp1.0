@@ -3,7 +3,7 @@
         <!-- 顶部 -->
         <header class="spec_top">
             <p class='spec_title'>商品规格</p>
-            <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='openAddspec'>新增规格</el-button>
+            <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='openAddspec' v-perss="'新增商品规格'">新增规格</el-button>
         </header>
         <section class="spec_conent" >
             <div class="spec_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
@@ -23,13 +23,13 @@
                     <li style="width:300px">备注</li>
                     <li style="width:110px">操作</li>
                 </ul>
-                <ul class="spec_list spec_text" v-for='(item,index) in this.spec' :key="index">
+                <ul class="spec_list spec_text" v-for='(item,index) in this.spec' :key="index" style="font-size:12px">
                     <li style="width:210px">{{item.skuPropertyName}}</li>
                     <li style="width:500px"><span v-for="(date,index) in item.list" :key="index" style="margin-right:5px">{{date.skuPropertyValueName}}</span></li>
                     <li style="width:300px">这是备注信息</li>
                     <li style="width:110px">
-                        <el-button type='text' @click='gotoEdit(item.id)'>编辑</el-button>
-                        <el-button type="text" @click="del = true">删除</el-button>
+                        <el-button type='text' @click='gotoEdit(item.id)' v-perss="'更新商品规格'"><span style="font-size:12px">编辑</span></el-button>
+                        <el-button type="text" @click="del = true" ><span style="font-size:12px">删除</span></el-button>
                         <el-dialog
                             title="温馨提示"
                             :visible.sync="del"

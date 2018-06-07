@@ -140,6 +140,10 @@ export default {
                 ]
                 this.specNum.skuPropertyName = ''
                 this.text = ''
+                this.$message({
+                    type: 'success',
+                    message: '新增商品规格成功！'
+                });
                 this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)

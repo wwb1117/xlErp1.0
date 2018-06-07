@@ -11,11 +11,11 @@
         <section class="addbrand_conent">
             <div class="addbrand_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <!-- conents -->
-                <el-form v-model="from">
-                    <el-form-item required label='品牌名称' :label-width='formLabelWidth' style="height:50px">
+                <el-form ref="addbrand" :rules="rules" :model="from" >
+                    <el-form-item prop='brandName' label='品牌名称' :label-width='formLabelWidth' >
                         <el-input type='text' suffix-text='0/15'  size='small' style="width:338px" v-model="from.brandName"></el-input>
                     </el-form-item>
-                    <el-form-item label="关联分类" required :label-width="formLabelWidth" style="height:50px;margin-bottom:30px" >
+                    <el-form-item label="关联分类" required :label-width="formLabelWidth"  >
                         <el-select
                             placeholder="请选择"
                             size='small'
@@ -33,10 +33,10 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label='服务费率' required :label-width='formLabelWidth' style="height:50px" v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
+                    <el-form-item label='服务费率' required :label-width='formLabelWidth'  v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
                         <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
                     </el-form-item>
-                    <el-form-item label="品牌LOGO" :label-width="formLabelWidth" style="height:100px">
+                    <el-form-item label="品牌LOGO" :label-width="formLabelWidth" >
                         <el-upload
                             action=""
                             list-type="picture-card"
@@ -49,13 +49,13 @@
                             <img width="100%" :src="from.brandImg" alt="">
                         </el-dialog>
                     </el-form-item>
-                    <el-form-item label="排序" required :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item label="排序" prop='sort' :label-width="formLabelWidth" >
                         <el-input  placeholder="数值越大越靠前"  size='small' style="width:338px" v-model="from.sort"></el-input>
                     </el-form-item>
-                    <el-form-item  label="控货品牌" :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item  label="控货品牌" :label-width="formLabelWidth" >
                         <el-checkbox v-model="from.isControl" @change="changes">勾选为控货品牌</el-checkbox>
                     </el-form-item>
-                    <el-form-item label="控货门店" :label-width="formLabelWidth" style="height:50px;margin-bottom:30px" v-if='showhiddden'>
+                    <el-form-item label="控货门店" :label-width="formLabelWidth" v-if='showhiddden'>
                         <el-select
                             v-model="groupName"
                             multiple
@@ -67,13 +67,13 @@
                             style="width:338px">
                             <el-option
                             v-for="item in group"
-                            :key="item.id"
+                            :key="item.groupId"
                             :label="item.groupName"
-                            :value="item.id">
+                            :value="item.groupId">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="是否推荐" required :label-width="formLabelWidth" style="height:50px">
+                    <el-form-item label="是否推荐" required :label-width="formLabelWidth" >
                         <el-switch
                             v-model="from.isRecommended">
                         </el-switch>
@@ -82,7 +82,7 @@
             </div>
         </section>
         <footer class="addbrand_footer">
-            <el-button type="primary" size='small' style="width:90px" @click='trueconfim'>保存</el-button>
+            <el-button type="primary" size='small' style="width:90px" @click='trueconfim' v-perss="'修改商品品牌'">保存</el-button>
             <el-button size='small' style="width:90px" @click="returnprev">返回</el-button>
         </footer>
     </section>
@@ -96,9 +96,7 @@ export default {
             dialogVisible: false,
             formLabelWidth: '120px',
 
-            from: {
-
-            },
+            from: {},
 
             value: '',
             options: [],
@@ -108,7 +106,16 @@ export default {
             showhiddden: false,
 
             group: [],
-            groupName: []
+            groupName: [],
+
+            rules: {
+                brandName: [
+                    { required: true, message: '请输入品牌名称', trigger: 'blur' }
+                ],
+                sort: [
+                    { required: true, message: '请输入排序', trigger: 'blur' }
+                ]
+            }
 
         }
     },
@@ -122,56 +129,59 @@ export default {
             this.dialogVisible = true;
         },
         trueconfim() {
-            for (var w in this.from.itemBrandCategories){
-                for (var e in this.options){
-                    if (this.from.itemBrandCategories[w] == this.options[e].categoryName){
-                        this.from.itemBrandCategories[w] = this.options[e].id
+            this.$refs['addbrand'].validate((valid)=>{
+                if (valid){
+                    for (var w in this.from.itemBrandCategories){
+                        for (var e in this.options){
+                            if (this.from.itemBrandCategories[w] == this.options[e].categoryName){
+                                this.from.itemBrandCategories[w] = this.options[e].id
+                            }
+                        }
                     }
+
+                    if (this.from.isControl == true){
+                        this.from.isControl = 1
+                    } else {
+                        this.from.isControl = 0
+                    }
+
+                    if (this.from.isRecommended == true){
+                        this.from.isRecommended = 1
+                    } else {
+                        this.from.isRecommended = 0
+                    }
+
+                    let obj = {
+                        id: this.from.id,
+                        brandName: this.from.brandName,
+                        isControl: this.from.isControl,
+                        rateList: JSON.stringify(this.from.itemBrandCategories),
+                        brandImg: this.from.brandImg,
+                        sort: this.from.sort,
+                        isRecommended: this.from.isRecommended,
+                        shopGroupIds:this.groupName.toString()
+                    }
+
+                    api.putitemitemBrandupdate(obj).then((response)=>{
+                        this.group = []
+                        this.groupName = []
+                        this.options = []
+                        this.from = {}
+                        this.$message({
+                            type: 'success',
+                            message: '更新商品品牌成功！'
+                        });
+                        this.$router.go(-1)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
                 }
-            }
 
-            if (this.from.isControl == true){
-                this.from.isControl = 1
-            } else {
-                this.from.isControl = 0
-            }
-
-            if (this.from.isRecommended == true){
-                this.from.isRecommended = 1
-            } else {
-                this.from.isRecommended = 0
-            }
-
-
-            let obj = {
-                id: this.from.id,
-                brandName: this.from.brandName,
-                isControl: this.from.isControl,
-                rateList: JSON.stringify(this.from.itemBrandCategories),
-                brandImg: this.from.brandImg,
-                sort: this.from.sort,
-                isRecommended: this.from.isRecommended,
-                shopGroupIds:this.groupName.toString()
-            }
-
-            api.putitemitemBrandupdate(obj).then((response)=>{
-
-            }).catch((error)=>{
-                console.log(error)
             })
 
         },
         returnprev() {
-            this.from = {
-                id: '',
-                brandName: '',
-                isControl: '',
-                itemBrandCategories: [],
-                brandImg: '',
-                sort: '',
-                isRecommended: ''
-            }
-            this.value = ''
+            this.$refs['addbrand'].resetFields();
             this.$router.go(-1)
         },
         changes() {
@@ -187,6 +197,7 @@ export default {
         var id = this.$store.state.home.brandId
 
         api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
+            this.group = []
             this.group = response.data
             // console.log(response)
         }).catch((error)=>{
@@ -194,6 +205,7 @@ export default {
         })
 
         api.getcategorylist().then((response)=>{
+            this.options = []
             this.options = response.data.list
             // console.log(response)
         }).catch((error)=>{
@@ -202,6 +214,7 @@ export default {
 
         api.getitemBrandid(id).then((response)=>{
             // console.log(response.data.list)
+            this.from = {}
             this.from = response.data.list
             for (var i in this.from.itemBrandCategories){
                 this.text[i] = this.from.itemBrandCategories[i].rate

@@ -149,6 +149,7 @@ export default {
             })
         },
         have() {
+
             api.getuserstatus(this.userid).then((response)=>{
                 // console.log(response)
                 this.$refs.tree.setCheckedKeys(response.data);

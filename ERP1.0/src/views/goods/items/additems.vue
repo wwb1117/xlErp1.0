@@ -11,11 +11,11 @@
         <section class="additems_conent">
             <div class="additems_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <!-- conents -->
-                <el-form :model="msg">
-                    <el-form-item label="分类名称" required :label-width="formLabelWidth" style="height:50px">
+                <el-form ref="additems" :rules="rules" :model="msg" >
+                    <el-form-item label="分类名称" prop='name' :label-width="formLabelWidth" >
                         <el-input v-model="msg.name" type='text' suffix-text='0/15' size='small' style="width:338px"></el-input>
                     </el-form-item>
-                    <el-form-item label="分类图片" :label-width="formLabelWidth"  style="height:100px">
+                    <el-form-item label="分类图片" :label-width="formLabelWidth"  >
                         <el-upload
                             action=""
                             list-type="picture-card"
@@ -28,10 +28,10 @@
                             <img width="100%" :src="msg.dialogImageUrl" alt="">
                         </el-dialog>
                     </el-form-item>
-                    <el-form-item label="排序" required :label-width="formLabelWidth"  style="height:50px">
+                    <el-form-item label="排序" prop='sort' :label-width="formLabelWidth"  >
                         <el-input v-model="msg.sort" placeholder="数值越大越靠前"  size='small' style="width:338px"></el-input>
                     </el-form-item>
-                    <el-form-item label="是否显示" required :label-width="formLabelWidth"  style="height:50px">
+                    <el-form-item label="是否显示" required :label-width="formLabelWidth"  >
                         <el-switch
                             v-model="msg.value">
                         </el-switch>
@@ -63,7 +63,16 @@ export default {
 
             dialogVisible: false,
 
-            parentid : ''
+            parentid : '',
+
+            rules: {
+                name: [
+                    { required: true, message: '请输入分类名称', trigger: 'blur' }
+                ],
+                sort: [
+                    { required: true, message: '请输入排序', trigger: 'blur' }
+                ]
+            }
 
         }
     },
@@ -76,34 +85,41 @@ export default {
             this.dialogVisible = true;
         },
         tryeconfim() {
+            this.$refs['additems'].validate((valid)=>{
+                if (valid){
+                    if (this.msg.value == true){
+                        this.msg.value = 1
+                    } else {
+                        this.msg.value = 0
+                    }
 
-            if (this.msg.value == true){
-                this.msg.value = 1
-            } else {
-                this.msg.value = 0
-            }
+                    let obj = {
+                        parentId: this.parentid,
+                        categoryImg: this.msg.dialogImageUrl,
+                        categoryName: this.msg.name,
+                        isDisplay: this.msg.value,
+                        sort: this.msg.sort
+                    }
 
-            let obj = {
-                parentId: this.parentid,
-                categoryImg: this.msg.dialogImageUrl,
-                categoryName: this.msg.name,
-                isDisplay: this.msg.value,
-                sort: this.msg.sort
-            }
-
-            console.log(obj.categoryImg)
-            api.postitemcategoryadd(obj).then((response)=>{
-                this.msg = {
-                    name: '',
-                    dialogImageUrl: '',
-                    sort:'',
-                    value: true
+                    api.postitemcategoryadd(obj).then((response)=>{
+                        this.msg = {
+                            name: '',
+                            dialogImageUrl: '',
+                            sort:'',
+                            value: true
+                        }
+                        this.parentid = ''
+                        this.$message({
+                            type: 'success',
+                            message: '新增商品分类成功！'
+                        });
+                        this.$router.go(-1)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
                 }
-                this.parentid = ''
-                // this.$router.go(-1)
-            }).catch((error)=>{
-                console.log(error)
             })
+
         },
         returnitems() {
             this.msg = {
@@ -113,6 +129,7 @@ export default {
                 value: true
             }
             this.parentid = ''
+            this.$refs['additems'].resetFields();
             this.$router.go(-1)
         }
 
@@ -149,6 +166,7 @@ export default {
     color: #5e6161;
     background: white;
     padding: 48px 20px 0 20px;
+    overflow: auto
 }
 
 /* 底部 */

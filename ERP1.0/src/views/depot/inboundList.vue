@@ -163,6 +163,7 @@
                         label="操作">
                         <template slot-scope="scope">
                             <el-button
+                                :style="{marginRight: '12px'}"
                                 @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
@@ -170,13 +171,13 @@
                             </el-button>
                             <div v-if="scope.row.auditStatus == 0" style="display: inline-block">
                                 <!--待审核-->
-                                <el-button
-                                    :style="{marginLeft: '12px'}"
-                                    @click.native.prevent="editTable(scope.$index, scope.row)"
-                                    type="text"
-                                    size="small">
-                                    修改
-                                </el-button>
+                                <!--<el-button-->
+                                    <!--:style="{marginLeft: '12px'}"-->
+                                    <!--@click.native.prevent="editTable(scope.$index, scope.row)"-->
+                                    <!--type="text"-->
+                                    <!--size="small">-->
+                                    <!--修改-->
+                                <!--</el-button>-->
                                 <el-button
                                     @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                     type="text"
@@ -203,7 +204,7 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page.sync="currentPage"
                 :page-sizes="[10, 30, 50, 100]"
                 :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
@@ -219,6 +220,7 @@ import API from 'api/depot'
 export default {
     data(){
         return {
+            userInfo: {},
             loading: false,
             timeout:  null,
             serchText: '',
@@ -263,11 +265,11 @@ export default {
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(data){
+            this.getInboundList({pageNo: this.currentPage, pageSize: data})
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(data){
+            this.getInboundList({pageNo: data})
         },
         // 获取列表数据
         getInboundList(data) {
@@ -286,7 +288,7 @@ export default {
         },
         // 跳转详情页
         inBoundDetail(index, data) {
-            this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'inbound'}})
+            this.$router.push({name: '出入库详情', params: {id: data.id, type: 'inbound'}})
         },
         // 修改
         editTable(index, data) {
@@ -321,7 +323,6 @@ export default {
         },
         // 撤回
         undo(index, data) {
-            console.log(data, "dasddsadsad")
             this.$confirm('此操作将撤回该审核订单, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -330,7 +331,7 @@ export default {
                 let obj = {
                     processType: 3,
                     orderId: data.id,
-                    submitterId: data.id // 本地账户的信息id
+                    submitterId: this.userInfo.user.id // 本地账户的信息id
                 }
 
                 API.undoAudit(3, obj).then(res => {
@@ -424,9 +425,12 @@ export default {
     },
     created(){},
     mounted(){
-        this.getInboundList()
         this.getPurchaseList()
-
+    },
+    activated() {
+        this.getInboundList();
+        this.currentPage = 1
+        this.userInfo = localStorage.getItem('userInfo')
     }
 }
 </script>

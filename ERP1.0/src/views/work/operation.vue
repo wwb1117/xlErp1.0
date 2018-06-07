@@ -24,7 +24,7 @@
                         width='30'>
                     </el-table-column>
                     <el-table-column
-                        prop="id"
+                        prop="userName"
                         label='操作人'
                         width='150'>
                     </el-table-column>
@@ -53,7 +53,7 @@
                         label='操作时间'
                         width='250'>
                         <template slot-scope="scope">
-                            <span style="color:#3f9ffe">{{scope.row.created}}</span>
+                            <span style="color:#3f9ffe">{{scope.row.created }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column

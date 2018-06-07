@@ -39,11 +39,11 @@
                             <el-table-column
                                 prop='isDeleted'
                                 label='是否启用'>
-                            <template slot-scope="scope">
-                                <el-switch
-                                    v-model="scope.row.isDeleted">
-                                </el-switch>
-                            </template>
+                                <template slot-scope="scope">
+                                    <el-switch
+                                        v-model="scope.row.isDeleted">
+                                    </el-switch>
+                                </template>
                             </el-table-column>
                         </el-table>
 
@@ -89,7 +89,6 @@ export default {
     methods: {
         addEditnum() {
             let obj = {
-                skuPropertyId: this.editNum.id,
                 skuPropertyValueName: '',
                 isDeleted: 0
             }
@@ -108,17 +107,27 @@ export default {
         },
         trueconfim() {
 
+            for (var i in this.editNum.propertyValueList){
+                if (this.editNum.propertyValueList[i].isDeleted == true){
+                    this.editNum.propertyValueList[i].isDeleted = 1
+                } else {
+                    this.editNum.propertyValueList[i].isDeleted = 0
+                }
+            }
+
             let obj = {
-                skuProperties : JSON.stringify({
-                    skuPropertyId: this.editNum.id,
-                    skuPropertyName: this.editNum.skuPropertyName,
-                    remark: this.editNum.remark,
-                    itemSkuPropertyValueDTOS: this.editNum.propertyValueList
-                })
+                id: this.editNum.id,
+                skuPropertyName: JSON.stringify(this.editNum.skuPropertyName),
+                remark: JSON.stringify(this.editNum.remark),
+                itemSkuPropertyValueDTOS: JSON.stringify(this.editNum.propertyValueList)
             }
 
             api.putitemskuPropertyupdate(obj).then((response)=>{
                 this.editNum = []
+                this.$message({
+                    type: 'success',
+                    message: '更新商品规格成功！'
+                });
                 this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)

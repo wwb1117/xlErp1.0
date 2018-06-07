@@ -70,7 +70,7 @@
             </div>
         </section>
         <footer class="editTypes_footer">
-            <el-button type="primary" size='small' @click="trueconfim" style="width:90px">保存</el-button>
+            <el-button type="primary" size='small' @click="trueconfim" style="width:90px" v-perss="'更新供货规格'">保存</el-button>
             <el-button size='small' @click='returnPrev' style="width:90px">取消</el-button>
         </footer>
     </section>
@@ -88,10 +88,16 @@ export default {
 
             text: '',
             remark: '',
-            from: [],
+            from: {
+                itemSupplyPropertyVOs:[
+                    {
+                        skuNumber: '',
+                        supplyMsg: '',
+                        isDeleted: '0'
+                    }
+                ]
+            },
             goodid: ''
-
-            // disabled: false
 
         }
     },
@@ -127,8 +133,12 @@ export default {
             console.log(this.from)
 
             api.putitemsupplyPropertyupdate(obj).then((response)=>{
-                // this.$router.go(-1)
-                console.log(response)
+                this.$message({
+                    type: 'success',
+                    message: '更新包装类型成功！'
+                });
+                this.$router.go(-1)
+                // console.log(response)
             }).catch((error)=>{
                 console.log(error)
             })
@@ -154,7 +164,7 @@ export default {
 
         this.goodid = msg
         api.getitemsupplyPropertyunitId(msg).then((response)=>{
-            // console.log(response)
+            console.log(response)
             this.from = response.data
 
         }).catch((error)=>{

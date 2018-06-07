@@ -9,7 +9,7 @@
         <section class="addTypes_conent" >
             <div class="addTypes_box AEgoods_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <el-form ref="types"  label-width="100px">
-                    <el-form-item label="规格名称" required v-model="unitId">
+                    <el-form-item label="规格名称" required v-model="unitId" >
                         <el-select v-model="unitId" placeholder="请选择" style="width:338px" size='small'>
                             <el-option
                                 v-for="item in options"
@@ -152,6 +152,10 @@ export default {
                 ]
                 this.text = ''
                 this.value = ''
+                this.$message({
+                    type: 'success',
+                    message: '新增包装类型成功！'
+                });
                 this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)

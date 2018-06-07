@@ -18,7 +18,7 @@
                     <!-- 轮播图 -->
                     <div class="img_box">
                         <div class="details_img" style="width:418px;height:418px;background:pink">
-                            <img src="" alt="">
+                            <img :src="goodconent.mainImg" alt="">
                         </div>
                         <div class="small_box smallpri_box">
                             <div class="img_prev img_button" ></div>
@@ -42,10 +42,11 @@
                     </div>
                     <!-- 右侧详细内容 -->
                     <ul class="recommend">
-                        <li class="list_title"><h2>{{goods.name}}</h2></li>
-                        <li class="list_recommend" style="margin-top:5px">{{goods.recommend}}</li>
-                        <li class="list_import"><i class="el-icon-warning" style="line-height:38px"></i> &nbsp; &nbsp;{{goods.import}}</li>
+                        <li class="list_title"><h2>{{ goodconent.title }}</h2></li>
+                        <li class="list_recommend" style="margin-top:5px">{{ goodconent.description }}</li>
+                        <li class="list_import"><i class="el-icon-warning" style="line-height:38px"></i> &nbsp; &nbsp;{{ goodconent.buyRemind }}</li>
                         <li class="list_money"><span style="margin-left:40px">建议零售价：</span><span style="color:#fe7673;">￥</span> &nbsp;<h2 style="color:#fe7673;margin-top:12px">{{goods.money}}</h2></li>
+                        <!-- 规格尺寸 -->
                         <li>
                             <span  style="line-height:33px;margin-left:40px">规格：</span>
                             <p v-for='it in goods.spec' :key="it">{{it}}</p>
@@ -56,14 +57,20 @@
                         </li>
                         <li class="list_dl">
                             <dl>
-                                <dd><span>分类：</span>{{goods.item}}</dd>
-                                <dd><span>贸易类型：</span>{{goods.types}}</dd>
-                                <dd><span>商品条码：</span>{{goods.code}}</dd>
-                                <dd><span>保质期：</span>{{goods.time}}</dd>
+                                <dd>
+                                    <span>分类：</span>
+                                    <span v-if='goodconent.categoryNameOne'>{{ goodconent.categoryNameOne }}</span>
+                                    <span v-if='goodconent.categoryNameTwo'>- {{ goodconent.categoryNameTwo }}</span>
+                                    <span v-if='goodconent.categoryNameThree'>- {{ goodconent.categoryNameThree }}</span>
+                                </dd>
+                                <dd><span>贸易类型：</span>{{ goodconent.sendWay }}</dd>
+                                <dd><span>商品条码：</span>{{ goodconent.barCode }}</dd>
+                                <dd><span>保质期：</span>{{ goodconent.expirationDate }} 个月</dd>
                             </dl>
                             <dl style="margin-left:100px">
-                                <dd><span>品牌：</span>{{goods.brand}}</dd>
-                                <dd><span>商品编码：</span>{{goods.num}}</dd>
+                                <dd><span>品牌：</span>{{ goodconent.brandName }}</dd>
+                                <dd><span>商品编码：</span>{{ goodconent.itemCode }}</dd>
+                                <!-- 计量单位 -->
                                 <dd><span>计量单位：</span>{{goods.unit}}</dd>
                             </dl>
                         </li>
@@ -79,11 +86,13 @@
             </div>
         </section>
         <footer class="details_footer">
-            <el-button size='small' @click="returnPrev">返回</el-button>
+            <el-button size='small' @click="returnPrev" style="width:90px">返回</el-button>
         </footer>
     </section>
 </template>
 <script>
+import api from 'api/goods'
+
 export default {
     data() {
         return {
@@ -102,7 +111,9 @@ export default {
                 unit: '罐',
                 time: '36'
             },
-            activeName: 'first'
+            activeName: 'first',
+
+            goodconent:{}
         }
     },
     created() {
@@ -115,6 +126,22 @@ export default {
         returnPrev() {
             this.$router.push('goodsList')
         }
+    },
+    // created() {
+    //     var id = this.$store.state.home.goodsmoreId
+
+    //     alert (id)
+    // },
+    activated() {
+        var id = this.$store.state.home.goodsmoreId
+
+        api.getitemitemId(id).then((response)=>{
+            console.log(response)
+            this.goodconent = response.data.item
+        }).catch((error)=>{
+            console.log(error)
+        })
+
     }
 }
 </script>
@@ -139,6 +166,10 @@ export default {
 .smallpri dd:first-child{
     margin-left: 0
 }
+.details_img img{
+    width: 418px;
+    height: 418px;
+}
 /* 顶部 */
 .details_header{
     height: 45px;
@@ -156,12 +187,13 @@ export default {
     border: 1px solid #e6e9eb;
     color: #5e6161;
     background: white;
-    padding: 50px
+    padding: 50px;
+    overflow: auto
 }
 /* 内容 */
 .details_text{
     display: flex;
-    height: 520px
+
 }
 .recommend{
     margin-left: 50px;

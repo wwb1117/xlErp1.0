@@ -5,7 +5,8 @@
             <span> - 新增{{$route.params.type}}单</span>
         </div>
         <div class="model_content" >
-            <div class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
+            <add-good v-if="isShowAddGoods" @saveAddgoodsFn="fromAddGoods"></add-good>
+            <div v-if="!isShowAddGoods" class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
                 <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="110px">
                     <div class="banner">
                         基本信息
@@ -117,12 +118,12 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="itemSku"
                                 label="编号"
                                 width="180">
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.itemId === ''">
                                         <el-autocomplete
+                                            disabled="true"
                                             v-model="querySearchText"
                                             :style="{width: '270px'}"
                                             :fetch-suggestions="querySearchAsync"
@@ -134,7 +135,7 @@
                                         <span @click="chooseGoodEvent" class="el-icon-more"></span>
                                     </div>
                                     <div v-if="scope.row.itemId !== ''">
-                                        <span v-text="scope.row.itemId"></span>
+                                        <span v-text="scope.row.itemCode"></span>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -189,11 +190,34 @@
                                 label="单位">
                             </el-table-column>
                             <el-table-column
-                                prop="remark"
                                 label="备注">
+                                <template slot-scope="scope">
+                                    <div class="addRemark" @click="addRemark(scope.$index, scope.row)" v-if="scope.row.remark === ''">
+                                        <i class="el-icon-plus" style="font-weight: 900;font-size: 16px"></i>
+                                    </div>
+                                    <div class="addRemark" @click="addRemark(scope.$index, scope.row)" v-else style="line-height: 20px;max-height: 40px;overflow: hidden;text-overflow: ellipsis">
+                                        <i class="el-icon-edit" style="font-weight: 900;font-size: 16px"></i>
+                                        <span>{{scope.row.remark}}</span>
+                                    </div>
+                                </template>
                             </el-table-column>
                         </el-table>
                     </div>
+                    <el-dialog
+                        title="备注说明"
+                        :visible.sync="dialogVisible"
+                        width="30%">
+                        <el-input
+                            type="textarea"
+                            :rows="4"
+                            placeholder="请输入备注信息，不得超过200字"
+                            v-model="remarkTextarea">
+                        </el-input>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="remarkCancle">取 消</el-button>
+                            <el-button type="primary" @click="remarkSure">确 定</el-button>
+                        </span>
+                    </el-dialog>
 
                     <div class="goodInfoBox">
                         <el-form-item prop="storeNo" label="入库单号" v-if="inbound">
@@ -217,7 +241,7 @@
                 </el-form>
             </div>
         </div>
-        <div class="model_footer">
+        <div class="model_footer" v-if="!isShowAddGoods">
             <el-button style="width: 90px" type="primary" size="small" @click="save">保存</el-button>
             <el-button style="width: 90px" size="small" v-RouterBack>取消</el-button>
         </div>
@@ -226,11 +250,19 @@
 
 <script>
 import 'utils/allEnumeration'
+import addGood from './forms/addGoods'
 import ME from 'utils/base'
 import API from 'api/depot'
 export default {
+    components: {
+        addGood
+    },
     data(){
         return {
+            dialogVisible: false,
+            remarkTextarea: '',
+            remarkIndex: 0,
+            choose: false,
             querySearchText: '',
             houseId_option: [],
             buyerId_option: [],
@@ -238,10 +270,9 @@ export default {
             inbound: false,
             outbound: false,
             goodsInfoData: [{
-                itemSku: '2',
-                currentStoreNumber: 5,
-                itemId: 2,
-                remark: '出库备注'
+                itemCode: '',
+                currentStoreNumber: '',
+                itemId: ''
             }],
             addFormData: {
                 storeType: '',
@@ -282,8 +313,54 @@ export default {
         }
     },
     computed:{
+        isShowAddGoods() {
+            return this.$store.state.depot.showAddGoods.id > 0
+        }
     },
     methods:{
+        // 添加商品备注
+        addRemark(index, data) {
+            this.dialogVisible = true
+            this.remarkTextarea = data.remark
+            this.remarkIndex = index
+        },
+        remarkCancle() {
+            this.dialogVisible = false
+        },
+        remarkSure() {
+            this.dialogVisible = false
+            this.goodsInfoData[this.remarkIndex].remark = this.remarkTextarea
+        },
+        clearAll() {
+            for (let key in this.addFormData) {
+                this.addFormData[key] = ''
+            }
+            this.goodsInfoData = [{
+                itemCode: '',
+                currentStoreNumber: '',
+                itemId: ''
+            }]
+        },
+        fromAddGoods(data) {
+            this.goodsInfoData = []
+            console.log(data, '接收的数据')
+            data.forEach(res => {
+                let obj = {
+                    itemMac: res.barCode,
+                    itemCode: res.itemCode,
+                    itemName: res.title,
+                    itemSpec: res.skuGroups,
+                    itemExp: res.expirationDate,
+                    productionDate: '',
+                    itemId: res.id,
+                    currentStoreNumber: res.mount,
+                    itemQuantifierUnit: res.unit,
+                    remark: ''
+                }
+
+                this.goodsInfoData.push(obj)
+            })
+        },
         goodTableAddEvent(){
             let itemobj = {
                 oper: '',
@@ -302,14 +379,19 @@ export default {
 
             this.goodsInfoData.push(itemobj)
         },
-        goodTableReduceEvent(data){
-            if (this.goodsInfoData.length > 1){
-                this.goodsInfoData.splice(data.$index, 1)
+        goodTableReduceEvent(data) {
+            this.goodsInfoData.splice(data.$index, 1)
+            if (this.goodsInfoData.length < 1){
+                let obj = {
+                    itemId: ''
+                }
+
+                this.goodsInfoData.push(obj)
             }
         },
         arraySpanMethod({row, column, rowIndex, columnIndex}) {
-            console.log(rowIndex)
-            console.log(this.goodsInfoData.length)
+            // console.log(rowIndex)
+            // console.log(this.goodsInfoData.length)
             if (columnIndex === 2) {
                 if (row.itemId == ""){
                     return [1, 3];
@@ -356,18 +438,12 @@ export default {
 
         },
         unitTatalEvent(data){
-            data.row.unitPrice = data.row.unitPrice.replace(/[^\d\.]/g, '')
             data.row.currentStoreNumber = data.row.currentStoreNumber.replace(/[^\d\.]/g, '')
             if (data.row.unitPrice == '' || data.row.currentStoreNumber == ''){
                 data.row.unitTotal = ''
                 return
             }
-            var price = parseFloat(data.row.unitPrice)
-            var num = parseFloat(data.row.currentStoreNumber)
 
-
-
-            data.row.unitTotal = price * num
         },
         getSummaries(param){
             var columns = param.columns
@@ -407,9 +483,7 @@ export default {
 
         },
         chooseGoodEvent(){
-            this.$router.push({
-                path: '/chooseGood'
-            });
+            this.$store.commit('showAddGoods')
         },
         // 产生随机数并加到编码
         MathRand(data, type) {
@@ -427,6 +501,7 @@ export default {
         save() {
             this.addFormData.totalStoreNumber = 0
             this.addFormData.list = []
+            console.log(this.goodsInfoData, "表中信息")
             // 将表中商品信息添加到addFormData
             this.goodsInfoData.forEach(res => {
                 let obj = {
@@ -434,17 +509,21 @@ export default {
                     currentStoreNumber: '',
                     purchasingNumber: '',
                     remark: '',
-                    itemSpec: ''
+                    itemSpec: '3灌装'
                 }
 
                 obj.itemId = res.itemId
                 obj.remark = res.remark
-                obj.itemSpec = res.itemSpec
+                // obj.itemSpec = res.itemSpec
+
                 obj.currentStoreNumber = res.currentStoreNumber
                 this.addFormData.totalStoreNumber += parseInt(obj.currentStoreNumber, 10)
                 this.addFormData.list.push(obj)
             })
-            this.addFormData.creatorId = '12346'
+            console.log(this.addFormData, "表中信息2")
+            let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+            this.addFormData.creatorId = userInfo.user.id
             // 通过仓库ID和采购单ID赋值给addFormData的name
             this.houseId_option.forEach(res => {
                 if (res.id === this.addFormData.storeHouseId) {
@@ -618,9 +697,7 @@ export default {
         this.getPurchaseList()
     },
     activated () {
-        for (let key in this.addFormData) {
-            this.addFormData[key] = ''
-        }
+        this.clearAll()
         if (this.$route.params.type === '入库') {
             this.inbound = true
             this.outbound = false
@@ -639,7 +716,6 @@ export default {
         const USER = sessionStorage.getItem('user')
 
         this.addFormData.creator = JSON.parse(USER).loginCode
-        console.log(this.inbound, this.outbound)
     }
 }
 </script>
@@ -676,5 +752,8 @@ export default {
     }
     .goodInfoBox .el-form-item{
         width: 400px;
+    }
+    .addRemark{
+        cursor: pointer;
     }
 </style>

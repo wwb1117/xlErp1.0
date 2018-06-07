@@ -33,7 +33,10 @@ export default {
         // 商品分类查询详情ID
         itemId: '',
         // 商品分类新增父ID
-        parentId: ''
+        parentId: '',
+
+        // 查看商品详情id
+        goodsmoreId: ''
     },
     mutations: {
         setDevice(state, value){
@@ -114,6 +117,11 @@ export default {
         // 商品分类新增父ID
         setparentid(state, value){
             state.parentId = value
+        },
+
+        // 获取商品详情ID
+        setgoodsmoreid(state, value){
+            state.goodsmoreId = value
         }
     }
 };
