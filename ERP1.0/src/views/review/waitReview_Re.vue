@@ -9,8 +9,20 @@
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="model_content_inner">
-                <div class="content_title">
+                <div v-if="$store.state.home.currentModelId.processType == 1" class="content_title">
                     采购订单审核
+                </div>
+                <div v-if="$store.state.home.currentModelId.processType == 2" class="content_title">
+                    退货单单审核
+                </div>
+                <div v-if="$store.state.home.currentModelId.processType == 3" class="content_title">
+                    入库单审核
+                </div>
+                <div v-if="$store.state.home.currentModelId.processType == 4" class="content_title">
+                    出库单审核
+                </div>
+                <div v-if="$store.state.home.currentModelId.processType == 5" class="content_title">
+                    调拨单审核
                 </div>
                 <div class="banner">
                     当前审核状态
@@ -30,7 +42,7 @@
                         <span class="item_state_pass"></span>
                         <span style="margin-left: 15px">审核通过</span><br>
                         <span style="margin-left: 15px">审核人 : </span>
-                        <span> wwb </span><br>
+                        <span v-text="$store.state.home.userInfo.user.id"></span><br>
                         <span>审核时间 : </span>
                         <span>2018-05-22</span><br>
                         <span>审核意见 : </span>
@@ -40,7 +52,7 @@
                         <span class="item_state_curr"></span>
                         <span class="color_brown" style="margin-left: 15px">审核中</span><br>
                         <span style="margin-left: 15px">审核人 : </span>
-                        <span> wwb </span><br>
+                        <span v-text="$store.state.home.userInfo.user.userName"> </span><br>
                         <span>审核时间 : </span>
                         <span>{{Date.parse(new Date()) / 1000 | time_m}}</span><br>
                         <el-form :inline="true" :rules="rules" :model="formData" label-position="left" size="small" label-width="80px">
@@ -156,9 +168,30 @@ export default {
             this.dialogVisible = true
         },
         lookBtnEvent(){
-            this.$router.push({
-                path: '/lookWaitReviewRe'
-            })
+            var idObj = this.$store.state.home.currentModelId
+            var orderId = idObj.orderId
+
+            if (idObj.processType == 1) { //采购
+                this.$store.commit('setCurrentModelId', orderId)
+                this.$router.push({
+                    path: '/purchaseListDetail/' + '1'
+                })
+            }
+            if (idObj.processType == 2) { //退货
+                this.$store.commit('setCurrentModelId', orderId)
+                this.$router.push({
+                    path: '/lookPurchaseReject'
+                })
+            }
+            if (idObj.processType == 3) { //入库
+                this.$router.push({name: '出入库详情', params: {id: orderId, type: 'inbound'}})
+            }
+            if (idObj.processType == 4) { //出库
+                this.$router.push({name: '出入库详情', params: {id: orderId, type: 'outbound'}})
+            }
+            if (idObj.processType == 5) { //调拨
+                this.$router.push({name: '调拨单详情', params: {id: orderId, type: '调拨'}})
+            }
         },
         getReviewRecord(){
             var idObj = this.$store.state.home.currentModelId

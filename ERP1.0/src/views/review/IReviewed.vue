@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="model_topcol">
-            <span>我发起的</span>
+            <span>我已审批</span>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
             <div class="model_content_inner">
@@ -42,21 +42,31 @@
                     width="50">
                     </el-table-column>
                     <el-table-column
-                        prop="flowName"
+                        prop="processName"
                         label="流程名称"
                         >
                     </el-table-column>
                     <el-table-column
-                        prop="makeListMan"
+                        prop="creator"
                         label="创建人">
                     </el-table-column>
                     <el-table-column
                         prop="setTime"
                         label="创建时间">
+                        <template slot-scope="scope">
+                            <span>{{scope.row.created | time_m}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="state"
                         label="审核状态">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.auditStatus == 0" class="color_brown">待审核</span>
+                            <span v-if="scope.row.auditStatus == 1" class="color_brown">审核中</span>
+                            <span v-if="scope.row.auditStatus == 2" class="color_gray">通过</span>
+                            <span v-if="scope.row.auditStatus == 3" class="color_red">不通过</span>
+                            <span v-if="scope.row.auditStatus == 4" class="color_gray">撤销</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="prop"
@@ -82,7 +92,7 @@
                 :page-sizes="[10, 30, 50, 100]"
                 :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
@@ -96,8 +106,9 @@ export default {
             searchText: '',
             searchTime: '',
             searState: '',
+            totalPage: 1,
             tableParam: {
-                auditorId: '1',
+                auditorId: this.$store.state.home.userInfo.user.id,
                 startTime: '',
                 endTime: '',
                 pageNo: 1,
@@ -113,11 +124,13 @@ export default {
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
+            this.getTableData()
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
+            this.getTableData()
         },
         tablePropEvent(index, type){
             this.$router.push({
@@ -129,14 +142,21 @@ export default {
 
         },
         datePickerChange(data){
-            this.tableParam.startTime = data[0] / 1000
-            this.tableParam.endTime = data[1] / 1000
+            this.tableParam.startTime = Math.round(data[0] / 1000)
+            this.tableParam.endTime = Math.round(data[1] / 1000)
         },
         getTableData(){
             api.getIReviewList(this.tableParam).then((res) => {
                 console.log(res)
+                this.tableData = res.data.list
+                this.totalPage = res.data.total
             })
         }
+    },
+    activated(){
+        this.pageNo = 1
+        this.pageSize = 10
+        this.getTableData()
     },
     created(){},
     mounted(){}

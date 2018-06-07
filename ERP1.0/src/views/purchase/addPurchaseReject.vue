@@ -102,20 +102,19 @@
                         prop="productData"
                         label="剩余可退数">
                             <template slot-scope="scope">
-                                <span v-if="scope.row.returnNumber">{{scope.row.purchasingNumber - scope.row.storeNumber - scope.row.returnNumber}}</span>
-                                <span v-else>{{scope.row.purchasingNumber - scope.row.storeNumber}}</span>
+                                <span>{{scope.row.storeNumber - scope.row.returnNumber}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
-                        prop="currReturnNum"
+                        prop="returnNumber"
                         label="退货数">
                             <template slot-scope="scope">
                                 <div v-if="scope.row.itemSku === ''">
                                     <span></span>
                                 </div>
                                 <div v-if="scope.row.itemSku !== ''">
-                                    <el-tooltip class="item" effect="dark" :content="'不得大于' + (scope.row.purchasingNumber - scope.row.storeNumber - scope.row.returnNumber)" placement="top">
-                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currReturnNum"></el-input>
+                                    <el-tooltip class="item" effect="dark" :content="'不得大于' + (scope.row.storeNumber - scope.row.returnNumber)" placement="top">
+                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.returnNumber"></el-input>
                                     </el-tooltip>
                                 </div>
                             </template>
@@ -125,19 +124,19 @@
                         label="单位">
                         </el-table-column>
                         <el-table-column
-                        prop="unitPrice"
+                        prop="returnUnitPrice"
                         label="退货单价(元)">
                             <template slot-scope="scope">
                                 <div v-if="scope.row.itemSku === ''">
                                     <span></span>
                                 </div>
                                 <div v-if="scope.row.itemSku !== ''">
-                                    <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.unitPrice"></el-input>
+                                    <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.returnUnitPrice"></el-input>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column
-                        prop="unitTotal"
+                        prop="returnMoney"
                         label="小计(元)">
                         </el-table-column>
                     </el-table>
@@ -211,7 +210,7 @@ export default {
                 totalReturnMoney: '',
                 totalReturnNumber: '',
                 creator: '',
-                creatorId: '1',
+                creatorId: '',
                 ReturnOrderNo: '',
                 returnTime: '',
                 consultPrice: '',
@@ -221,7 +220,7 @@ export default {
             },
             rules: {
                 relePurchaseList: [
-                    { required: true, message: '', trigger: 'blur' }
+                    { required: true, message: '请选择关联采购单', trigger: 'blur' }
                 ],
                 returnHouseId: [
                     { required: true, message: '请选择入库仓库', trigger: 'blur' }
@@ -264,8 +263,8 @@ export default {
                 productData: '',
                 purchaseNum: '',
                 itemQuantifierUnit: '',
-                unitPrice: '',
-                unitTotal: ''
+                returnUnitPrice: '',
+                returnMoney: ''
             }
 
             this.goodsInfoData.push(itemobj)
@@ -304,7 +303,7 @@ export default {
                     sums[index] = '合计';
                     return;
                 }
-                if (column.property == 'currReturnNum' || column.property == 'unitTotal'){
+                if (column.property == 'returnNumber' || column.property == 'returnMoney'){
                     const values = data.map(item => Number(item[column.property]));
 
                     if (!values.every(value => isNaN(value))) {
@@ -320,11 +319,11 @@ export default {
 
                     }
 
-                    if (column.property == 'currReturnNum'){
+                    if (column.property == 'returnNumber'){
                         this.addFormData.totalReturnNumber = sums[index]
                     }
 
-                    if (column.property == 'unitTotal'){
+                    if (column.property == 'returnMoney'){
                         this.tabelTotalCost = sums[index]
                         if (this.addFormData.consultPrice == "") {
                             this.addFormData.totalReturnMoney = this.tabelTotalCost
@@ -340,20 +339,20 @@ export default {
             return sums
         },
         unitTatalEvent(data){
-            data.row.unitPrice = data.row.unitPrice.replace(/[^\d\.]/g, '')
-            data.row.currReturnNum = data.row.currReturnNum.replace(/[^\d\.]/g, '')
-            if (data.row.unitPrice == '' || data.row.currReturnNum == ''){
-                data.row.unitTotal = 0
+            data.row.returnUnitPrice = data.row.returnUnitPrice.replace(/[^\d\.]/g, '')
+            data.row.returnNumber = data.row.returnNumber.replace(/[^\d\.]/g, '')
+            if (data.row.returnUnitPrice == '' || data.row.returnNumber == ''){
+                data.row.returnMoney = 0
             } else {
-                var price = parseFloat(data.row.unitPrice)
-                var num = parseFloat(data.row.currReturnNum)
+                var price = parseFloat(data.row.returnUnitPrice)
+                var num = parseFloat(data.row.returnNumber)
 
-                if (num > (data.row.purchasingNumber - data.row.storeNumber - data.row.returnNumber)) {
-                    num = data.row.purchasingNumber - data.row.storeNumber - data.row.returnNumber
-                    data.row.currReturnNum = num
+                if (num > (data.row.storeNumber - data.row.returnNumber)) {
+                    num = data.row.storeNumber - data.row.returnNumber
+                    data.row.returnNumber = num
                 }
 
-                data.row.unitTotal = price * num
+                data.row.returnMoney = price * num
             }
 
         },
@@ -390,6 +389,7 @@ export default {
 
             this.addFormData.returnTime = Math.round(this.addFormData.returnTime / 1000)
             this.addFormData.list = this.goodsInfoData
+            this.addFormData.creatorId = "1"
             api.addRejectList(this.addFormData).then(() => {
                 this.$message({
                     type: 'success',
@@ -397,9 +397,10 @@ export default {
                     duration: 1500,
                     message: '保存成功!'
                 });
-                this.$router.push({
-                    path: '/addPurchaseRejectSuccess'
-                })
+                this.$router.go(-1)
+                // this.$router.push({
+                //     path: '/lookPurchaseReject'
+                // })
             })
         },
         setGoodsInfoData(arr){
@@ -408,9 +409,9 @@ export default {
             arr.forEach((item, index) => {
                 var itemobj = this.myBase.deepCopy(item)
 
-                itemobj.currReturnNum = "1"
-                itemobj.unitPrice = '0'
-                itemobj.unitTotal = "0"
+                itemobj.returnNumber = "1"
+                itemobj.returnUnitPrice = '0'
+                itemobj.returnMoney = "0"
 
                 resArr.push(itemobj)
             })
@@ -430,6 +431,7 @@ export default {
 
         if (id != "") {
             api.getPurchaseListItem(id).then((response) => {
+                this.$refs['addPurRejectForm'].resetFields();
                 var puraseInfo = response.data
 
                 this.addFormData.relePurchaseList = puraseInfo.purchaseOrderNo
@@ -443,7 +445,7 @@ export default {
                 this.addFormData.sellerName = puraseInfo.sellerName
                 this.addFormData.creator = puraseInfo.creator
                 // this.addFormData.creatorId = puraseInfo.creatorId
-                this.addFormData.ReturnOrderNo = this.myBase.MathRand('CG_R')
+                this.addFormData.ReturnOrderNo = this.myBase.MathRand('CG-R')
 
                 this.addFormData.list = puraseInfo.list
 

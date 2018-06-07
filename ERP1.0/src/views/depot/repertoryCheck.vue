@@ -36,7 +36,9 @@
                         <el-upload
                             ref="upload"
                             :style="{width: '450px', display: 'inline-block'}"
-                            :action= upLoadUrl
+                            :action.sync= upLoadUrl
+                            :before-upload="beforeUpload"
+                            :on-success="handleAvatarSuccess"
                             :auto-upload="false">
                             <el-input style="width: 280px" slot="trigger" placeholder="添加盘点数据" readonly="true"><i style="margin-top: 13px" slot="prefix" class="fa fa-paperclip fa-lg"></i></el-input>
                             <el-button slot="trigger" style="margin-left: 10px; width: 90px" type="primary">导入</el-button>
@@ -46,14 +48,14 @@
                 </div>
                 <div v-if="currentStep == 2" class="secondStep mt40">
                     <div class="textCenter">
-                        <h1>导入失败</h1>
-                        <p style="font-size: 18px">共3条数据，成功导入1条，导入失败2条。</p>
+                        <h1 :class="status" v-text="receiveData.content"></h1>
+                        <p style="font-size: 18px">共{{receiveData.totalNumber}}条数据，成功导入{{receiveData.successNumber}}条，导入失败{{receiveData.failNumber}}条。</p>
                         <div class="mt40">
                             <h2>导入失败的原因可能有</h2>
                             <p>1、系统中没有指定商品存在</p>
                             <p>2、盘点数量不能为空</p>
                             <p>3、商品编码、商品名称、商品规格完全相同的多条商品</p>
-                            <el-button plain icon="el-icon-download" style="padding: 8px 15px">下载商品库存数据</el-button>
+                            <el-button plain icon="el-icon-download" style="padding: 8px 15px" @click="downLoadData">下载商品库存数据</el-button>
                             <p class="grey">按上述要求检查修改后，重新上传</p>
                         </div>
                     </div>
@@ -86,7 +88,25 @@ export default {
             houseId: null,
             houseId_option: '',
             loading: true,
-            upLoadUrl: process.env.API_ROOT + '/storage/stockCount/import'
+            status: 'fail',
+            receiveData: {
+                content: '',
+                failNumber: 0,
+                successNumber: 0,
+                totalNumber: 0,
+                id: 0
+            },
+            reExportId: null,
+            upLoadUrlCopy: process.env.API_ROOT + `/storage/stockCount/import/`,
+            upLoadUrl: process.env.API_ROOT + `/storage/stockCount/import/`
+        }
+    },
+    watch: {
+        houseId() {
+            if (!this.houseId == false) {
+                this.upLoadUrl = this.upLoadUrlCopy + this.houseId
+                console.log(this.upLoadUrl)
+            }
         }
     },
     methods: {
@@ -115,10 +135,51 @@ export default {
         goBack() {
             this.$router.push({name: '库存盘点'})
             this.currentStep = 1
+            this.houseId = null
         },
         nextStep() {
+
+            if (!this.houseId) {
+                this.$message({
+                    type:'warning',
+                    message:'请选择盘点仓库'
+                })
+                return
+            }
             this.currentStep = 2
             this.$refs.upload.submit();
+        },
+        beforeUpload() {
+            if (!this.houseId) {
+                this.$message({
+                    type:'warning',
+                    message:'请选择盘点仓库'
+                })
+                return
+            }
+        },
+        handleAvatarSuccess(data, data1) {
+            if (data.result == 1) {
+                this.reExportId = data.data.id
+                this.receiveData = data.data
+            }
+            if (this.receiveData.content == '导入成功') {
+                this.status = 'success'
+            } else {
+                this.status = 'fail'
+            }
+            console.log(data, data1, "返回的数据")
+        },
+        // 盘点异常数据导出
+        downLoadData() {
+            if (this.reExportId == 0) {
+                this.$message({
+                    type:'warning',
+                    message:'暂无可导出数据'
+                })
+                return
+            }
+            window.open(process.env.API_ROOT + `/storage/stockCount/reExport/${this.reExportId}`)
         },
         // 下载商品库存
         exportInventory() {
@@ -169,6 +230,9 @@ export default {
     .textCenter h1{
         color: #606266;
         font-size: 40px;
+    }
+    .textCenter h1.success{
+        color: #f66c6b;
     }
     .textCenter h2{
         color: #606266;

@@ -484,8 +484,22 @@ export default {
                 })
             }
             if (type == 4) { //撤回
-                this.$router.push({
-                    path: '/Ilaunched'
+                var paramobj = {
+                    orderId: rowid,
+                    processType: 1,
+                    submitterId: this.$store.state.home.userInfo.user.id
+                }
+
+                api.recallList(paramobj).then(() => {
+                    this.$message({
+                        type: 'success',
+                        duration: 1500,
+                        showClose: true,
+                        message: '撤回成功!'
+                    })
+                    this.tableParam.pageSize = 10
+                    this.tableParam.pageNo = 1
+                    this.getTableData()
                 })
             }
             if (type == 7) { //删除

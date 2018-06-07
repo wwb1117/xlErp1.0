@@ -94,7 +94,7 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item prop="storeNo" label="入库单号">
-                    <el-input v-model="formData.storeNo" placeholder="请输入入库单号"></el-input>
+                    <el-input :disabled="true" v-model="formData.storeNo" placeholder="请输入入库单号"></el-input>
                 </el-form-item><br>
                 <el-form-item prop="operator" label="经办人">
                     <el-input v-model="formData.operator" placeholder="请输入经办人"></el-input>
@@ -293,6 +293,7 @@ export default {
             this.formData.orderTime *= 1000
             this.formData.storeType = '1'
             this.goodsInfoData = this.fatherValue.list
+            this.formData.storeNo = this.myBase.MathRand('IN')
 
             this.getRepositorySelectData()
             this.getBuyerComSelectData()

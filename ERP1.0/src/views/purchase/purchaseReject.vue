@@ -76,7 +76,7 @@
                         :style="{width: '378px'}"
                         v-model="tableParam.searchStr">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button @click="getTableData" :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
                 </div>
                 <div v-show="isExportShow" class="purchaseList_exportWrap">
@@ -299,6 +299,26 @@ export default {
                 })
             }
 
+            if (type == 3) {
+                var paramobj = {
+                    orderId: rowid,
+                    processType: 2,
+                    submitterId: this.$store.state.home.userInfo.user.id
+                }
+
+                api.recallList(paramobj).then(() => {
+                    this.$message({
+                        type: 'success',
+                        duration: 1500,
+                        showClose: true,
+                        message: '撤回成功!'
+                    })
+                    this.tableParam.pageSize = 10
+                    this.tableParam.pageNo = 1
+                    this.getTableData()
+                })
+            }
+
         },
         closeExportWrap(){
             this.isExportShow = false
@@ -351,6 +371,8 @@ export default {
         this.getBuyerComSelectData()
     },
     activated(){
+        this.tableParam.pageSize = 10
+        this.tableParam.pageNo = 1
         this.getTableData()
     },
     mounted(){}
