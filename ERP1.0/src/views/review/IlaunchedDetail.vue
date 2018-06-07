@@ -111,23 +111,68 @@ export default {
 
             if (idObj.processType == 1) { //采购
                 this.$store.commit('setCurrentModelId', orderId)
+                if (!this.myBase.isHasPerssion('采购单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({
                     path: '/purchaseListDetail/' + '1'
                 })
             }
             if (idObj.processType == 2) { //退货
                 this.$store.commit('setCurrentModelId', orderId)
+                if (!this.myBase.isHasPerssion('采购退货单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({
                     path: '/lookPurchaseReject'
                 })
             }
             if (idObj.processType == 3) { //入库
+                if (!this.myBase.isHasPerssion('入库单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({name: '出入库详情', params: {id: orderId, type: 'inbound'}})
             }
             if (idObj.processType == 4) { //出库
+                if (!this.myBase.isHasPerssion('出库单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({name: '出入库详情', params: {id: orderId, type: 'outbound'}})
             }
             if (idObj.processType == 5) { //调拨
+                if (!this.myBase.isHasPerssion('调拨单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({name: '调拨单详情', params: {id: orderId, type: '调拨'}})
             }
         },

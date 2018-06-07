@@ -14,7 +14,7 @@
                         v-model="this.tableParam.serchText">
                     </el-input>
                     <el-button @click="getTableData" :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
-                    <el-button @click="addPurchaseComEvent" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
+                    <el-button @click="addPurchaseComEvent" v-perss="'添加采购单位'" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
 
                 </div>
                 <el-table
@@ -84,18 +84,21 @@
                             <el-button
                             @click.native="tablePropEvent(scope.row.id, 1)"
                             type="text"
+                            v-perss="'采购单位详情'"
                             size="small">
                             详情
                             </el-button>
                             <el-button
                             @click.native="tablePropEvent(scope.row.id, 2)"
                             type="text"
+                            v-perss="'修改采购单位'"
                             size="small">
                             编辑
                             </el-button>
                             <el-button
                             @click.native="tablePropEvent(scope.row.id, 3)"
                             type="text"
+                            v-perss="'启禁采购单位'"
                             size="small">
                             删除
                             </el-button>
@@ -132,47 +135,7 @@ export default {
             totalPage: 1,
             selectTableData: [],
             tableHeight: 500,
-            tableData: [
-                {
-                    purchaseCompanyNo: 'GG7758521',
-                    purchaseCompanyName: '联星贸易',
-                    leadMan: '李明珠',
-                    purchaseRMB: '888,000,00',
-                    makeListTime: '2018-05-16',
-                    tlephone: '15639115673',
-                    email: '153634555@qq.com',
-                    address: '杭州西溪',
-                    maker: '备注就是备注',
-                    state: '1',
-                    prop: ''
-                },
-                {
-                    purchaseCompanyNo: 'GG7758521',
-                    purchaseCompanyName: '联星贸易',
-                    leadMan: '李明珠',
-                    purchaseRMB: '888,000,00',
-                    makeListTime: '2018-05-16',
-                    tlephone: '15639115673',
-                    email: '153634555@qq.com',
-                    address: '杭州西溪',
-                    maker: '备注就是备注',
-                    state: '0',
-                    prop: ''
-                },
-                {
-                    purchaseCompanyNo: 'GG7758521',
-                    purchaseCompanyName: '联星贸易',
-                    leadMan: '李明珠',
-                    purchaseRMB: '888,000,00',
-                    makeListTime: '2018-05-16',
-                    tlephone: '15639115673',
-                    email: '153634555@qq.com',
-                    address: '杭州西溪',
-                    maker: '备注就是备注',
-                    state: '0',
-                    prop: ''
-                }
-            ]
+            tableData: []
         }
     },
     computed:{},

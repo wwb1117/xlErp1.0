@@ -180,6 +180,7 @@
                                     :style="{marginRight: '10px'}"
                                     @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
+                                    v-perss="'采购单详情'"
                                     size="small">
                                     查看
                                 </el-button>
@@ -195,7 +196,7 @@
                                         更多<i class="el-icon-arrow-down el-icon--right"></i>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.row.id, 7)">删除</el-dropdown-item>
+                                        <el-dropdown-item v-perss="'删除采购单'" @click.native.prevent="tablePropEvent(scope.row.id, 7)">删除</el-dropdown-item>
                                         <el-dropdown-item @click.native.prevent="tablePropEvent(scope.row.id, 5)">打印</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
@@ -204,6 +205,7 @@
                                 <el-button
                                     @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
+                                    v-perss="'采购单详情'"
                                     size="small">
                                     查看
                                 </el-button>
@@ -226,6 +228,7 @@
                                 <el-button
                                     @click.native.prevent="tablePropEvent(scope.row.id, 1)"
                                     type="text"
+                                    v-perss="'入库单详情'"
                                     size="small">
                                     入库
                                 </el-button>
@@ -240,6 +243,7 @@
                                     :style="{marginRight: '10px'}"
                                     @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
+                                    v-perss="'采购单详情'"
                                     size="small">
                                     查看
                                 </el-button>
@@ -248,6 +252,7 @@
                                 <el-button
                                     @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
+                                    v-perss="'采购单详情'"
                                     size="small">
                                     查看
                                 </el-button>
@@ -263,6 +268,7 @@
                                 <el-button
                                     @click.native.prevent="tablePropEvent(scope.row.id, 1)"
                                     type="text"
+                                    v-perss="'入库单详情'"
                                     size="small">
                                     入库
                                 </el-button>
@@ -270,6 +276,7 @@
                                     :style="{marginRight: '10px'}"
                                     @click.native.prevent="tablePropEvent(scope.row.id, 2)"
                                     type="text"
+                                    v-perss="'新建退货单'"
                                     size="small">
                                     退货
                                 </el-button>
@@ -278,7 +285,7 @@
                                         更多<i class="el-icon-arrow-down el-icon--right"></i>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <el-dropdown-item @click.native.prevent="tablePropEvent(scope.row.id, 3)">查看</el-dropdown-item>
+                                        <el-dropdown-item v-perss="'采购单详情'" @click.native.prevent="tablePropEvent(scope.row.id, 3)">查看</el-dropdown-item>
                                         <el-dropdown-item @click.native.prevent="tablePropEvent(scope.row.id, 5)">打印</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </el-dropdown>
@@ -287,6 +294,7 @@
                                 <el-button
                                     @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
+                                    v-perss="'采购单详情'"
                                     size="small">
                                     查看
                                 </el-button>
@@ -294,6 +302,7 @@
                                     :style="{marginRight: '10px'}"
                                     @click.native.prevent="tablePropEvent(scope.row.id, 2)"
                                     type="text"
+                                    v-perss="'新建退货单'"
                                     size="small">
                                     退货
                                 </el-button>

@@ -1,5 +1,8 @@
 import HttpClient from 'utils/HttpClient';
 export default {
+    recallList(data){
+        return HttpClient.put('/approval/creator/' + data.processType, data);
+    },
     getWaitReviewList(data){
         return HttpClient.get('/approval/auditor/findByCondition', data);
     },

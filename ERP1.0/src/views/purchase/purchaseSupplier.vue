@@ -14,7 +14,7 @@
                         v-model="tableParam.sellerName">
                     </el-input>
                     <el-button @click="getTableData" :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
-                    <el-button @click="addPurchaseSupplierEvent" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
+                    <el-button @click="addPurchaseSupplierEvent" v-perss="'新建供应商'" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
 
                 </div>
                 <el-table
@@ -57,18 +57,21 @@
                             <el-button
                             @click.native="tablePropEvent(scope.row.id, 1)"
                             type="text"
+                            v-perss="'供应商详情'"
                             size="small">
                             详情
                             </el-button>
                             <el-button
                             @click.native="tablePropEvent(scope.row.id, 2)"
                             type="text"
+                            v-perss="'修改供应商'"
                             size="small">
                             编辑
                             </el-button>
                             <el-button
                             @click.native="tablePropEvent(scope.row.id, 3)"
                             type="text"
+                            v-perss="'删除供应商'"
                             size="small">
                             删除
                             </el-button>
