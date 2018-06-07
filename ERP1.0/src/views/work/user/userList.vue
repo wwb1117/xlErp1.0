@@ -25,6 +25,9 @@
                     prop="created"
                     label='创建时间'
                     width="200">
+                    <template  slot-scope="scope">
+                        <span>{{scope.row.created | time_m}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="other"

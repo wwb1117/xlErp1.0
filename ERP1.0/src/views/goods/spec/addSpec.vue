@@ -21,8 +21,8 @@
                                 width='55'>
                                 <template slot-scope="scope">
                                     <div class="icon_box" style="height:50px;line-height:50px">
-                                        <i class="el-icon-plus" style="font-weight:700" @click="addSpecnum(scope)"></i>
-                                        <i class="el-icon-minus" style="margin-left:5px;font-weight:700" @click="removeSpecnum(scope)"></i>
+                                        <i class="el-icon-plus" style="font-weight:700;cursor: pointer;" @click="addSpecnum(scope)"></i>
+                                        <i class="el-icon-minus" style="margin-left:5px;font-weight:700;cursor: pointer;" @click="removeSpecnum(scope)"></i>
                                     </div>
                                 </template>
                             </el-table-column>

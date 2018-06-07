@@ -222,10 +222,10 @@
                                         <el-col :span="2">
                                             <el-input size="small" placeholder="属性名" v-model="attrnum.propertyName" ></el-input>
                                         </el-col>
-                                        <el-col :span="21   " style="margin-left:10px">
+                                        <el-col :span="18" style="margin-left:10px">
                                             <el-input size="small" placeholder="属性值" v-model="attrnum.propertyValue" ></el-input>
                                         </el-col>
-                                        <i class="el-icon-close" style="margin-left:10px" ></i>
+                                        <i class="el-icon-close" style="margin-left:10px" @click="removeattr(index)"></i>
                                     </el-col>
                                 </el-form-item>
                             </el-form>
@@ -262,7 +262,7 @@
                     <!-- 富编辑器 -->
                     <li>
                         <div style="padding:10px;background:white">
-                            <tinymce></tinymce>
+                            <div id='editor1'></div>
                         </div>
                     </li>
                 </ul>
@@ -334,7 +334,7 @@
                             </el-form-item>
                             <el-form-item label="分享内容">
                                 <div style="background:white">
-                                    <tinymce></tinymce>
+                                    <div id='editor2'></div>
                                 </div>
                             </el-form-item>
                         </el-form>
@@ -378,7 +378,6 @@
                             </el-form-item>
                         </el-form>
                     </li>
-
                 </ul>
             </div>
         </section>
@@ -400,6 +399,7 @@ import tinymce from '@/components/tinymce'
 import bar from '@/components/stepBar'
 import updata from '@/components/updata'
 import api from 'api/goods'
+import WangEditor from 'wangeditor'
 
 export default {
     data () {
@@ -435,16 +435,6 @@ export default {
                 expirationDate: ''
             },
             // 信息表单选项
-            options: [
-                {
-                    value: '选项1',
-                    label: '妈妈去哪了'
-                },
-                {
-                    value: '选项2',
-                    label: '爸爸去哪了'
-                }
-            ],
             brandIdoptions:[],
             categoryIdoptions:[],
             sendWayoptions:[],
@@ -471,6 +461,8 @@ export default {
             // 商品主图
             dialogImageUrl: '',
             dialogVisible: false,
+
+            tinymce: '',
 
             // 商品规格
             checked: true,
@@ -552,7 +544,6 @@ export default {
                 }
             });
 
-
             let obj = {
                 // 商品信息
                 itemType: this.form.itemType,
@@ -567,9 +558,13 @@ export default {
                 sendWay: this.form.sendWay,
                 money: this.form.money,
                 unitId: this.form.unitId,
-                expirationDate: this.form.expirationDate
+                expirationDate: this.form.expirationDate,
                 // 商品属性
-                // property
+                property: JSON.stringify(this.property),
+                // 商品图片
+                itemImgs: JSON.stringify(this.dialogImageUrl),
+                // 商品描述
+                description: ''
             }
 
             console.log(obj)
@@ -615,6 +610,12 @@ export default {
 
             this.property.push(obj)
         },
+        // 移除属性
+        removeattr(data) {
+            if (this.property.length > 1){
+                this.property.splice(data, 1)
+            }
+        },
         // 分类样式
         option($event) {
             var type = $event.currentTarget
@@ -649,7 +650,7 @@ export default {
             }
 
             api.getitemBrandlist(obj).then((response)=>{
-                console.log(response)
+                // console.log(response)
                 this.brandIdoptions = response.data.itemVOs
             }).catch((error)=>{
                 console.log(error)
@@ -658,7 +659,7 @@ export default {
         // 获取商品分类选项
         getcategoryId() {
             api.getcategorylist().then((response)=>{
-                console.log(response)
+                // console.log(response)
                 this.categoryIdoptions = response.data.list
 
             }).catch((error)=>{
@@ -684,10 +685,18 @@ export default {
         this.currentStep = 1
         this.conent1 = true
         this.conent2 = false
+
+        this.editor1 = new WangEditor('#editor1')
+        this.editor1.create()
+
+        this.editor2 = new WangEditor('#editor2')
+        this.editor2.create()
     },
     activated() {
         this.getbrandId()
         this.getcategoryId()
+
+
     }
 
 

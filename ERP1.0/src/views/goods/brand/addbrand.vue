@@ -274,7 +274,7 @@ export default {
 
         api.getshopgrouplist(this.page).then((response)=>{
             this.group = response.data.list
-            // console.log(response)
+            console.log(response)
         }).catch((error)=>{
             console.log(error)
         })
