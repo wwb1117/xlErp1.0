@@ -4,7 +4,7 @@
             <span>调拨单</span>
             <div>
                 <el-button size="small">导出调拨单</el-button>
-                <el-button type="primary" @click="purchaseAddEvent" size="small">新增调拨单</el-button>
+                <el-button type="primary" @click="purchaseAddEvent" size="small" v-perss="'新增调拨单'">新增调拨单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -170,6 +170,7 @@
                         label="操作">
                         <template slot-scope="scope">
                             <el-button
+                                v-perss="'调拨单详情'"
                                 @click.native.prevent="inAllotDetail(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
@@ -177,14 +178,15 @@
                             </el-button>
                             <div v-if="scope.row.auditStatus == 0" style="display: inline-block">
                                 <!--待审核-->
+                                <!--<el-button-->
+                                    <!--:style="{marginLeft: '12px'}"-->
+                                    <!--@click.native.prevent="editTable(scope.$index, scope.row)"-->
+                                    <!--type="text"-->
+                                    <!--size="small">-->
+                                    <!--修改-->
+                                <!--</el-button>-->
                                 <el-button
-                                    :style="{marginLeft: '12px'}"
-                                    @click.native.prevent="editTable(scope.$index, scope.row)"
-                                    type="text"
-                                    size="small">
-                                    修改
-                                </el-button>
-                                <el-button
+                                    v-perss="'删除调拨单'"
                                     @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                     type="text"
                                     size="small">

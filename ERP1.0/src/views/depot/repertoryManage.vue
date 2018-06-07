@@ -3,7 +3,7 @@
         <div class="model_topcol">
             <span>仓库管理</span>
             <div>
-                <el-button type="primary" @click="purchaseAddEvent" size="small">新建仓库</el-button>
+                <el-button type="primary" @click="purchaseAddEvent" size="small" v-perss="'新增仓库'">新建仓库</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 50  + 'px'}">
@@ -38,6 +38,7 @@
                         label="状态">
                         <template slot-scope="scope">
                             <el-switch
+                                :disabled="switchPerss"
                                 v-model="scope.row.activateState"
                                 @change="changeWarehouseState(scope.$index, scope.row)">
                             </el-switch>
@@ -70,16 +71,19 @@
                             <el-button
                                 @click.native.prevent="inRepDetail(scope.$index, scope.row)"
                                 type="text"
+                                v-perss="'仓库详情'"
                                 size="small">
                                 详情
                             </el-button>
                             <el-button
+                                v-perss="'修改仓库'"
                                 @click.native.prevent="editTable(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
                                 编辑
                             </el-button>
                             <el-button
+                                v-perss="'删除仓库'"
                                 @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
@@ -96,6 +100,7 @@
 <script>
 import 'utils/allEnumeration'
 import API from 'api/depot'
+import myBase from 'utils/base'
 export default {
     data(){
         return {
@@ -109,7 +114,11 @@ export default {
             warehouseList: []
         }
     },
-    computed:{},
+    computed:{
+        switchPerss() {
+            return !myBase.isHasPerssion('设置仓库状态')
+        }
+    },
     methods:{
         handleSizeChange(){
 
@@ -132,7 +141,6 @@ export default {
         },
         // 修改仓库状态
         changeWarehouseState(index, data) {
-            console.log(data.activateState, "sdadas")
             API.editWarehouseState({id: data.id, activateState: this.$allEnumeration.notBool[data.activateState]}).then(res => {
                 if (res.result == 1) {
                     this.$message({
@@ -141,6 +149,8 @@ export default {
                     });
                 }
             })
+
+
         },
         // 编辑数据
         editTable(index, data) {

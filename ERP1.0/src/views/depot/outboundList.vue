@@ -5,7 +5,7 @@
             <div>
                 <el-button size="small">导入出库单</el-button>
                 <el-button size="small">导出出库单</el-button>
-                <el-button type="primary" @click="purchaseAddEvent" size="small">新增出库单</el-button>
+                <el-button type="primary" @click="purchaseAddEvent" size="small" v-perss="'新增出库单'">新增出库单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -133,6 +133,9 @@
                     <el-table-column
                         prop="deliverType"
                         label="出库类型">
+                        <template slot-scope="scope">
+                            <span>{{$allEnumeration.deliverType[scope.row.deliverType]}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="creator"
@@ -145,11 +148,11 @@
                     <el-table-column
                         label="审核状态">
                         <template slot-scope="scope">
-                            <span v-if="scope.row.auditStatus == 0" class="auditStatus_0">待审核</span>
-                            <span v-if="scope.row.auditStatus == 1" class="auditStatus_1">审核中</span>
-                            <span v-if="scope.row.auditStatus == 2" class="auditStatus_2">通过</span>
-                            <span v-if="scope.row.auditStatus == 3" class="auditStatus_3">审核未通过</span>
-                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_3">撤销</span>
+                            <span v-if="scope.row.auditStatus == 0" class="auditStatus_0">{{$allEnumeration.auditStatus[0]}}</span>
+                            <span v-if="scope.row.auditStatus == 1" class="auditStatus_1">{{$allEnumeration.auditStatus[1]}}</span>
+                            <span v-if="scope.row.auditStatus == 2" class="auditStatus_2">{{$allEnumeration.auditStatus[2]}}</span>
+                            <span v-if="scope.row.auditStatus == 3" class="auditStatus_3">{{$allEnumeration.auditStatus[3]}}</span>
+                            <span v-if="scope.row.auditStatus == 4" class="auditStatus_4">{{$allEnumeration.auditStatus[4]}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -158,6 +161,7 @@
                         label="操作">
                         <template slot-scope="scope">
                             <el-button
+                                v-perss="'出库单详情'"
                                 :style="{marginRight: '12px'}"
                                 @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
                                 type="text"
@@ -174,6 +178,7 @@
                                     <!--修改-->
                                 <!--</el-button>-->
                                 <el-button
+                                    v-perss="'删除出库单'"
                                     @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                     type="text"
                                     size="small">
@@ -319,7 +324,7 @@ export default {
             }
         },
         inBoundDetail(index, data){
-            this.$router.push({name: '出入库详情', params: {id: data.id || 123, type: 'outbound'}})
+            this.$router.push({name: '出入库详情', params: {id: data.id, type: 'outbound'}})
         },
         // 修改
         editTable(index, data) {

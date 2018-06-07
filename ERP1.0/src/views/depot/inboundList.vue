@@ -5,7 +5,7 @@
             <div>
                 <el-button size="small">导入入库单</el-button>
                 <el-button size="small">导出入库单</el-button>
-                <el-button type="primary" @click="inAddEvent" size="small">新增入库单</el-button>
+                <el-button type="primary" @click="inAddEvent" size="small" v-perss="'新增入库单'">新增入库单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -134,9 +134,7 @@
                         prop="storeType"
                         label="入库类型">
                         <template slot-scope="scope">
-                            <span v-if="scope.row.storeType == 1" >{{$allEnumeration.storeType[1]}}</span>
-                            <span v-if="scope.row.storeType == 2" >{{$allEnumeration.storeType[2]}}</span>
-                            <span v-if="scope.row.storeType == 3" >{{$allEnumeration.storeType[3]}}</span>
+                            <span>{{$allEnumeration.storeType[scope.row.storeType]}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -164,6 +162,7 @@
                         <template slot-scope="scope">
                             <el-button
                                 :style="{marginRight: '12px'}"
+                                v-perss="'入库单详情'"
                                 @click.native.prevent="inBoundDetail(scope.$index, scope.row)"
                                 type="text"
                                 size="small">
@@ -181,6 +180,7 @@
                                 <el-button
                                     @click.native.prevent="deleteTable(scope.$index, scope.row)"
                                     type="text"
+                                    v-perss="'删除入库单'"
                                     size="small">
                                     删除
                                 </el-button>
