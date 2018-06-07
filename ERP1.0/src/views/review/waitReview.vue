@@ -59,9 +59,9 @@
                         <template slot-scope="scope">
                             <span v-if="scope.row.auditStatus == 0" class="color_brown">待审核</span>
                             <span v-if="scope.row.auditStatus == 1" class="color_brown">审核中</span>
-                            <span v-if="scope.row.auditStatus == 2" class="color_brown">通过</span>
-                            <span v-if="scope.row.auditStatus == 3" class="color_brown">不通过</span>
-                            <span v-if="scope.row.auditStatus == 4" class="color_brown">撤销</span>
+                            <span v-if="scope.row.auditStatus == 2" class="color_gray">通过</span>
+                            <span v-if="scope.row.auditStatus == 3" class="color_red">不通过</span>
+                            <span v-if="scope.row.auditStatus == 4" class="color_gray">撤销</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -105,7 +105,7 @@ export default {
             tableHeight: 500,
             totalPage: 0,
             tableParam: {
-                auditorId: '1',
+                auditorId: this.$store.state.home.userInfo.user.id,
                 startTime: '',
                 endTime: '',
                 pageNo: 1,
@@ -149,6 +149,8 @@ export default {
     },
     created(){},
     activated(){
+        this.pageNo = 1
+        this.pageSize = 10
         this.getTableData()
     },
     mounted(){}

@@ -1,6 +1,10 @@
 import HttpClient from 'utils/HttpClient';
 
 export default {
+    /************************通用接口****************************** */
+    recallList(data){
+        return HttpClient.put('/approval/creator/' + data.processType, data);
+    },
     /************************供应商****************************** */
     getSupplierSelectData(){
         return HttpClient.get('/seller/findAll');
@@ -87,7 +91,7 @@ export default {
         return HttpClient.postJSON('/returnOrder/insertOrder', data);
     },
     getRejectItemData(data){
-        return HttpClient.get('/store/' + data);
+        return HttpClient.get('/returnOrder/' + data);
     },
     deleteRejectItem(data){
         return HttpClient.delete('/returnOrder/' + data);

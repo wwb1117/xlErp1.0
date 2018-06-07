@@ -154,7 +154,7 @@
                             </el-date-picker>
                         </el-form-item>
                         <el-form-item prop="purchaseOrderNo" label="采购单号">
-                            <el-input v-model="addFormData.purchaseOrderNo" placeholder="请输入采购单号"></el-input>
+                            <el-input :disabled="true" v-model="addFormData.purchaseOrderNo" placeholder="请输入采购单号"></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item prop="purchasingAgent" label="采购员">
@@ -495,6 +495,7 @@ export default {
         this.getSupplierSelectData()
         this.getRepositorySelectData()
         this.getBuyerComSelectData()
+        this.addFormData.purchaseOrderNo = this.myBase.MathRand('CG')
     },
     beforeRouteLeave(to, from, next){
         this.$store.commit('setGoodsInfoData', this.initGoodsInfoData)
