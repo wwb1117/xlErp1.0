@@ -243,10 +243,12 @@
                     <li class="pic_up">
                         <div class="updata_box">
                             <el-upload
-                                action=""
+                                :action="this.upDateImgUrl"
+                                :data='sentData'
                                 list-type="picture-card"
                                 :on-preview="handlePictureCardPreview"
-                                :on-remove="handleRemove">
+                                :on-remove="handleRemove"
+                                :on-success='handleAvatarSuccess'>
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <!-- action上传地址 -->
@@ -319,10 +321,12 @@
                             <el-form-item label="分享图片">
                                 <div class="updata_box">
                                     <el-upload
-                                        action=""
+                                        :action="this.upDateImgUrl2"
+                                        :data='sentData2'
                                         list-type="picture-card"
                                         :on-preview="handlePictureCardPreview2"
-                                        :on-remove="handleRemove2">
+                                        :on-remove="handleRemove2"
+                                        :on-success='handleAvatarSuccess2'>
                                         <i class="el-icon-plus" style="font-size:16px"></i>
                                     </el-upload>
                                     <!-- action上传地址 -->
@@ -405,6 +409,28 @@ export default {
     data () {
         return {
 
+            // 商品主图
+            dialogImageUrl: '',
+            dialogVisible: false,
+
+            // 分享图片
+            otherImgUrl: '',
+            otherVisible: false,
+
+            upDateImgUrl: process.env.API_ROOT + '/f/upload',
+            sentData: {
+                file: '',
+                uploadType: 'cms-address'
+            },
+            fileList1:[],
+
+            upDateImgUrl2: process.env.API_ROOT + '/f/upload',
+            sentData2: {
+                file: '',
+                uploadType: 'cms-address'
+            },
+            fileList2:[],
+
             // 步骤条
             testText: ['1. 编辑基本信息', '2. 设置商品参数'],
             stepNums: 2,
@@ -439,6 +465,11 @@ export default {
             categoryIdoptions:[],
             sendWayoptions:[],
             unitIdoptions:[],
+            itemImgs1:[
+                {
+                    imgUrl:''
+                }
+            ],
 
             // 规格表单
             standard: {
@@ -451,17 +482,6 @@ export default {
                 resource: '',
                 desc: ''
             },
-            // 属性表单
-            property: [
-                {
-                    propertyName: '',
-                    propertyValue: ''
-                }
-            ],
-            // 商品主图
-            dialogImageUrl: '',
-            dialogVisible: false,
-
             // 商品规格
             checked: true,
             // 规格值
@@ -490,6 +510,14 @@ export default {
                 }
             ],
 
+            // 属性表单
+            property: [
+                {
+                    propertyName: '',
+                    propertyValue: ''
+                }
+            ],
+
             // 内容2
 
             // 商品选择包装类型
@@ -505,10 +533,6 @@ export default {
             // 包装类型
             typenameoptions:[],
             typevalueoptions:[],
-
-            // 分享图片
-            otherImgUrl: '',
-            otherVisible: false,
 
             // 报价提成
             setmonenyoptions: [],
@@ -553,6 +577,20 @@ export default {
                 }
             });
 
+            if (this.fileList1.length >= this.itemImgs1.length){
+                for (var a = 0 ; a < this.fileList1.length - 1 ; a ++){
+                    let obj = {
+                        imgUrl:''
+                    }
+
+                    this.itemImgs1.push(obj)
+                }
+            }
+
+            for (var i in this.fileList1){
+                this.itemImgs1[i].imgUrl = this.fileList1[i].data.url
+            }
+
             let obj = {
                 // 商品信息
                 itemType: this.form.itemType,
@@ -567,13 +605,14 @@ export default {
                 sendWay: this.form.sendWay,
                 money: this.form.money,
                 unitId: this.form.unitId,
+
                 expirationDate: this.form.expirationDate,
                 // 商品规格
                 skuProperty: '',
                 // 商品属性
                 property: JSON.stringify(this.property),
                 // 商品图片
-                itemImgs: JSON.stringify(this.dialogImageUrl),
+                itemImgs: JSON.stringify(this.itemImgs1),
                 // 商品描述
                 description: this.editor1.txt.text()
             }
@@ -615,12 +654,19 @@ export default {
             // })
         },
         // 上传图片
+        // 移除
         handleRemove(file, fileList) {
             console.log(file, fileList);
         },
+        // 变大查看
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
+        },
+        // 成功回调
+        handleAvatarSuccess(file, fileList) {
+            this.fileList1.push(file)
+            console.log(this.fileList1)
         },
         // 分享图片
         handleRemove2(file, fileList) {
@@ -629,6 +675,10 @@ export default {
         handlePictureCardPreview2(file) {
             this.otherImgUrl = file.url;
             this.otherVisible = true;
+        },
+        handleAvatarSuccess2(file, fileList) {
+            this.fileList2.push(file)
+            // console.log(this.fileList2)
         },
         // 重置
         reset() {
@@ -911,6 +961,7 @@ export default {
     background: white;
     padding: 10px 40px;
 }
+
 /* 控制步骤 */
 .add_bottom{
     height: 50px;
