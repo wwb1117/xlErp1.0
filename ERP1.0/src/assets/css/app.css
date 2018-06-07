@@ -278,4 +278,7 @@ input[type="file"] {
 .el-dialog{
     box-shadow: none
 }
+.add_attr .el-icon-close:hover{
+    font-size: 14px
+}
 
