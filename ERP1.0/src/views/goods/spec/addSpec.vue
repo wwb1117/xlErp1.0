@@ -122,11 +122,9 @@ export default {
 
 
             let obj = {
-                itemSupplyPropertyValueForms:JSON.stringify({
-                    skuPropertyName: this.specNum.skuPropertyName,
-                    remark: this.text,
-                    itemSkuPropertyValueDTOS: this.specNum
-                })
+                skuPropertyName: this.specNum.skuPropertyName,
+                remark: this.text,
+                itemSkuPropertyValueDTOS: this.specNum
             }
 
             console.log(obj)

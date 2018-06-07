@@ -72,11 +72,11 @@ export default {
     },
     // 新增商品规格
     postitemskuPropertyadd(data) {
-        return HttpClient.post('/item/skuProperty/add', data)
+        return HttpClient.postJSON('/item/skuProperty/add', data)
     },
     // 批量更新商品规格选项!
     putitemskuPropertyupdate(data) {
-        return HttpClient.put('/item/skuProperty/update', data)
+        return HttpClient.putJSON('/item/skuProperty/update', data)
     },
 
     // 供货规格！

@@ -133,6 +133,17 @@ export default {
             }
         }).then(checkStatus)
     },
+    putJSON(url, data) {
+        return axios({
+            method: 'put',
+            url,
+            data: JSON.stringify(data),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        }).then(checkStatus)
+    },
     get(url, params) {
         return axios({
             method: 'get',
