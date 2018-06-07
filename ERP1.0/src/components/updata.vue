@@ -33,8 +33,10 @@
                     <div class="up_box">
                         <el-checkbox v-model="checked">开启图片水印</el-checkbox>
                         <el-upload
-                            action=""
+                            :action="upDateImgUrl"
+                            :data="sentData"
                             :on-preview="handlePictureCardPreview"
+                            :on-success="handleAvatarSuccess"
                             :on-remove="handleRemove">
                             本地上传
                         </el-upload>
@@ -74,6 +76,11 @@
 export default {
     data() {
         return {
+            upDateImgUrl: process.env.API_ROOT + '/f/upload',
+            sentData: {
+                file: "",
+                uploadType: 'cms-address'
+            },
             dialogVisible: false,
             addteam: false,
             checked: false,
@@ -123,11 +130,15 @@ export default {
             this.team.push(this.text)
         },
         handleRemove(file, fileList) {
-            // console.log(file, fileList);
+            console.log(file, fileList);
         },
         handlePictureCardPreview(file) {
             this.ImageUrl = file.url;
             this.upimg = true;
+        },
+        // 图片上传成功
+        handleAvatarSuccess(file, fileList) {
+            console.log(file, fileList, "图片信息")
         },
         opentrue($event) {
             var tha = $event.currentTarget
