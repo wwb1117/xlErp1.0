@@ -84,7 +84,7 @@
                         placeholder="请输入采购单号/供应商名称/采购单位"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="serchText">
+                        v-model="tableParam.searchStr">
                     </el-input>
                     <el-button :style="{margin: '0 10px'}" @click="getTableData" type="primary" size="small">搜索</el-button>
                     <span @click="supperBoxShow">高级搜索</span>
@@ -167,7 +167,7 @@
                             <span style="color: #e7a03d" v-if="scope.row.auditStatus == 1">审核中</span>
                             <span v-if="scope.row.auditStatus == 2">审核通过</span>
                             <span style="color: #f37069" v-if="scope.row.auditStatus == 3">审核不通过</span>
-                            <span style="color: #f37069" v-if="scope.row.auditStatus == 4">撤销</span>
+                            <span style="color: #f37069" v-if="scope.row.auditStatus == 4">撤回</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -177,18 +177,19 @@
                          <template slot-scope="scope">
                             <div v-if="scope.row.storeStatus == 0 && scope.row.auditStatus == 0">
                                 <el-button
+                                    :style="{marginRight: '10px'}"
                                     @click.native.prevent="tablePropEvent(scope.row.id, 3)"
                                     type="text"
                                     size="small">
                                     查看
                                 </el-button>
-                                <el-button
+                                <!-- <el-button
                                     :style="{marginRight: '10px'}"
                                     @click.native.prevent="tablePropEvent(scope.row.id, 6)"
                                     type="text"
                                     size="small">
                                     编辑
-                                </el-button>
+                                </el-button> -->
                                 <el-dropdown :hide-timeout="50" trigger="click">
                                     <span class="el-dropdown-link">
                                         更多<i class="el-icon-arrow-down el-icon--right"></i>
@@ -456,9 +457,8 @@ export default {
             }
         },
         datePickerChangeEvent (val) {
-            this.tableParam.startTime = val[0]
-            this.tableParam.endTime = val[1]
-
+            this.tableParam.startTime = Math.round(val[0] / 1000)
+            this.tableParam.endTime = Math.round(val[1] / 1000)
         },
         getTableData(){
             return api.getPurchaseList(this.tableParam).then((response) => {
@@ -468,12 +468,27 @@ export default {
         },
         tablePropEvent(rowid, type){
             this.$store.commit('setCurrentModelId', rowid)
-            if (type == 3) {
+            if (type == 3) { //查看
                 this.$router.push({
-                    path: '/purchaseListDetail'
+                    path: '/purchaseListDetail/' + '1'
                 })
             }
-            if (type == 7) {
+            if (type == 2) { //退货
+                this.$router.push({
+                    path: '/addPurchaseReject'
+                })
+            }
+            if (type == 1) { //入库
+                this.$router.push({
+                    path: '/purchaseListDetail/' + '2'
+                })
+            }
+            if (type == 4) { //撤回
+                this.$router.push({
+                    path: '/Ilaunched'
+                })
+            }
+            if (type == 7) { //删除
                 this.myBase.confirmDelet('你确定要永久删除此采购单信息?', () => {
                     api.deletePurchaseList(rowid).then((response) => {
                         this.$message({

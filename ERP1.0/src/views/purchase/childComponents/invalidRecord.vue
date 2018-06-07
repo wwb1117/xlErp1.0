@@ -2,7 +2,7 @@
     <div class="wrap">
         <div class="check_wrap fontwe_500">
             <el-checkbox :style="{color: '#f37069'}" v-model="totalChecked">作废原因</el-checkbox>
-            <span class="color_gray">商品入库时,核对错误,并未实际入库</span>
+            <span v-text="invalidRecord.invalidReason" class="color_gray">商品入库时,核对错误,并未实际入库</span>
         </div>
         <div class="content_wrap">
             <div class="content">
@@ -10,106 +10,109 @@
                     <div class="title">
                     作废记录
                     </div>
-                    <span class="el_icon el-icon-arrow-down"></span>
+                    <span @click="isWrapShowEvent" class="el_icon el-icon-arrow-down"></span>
                 </div>
-                <div class="btn_wrap">
-                    <div class="tab_title fontWe_600">
-                        <span class="title_title">作废时间 : </span>
-                        <span class="title_data">2018-05-21 11:17</span>
-                        <span class="title_title">采购单号 : </span>
-                        <span class="title_data">456655222222222222522</span>
-                        <span class="title_title">供应商 : </span>
-                        <span class="title_data">杭州苏雅诗贸易有限公司</span>
-                        <span class="title_title">采购单位 : </span>
-                        <span class="title_data">妈妈去哪儿</span>
-                        <span class="title_title">入库仓库 : </span>
-                        <span class="title_data">默认仓库</span>
-                        <!-- <span class="title_title">采购时间 : </span>
-                        <span class="title_data">2018-05-18 16:34</span> -->
+                <div v-show="isWrapShow">
+                    <div class="btn_wrap">
+                        <div class="tab_title fontWe_600">
+                            <span class="title_title">作废时间 : </span>
+                            <span class="title_data">{{invalidRecord.invalidTime | time_m}}</span>
+                            <span class="title_title">采购单号 : </span>
+                            <span v-text="invalidRecord.purchaseOrderNo" class="title_data"></span>
+                            <span class="title_title">供应商 : </span>
+                            <span v-text="invalidRecord.buyerName" class="title_data"></span>
+                            <span class="title_title">采购单位 : </span>
+                            <span v-text="invalidRecord.buyerName" class="title_data"></span>
+                            <span class="title_title">入库仓库 : </span>
+                            <span v-text="invalidRecord.storeHouseName" class="title_data"></span>
+                            <!-- <span class="title_title">采购时间 : </span>
+                            <span class="title_data">2018-05-18 16:34</span> -->
+                        </div>
+                    </div>
+                    <div class="banner">
+                        商品信息
+                    </div>
+                    <div class="table_wrap">
+                        <el-table
+                            :data="invalidRecord.list"
+                            border
+                        style="width: 100%">
+                            <el-table-column
+                            label=" "
+                            type="index"
+                            width="50">
+                            </el-table-column>
+                            <el-table-column
+                            prop="itemSku"
+                            label="编号"
+                            width="180">
+                            </el-table-column>
+                            <el-table-column
+                            prop="itemMac"
+                            label="条码">
+                            </el-table-column>
+                            <el-table-column
+                            prop="itemName"
+                            label="商品">
+                            </el-table-column>
+                            <el-table-column
+                            prop="itemSpec"
+                            label="规格-SKU">
+                            </el-table-column>
+                            <el-table-column
+                            prop="itemExp"
+                            label="保质期(月)">
+                            </el-table-column>
+                            <el-table-column
+                            prop="productData"
+                            label="生产日期">
+                            </el-table-column>
+                            <el-table-column
+                            prop="purchasingNumber"
+                            label="采购数">
+                            </el-table-column>
+                            <el-table-column
+                            prop="inventoryNumber"
+                            label="已入库数">
+                            </el-table-column>
+                            <el-table-column
+                            prop="currentStoreNumber"
+                            label="本次入库数">
+                            </el-table-column>
+                            <el-table-column
+                            prop="itemQuantifierUnit"
+                            label="单位">
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                    <div class="table_bottom color_gray fontWe_500">
+                        <div style="margin-bottom: 30px; line-height: 30px">
+                            <span class="title_title">入库单号 : </span>
+                            <span v-text="invalidRecord.storeNo" class="title_data"></span>
+                            <span class="title_title">入库仓库 : </span>
+                            <span v-text="invalidRecord.storeHouseName" class="title_data"></span>
+                            <span class="title_title">经办人 : </span>
+                            <span v-text="invalidRecord.creator" class="title_data"></span><br>
+                            <span class="title_title">入库备注 : </span>
+                            <span v-text="invalidRecord.storeRemark"></span>
+                            <!-- <span class="title_title">采购时间 : </span>
+                            <span class="title_data">2018-05-18 16:34</span> -->
+                        </div>
+                        <div style="margin-bottom: 30px; line-height: 30px">
+                            <span class="title_title">采购单号 : </span>
+                            <span v-text="invalidRecord.purchaseOrderNo" class="title_data"></span>
+                            <span class="title_title">采购员 : </span>
+                            <span v-text="invalidRecord.operator" class="title_data"></span>
+                            <span class="title_title">制单人 : </span>
+                            <span v-text="invalidRecord.creator" class="title_data"></span><br>
+                            <span class="title_title">采购备注 : </span>
+                            <span v-text="invalidRecord.creator"></span>
+                            <!-- <span class="title_title">采购时间 : </span>
+                            <span class="title_data">2018-05-18 16:34</span> -->
+                        </div>
                     </div>
                 </div>
-                <div class="banner">
-                    商品信息
-                </div>
-                <div class="table_wrap">
-                    <el-table
-                        :data="goodsInfoData"
-                        border
-                    style="width: 100%">
-                        <el-table-column
-                        label=" "
-                        type="index"
-                        width="50">
-                        </el-table-column>
-                        <el-table-column
-                        prop="selfNum"
-                        label="编号"
-                        width="180">
-                        </el-table-column>
-                        <el-table-column
-                        prop="barCode"
-                        label="条码">
-                        </el-table-column>
-                        <el-table-column
-                        prop="goodName"
-                        label="商品">
-                        </el-table-column>
-                        <el-table-column
-                        prop="SKU"
-                        label="规格-SKU">
-                        </el-table-column>
-                        <el-table-column
-                        prop="qualityDate"
-                        label="保质期">
-                        </el-table-column>
-                        <el-table-column
-                        prop="productData"
-                        label="生产日期">
-                        </el-table-column>
-                        <el-table-column
-                        prop="purchaseNum"
-                        label="采购数">
-                        </el-table-column>
-                        <el-table-column
-                        prop="inRepositoryNum"
-                        label="已入库数">
-                        </el-table-column>
-                        <el-table-column
-                        prop="itemRepositoryNum"
-                        label="本次入库数">
-                        </el-table-column>
-                        <el-table-column
-                        prop="unit"
-                        label="单位">
-                        </el-table-column>
-                    </el-table>
-                </div>
-                <div class="table_bottom color_gray fontWe_500">
-                    <div style="margin-bottom: 30px; line-height: 30px">
-                        <span class="title_title">入库单号 : </span>
-                        <span class="title_data">456655222222222222522</span>
-                        <span class="title_title">入库仓库 : </span>
-                        <span class="title_data">默认仓库</span>
-                        <span class="title_title">经办人 : </span>
-                        <span class="title_data">李思思</span><br>
-                        <span class="title_title">入库备注 : </span>
-                        <span ></span><span>我是一只小鸭子,咿呀,咿呀, 呦,, </span>
-                        <!-- <span class="title_title">采购时间 : </span>
-                        <span class="title_data">2018-05-18 16:34</span> -->
-                    </div>
-                    <div style="margin-bottom: 30px; line-height: 30px">
-                        <span class="title_title">采购单号 : </span>
-                        <span class="title_data">456655222222222222522</span>
-                        <span class="title_title">采购员 : </span>
-                        <span class="title_data">章撒</span>
-                        <span class="title_title">制单人 : </span>
-                        <span class="title_data">李思思</span><br>
-                        <span class="title_title">采购备注 : </span>
-                        <span ></span><span>我是一只小鸭子,咿呀,咿呀, 呦,, </span>
-                        <!-- <span class="title_title">采购时间 : </span>
-                        <span class="title_data">2018-05-18 16:34</span> -->
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -122,8 +125,9 @@ export default {
     data(){
         return {
             dialogVisible: false,
-            invalidRecord: '',
+            invalidRecord: {},
             totalChecked: "",
+            isWrapShow: true,
             formData: {
                 inrepository: '',
                 purchaseCom: '',
@@ -162,9 +166,18 @@ export default {
                 path: '/invalidRecord'
             })
             this.dialogVisible = false
+        },
+        isWrapShowEvent(){
+            this.isWrapShow = !this.isWrapShow
         }
     },
     created(){},
+    watch: {
+        fatherValue(newvalue){
+            this.invalidRecord = newvalue
+            console.log(newvalue)
+        }
+    },
     mounted(){
 
     }
