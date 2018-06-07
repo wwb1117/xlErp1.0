@@ -395,7 +395,6 @@
 
 </template>
 <script>
-import tinymce from '@/components/tinymce'
 import bar from '@/components/stepBar'
 import updata from '@/components/updata'
 import api from 'api/goods'
@@ -677,7 +676,6 @@ export default {
 
     },
     components: {
-        tinymce,
         bar,
         updata
     },
