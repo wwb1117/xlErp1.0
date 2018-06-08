@@ -41,16 +41,19 @@
                         <el-form-item label="身份证">
                             <div style="display: inline-block">
                                 <el-upload
-                                action=""
+                                action="https://jsonplaceholder.typicode.com/posts/"
                                 list-type="picture-card"
-                                :on-preview="handlePictureCardPreview"
-                                :on-remove="handleRemove">
-                                <i class="el-icon-plus"></i>
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess1"
+                                :before-upload="beforeAvatarUpload1"
+                                >
+                                <img style="width: 80px; height: 80px;" v-if="imageUrl1" :src="imageUrl1" class="avatar">
+                                <i v-if="!imageUrl1" class="el-icon-plus"></i>
                                 </el-upload>
                                 <span class="card_tip">经营者身份证<br>正面照</span>
-                                <el-dialog :visible.sync="dialogVisible">
+                                <!-- <el-dialog :visible.sync="dialogVisible">
                                 <img width="100%" :src="dialogImageUrl" alt="">
-                                </el-dialog>
+                                </el-dialog> -->
                             </div>
                             <div style="display: inline-block; margin-left: 30px;">
                                 <el-upload
@@ -58,12 +61,13 @@
                                 list-type="picture-card"
                                 :on-preview="handlePictureCardPreview"
                                 :on-remove="handleRemove">
-                                <i class="el-icon-plus"></i>
+                                <img style="width: 88px; height: 88px;" v-if="imageUrl2" :src="imageUrl2" class="avatar">
+                                <i v-if="!imageUrl2" class="el-icon-plus"></i>
                                 </el-upload>
                                 <span class="card_tip">经营者身份证<br>反面照</span>
-                                <el-dialog :visible.sync="dialogVisible">
+                                <!-- <el-dialog :visible.sync="dialogVisible">
                                 <img width="100%" :src="dialogImageUrl" alt="">
-                                </el-dialog>
+                                </el-dialog> -->
                             </div>
                         </el-form-item>
                     </div>
@@ -132,6 +136,8 @@ export default {
     },
     data(){
         return {
+            imageUrl1: "",
+            imageUrl2: "",
             formData: {
                 sellerCompanyName: '',
                 sellerCompanyNo: '',
@@ -174,6 +180,22 @@ export default {
     },
     computed:{},
     methods:{
+        handleAvatarSuccess1(res, file) {
+            this.imageUrl1 = URL.createObjectURL(file.raw);
+        },
+        beforeAvatarUpload1(file){
+            console.log(file)
+            const isJPG = file.type === 'image/jpeg' || 'image/png';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
         handleRemove(file, fileList) {
             console.log(file, fileList);
         },
@@ -212,7 +234,7 @@ export default {
 
     },
     activated(){
-
+        this.$refs['addSupplierForm'].resetFields();
     },
     created(){},
     mounted(){}
