@@ -7,7 +7,7 @@
         <div class="model_content" >
             <add-good v-if="isShowAddGoods" @saveAddgoodsFn="fromAddGoods"></add-good>
             <div v-if="!isShowAddGoods" class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
-                <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="110px">
+                <el-form ref="myForm" class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="110px">
                     <div class="banner">
                         基本信息
                     </div>
@@ -239,25 +239,26 @@ export default {
             houseId_option: [],
             rules: {
                 warehouseId: [
-                    { required: true, message: '请选择入库仓库', trigger: 'blur' }
+                    { required: true, message: '请选择调拨仓库', trigger: 'change' }
                 ],
                 inventoryInId: [
-                    { required: true, message: '请选择调入单位', trigger: 'blur' }
+                    { required: true, message: '请选择调入单位', trigger: 'change' }
                 ],
                 inventoryOutId: [
-                    { required: true, message: '请选择调出单位', trigger: 'blur' }
+                    { required: true, message: '请选择调出单位', trigger: 'change' }
                 ],
                 inventoryAllocationNo: [
                     { required: true, message: '请输入调拨单号', trigger: 'blur' }
                 ],
                 inventoryAllocationTime: [
-                    {required: true, message: '请输入调拨时间', trigger: 'blur'}
+                    {required: true, message: '请输入调拨时间', trigger: 'change'}
                 ],
                 creator: [
                     { required: true, message: '请输入制单人', trigger: 'blur' }
                 ]
             },
-            loading: true
+            loading: true,
+            validFlag: false
         }
     },
     computed:{
@@ -308,6 +309,7 @@ export default {
                 currentStoreNumber: '',
                 itemId: ''
             }]
+            this.$refs.myForm.resetFields();
         },
         goodTableAddEvent(){
             var itemobj = {
@@ -432,6 +434,13 @@ export default {
         save() {
             this.addFormData.list = []
             this.addFormData.totalInventoryNumber = 0
+            // 表单验证
+            this.$refs.myForm.validate((valid) => {
+                this.validFlag = valid
+            })
+            if (!this.validFlag) {
+                return
+            }
             // 将表中商品信息添加到addFormData
             this.goodsInfoData.forEach(res => {
                 let obj = {
@@ -469,6 +478,13 @@ export default {
             this.postData = ME.deepCopy(this.addFormData)
             this.postData.inventoryAllocationTime = Date.parse(this.postData.inventoryAllocationTime) / 1000
             console.log(this.postData, "添加的数据")
+            if (!this.postData.list[0].itemId) {
+                this.$message({
+                    type: 'warning',
+                    message: '请选择商品'
+                })
+                return
+            }
             // 调取新增调拨单的接口
             API.addAllotOrder(this.postData).then(res => {
                 this.$message({

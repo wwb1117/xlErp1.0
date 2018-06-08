@@ -8,7 +8,7 @@
             <add-good v-if="isShowAddGoods" @saveAddgoodsFn="fromAddGoods"></add-good>
             <add-purchase v-if="isShowPurchase" @saveAddpurchaseFn="fromeAddPurchase"></add-purchase>
             <div v-if="!isShowAddGoods && !isShowPurchase" class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
-                <el-form class="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="110px">
+                <el-form class="myForm" ref="myForm" :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="110px">
                     <div class="banner">
                         基本信息
                     </div>
@@ -293,17 +293,17 @@ export default {
                 creatorId: ''
             },
             rules: {
-                storeType: [
-                    { required: true, message: '入库类型', trigger: 'blur' }
-                ],
                 storeHouseId: [
-                    { required: true, message: '请选择入库仓库', trigger: 'blur' }
+                    { required: true, message: '请选择仓库', trigger: 'change' }
+                ],
+                storeType: [
+                    { required: true, message: '请选择类型', trigger: 'change' }
                 ],
                 buyerId: [
-                    { required: true, message: '请选择采购单位', trigger: 'blur' }
+                    { required: true, message: '请选择采购单位', trigger: 'change' }
                 ],
                 storeTime: [
-                    { required: true, message: '请选择采购时间', trigger: 'blur' }
+                    { required: true, message: '请选择时间', trigger: 'change' }
                 ],
                 creator: [
                     { required: true, message: '请输入制单人', trigger: 'blur' }
@@ -312,7 +312,8 @@ export default {
                     { required: true, message: '请输入入库单号', trigger: 'blur' }
                 ]
             },
-            postData: {}
+            postData: {},
+            validFlag: false
         }
     },
     computed:{
@@ -346,6 +347,7 @@ export default {
                 currentStoreNumber: '',
                 itemId: ''
             }]
+            this.$refs.myForm.resetFields();
         },
         // 添加采购单
         fromeAddPurchase(data) {
@@ -516,6 +518,13 @@ export default {
         save() {
             this.addFormData.totalStoreNumber = 0
             this.addFormData.list = []
+            // 表单验证
+            this.$refs.myForm.validate((valid) => {
+                this.validFlag = valid
+            })
+            if (!this.validFlag) {
+                return
+            }
             console.log(this.goodsInfoData, "表中信息")
             // 将表中商品信息添加到addFormData
             this.goodsInfoData.forEach(res => {
