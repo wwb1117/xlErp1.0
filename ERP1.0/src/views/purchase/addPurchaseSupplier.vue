@@ -41,11 +41,12 @@
                         <el-form-item label="身份证">
                             <div style="display: inline-block">
                                 <el-upload
-                                action="https://jsonplaceholder.typicode.com/posts/"
+                                :action="uploadURL"
+                                :data="sendData"
                                 list-type="picture-card"
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess1"
-                                :before-upload="beforeAvatarUpload1"
+                                :before-upload="beforeAvatarUpload"
                                 >
                                 <img style="width: 80px; height: 80px;" v-if="imageUrl1" :src="imageUrl1" class="avatar">
                                 <i v-if="!imageUrl1" class="el-icon-plus"></i>
@@ -57,11 +58,14 @@
                             </div>
                             <div style="display: inline-block; margin-left: 30px;">
                                 <el-upload
-                                action=""
+                                :action="uploadURL"
+                                :data="sendData"
+                                :show-file-list="false"
                                 list-type="picture-card"
-                                :on-preview="handlePictureCardPreview"
-                                :on-remove="handleRemove">
-                                <img style="width: 88px; height: 88px;" v-if="imageUrl2" :src="imageUrl2" class="avatar">
+                                :on-success="handleAvatarSuccess2"
+                                :before-upload="beforeAvatarUpload"
+                                >
+                                <img style="width: 86px; height: 86px;" v-if="imageUrl2" :src="imageUrl2" class="avatar">
                                 <i v-if="!imageUrl2" class="el-icon-plus"></i>
                                 </el-upload>
                                 <span class="card_tip">经营者身份证<br>反面照</span>
@@ -78,16 +82,17 @@
                             </span>
                             <div style="display: inline-block">
                                 <el-upload
-                                action=""
+                                :action="uploadURL"
+                                :data="sendData"
+                                :show-file-list="false"
                                 list-type="picture-card"
-                                :on-preview="handlePictureCardPreview"
-                                :on-remove="handleRemove">
-                                <i class="el-icon-plus"></i>
+                                :on-success="handleAvatarSuccess3"
+                                :before-upload="beforeAvatarUpload"
+                                >
+                                <img style="width: 86px; height: 86px;" v-if="imageUrl3" :src="imageUrl3" class="avatar">
+                                <i v-if="!imageUrl3" class="el-icon-plus"></i>
                                 </el-upload>
-                                <span class="card_tip">经营者身份证<br>正面照</span>
-                                <el-dialog :visible.sync="dialogVisible">
-                                <img width="100%" :src="dialogImageUrl" alt="">
-                                </el-dialog>
+                                <span class="card_tip">经营许可<br>证照片</span>
                             </div>
                         </el-form-item>
                     </div>
@@ -138,6 +143,12 @@ export default {
         return {
             imageUrl1: "",
             imageUrl2: "",
+            imageUrl3: "",
+            uploadURL: process.env.API_ROOT + '/f/upload',
+            sendData: {
+                file: "",
+                uploadType: 'erp'
+            },
             formData: {
                 sellerCompanyName: '',
                 sellerCompanyNo: '',
@@ -181,10 +192,18 @@ export default {
     computed:{},
     methods:{
         handleAvatarSuccess1(res, file) {
+            this.formData.faceIdcard = res.data.url
             this.imageUrl1 = URL.createObjectURL(file.raw);
         },
-        beforeAvatarUpload1(file){
-            console.log(file)
+        handleAvatarSuccess2(res, file) {
+            this.formData.frontIdcard = res.data.url
+            this.imageUrl2 = URL.createObjectURL(file.raw);
+        },
+        handleAvatarSuccess3(res, file) {
+            this.formData.imgLicense = res.data.url
+            this.imageUrl3 = URL.createObjectURL(file.raw);
+        },
+        beforeAvatarUpload(file){
             const isJPG = file.type === 'image/jpeg' || 'image/png';
             const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -195,13 +214,6 @@ export default {
                 this.$message.error('上传头像图片大小不能超过 2MB!');
             }
             return isJPG && isLt2M;
-        },
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
         },
         areaCallBack(data){
             this.formData.provinceId = data[0]
