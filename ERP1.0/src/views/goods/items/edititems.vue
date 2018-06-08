@@ -15,17 +15,19 @@
                     <el-form-item label="分类名称" required :label-width="formLabelWidth">
                         <el-input v-model="msg.categoryName" type='text' suffix-text='0/15' size='small' style="width:338px"></el-input>
                     </el-form-item>
-                    <el-form-item label="分类图片" :label-width="formLabelWidth" >
+                    <el-form-item label="分类图片" :label-width="formLabelWidth" class="img_up">
                         <el-upload
-                            action=""
+                            :action="this.upDateImgUrl"
+                            :data='sentData'
                             list-type="picture-card"
                             :on-preview="handlePictureCardPreview"
-                            :on-remove="handleRemove">
+                            :on-remove="handleRemove"
+                            :on-success='handleAvatarSuccess'>
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <!-- action上传地址 -->
                         <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="msg.categoryImg" alt="">
+                            <img width="100%" :src="this.dialogImageUrl" alt="">
                         </el-dialog>
                     </el-form-item>
                     <el-form-item label="排序" required :label-width="formLabelWidth"  >
@@ -51,22 +53,55 @@ import api from 'api/goods'
 export default {
     data() {
         return {
-            msg: {},
+            msg: {
+                id: '',
+                parentId: '',
+                categoryImg: [],
+                categoryName: '',
+                isDisplay: '',
+                sort: ''
+            },
+
             formLabelWidth: '120px',
             // 上传
-            dialogVisible: false
+            dialogVisible: false,
+            dialogImageUrl: '',
+            upDateImgUrl: process.env.API_ROOT + '/f/upload',
+            sentData: {
+                file: '',
+                uploadType: 'cms-address'
+            },
+            fileList:[]
 
         }
     },
     methods: {
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            // console.log(file, fileList);
+            for (var i in this.fileList){
+                if (this.fileList[i].data.url == file.response.data.url){
+
+                    this.fileList.splice(i, 1)
+                }
+            }
         },
         handlePictureCardPreview(file) {
             this.msg.categoryImg = file.url;
             this.dialogVisible = true;
         },
+        handleAvatarSuccess(file, fileList) {
+            this.fileList.push(file)
+            // console.log(this.fileList)
+        },
         returnitems() {
+            this.msg = {
+                id: '',
+                parentId: '',
+                categoryImg: [],
+                categoryName: '',
+                isDisplay: '',
+                sort: ''
+            }
             this.$router.go(-1)
         },
         trueconfim() {
@@ -76,10 +111,24 @@ export default {
                 this.msg.isDisplay = 0
             }
 
+            if (this.fileList.length >= this.msg.categoryImg.length){
+                for (var l = 0 ; l < this.fileList.length - 1 ; l ++){
+                    let obj = {
+                        imgUrl:''
+                    }
+
+                    this.msg.categoryImg.push(obj)
+                }
+            }
+
+            for (var j in this.fileList){
+                this.msg.categoryImg[j].imgUrl = this.fileList[j].data.url
+            }
+
             let obj = {
                 id: this.msg.id,
                 parentId: this.msg.parentId,
-                categoryImg: this.msg.categoryImg,
+                categoryImg: this.msg.categoryImg.toString(),
                 categoryName: this.msg.categoryName,
                 isDisplay: this.msg.isDisplay,
                 sort: this.msg.sort
