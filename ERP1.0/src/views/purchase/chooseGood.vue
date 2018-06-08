@@ -140,9 +140,9 @@ export default {
             }],
             SKUSelectData: [],
             tableParam: {
-                serchText: '',
                 pageSize: 10,
                 pageNo: 1,
+                serchText: '',
                 mainImg: '',
                 title: '',
                 itemCode: '',
