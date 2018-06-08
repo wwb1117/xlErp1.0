@@ -53,11 +53,14 @@ export default {
         trueconfim() {
 
             var resourceId = this.$refs.tree.getCheckedKeys()
+            var resourceId2 = this.$refs.tree.getHalfCheckedKeys()
+            var resourceId3 = resourceId.concat(resourceId2)
+
 
             let obj = {
                 roleId: this.userid,
                 roleName: this.username,
-                resourceIds: resourceId.toString()
+                resourceIds: resourceId3.toString()
             }
 
             api.postrolesetaccess(obj).then((response)=>{

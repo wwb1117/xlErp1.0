@@ -84,7 +84,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="expirationDate"
+                    prop="expirationDateName"
                     label="保质期">
                 </el-table-column>
                 <el-table-column
@@ -140,9 +140,9 @@ export default {
             }],
             SKUSelectData: [],
             tableParam: {
-                serchText: '',
                 pageSize: 10,
                 pageNo: 1,
+                serchText: '',
                 mainImg: '',
                 title: '',
                 itemCode: '',
