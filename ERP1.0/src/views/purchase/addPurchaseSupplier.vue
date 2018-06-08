@@ -65,7 +65,7 @@
                                 :on-success="handleAvatarSuccess2"
                                 :before-upload="beforeAvatarUpload"
                                 >
-                                <img style="width: 86px; height: 86px;" v-if="imageUrl2" :src="imageUrl2" class="avatar">
+                                <img style="width: 80px; height: 80px;" v-if="imageUrl2" :src="imageUrl2" class="avatar">
                                 <i v-if="!imageUrl2" class="el-icon-plus"></i>
                                 </el-upload>
                                 <span class="card_tip">经营者身份证<br>反面照</span>
@@ -89,7 +89,7 @@
                                 :on-success="handleAvatarSuccess3"
                                 :before-upload="beforeAvatarUpload"
                                 >
-                                <img style="width: 86px; height: 86px;" v-if="imageUrl3" :src="imageUrl3" class="avatar">
+                                <img style="width: 80px; height: 80px;" v-if="imageUrl3" :src="imageUrl3" class="avatar">
                                 <i v-if="!imageUrl3" class="el-icon-plus"></i>
                                 </el-upload>
                                 <span class="card_tip">经营许可<br>证照片</span>

@@ -84,7 +84,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="expirationDate"
+                    prop="expirationDateName"
                     label="保质期">
                 </el-table-column>
                 <el-table-column
