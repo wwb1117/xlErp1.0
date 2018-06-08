@@ -15,7 +15,7 @@
         trigger="click"
         :style="{textAlign: 'center'}"
         >
-        <div class="dropdown">
+        <div @click="editPasswordEvent" class="dropdown">
             修改密码
         </div>
         <div @click="loginOutEvent" class="dropdown">
@@ -112,6 +112,11 @@ export default {
                         path: '/login'
                     })
                 })
+            })
+        },
+        editPasswordEvent(){
+            this.$router.push({
+                path: '/editPassword'
             })
         }
     },

@@ -148,6 +148,12 @@ input[type="file"] {
     background: #ffffff;
     border: 1px solid #E4E7ED;
 }
+#editPassWordWrap .model_content_inner .el-form-item__content{
+    height: 37px;
+}
+#editPassWordWrap .model_content_inner .el-form-item{
+    height: 37px;
+}
 /* ***************************商品添加样式************************************************* */
 .updata_box input[type="file"] {
     display: none;
