@@ -56,36 +56,36 @@
                     <!-- 信息title -->
                     <li class="good_title">
                         <p>基本信息</p>
-                        <el-checkbox style="margin-left:30px"><span style="font-size:10px">有无保质期</span></el-checkbox>
+                        <el-checkbox style="margin-left:30px" v-model="this.form.item.expirationDateStatus"><span style="font-size:10px">有无保质期</span></el-checkbox>
                     </li>
                     <!-- 信息内容 -->
                     <li class="msg_conent">
-                        <el-form ref="form" :model="form" label-width="100px">
+                        <el-form ref="form" :model="form.item" label-width="100px">
                             <el-form-item label="商品名称" required>
-                                <el-input v-model="form.title" size="small" placeholder="长度<64" style="width:688px"></el-input>
+                                <el-input v-model="form.item.title" size="small" placeholder="长度<64" style="width:688px"></el-input>
                             </el-form-item>
                             <el-form-item label="商品卖点" style="margin-bottom:35px">
-                                <el-input type="textarea" v-model="form.sellingPoint" size="small" placeholder="长度<300" rows='2'></el-input>
+                                <el-input type="textarea" v-model="form.item.sellingPoint" size="small" placeholder="长度<300" rows='2'></el-input>
                             </el-form-item>
                             <el-form-item label="购买提醒" style="margin-bottom:35px">
-                                <el-input type="textarea" v-model="form.buyRemind" size="small" placeholder="长度<300" rows='2'></el-input>
+                                <el-input type="textarea" v-model="form.item.buyRemind" size="small" placeholder="长度<300" rows='2'></el-input>
                             </el-form-item>
                             <el-col :span='24'>
                                 <el-col :span='6'>
                                     <el-form-item label="商品条码" required >
-                                        <el-input v-model="form.barCode" size="small" placeholder="长度<64" ></el-input>
+                                        <el-input v-model="form.item.barCode" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="商品编码" required >
-                                        <el-input v-model="form.itemCode" size="small" placeholder="长度<64" ></el-input>
+                                        <el-input v-model="form.item.itemCode" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
                             <el-col :span='24'>
                                 <el-col :span='6'>
                                     <el-form-item label="商品品牌" required >
-                                        <el-select v-model="form.brandId" placeholder="请选择"  size='small'>
+                                        <el-select v-model="form.item.brandId" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in brandIdoptions"
                                                 :key="item.id"
@@ -96,7 +96,7 @@
                                 </el-col>
                                 <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="商品分类" required >
-                                        <el-select v-model="form.categoryId" placeholder="请选择"  size='small'>
+                                        <el-select v-model="form.item.categoryId" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in categoryIdoptions"
                                                 :key="item.id"
@@ -109,7 +109,7 @@
                             <el-col :span='24'>
                                 <el-col :span='6'>
                                     <el-form-item label="贸易类型" required >
-                                        <el-select v-model="form.sendWay" placeholder="请选择"  size='small'>
+                                        <el-select v-model="form.item.sendWay" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in sendWayoptions"
                                                 :key="item.value"
@@ -120,14 +120,14 @@
                                 </el-col>
                                 <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="建议零售价"  class="money">
-                                        <el-input v-model="form.money" size="small" placeholder="长度<64" ></el-input>
+                                        <el-input v-model="form.item.suggestedPrice" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
                             <el-col :span='24'>
                                 <el-col :span='6'>
                                     <el-form-item label="单位" >
-                                        <el-select v-model="form.unitId" placeholder="请选择"  size='small'>
+                                        <el-select v-model="form.item.unitId" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in unitIdoptions"
                                                 :key="item.id"
@@ -138,7 +138,7 @@
                                 </el-col>
                                 <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="保质期" required >
-                                        <el-input v-model="form.expirationDate" size="small" placeholder="长度<64" suffix="月"></el-input>
+                                        <el-input v-model="form.item.expirationDate" size="small" placeholder="长度<64" suffix="月"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
@@ -443,19 +443,19 @@ export default {
 
             // 信息内容
             form: {
-                itemType: 1,
-                isPresent: 0,
-                title: '',
-                sellingPoint: '',
-                buyRemind: '',
-                barCode: '',
-                itemCode: '',
-                brandId: [],
-                categoryId: [],
-                sendWay: [],
-                money: '',
-                unitId: [],
-                expirationDate: ''
+                // itemType: 1,
+                // isPresent: 0,
+                // title: '',
+                // sellingPoint: '',
+                // buyRemind: '',
+                // barCode: '',
+                // itemCode: '',
+                // brandId: [],
+                // categoryId: [],
+                // sendWay: [],
+                // money: '',
+                // unitId: [],
+                // expirationDate: ''
             },
             // 信息表单选项
             brandIdoptions:[],
@@ -796,7 +796,13 @@ export default {
             var id = this.$store.state.home.goodsmoreId
 
             api.getitemfirstEdititemId(id).then((response)=>{
-                console.log(response)
+                this.form = response.data
+                // console.log(response)
+                if (this.form.item.expirationDateStatus == 1){
+                    this.form.item.expirationDateStatus = true
+                } else {
+                    this.form.item.expirationDateStatus = false
+                }
             }).catch((error)=>{
                 console.log(error)
             })

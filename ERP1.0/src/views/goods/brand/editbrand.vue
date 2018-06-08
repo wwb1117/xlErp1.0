@@ -20,20 +20,20 @@
                             placeholder="请选择"
                             size='small'
                             style="width:338px"
-                            v-model="from.itemBrandCategories"
+                            v-model="items"
                             multiple
                             filterable
                             allow-create
                             default-first-option>
                             <el-option
-                                v-for="item in options"
-                                :key="item.itemCategoryId"
+                                v-for="item in itemoptions"
+                                :key="item.id"
                                 :label="item.categoryName"
                                 :value="item.categoryName">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label='服务费率' required :label-width='formLabelWidth'  v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
+                    <el-form-item label='服务费率' required :label-width='formLabelWidth'  v-for="(date,index) in items" :key='index' v-model='text' >
                         <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
                     </el-form-item>
                     <el-form-item label="品牌LOGO" :label-width="formLabelWidth" class="img_up">
@@ -69,9 +69,9 @@
                             style="width:338px">
                             <el-option
                             v-for="item in group"
-                            :key="item.groupId"
+                            :key="item.id"
                             :label="item.groupName"
-                            :value="item.groupId">
+                            :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -103,6 +103,9 @@ export default {
             value: '',
             options: [],
             text:[],
+
+            items:[],
+            itemoptions:[],
 
             // 是否出现门店
             showhiddden: false,
@@ -149,13 +152,6 @@ export default {
         trueconfim() {
             this.$refs['addbrand'].validate((valid)=>{
                 if (valid){
-                    for (var w in this.from.itemBrandCategories){
-                        for (var e in this.options){
-                            if (this.from.itemBrandCategories[w] == this.options[e].categoryName){
-                                this.from.itemBrandCategories[w] = this.options[e].id
-                            }
-                        }
-                    }
 
                     if (this.from.isControl == true){
                         this.from.isControl = 1
@@ -167,6 +163,34 @@ export default {
                         this.from.isRecommended = 1
                     } else {
                         this.from.isRecommended = 0
+                    }
+
+                    this.from.itemBrandCategories = [
+                    ]
+
+                    if (this.text.length >= this.from.itemBrandCategories.length){
+                        for (var a = 0 ; a < this.text.length; a ++){
+                            let obj = {
+                                itemCategoryId:'',
+                                categoryName:'',
+                                rate:''
+                            }
+
+                            this.from.itemBrandCategories.push(obj)
+                        }
+                    }
+
+                    for (var i in this.items){
+                        this.from.itemBrandCategories[i].categoryName = this.items[i]
+                        this.from.itemBrandCategories[i].rate = this.text[i]
+                    }
+
+                    for (var y in this.itemoptions){
+                        for (var x in this.from.itemBrandCategories){
+                            if (this.from.itemBrandCategories[x].categoryName == this.itemoptions[y].categoryName){
+                                this.from.itemBrandCategories[x].itemCategoryId = this.itemoptions[y].id
+                            }
+                        }
                     }
 
                     let obj = {
@@ -211,32 +235,23 @@ export default {
         }
     },
     created() {
-
         var id = this.$store.state.home.brandId
 
         api.getcategorylist().then((response)=>{
-            this.options = []
-            this.options = response.data.list
-            // console.log(response)
+            this.itemoptions = response.data.list
+
         }).catch((error)=>{
             console.log(error)
         })
 
         api.getitemBrandid(id).then((response)=>{
-            // console.log(response.data.list)
-            this.from = {}
-            this.from = response.data.list
+            this.from = response.data
+
+
             for (var i in this.from.itemBrandCategories){
-                this.text[i] = this.from.itemBrandCategories[i].rate
-                this.from.itemBrandCategories[i] = this.from.itemBrandCategories[i].categoryName
+                this.text.push(this.from.itemBrandCategories[i].rate)
             }
 
-            if (this.from.isControl == 1){
-                this.from.isControl = true
-                this.showhiddden = true
-            } else {
-                this.from.isControl = false
-            }
         }).catch((error)=>{
             console.log(error)
         })
@@ -257,38 +272,46 @@ export default {
         var id = this.$store.state.home.brandId
 
         api.getcategorylist().then((response)=>{
-            this.options = response.data.list
-            // console.log(response.data.list)
-
+            this.itemoptions = response.data.list
+            // console.log(this.itemoptions)
         }).catch((error)=>{
             console.log(error)
         })
 
         api.getitemBrandid(id).then((response)=>{
-
             this.from = response.data
-            console.log(response.data)
-            for (var i in this.from.itemBrandCategories){
-                this.text[i] = this.from.itemBrandCategories[i].rate
-                this.from.itemBrandCategories[i] = this.from.itemBrandCategories[i].categoryName
+            this.items = []
+            this.text = []
+            this.groupName = []
+            if (this.from.isRecommended == 1){
+                this.from.isRecommended = true
+            } else {
+                this.from.isRecommended = false
             }
-
             if (this.from.isControl == 1){
                 this.from.isControl = true
                 this.showhiddden = true
             } else {
                 this.from.isControl = false
+                this.showhiddden = false
+            }
+            for (var i in this.from.itemBrandCategories){
+                this.text.push(this.from.itemBrandCategories[i].rate)
+            }
+            for (var y in this.from.itemBrandCategories){
+                this.items.push(this.from.itemBrandCategories[y].categoryName)
             }
 
+            for (var z in this.from.itemBrandShopGroups){
+                this.groupName.push(this.from.itemBrandShopGroups[z].groupId)
+            }
+            console.log(this.from)
         }).catch((error)=>{
             console.log(error)
         })
 
-        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
-            this.group = []
-            this.group = response.data
-            this.groupName = this.from.itemBrandShopGroups
-            // console.log(response)
+        api.getshopgrouplist(id).then((response)=>{
+            this.group = response.data.list
         }).catch((error)=>{
             console.log(error)
         })
