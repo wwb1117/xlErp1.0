@@ -140,7 +140,7 @@ export default {
 
             api.getcategorylist(page).then((response)=>{
                 // console.log(response.data)
-                this.items = response.data.list
+                this.items = response.data
 
                 for (var i in this.items){
                     if (this.items[i].isDisplay == 1){

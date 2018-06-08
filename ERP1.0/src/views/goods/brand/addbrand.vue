@@ -293,7 +293,7 @@ export default {
             }
             this.fileList = []
             api.getcategorylist().then((response)=>{
-                this.options = response.data.list
+                this.options = response.data
                 console.log(response)
             }).catch((error)=>{
                 console.log(error)
