@@ -24,7 +24,7 @@
                     :expand-on-click-node="false">
                     <ul class="item_box_conent"  slot-scope="{ node, data }" style="font-size:12px">
                         <li >
-                            <el-button type='text' @click="addconfim(data.parentId)" v-perss="'增加商品分类'"><span style="font-size:12px">新增下级</span></el-button>
+                            <el-button type='text' @click="addconfim(data.id)" v-perss="'增加商品分类'"><span style="font-size:12px">新增下级</span></el-button>
                             <el-button type='text' @click="editconfim(data.id)" v-perss="'修改商品类目'"><span style="font-size:12px">编辑</span></el-button>
                             <el-button type="text" disabled v-perss="'删除商品类目'"><span style="font-size:12px">删除</span></el-button>
                         </li>
@@ -139,8 +139,8 @@ export default {
             }
 
             api.getcategorylist(page).then((response)=>{
-                // console.log(response.data.list)
-                this.items = response.data.list
+                // console.log(response.data)
+                this.items = response.data
 
                 for (var i in this.items){
                     if (this.items[i].isDisplay == 1){
@@ -265,17 +265,17 @@ export default {
     float: right;
 }
 .item_box_conent li:nth-child(1){
-    margin-right: 20px
+    margin-right: 35px
 }
 .item_box_conent li:nth-child(2){
     width: 20px;
-    margin-right: 190px
+    margin-right: 200px
 }
 .item_box_conent li:nth-child(3){
-    margin-right: 250px
+    margin-right: 240px
 }
 .item_box_conent li:nth-child(4){
-    margin-right: 250px
+    margin-right: 260px
 }
 .item_box_conent li:nth-child(5){
     float: left;
@@ -283,7 +283,7 @@ export default {
 @media only screen and (max-width: 1850px) {
     .item_box_conent li:nth-child(2){
         width: 20px;
-        margin-right: 170px
+        margin-right: 150px
     }
     .item_box_conent li:nth-child(3){
         margin-right: 230px
@@ -298,10 +298,22 @@ export default {
         margin-right: 120px
     }
     .item_box_conent li:nth-child(3){
-        margin-right: 170px
+        margin-right: 180px
     }
     .item_box_conent li:nth-child(4){
         margin-right: 180px
+    }
+}
+@media only screen and (max-width: 1550px) {
+    .item_box_conent li:nth-child(2){
+        width: 20px;
+        margin-right: 120px
+    }
+    .item_box_conent li:nth-child(3){
+        margin-right: 100px
+    }
+    .item_box_conent li:nth-child(4){
+        margin-right: 160px
     }
 }
 @media only screen and (max-width: 1400px) {

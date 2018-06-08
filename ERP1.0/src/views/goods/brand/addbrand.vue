@@ -40,6 +40,7 @@
                         <el-upload
                             :action="this.upDateImgUrl"
                             :data='sentData'
+                            :file-list='fileList'
                             list-type="picture-card"
                             :on-preview="handlePictureCardPreview"
                             :on-remove="handleRemove"
@@ -145,8 +146,9 @@ export default {
             upDateImgUrl: process.env.API_ROOT + '/f/upload',
             sentData: {
                 file: '',
-                uploadType: 'cms-address'
+                uploadType: 'erp'
             },
+            fileList:[],
             dialogImg:''
         }
     },
@@ -155,7 +157,7 @@ export default {
         // 上传
         handleRemove(file, fileList) {
             for (var i in this.fileList){
-                if (this.fileList[i].data.url == file.response.data.url){
+                if (this.fileList[i].url == file.url){
 
                     this.fileList.splice(i, 1)
                 }
@@ -167,7 +169,7 @@ export default {
             this.dialogVisible = true;
         },
         handleAvatarSuccess(file, fileList) {
-            this.from.brandImg.push(fileList.response.data.url)
+            this.fileList.push(fileList.response.data)
         },
         trueconfim() {
             this.$refs['addbrand'].validate((valid) => {
@@ -222,7 +224,7 @@ export default {
                     }
 
 
-                    this.from.brandImg = this.from.brandImg.toString()
+                    this.from.brandImg = JSON.stringify(this.fileList)
 
                     api.postitemBrandadd(this.from).then((response)=>{
                         this.$message({
@@ -270,66 +272,42 @@ export default {
             } else {
                 this.showhiddden = false
             }
+        },
+        get() {
+            this.list = []
+            this.text = []
+
+            this.from = {
+                id: '',
+                brandName: '',
+                isControl: 0,
+                rateList: '',
+                brandImg: '',
+                sort: '',
+                isRecommended: 0,
+                shopGroupIds: ''
+            }
+            this.fileList = []
+            api.getcategorylist().then((response)=>{
+                this.options = response.data
+                // console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+
+            api.getshopgrouplist(this.page).then((response)=>{
+                this.group = response.data.list
+                // console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
     },
     created() {
-        this.list = []
-        this.text = []
-
-        this.from = {
-            id: '',
-            brandName: '',
-            isControl: 0,
-            rateList: '',
-            brandImg: '',
-            sort: '',
-            isRecommended: 0,
-            shopGroupIds: ''
-        }
-
-        api.getcategorylist().then((response)=>{
-            this.options = response.data.list
-            // console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
-
-        api.getshopgrouplist(this.page).then((response)=>{
-            this.group = response.data.list
-            // console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
+        this.get()
     },
     activated() {
-        this.list = []
-        this.text = []
-
-        this.from = {
-            id: '',
-            brandName: '',
-            isControl: 0,
-            rateList: '',
-            brandImg: '',
-            sort: '',
-            isRecommended: 0,
-            shopGroupIds: ''
-        }
-
-        api.getcategorylist().then((response)=>{
-            this.options = response.data.list
-            // console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
-
-        api.getshopgrouplist(this.page).then((response)=>{
-
-            this.group = response.data.list
-        }).catch((error)=>{
-            console.log(error)
-        })
-
+        this.get()
     }
 }
 </script>

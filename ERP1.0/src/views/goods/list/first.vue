@@ -467,7 +467,7 @@ export default {
         getcategoryName() {
             api.getcategorylist().then((response)=>{
                 // console.log(response.data.list)
-                this.categoryNameOptions = response.data.list
+                this.categoryNameOptions = response.data
 
             }).catch((error)=>{
                 console.log(error)
