@@ -153,23 +153,22 @@ input[type="file"] {
     display: none;
 }
 .edititems_box .el-upload--picture-card{
-    width: 100px;
-    height: 100px;
-    line-height: 100px
+    width: 108px;
+    height: 108px;
+    line-height: 108px
 }
 .additems_box .el-upload--picture-card{
-    width: 100px;
-    height: 100px;
-    line-height: 100px
+    width: 108px;
+    height: 108px;
+    line-height: 108px
 }
 .brand_top input[type="file"] {
     display: none;
 }
 .addbrand_box .el-upload--picture-card{
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-
+    width: 108px;
+    height: 108px;
+    line-height: 108px;
 }
 .pic_up .el-upload--picture-card{
     width: 108px;
@@ -185,6 +184,15 @@ input[type="file"] {
     width: 108px;
     height: 108px;
 }
+.img_up .el-upload-list__item{
+    width: 108px;
+    height: 108px;
+}
+.updata_box .el-upload-list__item{
+    height: 108px;
+    width: 108px;
+}
+
 .supply_check .el-tag .el-tag__close{
     top:-20px;
     right: 10px;

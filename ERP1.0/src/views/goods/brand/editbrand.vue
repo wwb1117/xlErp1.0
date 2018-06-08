@@ -36,17 +36,19 @@
                     <el-form-item label='服务费率' required :label-width='formLabelWidth'  v-for="(date,index) in from.itemBrandCategories" :key='index' v-model='text' >
                         <el-input type='text'  size='small' style="width:338px" v-model="text[index]" :placeholder='date'></el-input>
                     </el-form-item>
-                    <el-form-item label="品牌LOGO" :label-width="formLabelWidth" >
+                    <el-form-item label="品牌LOGO" :label-width="formLabelWidth" class="img_up">
                         <el-upload
-                            action=""
+                            :action="this.upDateImgUrl"
+                            :data='sentData'
                             list-type="picture-card"
                             :on-preview="handlePictureCardPreview"
-                            :on-remove="handleRemove">
+                            :on-remove="handleRemove"
+                            :on-success='handleAvatarSuccess'>
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <!-- action上传地址 -->
                         <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="from.brandImg" alt="">
+                            <img width="100%" :src="this.dialogImg" alt="">
                         </el-dialog>
                     </el-form-item>
                     <el-form-item label="排序" prop='sort' :label-width="formLabelWidth" >
@@ -115,18 +117,36 @@ export default {
                 sort: [
                     { required: true, message: '请输入排序', trigger: 'blur' }
                 ]
-            }
+            },
+
+            upDateImgUrl: process.env.API_ROOT + '/f/upload',
+            sentData: {
+                file: '',
+                uploadType: 'cms-address'
+            },
+            fileList:[],
+            dialogImg:''
 
         }
     },
     methods: {
         // 上传
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            // console.log(file, fileList);
+            for (var i in this.fileList){
+                if (this.fileList[i].data.url == file.response.data.url){
+
+                    this.fileList.splice(i, 1)
+                }
+            }
         },
         handlePictureCardPreview(file) {
-            this.from.brandImg = file.url;
+            this.dialogImg = file.url;
             this.dialogVisible = true;
+        },
+        handleAvatarSuccess(file, fileList) {
+            this.fileList.push(file)
+            // console.log(this.fileList)
         },
         trueconfim() {
             this.$refs['addbrand'].validate((valid)=>{
@@ -151,12 +171,26 @@ export default {
                         this.from.isRecommended = 0
                     }
 
+                    if (this.fileList.length >= this.from.brandImg.length){
+                        for (var a = 0 ; a < this.fileList.length - 1 ; a ++){
+                            let obj = {
+                                imgUrl:''
+                            }
+
+                            this.from.brandImg.push(obj)
+                        }
+                    }
+
+                    for (var i in this.fileList){
+                        this.from.brandImg[i].imgUrl = this.fileList[i].data.url
+                    }
+
                     let obj = {
                         id: this.from.id,
                         brandName: this.from.brandName,
                         isControl: this.from.isControl,
                         rateList: JSON.stringify(this.from.itemBrandCategories),
-                        brandImg: this.from.brandImg,
+                        brandImg: this.from.brandImg.toString(),
                         sort: this.from.sort,
                         isRecommended: this.from.isRecommended,
                         shopGroupIds:this.groupName.toString()

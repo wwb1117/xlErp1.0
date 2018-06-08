@@ -319,7 +319,7 @@
                     <li class="share">
                         <el-form  :model="nextform" label-width="100px">
                             <el-form-item label="分享图片">
-                                <div class="updata_box">
+                                <div class="updata_box ">
                                     <el-upload
                                         :action="this.upDateImgUrl2"
                                         :data='sentData2'
@@ -656,7 +656,13 @@ export default {
         // 上传图片
         // 移除
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            // console.log(file, fileList);
+            for (var i in this.fileList2){
+                if (this.fileList1[i].data.url == file.response.data.url){
+
+                    this.fileList1.splice(i, 1)
+                }
+            }
         },
         // 变大查看
         handlePictureCardPreview(file) {
@@ -666,11 +672,17 @@ export default {
         // 成功回调
         handleAvatarSuccess(file, fileList) {
             this.fileList1.push(file)
-            console.log(this.fileList1)
+            // console.log(this.fileList1)
         },
         // 分享图片
         handleRemove2(file, fileList) {
-            console.log(file, fileList);
+            // console.log(file, fileList);
+            for (var i in this.fileList2){
+                if (this.fileList2[i].data.url == file.response.data.url){
+
+                    this.fileList2.splice(i, 1)
+                }
+            }
         },
         handlePictureCardPreview2(file) {
             this.otherImgUrl = file.url;
