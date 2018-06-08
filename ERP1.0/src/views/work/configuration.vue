@@ -32,8 +32,8 @@
             </div>
         </section>
         <footer class="configuration_bottom">
-            <el-button type="primary" size='small' style="margin:10px 0 0 30px" @click='trueconfim'>保存</el-button>
-            <el-button  size='small' style="margin:10px 0 0 10px">取消</el-button>
+            <el-button type="primary" size='small' style="margin:10px 0 0 30px ;width:90px" @click='trueconfim'>保存</el-button>
+            <el-button  size='small' style="margin:10px 0 0 10px;width:90px" @click="returnprev">取消</el-button>
         </footer>
     </section>
 </template>
@@ -44,21 +44,7 @@ export default {
     name: 'configuration',
     data() {
         return {
-            name: [
-                // {
-                //     value: 'HTML',
-                //     label: 'HTML',
-                //     a: false
-                // },
-                // {
-                //     value: 'CSS',
-                //     label: 'CSS'
-                // },
-                // {
-                //     value: 'JavaScript',
-                //     label: 'JavaScript'
-                // }
-            ],
+            name: [],
             // 流程ID
             shu: '',
             // 流程名称
@@ -184,6 +170,9 @@ export default {
             }).catch((error)=>{
                 console.log(error)
             })
+        },
+        returnprev() {
+            this.$router.go(-1)
         },
         get() {
             api.getuseruserList().then((response)=>{

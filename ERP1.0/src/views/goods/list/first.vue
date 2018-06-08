@@ -107,12 +107,16 @@
                     </li>
                 </ul>
                 <!-- 列表顶部隐藏谈出框 -->
-                <el-dialog title="提示" :visible.sync="dialogVisible1" width="30%" >
-                    <el-form :model="supplier" label-width="100px">
+                <el-dialog title="提示" :visible.sync="dialogVisible1" width="25%" >
+                    <el-form label-width="100px">
                         <el-form-item label="供应商分组" size='small'>
-                            <el-select v-model="supplier.get" placeholder="选择允许报价的供应商分组"   style="margin-left:20px;width:338px">
-                                <el-option label="妈妈去哪了" value="12312"></el-option>
-                                <el-option label="爸爸去哪了" value="1243123"></el-option>
+                            <el-select v-model="sellerfind" placeholder="选择允许报价的供应商分组"   style="margin-left:20px">
+                                <el-option
+                                    v-for="item in sellerfindoptions"
+                                    :key="item.id"
+                                    :label="item.sellerCompanyName"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-form>
@@ -121,12 +125,16 @@
                         <el-button type="primary" @click="dialogVisible1 = false" size='small'>确 定</el-button>
                     </span>
                 </el-dialog>
-                <el-dialog title="提示" :visible.sync="dialogVisible2" width="30%" >
-                    <el-form :model="deduct" label-width="100px">
+                <el-dialog title="提示" :visible.sync="dialogVisible2" width="25%" >
+                    <el-form  label-width="100px">
                         <el-form-item label="提成方式" size='small' >
-                            <el-select v-model="deduct.get" placeholder="选择提成方式"  style="margin-left:20px;width:338px">
-                                <el-option label="妈妈去哪了" value="12312"></el-option>
-                                <el-option label="爸爸去哪了" value="1243123"></el-option>
+                            <el-select v-model="deduct" placeholder="选择提成方式"  style="margin-left:20px">
+                                <el-option
+                                    v-for="item in deductOptions"
+                                    :key="item.promoteGroupId"
+                                    :label="item.promoteGroupName"
+                                    :value="item.promoteGroupId">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-form>
@@ -205,7 +213,7 @@
                         </el-table-column>
                         <!-- 贸易类型 -->
                         <el-table-column
-                            prop=""
+                            prop="sendWay"
                             label="贸易类型">
                         </el-table-column>
                         <!-- 提成方式 -->
@@ -274,7 +282,7 @@ export default {
             // 高级搜索表单内容
             morefrom: {
                 pageNo: 1,
-                pageSize: 11,
+                pageSize: 10,
                 title : '',
                 itemCode : '',
                 categoryName : [],
@@ -283,7 +291,15 @@ export default {
                 sendWay: [],
                 deduct: []
             },
-            // 高级搜索选项
+            // 选择框隐藏表单内容
+            // 更改供应商
+            sellerfind:[],
+            sellerfindoptions:[],
+            // 提成方式
+            deductOptions: [],
+
+            // 更改提成方式
+            deduct: [],
 
             // 商品名称分类
             categoryNameOptions: [],
@@ -291,18 +307,7 @@ export default {
             brandNameOptions: [],
             // 贸易类型
             sendWayOptions: [],
-            // 提成方式
-            deductOptions: [],
 
-
-            // 更改供应商
-            supplier:{
-                get: ''
-            },
-            // 提成方式
-            deduct: {
-                get:''
-            },
             // 查看规格弹出框内容
             gridData: [
                 {
@@ -422,7 +427,7 @@ export default {
         },
         get() {
             api.getitemlist(this.page).then((response) => {
-                // console.log(response.data.list)
+                console.log(response.data.list)
                 this.goodData = response.data.list
             }).catch((error)=>{
                 console.log(error)
@@ -446,7 +451,7 @@ export default {
             }
 
             api.getitemBrandlist(obj).then((response)=>{
-                this.brandNameOptions = response.data.itemVOs
+                this.brandNameOptions = response.data.list
             }).catch((error)=>{
                 console.log(error)
             })
@@ -458,19 +463,30 @@ export default {
             }).catch((error)=>{
                 console.log(error)
             })
+        },
+        // 获取供应商列表
+        getsellerfind() {
+            api.getsellerfindAll().then((response)=>{
+                // console.log(response)
+                this.sellerfindoptions = response.data.list
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+
+        getall() {
+            this.get()
+            this.getcategoryName()
+            this.getbrandName()
+            this.getdeduct()
+            this.getsellerfind()
         }
     },
     created() {
-        this.get()
-        this.getcategoryName()
-        this.getbrandName()
-        this.getdeduct()
+        this.getall()
     },
     activated() {
-        this.get()
-        this.getcategoryName()
-        this.getbrandName()
-        this.getdeduct()
+        this.getall()
     }
 }
 </script>

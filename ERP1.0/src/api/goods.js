@@ -141,6 +141,14 @@ export default {
     // 商品提成设置
     getitempromotes(data) {
         return HttpClient.get('/item/promotes', data)
+    },
+    // 供应商选择
+    getsellerfindAll(data) {
+        return HttpClient.get('/seller/findAll', data)
+    },
+    // 供应商更改
+    putsellerupdateSeller(data) {
+        return HttpClient.put('/seller/updateSeller', data)
     }
 
 }

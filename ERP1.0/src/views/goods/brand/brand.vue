@@ -162,7 +162,7 @@ export default {
 
             api.getitemBrandlist(this.page).then((response)=>{
                 // console.log(response.data.itemVOs)
-                this.brand = response.data.itemVOs
+                this.brand = response.data.list
 
                 for (var i in this.brand){
                     if (this.brand[i].isRecommended == 1){
