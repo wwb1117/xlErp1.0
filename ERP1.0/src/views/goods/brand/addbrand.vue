@@ -223,8 +223,12 @@ export default {
                         this.from.isRecommended = 0
                     }
 
+                    var imgurl = []
 
-                    this.from.brandImg = JSON.stringify(this.fileList)
+                    for (var b in this.fileList){
+                        imgurl.push(this.fileList[b].url)
+                    }
+                    this.from.brandImg = imgurl.toString()
 
                     api.postitemBrandadd(this.from).then((response)=>{
                         this.$message({
@@ -289,8 +293,8 @@ export default {
             }
             this.fileList = []
             api.getcategorylist().then((response)=>{
-                this.options = response.data
-                // console.log(response)
+                this.options = response.data.list
+                console.log(response)
             }).catch((error)=>{
                 console.log(error)
             })

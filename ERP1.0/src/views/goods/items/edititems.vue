@@ -112,12 +112,16 @@ export default {
             } else {
                 this.msg.isDisplay = 0
             }
+            var imgurl = []
 
+            for (var i in this.fileList){
+                imgurl.push(this.fileList[i].url)
+            }
 
             let obj = {
                 id: this.msg.id,
                 parentId: this.msg.parentId,
-                categoryImg: JSON.stringify(this.fileList),
+                categoryImg: imgurl.toString(),
                 categoryName: this.msg.categoryName,
                 isDisplay: this.msg.isDisplay,
                 sort: this.msg.sort

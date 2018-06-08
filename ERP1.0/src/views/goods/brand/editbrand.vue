@@ -199,12 +199,18 @@ export default {
                         }
                     }
 
+                    var imgurl = []
+
+                    for (var b in this.fileList){
+                        imgurl.push(this.fileList[b].url)
+                    }
+
                     let obj = {
                         id: this.from.id,
                         brandName: this.from.brandName,
                         isControl: this.from.isControl,
                         rateList: JSON.stringify(this.from.itemBrandCategories),
-                        brandImg: JSON.stringify(this.fileList),
+                        brandImg: imgurl.toString(),
                         sort: this.from.sort,
                         isRecommended: this.from.isRecommended,
                         shopGroupIds:this.groupName.toString()
