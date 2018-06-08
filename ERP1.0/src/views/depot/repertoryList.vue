@@ -3,8 +3,8 @@
         <div class="model_topcol">
             <span>商品库存</span>
             <div>
-                <el-button size="small">库存盘点</el-button>
-                <el-button size="small">库存调拨</el-button>
+                <el-button size="small" @click="repCheck">库存盘点</el-button>
+                <el-button size="small" @click="repAllot">库存调拨</el-button>
                 <el-button type="primary" @click="purchaseAddEvent" size="small">导出库存表</el-button>
             </div>
         </div>
@@ -198,6 +198,7 @@
                                 详情
                             </el-button>
                             <el-button
+                                v-perss="'修改库存'"
                                 :style="{marginRight: '10px'}"
                                 @click.native.prevent="editTable(scope.$index, scope.row)"
                                 type="text"
@@ -325,9 +326,13 @@ export default {
             })
         },
         inDetail(index, data){
-            this.$router.push({name: '出入库明细', params: {id: data.itemSku || 12314654}})
+            this.$router.push({name: '出入库明细', params: {id: data.itemSku}})
             $('#secondMenu_ul li').removeClass('active')
-            $('#secondMenu_ul li').eq(3).addClass('active')
+            $('#secondMenu_ul li').each(function (eq, element) {
+                if ($(element).text() == '出入库明细') {
+                    $('#secondMenu_ul li').eq(eq).addClass('active')
+                }
+            })
         },
         editTable(index, data) {
             this.dialogFormVisible = true
@@ -414,6 +419,28 @@ export default {
             this.$router.push({
                 name: '新增入库',
                 params: {type: '出库'}
+            })
+        },
+        repCheck() {
+            this.$router.push({
+                name: '库存盘点'
+            })
+            $('#secondMenu_ul li').removeClass('active')
+            $('#secondMenu_ul li').each(function (eq, element) {
+                if ($(element).text() == '库存盘点') {
+                    $('#secondMenu_ul li').eq(eq).addClass('active')
+                }
+            })
+        },
+        repAllot() {
+            this.$router.push({
+                name: '库存调拨'
+            })
+            $('#secondMenu_ul li').removeClass('active')
+            $('#secondMenu_ul li').each(function (eq, element) {
+                if ($(element).text() == '调拨单') {
+                    $('#secondMenu_ul li').eq(eq).addClass('active')
+                }
             })
         },
         dropdownSelectEvent(command){

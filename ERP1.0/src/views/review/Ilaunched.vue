@@ -74,7 +74,7 @@
                         label="操作">
                          <template slot-scope="scope">
                             <el-button
-                            @click.native="tablePropEvent(scope.$index, 1)"
+                            @click.native="tablePropEvent(scope.row)"
                             type="text"
                             size="small">
                             详情
@@ -92,7 +92,7 @@
                 :page-sizes="[10, 30, 50, 100]"
                 :page-size="10"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalPage">
             </el-pagination>
         </div>
     </div>
@@ -105,7 +105,8 @@ export default {
         return {
             searchTime: '',
             searState: '',
-            currentPage: 2,
+            currentPage: 1,
+            totalPage: 1,
             selectTableData: [],
             tableHeight: 500,
             tableParam: {
@@ -115,39 +116,46 @@ export default {
                 pageSize: 10,
                 searchStr: '',
                 auditStatus: '',
-                creatorId: '1'
+                creatorId: this.$store.state.home.userInfo.user.id
             },
             tableData: []
         }
     },
     computed:{},
     methods:{
-        handleSizeChange(){
-
+        handleSizeChange(val){
+            this.tableParam.pageSize = val
+            this.getTableData()
         },
-        handleCurrentChange(){
-
+        handleCurrentChange(val){
+            this.tableParam.pageNo = val
+            this.getTableData()
         },
-        tablePropEvent(index, type){
+        tablePropEvent(rowData){
+            this.$store.commit('setCurrentModelId', rowData)
             this.$router.push({
-                path: '/waitReviewRe'
+                path: '/IlaunchedDetail'
             })
         },
         handleSelectionChange(val){
 
         },
         datePickerChange(data){
-            this.tableParam.startTime = data[0] / 1000
-            this.tableParam.endTime = data[1] / 1000
+            this.tableParam.startTime = Math.round(data[0] / 1000)
+            this.tableParam.endTime = Math.round(data[1] / 1000)
         },
         getTableData(){
             api.getILaunchedList(this.tableParam).then((res) => {
                 console.log(res)
+                this.tableData = res.data.list
+                this.totalPage = res.data.total
             })
         }
     },
     created(){},
     activated(){
+        this.tableParam.pageSize = 10
+        this.tableParam.pageNo = 1
         this.getTableData()
     },
     mounted(){}

@@ -6,6 +6,15 @@ ul{
     background: #ED3742;
     border-color: #ED3742;
 }
+.back_red{
+    background: #ED3742;
+}
+.back_gray{
+    background: #5f5f60;
+}
+.back_brown{
+    background: #FF811B;
+}
 .color_red{
     color:  #ED3742;
 }

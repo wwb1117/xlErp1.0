@@ -3,7 +3,7 @@
         <div class="model_topcol">
             <span>采购退货</span>
             <div>
-                <el-button type="primary" @click="addRejectEvent" size="small">新增退货单</el-button>
+                <el-button v-perss="'新建退货单'" type="primary" @click="addRejectEvent" size="small">新增退货单</el-button>
             </div>
         </div>
         <div class="model_content" :style="{height: $store.state.home.modelContentHeight + 'px'}">
@@ -159,6 +159,7 @@
                             <div v-if="scope.row.auditStatus == 0">
                                 <el-button
                                     @click.native.prevent="tableOperEvent(scope.row.id, 1)"
+                                    v-perss="'采购退货单详情'"
                                     type="text"
                                     size="small">
                                     查看
@@ -166,6 +167,7 @@
                                 <el-button
                                     @click.native.prevent="tableOperEvent(scope.row.id, 2)"
                                     type="text"
+                                    v-perss="'删除采购退货单'"
                                     size="small">
                                     删除
                                 </el-button>
@@ -174,12 +176,14 @@
                                 <el-button
                                     @click.native.prevent="tableOperEvent(scope.row.id, 1)"
                                     type="text"
+                                    v-perss="'采购退货单详情'"
                                     size="small">
                                     查看
                                 </el-button>
                                 <el-button
                                     @click.native.prevent="tableOperEvent(scope.row.id, 3)"
                                     type="text"
+                                    v-perss="'撤销审核'"
                                     size="small">
                                     撤回
                                 </el-button>
@@ -188,6 +192,7 @@
                                 <el-button
                                     @click.native.prevent="tableOperEvent(scope.row.id, 1)"
                                     type="text"
+                                    v-perss="'采购退货单详情'"
                                     size="small">
                                     查看
                                 </el-button>

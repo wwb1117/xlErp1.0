@@ -1,8 +1,12 @@
 <template>
     <div id="waitReview_Wrap">
         <div class="model_topcol">
-            <span style="color: #409EFF">待我审批</span>
-            <span> - 审核</span>
+            <span style="color: #409EFF">我已审批</span>
+            <span v-if="$store.state.home.currentModelId.auditStatus == 0"> - 待审核</span>
+            <span v-if="$store.state.home.currentModelId.auditStatus == 1"> - 审核中</span>
+            <span v-if="$store.state.home.currentModelId.auditStatus == 2"> - 通过</span>
+            <span v-if="$store.state.home.currentModelId.auditStatus == 3"> - 不通过</span>
+            <span v-if="$store.state.home.currentModelId.auditStatus == 4"> - 撤回</span>
             <div>
                 <el-button @click="lookBtnEvent" type="primary" size="small">查看订单</el-button>
             </div>
@@ -13,7 +17,7 @@
                     采购订单审核
                 </div>
                 <div v-if="$store.state.home.currentModelId.processType == 2" class="content_title">
-                    退货单单审核
+                    退货单审核
                 </div>
                 <div v-if="$store.state.home.currentModelId.processType == 3" class="content_title">
                     入库单审核
@@ -38,7 +42,7 @@
 
                 </div>
                 <div class="maincontent">
-                    <div v-for="item in reviewRecordData" :key="item.id" class="item_wrap">
+                    <div v-for="(item, index) in reviewRecordData" :key="item.id" class="item_wrap" :class="index == (reviewRecordData.length - 1) ? 'item_wrap_curr' : ''">
                         <span v-if="item.reviewProcessStatus == 0" class="item_state_pass back_gray"></span>
                         <span v-if="item.reviewProcessStatus == 1" class="item_state_pass back_brown"></span>
                         <span v-if="item.reviewProcessStatus == 2" class="item_state_pass back_gray"></span>
@@ -55,100 +59,35 @@
                         <span>审核意见 : </span>
                         <span v-text="item.reviewProcessRemark"></span>
                     </div>
-                    <div class="item_wrap item_wrap_curr">
+                    <!-- <div class="item_wrap item_wrap_curr">
                         <span class="item_state_curr"></span>
                         <span class="color_brown" style="margin-left: 15px">审核中</span><br>
                         <span style="margin-left: 15px">审核人 : </span>
                         <span v-text="$store.state.home.userInfo.user.userName"> </span><br>
                         <span>审核时间 : </span>
                         <span>{{Date.parse(new Date()) / 1000 | time_m}}</span><br>
-                        <el-form :inline="true" :rules="rules" :model="formData" label-position="left" size="small" label-width="80px">
+                        <el-form :inline="true" :model="formData" label-position="left" size="small" label-width="80px">
                             <el-form-item prop="maker" label="审核意见">
                                 <el-input type="textarea" :rows="4" style="width: 404px" v-model="formData.maker" placeholder="请输入审核意见"></el-input>
                             </el-form-item>
                         </el-form>
+                    </div> -->
+                    <div v-if="reviewRecordData.length == 0" class="item_wrap item_wrap_curr">
+                        <span class="item_state_pass back_brown"></span>
+                        <span class="color_brown" style="margin-left: 15px">待审核</span><br>
+                        <span style="margin-left: 15px">等待时间 : </span>
+                        <span style="margin-left: 15px" v-text="waitTime"></span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="model_footer">
-            <el-button type="primary" @click="reviewOperEvent(2)" size="small" style="width: 90px; margin-left: 25px;">审核通过</el-button>
-            <el-button size="small" @click="reviewOperEvent(1)" style="width: 90px; margin-left: 25px;">审核未通过</el-button>
+            <el-button @click="recallEvent" type="primary" size="small" style="width: 90px; margin-left: 25px;">撤销审核</el-button>
             <el-button v-RouterBack size="small" style="width: 90px; margin-left: 25px;">返 回</el-button>
-            <el-button type="primary" @click="talkWindowEvent" size="small" style="width: 90px; margin-left: 25px; float: right">沟通反馈</el-button>
         </div>
 
-        <el-dialog
-            title="提示"
-            :visible.sync="dialogVisible"
-            width="750px"
-            >
-            <div class="dialog_wrap" style="height: 500px">
-                <div>
-                    <el-input type="textarea" :rows="4" style="width: 100%" v-model="talkText" placeholder="请输入沟通反馈意见"></el-input>
-                    <el-button style="width: 90px; float: right; margin-top: 20px" size="small" type="primary">发送</el-button>
-                </div>
-
-                <div class="talkRecord">
-                    <div class="talkItem">
-                        <div class="talkItem_title">
-                            <el-badge value="2018-05-22"></el-badge>
-                            <span class="badge_circle"></span>
-                        </div>
-                        <div class="talkItem_item">
-                            <span class="talkItem_item_circle"></span>
-                            <span style="width: 50px">14:20</span>
-                            <span style="width: 60px">丹阳: </span>
-                            <span>好的 </span>
-                        </div>
-                        <div class="talkItem_item">
-                            <span class="talkItem_item_circle"></span>
-                            <span style="width: 50px">11:20</span>
-                            <span style="width: 60px">陈杰: </span>
-                            <span>下次在修改 </span>
-                        </div>
-                        <div class="talkItem_item">
-                            <span class="talkItem_item_circle"></span>
-                            <span style="width: 50px">9:20</span>
-                            <span style="width: 60px">锋哥: </span>
-                            <span>意见已经反馈 </span>
-                        </div>
-                    </div>
-                    <div class="talkItem">
-                        <div class="talkItem_title">
-                            <el-badge value="2018-05-22"></el-badge>
-                            <span class="badge_circle"></span>
-                        </div>
-                        <div class="talkItem_item">
-                            <span class="talkItem_item_circle"></span>
-                            <span style="width: 50px">14:20</span>
-                            <span style="width: 60px">丹阳: </span>
-                            <span>好的 </span>
-                        </div>
-                        <div class="talkItem_item">
-                            <span class="talkItem_item_circle"></span>
-                            <span style="width: 50px">11:20</span>
-                            <span style="width: 60px">陈杰: </span>
-                            <span>下次在修改 </span>
-                        </div>
-                        <div class="talkItem_item">
-                            <span class="talkItem_item_circle"></span>
-                            <span style="width: 50px">9:20</span>
-                            <span style="width: 60px">锋哥: </span>
-                            <span>意见已经反馈 </span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <!-- <span slot="footer" class="dialog-footer">
-                <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-                <el-button size="small" type="primary" @click="dialogVisible = false">确 定</el-button>
-            </span> -->
-        </el-dialog>
-
-
     </div>
+
 </template>
 
 <script>
@@ -158,45 +97,82 @@ export default {
         return {
             dialogVisible: false,
             reviewRecordData: [],
+            waitTime: '10: 10',
             formData: {
                 maker: ''
-            },
-            rules: {
-                maker: [
-                    { required: true, message: '请输入审核意见', trigger: 'blur' }
-                ]
-            },
-            talkText: ''
+            }
         }
     },
     computed:{},
     methods:{
-        talkWindowEvent(){
-            this.dialogVisible = true
-        },
         lookBtnEvent(){
             var idObj = this.$store.state.home.currentModelId
             var orderId = idObj.orderId
 
             if (idObj.processType == 1) { //采购
                 this.$store.commit('setCurrentModelId', orderId)
+                if (!this.myBase.isHasPerssion('采购单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({
                     path: '/purchaseListDetail/' + '1'
                 })
             }
             if (idObj.processType == 2) { //退货
                 this.$store.commit('setCurrentModelId', orderId)
+                if (!this.myBase.isHasPerssion('采购退货单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({
                     path: '/lookPurchaseReject'
                 })
             }
             if (idObj.processType == 3) { //入库
+                if (!this.myBase.isHasPerssion('入库单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({name: '出入库详情', params: {id: orderId, type: 'inbound'}})
             }
             if (idObj.processType == 4) { //出库
+                if (!this.myBase.isHasPerssion('出库单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({name: '出入库详情', params: {id: orderId, type: 'outbound'}})
             }
             if (idObj.processType == 5) { //调拨
+                if (!this.myBase.isHasPerssion('调拨单详情')) {
+                    this.$message({
+                        type: 'warning',
+                        duration: 1500,
+                        showClose: true,
+                        message: '对不起,你没有权限,请联系管理员'
+                    })
+                    return
+                }
                 this.$router.push({name: '调拨单详情', params: {id: orderId, type: '调拨'}})
             }
         },
@@ -209,35 +185,35 @@ export default {
                 reviewProcessId: reviewProcessId
             }
 
+            console.log(idObj)
+
             api.getReviewRecord(paramobj).then((response) => {
-                this.reviewRecordData = response.list
+                this.reviewRecordData = response.data.list
+
+                var nowstamp = Date.parse(new Date()) / 1000;
+
+                this.waitTime = this.myBase.computeTime(idObj.created, nowstamp)
+                console.log(response)
             })
         },
-        reviewOperEvent(type){
+        recallEvent(){
             var paramobj = {
-
                 orderId: this.$store.state.home.currentModelId.orderId,
-                reviewProcessId: this.$store.state.home.currentModelId.reviewProcessId,
-                reviewProcessUserName: this.$store.state.home.userInfo.user.userName,
-                reviewProcessStatus: type,
-                reviewProcessUserId: this.$store.state.home.userInfo.user.id,
-                reviewProcessTime: Date.parse(new Date()) / 1000,
-                reviewProcessRemark: this.formData.maker
-
+                processType: this.$store.state.home.currentModelId.processType,
+                submitterId: this.$store.state.home.userInfo.user.id
             }
 
-            api.auditorReview(paramobj).then((response) => {
-
+            api.recallList(paramobj).then(() => {
                 this.$message({
                     type: 'success',
                     duration: 1500,
                     showClose: true,
-                    message: '操作成功'
-                });
-
+                    message: '撤回成功!'
+                })
                 this.$router.go(-1)
             })
         }
+
 
     },
     activated(){
@@ -300,7 +276,6 @@ export default {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #606266;
     position: absolute;
     top: 2px;
     left: -8px;

@@ -19,7 +19,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :style="{float: 'right'}">
-                    <el-button @click="rukuBtnEvent" :style="{width: '90px'}" type="primary">入库</el-button>
+                    <el-button v-perss="'新增入库单'" @click="rukuBtnEvent" :style="{width: '90px'}" type="primary">入库</el-button>
                 </el-form-item>
             </div>
             <div class="banner">
