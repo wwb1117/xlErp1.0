@@ -92,7 +92,7 @@
                             label="保质期">
                             </el-table-column>
                             <el-table-column
-                            prop="productData"
+                            prop="productionDate"
                             label="生产日期">
                             </el-table-column>
                             <el-table-column
@@ -208,8 +208,8 @@ export default {
             addFormData: {
                 buyerId: "",
                 buyerName: "",
-                creator: "mama",
-                creatorId: "1",
+                creator: this.$store.state.home.userInfo.user.userName,
+                creatorId: this.$store.state.home.userInfo.user.id,
                 purchaseOrderNo: "",
                 list: [],
                 orderTime: "",
@@ -381,7 +381,7 @@ export default {
             this.$refs['addPurchaseListForm'].validate((valid) => {
                 if (valid) {
                     this.addFormData.orderTime = Math.round(this.addFormData.orderTime / 1000)
-                    this.addFormData.buyerId = "1"
+                    // this.addFormData.buyerId = "1"
 
                     this.saveBtnEvent()
                 }

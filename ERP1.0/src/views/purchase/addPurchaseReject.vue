@@ -95,7 +95,7 @@
                         label="保质期(月)">
                         </el-table-column>
                         <el-table-column
-                        prop="productData"
+                        prop="productionDate"
                         label="生产日期">
                         </el-table-column>
                         <el-table-column
@@ -389,7 +389,8 @@ export default {
 
             this.addFormData.returnTime = Math.round(this.addFormData.returnTime / 1000)
             this.addFormData.list = this.goodsInfoData
-            this.addFormData.creatorId = "1"
+            // console.log(this.addFormData)
+            // this.addFormData.creatorId = "1"
             api.addRejectList(this.addFormData).then(() => {
                 this.$message({
                     type: 'success',
@@ -444,14 +445,13 @@ export default {
                 this.addFormData.sellerId = puraseInfo.sellerId
                 this.addFormData.sellerName = puraseInfo.sellerName
                 this.addFormData.creator = puraseInfo.creator
-                // this.addFormData.creatorId = puraseInfo.creatorId
+
+                this.addFormData.creatorId = puraseInfo.creatorId
                 this.addFormData.ReturnOrderNo = this.myBase.MathRand('CG-R')
 
                 this.addFormData.list = puraseInfo.list
 
                 this.setGoodsInfoData(this.addFormData.list)
-
-                console.log(response)
 
             })
         }

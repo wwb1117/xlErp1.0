@@ -61,7 +61,7 @@
                         label="保质期">
                         </el-table-column>
                         <el-table-column
-                        prop="productData"
+                        prop="productionDate"
                         label="生产日期">
                         </el-table-column>
                         <el-table-column
