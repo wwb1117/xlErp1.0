@@ -81,8 +81,8 @@ export default {
             sentData: {
                 file: '',
                 uploadType: 'cms-address'
-            },
-            fileList:[]
+            }
+
 
 
         }
@@ -102,7 +102,8 @@ export default {
             this.dialogVisible = true;
         },
         handleAvatarSuccess(file, fileList) {
-            this.fileList.push(file)
+
+            this.msg.categoryImg.push(fileList.response.data.url)
             // console.log(this.fileList)
         },
         tryeconfim() {
@@ -112,20 +113,6 @@ export default {
                         this.msg.value = 1
                     } else {
                         this.msg.value = 0
-                    }
-
-                    if (this.fileList.length >= this.msg.categoryImg.length){
-                        for (var l = 0 ; l < this.fileList.length - 1 ; l ++){
-                            let obj = {
-                                imgUrl:''
-                            }
-
-                            this.msg.categoryImg.push(obj)
-                        }
-                    }
-
-                    for (var j in this.fileList){
-                        this.msg.categoryImg[j].imgUrl = this.fileList[j].data.url
                     }
 
                     let obj = {

@@ -104,7 +104,7 @@ export default {
                 brandName: '',
                 isControl: 0,
                 rateList: '',
-                brandImg: '',
+                brandImg: [],
                 sort: '',
                 isRecommended: 0,
                 shopGroupIds: ''
@@ -147,7 +147,6 @@ export default {
                 file: '',
                 uploadType: 'cms-address'
             },
-            fileList:[],
             dialogImg:''
         }
     },
@@ -168,8 +167,7 @@ export default {
             this.dialogVisible = true;
         },
         handleAvatarSuccess(file, fileList) {
-            this.fileList.push(file)
-            // console.log(this.fileList)
+            this.from.brandImg.push(fileList.response.data.url)
         },
         trueconfim() {
             this.$refs['addbrand'].validate((valid) => {
@@ -223,19 +221,6 @@ export default {
                         this.from.isRecommended = 0
                     }
 
-                    if (this.fileList.length >= this.from.brandImg.length){
-                        for (var l = 0 ; l < this.fileList.length - 1 ; l ++){
-                            let obj = {
-                                imgUrl:''
-                            }
-
-                            this.from.brandImg.push(obj)
-                        }
-                    }
-
-                    for (var j in this.fileList){
-                        this.from.brandImg[j].imgUrl = this.fileList[j].data.url
-                    }
 
                     this.from.brandImg = this.from.brandImg.toString()
 
@@ -250,7 +235,7 @@ export default {
                             brandName: '',
                             isControl: '',
                             rateList: [],
-                            brandImg: '',
+                            brandImg: [],
                             sort: '',
                             isRecommended: '',
                             shopGroupIds: ''

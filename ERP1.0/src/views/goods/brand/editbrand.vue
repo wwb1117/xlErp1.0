@@ -124,7 +124,6 @@ export default {
                 file: '',
                 uploadType: 'cms-address'
             },
-            fileList:[],
             dialogImg:''
 
         }
@@ -145,8 +144,7 @@ export default {
             this.dialogVisible = true;
         },
         handleAvatarSuccess(file, fileList) {
-            this.fileList.push(file)
-            // console.log(this.fileList)
+            this.from.brandImg.push(fileList.response.data.url)
         },
         trueconfim() {
             this.$refs['addbrand'].validate((valid)=>{
@@ -169,20 +167,6 @@ export default {
                         this.from.isRecommended = 1
                     } else {
                         this.from.isRecommended = 0
-                    }
-
-                    if (this.fileList.length >= this.from.brandImg.length){
-                        for (var a = 0 ; a < this.fileList.length - 1 ; a ++){
-                            let obj = {
-                                imgUrl:''
-                            }
-
-                            this.from.brandImg.push(obj)
-                        }
-                    }
-
-                    for (var i in this.fileList){
-                        this.from.brandImg[i].imgUrl = this.fileList[i].data.url
                     }
 
                     let obj = {

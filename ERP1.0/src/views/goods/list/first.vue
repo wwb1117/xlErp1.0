@@ -306,7 +306,20 @@ export default {
             // 商品品牌名称
             brandNameOptions: [],
             // 贸易类型
-            sendWayOptions: [],
+            sendWayOptions: [
+                {
+                    id:'1',
+                    categoryName: '国内贸易'
+                },
+                {
+                    id:'2',
+                    categoryName: '保税区直供'
+                },
+                {
+                    id:'3',
+                    categoryName: '海外直邮'
+                }
+            ],
 
             // 查看规格弹出框内容
             gridData: [
@@ -401,7 +414,19 @@ export default {
         },
         // 确定高级搜索
         findtrue() {
-            api.getitemlist(this.morefrom).then((response) => {
+            let obj = {
+                pageNo: 1,
+                pageSize: 10,
+                title : this.morefrom.title,
+                itemCode : this.morefrom.itemCode,
+                categoryName :this.morefrom.categoryName.toString(),
+                brandName: this.morefrom.brandName.toString(),
+                barCode: this.morefrom.barCode,
+                sendWay: this.morefrom.sendWay.toString(),
+                deduct: this.morefrom.deduct.toString()
+            }
+
+            api.getitemlist(obj).then((response) => {
                 // console.log(response.data.list)
                 if (response.data.total == 0){
                     this.$message({
@@ -427,7 +452,7 @@ export default {
         },
         get() {
             api.getitemlist(this.page).then((response) => {
-                console.log(response.data.list)
+                // console.log(response.data.list)
                 this.goodData = response.data.list
             }).catch((error)=>{
                 console.log(error)

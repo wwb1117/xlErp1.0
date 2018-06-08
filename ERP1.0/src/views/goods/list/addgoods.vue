@@ -422,14 +422,11 @@ export default {
                 file: '',
                 uploadType: 'cms-address'
             },
-            fileList1:[],
-
             upDateImgUrl2: process.env.API_ROOT + '/f/upload',
             sentData2: {
                 file: '',
                 uploadType: 'cms-address'
             },
-            fileList2:[],
 
             // 步骤条
             testText: ['1. 编辑基本信息', '2. 设置商品参数'],
@@ -465,11 +462,7 @@ export default {
             categoryIdoptions:[],
             sendWayoptions:[],
             unitIdoptions:[],
-            itemImgs1:[
-                {
-                    imgUrl:''
-                }
-            ],
+            itemImgs1:[],
 
             // 规格表单
             standard: {
@@ -529,6 +522,7 @@ export default {
                 delnum: '1',
                 deduct: []
             },
+            itemImgs2:[],
 
             // 包装类型
             typenameoptions:[],
@@ -577,19 +571,6 @@ export default {
                 }
             });
 
-            if (this.fileList1.length >= this.itemImgs1.length){
-                for (var a = 0 ; a < this.fileList1.length - 1 ; a ++){
-                    let obj = {
-                        imgUrl:''
-                    }
-
-                    this.itemImgs1.push(obj)
-                }
-            }
-
-            for (var i in this.fileList1){
-                this.itemImgs1[i].imgUrl = this.fileList1[i].data.url
-            }
 
             let obj = {
                 // 商品信息
@@ -643,7 +624,8 @@ export default {
                 goodhot:this.nextform.setmoneny,
                 delnum: this.nextform.setmoneny,
                 deduct: this.nextform.deduct.toString(),
-                sharetext:this.editor2.txt.text()
+                sharetext:this.editor2.txt.text(),
+                img: this.itemImgs2.toString()
             }
 
             console.log(obj)
@@ -671,8 +653,7 @@ export default {
         },
         // 成功回调
         handleAvatarSuccess(file, fileList) {
-            this.fileList1.push(file)
-            // console.log(this.fileList1)
+            this.itemImgs1.push(fileList.response.data.url)
         },
         // 分享图片
         handleRemove2(file, fileList) {
@@ -689,8 +670,7 @@ export default {
             this.otherVisible = true;
         },
         handleAvatarSuccess2(file, fileList) {
-            this.fileList2.push(file)
-            // console.log(this.fileList2)
+            this.itemImgs2.push(fileList.response.data.url)
         },
         // 重置
         reset() {

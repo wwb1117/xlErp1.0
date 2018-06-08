@@ -135,6 +135,7 @@ export default {
     activated() {
         var id = this.$store.state.home.goodsmoreId
 
+        alert(id)
         api.getitemitemId(id).then((response)=>{
             console.log(response)
             this.goodconent = response.data.item
