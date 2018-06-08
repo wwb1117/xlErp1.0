@@ -42,7 +42,7 @@
                     </li>
                     <li style="width:110px">{{item.sort}}</li>
                     <li style="width:130px">
-                        <el-button type='text'  @click="openedit(item.id)"><span style="font-size:12px">编辑</span></el-button>
+                        <el-button type='text'  @click="openedit(item.id)" v-perss="'修改商品品牌'"><span style="font-size:12px">编辑</span></el-button>
                         <el-button type="text" disabled  v-perss="'删除商品品牌'"><span style="font-size:12px">删除</span></el-button>
                     </li>
                 </ul>

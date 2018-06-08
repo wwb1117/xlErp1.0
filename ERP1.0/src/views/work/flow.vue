@@ -3,7 +3,7 @@
         <!-- 顶部 -->
         <header class="flow_top">
             <p class='flow_title'>流程配置</p>
-            <el-button type="primary" size='small' style="height:30px;margin-top:-3px" @click='addflow'>新增</el-button>
+            <el-button type="primary" size='small' style="height:30px;margin-top:-3px;width:90px" @click='addflow' v-perss="'新增流程名称'">新增流程</el-button>
             <el-dialog
                 title="新增流程"
                 :visible.sync="addopen"
@@ -51,9 +51,9 @@
                         label="操作"
                         width="200">
                         <template  slot-scope="scope">
-                            <el-button type="text" size="small" @click="writeflow(scope)" style="margin-right:10px">配置</el-button>
-                            <el-button type="text" size="small" @click="edittrue(scope)" style="margin-right:10px">编辑</el-button>
-                            <el-button type="text" size="small" @click='deltrue(scope)' >删除</el-button>
+                            <el-button type="text" size="small" @click="writeflow(scope)" style="margin-right:10px" v-perss="'设置审批流程'">配置</el-button>
+                            <el-button type="text" size="small" @click="edittrue(scope)" style="margin-right:10px" v-perss="'修改流程名称'">编辑</el-button>
+                            <el-button type="text" size="small" @click='deltrue(scope)' v-perss="'删除流程名称'">删除</el-button>
                             <!-- 编辑 -->
                             <el-dialog
                                 title="编辑流程"

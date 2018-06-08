@@ -25,8 +25,8 @@
             </div>
         </section>
         <footer class="authority_bottom">
-            <el-button type="primary" size='small' style="margin:10px 0 0 30px" @click="trueconfim">保存</el-button>
-            <el-button size='small' style="margin:10px 0 0 10px" @click='prevuser'>取消</el-button>
+            <el-button type="primary" size='small' style="margin:10px 0 0 30px;width:90px" @click="trueconfim">保存</el-button>
+            <el-button size='small' style="margin:10px 0 0 10px;width:90px" @click='prevuser'>取消</el-button>
         </footer>
     </section>
 </template>
@@ -36,80 +36,7 @@ import api from 'api/work'
 export default {
     data() {
         return {
-            item: [
-                // {
-                //     id: 1,
-                //     label: '权限设置（全选）',
-                //     children: [
-                //         {
-                //             id: 21,
-                //             label: '商品'
-                //         },
-                //         {
-                //             id: 22,
-                //             label: '采购',
-                //             children: [
-                //                 {
-                //                     id: 31,
-                //                     label: '采购列表',
-                //                     children: [
-                //                         {
-                //                             id: 41,
-                //                             label: '导入'
-                //                         },
-                //                         {
-                //                             id: 42,
-                //                             label: '新建'
-                //                         },
-                //                         {
-                //                             id: 43,
-                //                             label: '删除'
-                //                         },
-                //                         {
-                //                             id: 44,
-                //                             label: '修改'
-                //                         },
-                //                         {
-                //                             id: 45,
-                //                             label: '查看'
-                //                         },
-                //                         {
-                //                             id: 46,
-                //                             label: '入库'
-                //                         }
-                //                     ]
-                //                 },
-                //                 {
-                //                     id: 32,
-                //                     label: '采购退货列表',
-                //                     children: [
-                //                         {
-                //                             id: 47,
-                //                             label: '导入'
-                //                         },
-                //                         {
-                //                             id: 48,
-                //                             label: '新建'
-                //                         }
-                //                     ]
-                //                 }
-                //             ]
-                //         },
-                //         {
-                //             id: 23,
-                //             label: '仓储'
-                //         },
-                //         {
-                //             id: 24,
-                //             label: '审批'
-                //         },
-                //         {
-                //             id: 25,
-                //             label: '系统'
-                //         }
-                //     ]
-                // }
-            ],
+            item: [],
             defaultProps: {
                 children: 'childMenus',
                 label: 'resourceName'

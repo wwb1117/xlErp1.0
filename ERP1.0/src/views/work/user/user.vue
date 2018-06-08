@@ -13,8 +13,8 @@
 
         </header>
         <div class="button_box">
-            <el-button type='primary' size='small' style="margin-right:10px" v-if='first' @click='adduser = true' v-perss="'增加用户'">新增用户</el-button>
-            <el-button type='primary' size='small' style="margin-right:10px" v-if="second" @click="addautohority = true">新增权限组</el-button>
+            <el-button type='primary' size='small' style="margin-right:10px:width:90px" v-if='first' @click='adduser = true' v-perss="'增加用户'" >新增用户</el-button>
+            <el-button type='primary' size='small' style="margin-right:10px:width:90px" v-if="second" @click="addautohority = true">新增权限组</el-button>
         </div>
 
         <!-- 新增用户 -->

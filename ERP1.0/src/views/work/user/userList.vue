@@ -34,9 +34,9 @@
                     label='操作'
                     width="200">
                     <template  slot-scope="scope">
-                        <el-button type='text' @click="resultpass = true"  size='small'>重置密码</el-button>
-                        <el-button type='text' @click='edituesrtrue(scope)' size='small' >编辑</el-button>
-                        <el-button type='text' @click='delusertrue(scope)' size='small' >删除</el-button>
+                        <el-button type='text' @click="resultpass = true"  size='small' v-perss="'重置用户密码'">重置密码</el-button>
+                        <el-button type='text' @click='edituesrtrue(scope)' size='small' v-perss="'修改用户名或角色'">编辑</el-button>
+                        <el-button type='text' @click='delusertrue(scope)' size='small' v-perss="'删除用户'">删除</el-button>
                     </template>
                     <!-- 重置密码 -->
                     <el-dialog

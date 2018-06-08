@@ -97,13 +97,13 @@
                     <li @click='isHidden'><i class="el-icon-close"></i></li>
                     <li >已选择 <span style="color:#3f9fff" v-text="selectTableData.length">1</span> 项</li>
                     <li>
-                        <el-button type="text" @click="open">停止报价</el-button>
+                        <el-button type="text" @click="open" v-perss="'报价设置'">停止报价</el-button>
                     </li>
                     <li>
-                        <el-button type="text" @click="dialogVisible1 = true">更改报价供应商</el-button>
+                        <el-button type="text" @click="dialogVisible1 = true" v-perss="'供应商选择框'">更改报价供应商</el-button>
                     </li>
                     <li>
-                        <el-button type="text" @click="dialogVisible2 = true">更改提成方式</el-button>
+                        <el-button type="text" @click="dialogVisible2 = true" v-perss="'商品提成设置'">更改提成方式</el-button>
                     </li>
                 </ul>
                 <!-- 列表顶部隐藏谈出框 -->
@@ -218,8 +218,8 @@
                             label="操作"
                             width='200'>
                             <template slot-scope="scope">
-                                <el-button type="text"><span style="font-size:12px">编辑</span></el-button>
-                                <el-button type="text"><span style="font-size:12px">删除</span></el-button>
+                                <el-button type="text"><span style="font-size:12px" v-perss="'编辑商品基本信息'">编辑</span></el-button>
+                                <el-button type="text"><span style="font-size:12px" disabled>删除</span></el-button>
                                 <el-button type="text"><span style="font-size:12px">更多</span> <i class="el-icon-caret-bottom"></i> </el-button>
                             </template>
                         </el-table-column>

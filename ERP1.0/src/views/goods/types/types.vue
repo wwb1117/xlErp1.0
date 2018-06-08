@@ -28,8 +28,8 @@
                     <li style="width:500px"><span v-for='(date,index) in item.itemSupplyPropertyVOs' :key='index' style="margin-right:5px">{{date.supplyMsg}}</span></li>
                     <li style="width:300px">{{item.remark}}</li>
                     <li style="width:110px">
-                        <el-button type='text' @click='gotoEdit(item.id)'><span style="font-size:12px">编辑</span></el-button>
-                        <el-button type="text" @click="del = true"><span style="font-size:12px">删除</span></el-button>
+                        <el-button type='text' @click='gotoEdit(item.id)'><span style="font-size:12px" v-perss="'更新供货规格'">编辑</span></el-button>
+                        <el-button type="text" @click="del = true" disabled><span style="font-size:12px">删除</span></el-button>
                         <el-dialog
                             title="温馨提示"
                             :visible.sync="del"

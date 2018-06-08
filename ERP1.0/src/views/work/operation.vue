@@ -53,7 +53,7 @@
                         label='操作时间'
                         width='250'>
                         <template slot-scope="scope">
-                            <span style="color:#3f9ffe">{{scope.row.created }}</span>
+                            <span style="color:#3f9ffe">{{scope.row.created | time_m}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
