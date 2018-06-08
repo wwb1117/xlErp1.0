@@ -161,36 +161,33 @@ export default {
                 console.log(error)
             })
 
+        },
+
+        get() {
+            api.getitemunitlist().then((response)=>{
+                this.options = response.data.itemUnitList
+                // console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
+
+            this.typesNum = [
+                {
+                    skuNumber: '',
+                    supplyMsg: '',
+                    isDeleted: false,
+                    id:''
+                }
+            ]
+            this.text = ''
+            this.value = ''
         }
     },
     created() {
-
-        api.getitemunitlist().then((response)=>{
-            this.options = response.data.itemUnitList
-            // console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
-
-
-        this.typesNum = [
-            {
-                skuNumber: '',
-                supplyMsg: '',
-                isDeleted: false,
-                id:''
-            }
-        ]
-        this.text = ''
-        this.value = ''
+        this.get()
     },
     activated() {
-        api.getitemunitlist().then((response)=>{
-            // console.log(response)
-            this.options = response.data.itemUnitList
-        }).catch((error)=>{
-            console.log(error)
-        })
+        this.get()
     }
 
 }

@@ -17,8 +17,9 @@
                     </el-form-item>
                     <el-form-item label="分类图片" :label-width="formLabelWidth"  class="img_up">
                         <el-upload
-                            :action="this.upDateImgUrl"
+                            :action="upDateImgUrl"
                             :data='sentData'
+                            :file-list='fileList'
                             list-type="picture-card"
                             :on-preview="handlePictureCardPreview"
                             :on-remove="handleRemove"
@@ -27,7 +28,7 @@
                         </el-upload>
                         <!-- action上传地址 -->
                         <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="this.dialogImageUrl" alt="">
+                            <img width="100%" :src="dialogImageUrl" alt="">
                         </el-dialog>
                     </el-form-item>
                     <el-form-item label="排序" prop='sort' :label-width="formLabelWidth"  >
@@ -56,10 +57,9 @@ export default {
             msg: {
                 name: '',
                 sort:'',
-                value: true,
-                categoryImg:[]
+                value: true
             },
-
+            fileList:[],
             formLabelWidth: '120px',
             // 上传
 
@@ -80,18 +80,16 @@ export default {
             upDateImgUrl: process.env.API_ROOT + '/f/upload',
             sentData: {
                 file: '',
-                uploadType: 'cms-address'
+                uploadType: 'erp'
             }
-
-
 
         }
     },
     methods: {
         handleRemove(file, fileList) {
-            // console.log(file, fileList);
+            console.log(file, fileList);
             for (var i in this.fileList){
-                if (this.fileList[i].data.url == file.response.data.url){
+                if (this.fileList[i].url == file.url){
 
                     this.fileList.splice(i, 1)
                 }
@@ -102,9 +100,9 @@ export default {
             this.dialogVisible = true;
         },
         handleAvatarSuccess(file, fileList) {
+            console.log(fileList)
+            this.fileList.push(fileList.response.data)
 
-            this.msg.categoryImg.push(fileList.response.data.url)
-            // console.log(this.fileList)
         },
         tryeconfim() {
             this.$refs['additems'].validate((valid)=>{
@@ -117,24 +115,20 @@ export default {
 
                     let obj = {
                         parentId: this.parentid,
-                        categoryImg: this.msg.categoryImg.toString(),
+                        categoryImg: JSON.stringify(this.fileList),
                         categoryName: this.msg.name,
                         isDisplay: this.msg.value,
                         sort: this.msg.sort
                     }
 
+
                     api.postitemcategoryadd(obj).then((response)=>{
-                        this.msg = {
-                            name: '',
-                            dialogImageUrl: '',
-                            sort:'',
-                            value: true
-                        }
-                        this.parentid = ''
+                        this.clear()
                         this.$message({
                             type: 'success',
                             message: '新增商品分类成功！'
                         });
+                        this.$refs['additems'].resetFields();
                         this.$router.go(-1)
                     }).catch((error)=>{
                         console.log(error)
@@ -144,28 +138,35 @@ export default {
 
         },
         returnitems() {
+            this.clear()
+            this.$refs['additems'].resetFields();
+            this.$router.go(-1)
+        },
+        clear() {
             this.msg = {
                 name: '',
                 dialogImageUrl: '',
                 sort:'',
                 value: true
             }
+            this.fileList = []
             this.parentid = ''
-            this.$refs['additems'].resetFields();
-            this.$router.go(-1)
         }
 
     },
-    // created() {
-    //     var parent = this.$store.state.home.parentId
-
-    //     this.parentid = parent
-
-    // },
-    activated() {
+    created() {
+        this.clear()
         var parent = this.$store.state.home.parentId
 
         this.parentid = parent
+
+    },
+    activated() {
+        this.clear()
+        var parent = this.$store.state.home.parentId
+
+        this.parentid = parent
+        this.$refs['additems'].resetFields();
     }
 }
 </script>

@@ -40,6 +40,7 @@
                         <el-upload
                             :action="this.upDateImgUrl"
                             :data='sentData'
+                            :file-list='fileList'
                             list-type="picture-card"
                             :on-preview="handlePictureCardPreview"
                             :on-remove="handleRemove"
@@ -125,8 +126,13 @@ export default {
             upDateImgUrl: process.env.API_ROOT + '/f/upload',
             sentData: {
                 file: '',
-                uploadType: 'cms-address'
+                uploadType: 'erp'
             },
+            fileList:[
+                {
+                    url:''
+                }
+            ],
             dialogImg:''
 
         }
@@ -136,7 +142,7 @@ export default {
         handleRemove(file, fileList) {
             // console.log(file, fileList);
             for (var i in this.fileList){
-                if (this.fileList[i].data.url == file.response.data.url){
+                if (this.fileList[i].url == file.url){
 
                     this.fileList.splice(i, 1)
                 }
@@ -147,7 +153,7 @@ export default {
             this.dialogVisible = true;
         },
         handleAvatarSuccess(file, fileList) {
-            this.from.brandImg.push(fileList.response.data.url)
+            this.fileList.push(fileList.response.data.url)
         },
         trueconfim() {
             this.$refs['addbrand'].validate((valid)=>{
@@ -198,7 +204,7 @@ export default {
                         brandName: this.from.brandName,
                         isControl: this.from.isControl,
                         rateList: JSON.stringify(this.from.itemBrandCategories),
-                        brandImg: this.from.brandImg.toString(),
+                        brandImg: JSON.stringify(this.fileList),
                         sort: this.from.sort,
                         isRecommended: this.from.isRecommended,
                         shopGroupIds:this.groupName.toString()
@@ -232,89 +238,79 @@ export default {
             } else {
                 this.showhiddden = false
             }
+        },
+        get() {
+            var id = this.$store.state.home.brandId
+
+            api.getcategorylist().then((response)=>{
+
+                this.itemoptions = response.data
+            }).catch((error)=>{
+                console.log(error)
+            })
+
+            api.getitemBrandid(id).then((response)=>{
+                this.from = response.data
+                this.items = []
+                this.text = []
+                this.groupName = []
+                this.fileList = [
+                    {
+                        url:''
+                    }
+                ]
+                if (this.from.isRecommended == 1){
+                    this.from.isRecommended = true
+                } else {
+                    this.from.isRecommended = false
+                }
+                if (this.from.isControl == 1){
+                    this.from.isControl = true
+                    this.showhiddden = true
+                } else {
+                    this.from.isControl = false
+                    this.showhiddden = false
+                }
+                for (var i in this.from.itemBrandCategories){
+                    this.text.push(this.from.itemBrandCategories[i].rate)
+                }
+                for (var y in this.from.itemBrandCategories){
+                    this.items.push(this.from.itemBrandCategories[y].categoryName)
+                }
+                for (var z in this.from.itemBrandShopGroups){
+                    this.groupName.push(this.from.itemBrandShopGroups[z].groupId)
+                }
+
+                if (this.from.brandImg.length >= this.fileList.length.length){
+                    for (var a = 0 ; a < this.from.brandImg.length - 1; a ++){
+                        let obj = {
+                            url:''
+                        }
+
+                        this.fileList.push(obj)
+                    }
+                }
+
+                for (var t in this.fileList){
+                    this.fileList[t].url = this.from.brandImg
+                }
+            }).catch((error)=>{
+                console.log(error)
+            })
+
+            api.getshopgrouplist(id).then((response)=>{
+                this.group = response.data.list
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
     },
     created() {
-        var id = this.$store.state.home.brandId
-
-        api.getcategorylist().then((response)=>{
-            this.itemoptions = response.data.list
-
-        }).catch((error)=>{
-            console.log(error)
-        })
-
-        api.getitemBrandid(id).then((response)=>{
-            this.from = response.data
-
-
-            for (var i in this.from.itemBrandCategories){
-                this.text.push(this.from.itemBrandCategories[i].rate)
-            }
-
-        }).catch((error)=>{
-            console.log(error)
-        })
-
-        api.getitemitemBrandShopGroupitemBrandId(id).then((response)=>{
-            this.group = []
-            this.group = response.data
-            this.groupName = this.from.itemBrandShopGroups
-            // console.log(response)
-        }).catch((error)=>{
-            console.log(error)
-        })
-
+        this.get()
 
     },
     activated() {
-
-        var id = this.$store.state.home.brandId
-
-        api.getcategorylist().then((response)=>{
-            this.itemoptions = response.data.list
-            // console.log(this.itemoptions)
-        }).catch((error)=>{
-            console.log(error)
-        })
-
-        api.getitemBrandid(id).then((response)=>{
-            this.from = response.data
-            this.items = []
-            this.text = []
-            this.groupName = []
-            if (this.from.isRecommended == 1){
-                this.from.isRecommended = true
-            } else {
-                this.from.isRecommended = false
-            }
-            if (this.from.isControl == 1){
-                this.from.isControl = true
-                this.showhiddden = true
-            } else {
-                this.from.isControl = false
-                this.showhiddden = false
-            }
-            for (var i in this.from.itemBrandCategories){
-                this.text.push(this.from.itemBrandCategories[i].rate)
-            }
-            for (var y in this.from.itemBrandCategories){
-                this.items.push(this.from.itemBrandCategories[y].categoryName)
-            }
-
-            for (var z in this.from.itemBrandShopGroups){
-                this.groupName.push(this.from.itemBrandShopGroups[z].groupId)
-            }
-            console.log(this.from)
-        }).catch((error)=>{
-            console.log(error)
-        })
-
-        api.getshopgrouplist(id).then((response)=>{
-            this.group = response.data.list
-        }).catch((error)=>{
-            console.log(error)
-        })
+        this.get()
 
     }
 }

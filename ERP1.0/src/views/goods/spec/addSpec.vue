@@ -81,7 +81,6 @@ export default {
                 }
             ]
 
-
         }
     },
     methods: {
@@ -120,7 +119,6 @@ export default {
                 }
             }
 
-
             let obj = {
                 skuPropertyName: this.specNum.skuPropertyName,
                 remark: this.text,
@@ -130,14 +128,7 @@ export default {
             console.log(obj)
             // console.log(obj)
             api.postitemskuPropertyadd(obj).then((response)=>{
-                this.specNum = [
-                    {
-                        skuPropertyValueName: '',
-                        isDeleted: 0
-                    }
-                ]
-                this.specNum.skuPropertyName = ''
-                this.text = ''
+                this.clear()
                 this.$message({
                     type: 'success',
                     message: '新增商品规格成功！'
@@ -147,7 +138,25 @@ export default {
                 console.log(error)
             })
 
+        },
+        clear() {
+            this.specNum = [
+                {
+                    skuPropertyValueName: '',
+                    isDeleted: 0
+                }
+            ]
+            this.specNum.skuPropertyName = ''
+            this.text = ''
         }
+    },
+    created() {
+        this.clear()
+
+    },
+    activated() {
+        this.clear()
+
     }
 
 }
