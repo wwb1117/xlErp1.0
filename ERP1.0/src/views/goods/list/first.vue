@@ -226,7 +226,7 @@
                             label="操作"
                             width='200'>
                             <template slot-scope="scope">
-                                <el-button type="text"><span style="font-size:12px" v-perss="'编辑商品基本信息'">编辑</span></el-button>
+                                <el-button type="text" @click="editgoods(scope.row.id)"><span style="font-size:12px" v-perss="'编辑商品基本信息'">编辑</span></el-button>
                                 <el-button type="text"><span style="font-size:12px" disabled>删除</span></el-button>
                                 <el-button type="text"><span style="font-size:12px">更多</span> <i class="el-icon-caret-bottom"></i> </el-button>
                             </template>
@@ -411,6 +411,11 @@ export default {
         openGoods(data) {
             this.$store.commit('setgoodsmoreid', data)
             this.$router.push('goodsDetails')
+        },
+        // 编辑商品
+        editgoods(data) {
+            this.$store.commit('setgoodsmoreid', data)
+            this.$router.push('editGoods')
         },
         // 确定高级搜索
         findtrue() {

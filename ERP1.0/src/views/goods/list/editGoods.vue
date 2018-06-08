@@ -4,7 +4,7 @@
         <header class="add_top">
             <el-breadcrumb separator='-' style="line-height:45px;font-size:15px">
                 <el-breadcrumb-item :to="{ path: '/goodsList' }">商品列表</el-breadcrumb-item>
-                <el-breadcrumb-item>新增商品</el-breadcrumb-item>
+                <el-breadcrumb-item>编辑商品</el-breadcrumb-item>
             </el-breadcrumb>
         </header>
         <!-- 主体内容 -->
@@ -56,7 +56,7 @@
                     <!-- 信息title -->
                     <li class="good_title">
                         <p>基本信息</p>
-                        <el-checkbox style="margin-left:30px" v-model="this.form.expirationDateStatus"><span style="font-size:10px">有无保质期</span></el-checkbox>
+                        <el-checkbox style="margin-left:30px"><span style="font-size:10px">有无保质期</span></el-checkbox>
                     </li>
                     <!-- 信息内容 -->
                     <li class="msg_conent">
@@ -455,8 +455,7 @@ export default {
                 sendWay: [],
                 money: '',
                 unitId: [],
-                expirationDate: '',
-                expirationDateStatus:''
+                expirationDate: ''
             },
             // 信息表单选项
             brandIdoptions:[],
@@ -572,11 +571,7 @@ export default {
                 }
             });
 
-            if (this.form.expirationDateStatus == true){
-                this.form.expirationDateStatus = 1
-            } else {
-                this.form.expirationDateStatus = 0
-            }
+
             let obj = {
                 // 商品信息
                 itemType: this.form.itemType,
@@ -593,7 +588,6 @@ export default {
                 unitId: this.form.unitId,
 
                 expirationDate: this.form.expirationDate,
-                expirationDateStatus:this.form.expirationDateStatus,
                 // 商品规格
                 skuProperty: '',
                 // 商品属性
@@ -796,9 +790,17 @@ export default {
             }).catch((error)=>{
                 console.log(error)
             })
+        },
+
+        get() {
+            var id = this.$store.state.home.goodsmoreId
+
+            api.getitemfirstEdititemId(id).then((response)=>{
+                console.log(response)
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
-
-
     },
     components: {
         bar,
@@ -815,6 +817,8 @@ export default {
         this.getcategoryId()
         this.gettypename()
         this.getunitId()
+
+        this.get()
     },
     mounted() {
         this.editor1 = new WangEditor('#editor1')

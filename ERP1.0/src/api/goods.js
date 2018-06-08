@@ -134,6 +134,14 @@ export default {
     getitemitemId(itemId) {
         return HttpClient.get(`/item/${itemId}`)
     },
+    // 根据商品ID获取第一页编辑信息
+    getitemfirstEdititemId(itemId) {
+        return HttpClient.get(`/item/firstEdit/${itemId}`)
+    },
+    // 根据商品ID获取第二页编辑信息
+    getitemnextEdititemId(itemId) {
+        return HttpClient.get(`/item/nextEdit/${itemId}`)
+    },
     // 批量更新
     putitembatchUpdate(data) {
         return HttpClient.put('/item/batchUpdate', data)
