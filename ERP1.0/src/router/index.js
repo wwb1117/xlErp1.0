@@ -60,6 +60,7 @@ import IReviewDetail from '@/views/review/IReviewDetail'
 /**************************************************商品模块*********************************************/
 import goods from '@/views/goods/list/goods'
 import addGoods from '@/views/goods/list/addGoods'
+import editGoods from '@/views/goods/list/editGoods'
 import items from '@/views/goods/items/items'
 import additems from '@/views/goods/items/additems'
 import edititems from '@/views/goods/items/edititems'
@@ -145,6 +146,7 @@ var router = new Router({
                 /*************************** 商品模块*************************************/
                 {name: "商品列表", path: '/goodsList', component: goods},
                 {name: "新增商品", path: '/addGoods', component: addGoods},
+                {name: "编辑商品", path: '/editGoods', component: editGoods},
                 {name: "商品详情", path: '/goodsDetails', component: dteails},
 
                 {name: "商品分类", path: '/goodsItems', component: items},
