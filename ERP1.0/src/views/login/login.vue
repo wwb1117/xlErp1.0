@@ -18,6 +18,7 @@
                     <el-input
                         placeholder="密码"
                         v-model="userInfo.loginPassword"
+                        @keyup.enter.native="loginEvent"
                         :style="{width: '320px'}"
                         clearable>
                     </el-input>
@@ -38,7 +39,7 @@ import lapi from 'api/login'
 export default {
     data() {
         return {
-            isRemPwd: true,
+            isRemPwd: false,
             userInfo: {
                 loginCode: 'mama',
                 loginPassword: '888888'
@@ -66,6 +67,10 @@ export default {
                     type: 'warning'
                 });
                 return
+            }
+
+            if (this.isRemPwd) {
+
             }
 
             lapi.login(this.userInfo).then((reponse) => {
