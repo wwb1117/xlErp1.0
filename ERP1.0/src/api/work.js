@@ -85,5 +85,9 @@ export default {
     // 设置权限
     postrolesetaccess(data) {
         return HttpClient.post('/role/set/access', data)
+    },
+    //修改密码
+    editPassword(data){
+        return HttpClient.put('/user/password/edit', data)
     }
 }

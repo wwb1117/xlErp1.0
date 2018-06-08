@@ -23,7 +23,7 @@
                         :style="{width: '378px'}"
                         v-model="tableParam.serchText">
                     </el-input>
-                    <el-button :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button @click="getTableData" :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                 </el-form-item>
             </el-form>
         </div>
