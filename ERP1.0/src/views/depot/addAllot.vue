@@ -309,7 +309,7 @@ export default {
                 currentStoreNumber: '',
                 itemId: ''
             }]
-            this.$refs.myForm.resetFields();
+            this.$refs.myForm.resetFields()
         },
         goodTableAddEvent(){
             var itemobj = {

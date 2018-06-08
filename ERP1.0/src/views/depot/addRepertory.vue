@@ -6,7 +6,7 @@
         </div>
         <div class="model_content" >
             <div class="content" :style="{height: $store.state.home.modelContentHeight - 20 + 'px'}">
-                <el-form :inline="true" :model="addFormData" :rules="rules" label-position="right" size="small" label-width="110px">
+                <el-form :inline="true" :model="addFormData" ref="myForm" :rules="rules" label-position="right" size="small" label-width="110px">
                     <div class="banner">
                         基本信息
                     </div>
@@ -128,6 +128,7 @@ export default {
             for (let key in this.addFormData) {
                 this.addFormData[key] = ''
             }
+            this.$refs.myForm.resetFields()
         }
     },
     created(){},
