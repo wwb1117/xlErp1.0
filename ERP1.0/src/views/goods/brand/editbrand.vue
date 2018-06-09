@@ -304,7 +304,13 @@ export default {
                 console.log(error)
             })
 
-            api.getshopgrouplist(id).then((response)=>{
+            let obj = {
+                pageNo:1,
+                pageSize:50
+            }
+
+            api.getshopgrouplist(obj).then((response)=>{
+                console.log(response)
                 this.group = response.data.list
             }).catch((error)=>{
                 console.log(error)

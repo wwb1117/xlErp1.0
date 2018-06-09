@@ -26,7 +26,7 @@
                 <ul class="spec_list spec_text" v-for='(item,index) in this.spec' :key="index" style="font-size:12px">
                     <li style="width:210px">{{item.skuPropertyName}}</li>
                     <li style="width:500px"><span v-for="(date,index) in item.propertyValueList" :key="index" style="margin-right:5px">{{date.skuPropertyValueName}}</span></li>
-                    <li style="width:300px">这是备注信息</li>
+                    <li style="width:300px">{{item.remark}}</li>
                     <li style="width:110px">
                         <el-button type='text' @click='gotoEdit(item.id)' v-perss="'更新商品规格'"><span style="font-size:12px">编辑</span></el-button>
                         <el-button type="text" @click="del = true" disabled><span style="font-size:12px">删除</span></el-button>

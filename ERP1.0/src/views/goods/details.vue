@@ -16,29 +16,28 @@
             <div class="details_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
                 <div class="details_text">
                     <!-- 轮播图 -->
-                    <div class="img_box">
-                        <div class="details_img" style="width:418px;height:418px;background:pink">
-                            <img :src="goodconent.mainImg" alt="">
+                    <div class="swiper_box">
+                        <div class="swiper-container gallery-top">
+                            <div class="swiper-wrapper">
+                                <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                            </div>
                         </div>
-                        <div class="small_box smallpri_box">
-                            <div class="img_prev img_button" ></div>
-                            <!-- 小图 -->
-                                <dl class="small_box smallpri">
-                                    <dd style="width:78px;height:78px;background:pink">
-                                        <img src="" alt="">
-                                    </dd>
-                                    <dd style="width:78px;height:78px;background:pink">
-                                        <img src="" alt="">
-                                    </dd>
-                                    <dd style="width:78px;height:78px;background:pink">
-                                        <img src="" alt="">
-                                    </dd>
-                                    <dd style="width:78px;height:78px;background:pink">
-                                        <img src="" alt="">
-                                    </dd>
-                                </dl>
-                            <div class="img_next img_button"></div>
+                        <div class="small_box">
+                            <div class="swiper-button-prev"></div>
+                                <div class="swiper-container smallimg gallery-thumbs">
+                                    <div class="swiper-wrapper" >
+                                        <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                        <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                        <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                        <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                    </div>
+                                </div>
+                            <div class="swiper-button-next"></div>
                         </div>
+
                     </div>
                     <!-- 右侧详细内容 -->
                     <ul class="recommend">
@@ -59,11 +58,9 @@
                             <dl>
                                 <dd>
                                     <span>分类：</span>
-                                    <span v-if='goodconent.categoryNameOne'>{{ goodconent.categoryNameOne }}</span>
-                                    <span v-if='goodconent.categoryNameTwo'>- {{ goodconent.categoryNameTwo }}</span>
-                                    <span v-if='goodconent.categoryNameThree'>- {{ goodconent.categoryNameThree }}</span>
+                                    <span>{{ goodconent.categoryName }}</span>
                                 </dd>
-                                <dd><span>贸易类型：</span>{{ goodconent.sendWay }}</dd>
+                                <dd><span>贸易类型：</span>{{ goodconent.sendWayName }}</dd>
                                 <dd><span>商品条码：</span>{{ goodconent.barCode }}</dd>
                                 <dd><span>保质期：</span>{{ goodconent.expirationDate }} 个月</dd>
                             </dl>
@@ -92,6 +89,8 @@
 </template>
 <script>
 import api from 'api/goods'
+import Swiper from 'swiper'
+import 'swiper/dist/css/swiper.min.css';
 
 export default {
     data() {
@@ -116,9 +115,6 @@ export default {
             goodconent:{}
         }
     },
-    created() {
-
-    },
     methods: {
         handleClick(tab, event) {
             console.log(tab, event);
@@ -135,42 +131,63 @@ export default {
     activated() {
         var id = this.$store.state.home.goodsmoreId
 
-        alert(id)
         api.getitemitemId(id).then((response)=>{
             console.log(response)
             this.goodconent = response.data.item
         }).catch((error)=>{
             console.log(error)
         })
+    },
+    mounted() {
+        var galleryTop = new Swiper('.gallery-top', {
+            spaceBetween: 10,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            }
+        })
+        var galleryThumbs = new Swiper('.gallery-thumbs', {
+            spaceBetween: 10,
+            centeredSlides: true,
+            slidesPerView: 4,
+            touchRatio: 0.2,
+            slideToClickedSlide: true
+        })
 
+        galleryTop.controller.control = galleryThumbs;
+        galleryThumbs.controller.control = galleryTop;
     }
 }
 </script>
 <style scoped>
 /* 轮播 */
-
-.small_box{
-    display: flex;
-    justify-content: space-between;
-}
-.smallpri_box{
-    margin-top: 10px
-}
-.img_button{
-    width: 18px;
-    height: 78px;
-    background:blue;
-}
-.smallpri dd{
-    margin-left: 15px
-}
-.smallpri dd:first-child{
-    margin-left: 0
-}
-.details_img img{
+.swiper_box{
     width: 418px;
-    height: 418px;
+    height: 508px;
 }
+.small_box{
+    width: 418px;
+    height: 50px;
+    margin-top: 20px;
+    position: relative;
+}
+.smallimg{
+    width: 300px;
+    height: 50px;
+    margin-left:60px
+}
+.smallimg .swiper-slide{
+    width: 50px !important;
+    height: 50px
+}
+.gallery-top {
+    height: 418px;
+    width: 418px;
+}
+.gallery-thumbs .swiper-slide-active {
+    border: 1px solid blueviolet
+}
+
 /* 顶部 */
 .details_header{
     height: 45px;

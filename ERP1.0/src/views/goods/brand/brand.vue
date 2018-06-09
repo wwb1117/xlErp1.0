@@ -123,8 +123,9 @@ export default {
         change(data, item){
             api.getitemBrandid(item).then((response)=>{
                 // console.log(response.data.list)
-                this.brandtext = response.data.list
 
+                this.brandtext = response.data
+                // console.log(this.brandtext)
                 var arr = []
 
                 for (var i in this.brandtext.itemBrandShopGroups){

@@ -64,7 +64,11 @@ export default {
             }
 
             api.postrolesetaccess(obj).then((response)=>{
-                // this.$router.go(-1)
+                this.$message({
+                    type: 'success',
+                    message: '配置权限成功！'
+                });
+                this.$router.go(-1)
             }).catch((error)=>{
                 console.log(error)
             })

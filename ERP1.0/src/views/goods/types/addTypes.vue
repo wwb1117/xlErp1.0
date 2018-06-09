@@ -165,7 +165,7 @@ export default {
 
         get() {
             api.getitemunitlist().then((response)=>{
-                this.options = response.data.itemUnitList
+                this.options = response.data.list
                 // console.log(response)
             }).catch((error)=>{
                 console.log(error)
