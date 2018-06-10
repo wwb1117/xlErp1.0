@@ -56,7 +56,7 @@
                     <!-- 信息title -->
                     <li class="good_title">
                         <p>基本信息</p>
-                        <el-checkbox style="margin-left:30px"><span style="font-size:10px">有无保质期</span></el-checkbox>
+                        <el-checkbox style="margin-left:30px" v-model="form.expirationDateStatus"><span style="font-size:10px">有无保质期</span></el-checkbox>
                     </li>
                     <!-- 信息内容 -->
                     <li class="msg_conent">
@@ -112,9 +112,9 @@
                                         <el-select v-model="form.sendWay" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in sendWayoptions"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"></el-option>
+                                                :key="item.id"
+                                                :label="item.categoryName"
+                                                :value="item.id"></el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -138,7 +138,7 @@
                                 </el-col>
                                 <el-col :span='6' style="margin-left:40px">
                                     <el-form-item label="保质期" required >
-                                        <el-input v-model="form.expirationDate" size="small" placeholder="长度<64" suffix="月"></el-input>
+                                        <el-input v-model="form.expirationDateName" size="small" placeholder="长度<64" suffix="月"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
@@ -159,7 +159,7 @@
                                     <div v-for="(item, index) in skuProperty" :key="index">
 
                                         <div class="add_small_standard" >
-                                            <el-form-item label="规格名" style="margin-left:-80px" >
+                                            <el-form-item label="规格名" style="margin-left:-20px" >
                                                 <el-select v-model="item.skuPropertyName" @change="changeSku(item, index)" placeholder="请选择活动区域" size='small' style="width:138px">
                                                     <el-option
                                                         v-for="item2 in skuList"
@@ -168,7 +168,7 @@
                                                         :value="item2.skuPropertyName">
                                                     </el-option>
                                                 </el-select>
-                                                <el-checkbox v-model="checked" style="margin-left:10px">添加规格图片</el-checkbox>
+                                                <el-checkbox v-model="checked" style="margin-left:10px"  @change="changeupload">添加规格图片</el-checkbox>
                                             </el-form-item>
                                         </div>
                                         <el-form-item label='规格值' style="margin-left:-10px;margin-top:5px" >
@@ -183,7 +183,7 @@
                                             <el-button type='text' @click="addSpec(index)">添加规格值</el-button>
                                             <div style="display:flex">
                                                 <div style="width:158px" v-for='(itemImg,index) in item.itemSkuPropertyValueDTOS' :key='index'>
-                                                    <updata></updata>
+                                                    <updata v-if='uploadshow'></updata>
                                                 </div>
                                             </div>
                                             <p style="color:#888;font-size:12px">仅支持为第一组规格设置图片（最多40张图），买家选择不同规格会看到对应图片，建议尺寸：640 X 640 像素</p>
@@ -201,10 +201,9 @@
                                 </el-form-item>
 
 
-
                                 <el-form-item label="规格明细">
                                     <!-- 规格明细 -->
-                                    <table class='skuTable' style="width: 100%">
+                                    <table class='skuTable' style="width: 100%;margin-top:10px">
                                         <tr>
                                             <th width='70%'>
                                                 <div class="">
@@ -268,8 +267,9 @@
                     <li class="pic_up">
                         <div class="updata_box">
                             <el-upload
-                                :action="this.upDateImgUrl"
+                                :action="upDateImgUrl"
                                 :data='sentData'
+                                :file-list='fileList1'
                                 list-type="picture-card"
                                 :on-preview="handlePictureCardPreview"
                                 :on-remove="handleRemove"
@@ -318,13 +318,14 @@
                                     </div>
                                     <div style="padding:10px;display:flex" class="supply_check">
                                         <el-form-item label="类型值" label-width="70px">
-                                            <span style="position:relative;margin-right:20px" v-for="item in shu" :key="item" >
-                                                <el-select v-model="nextform.typesvalue" placeholder="选择类型值" size='small'>
+                                            <span style="position:relative;margin-right:20px" v-for="(items, index) in nextform.typesvalue" :key="index" >
+                                                <el-select v-model="items.id" placeholder="选择类型值" size='small'>
                                                     <el-option
                                                     v-for="item in typevalueoptions"
                                                     :key="item.id"
                                                     :label="item.supplyMsg"
-                                                    :value="item.id">
+                                                    :value="item.id"
+                                                    :disabled="item.disabled">
                                                     </el-option>
                                                 </el-select>
                                                 <i class="el-icon-circle-close" @click="delet(index)" style="position:relative;right:13px;top:-15px;font-size:16px;cursor: pointer"></i>
@@ -343,11 +344,12 @@
                     <!-- 分享设置 -->
                     <li class="share">
                         <el-form  :model="nextform" label-width="100px">
-                            <el-form-item label="分享图片">
+                            <el-form-item label="分享图片" style="margin-bottom:30px">
                                 <div class="updata_box ">
                                     <el-upload
                                         :action="this.upDateImgUrl2"
                                         :data='sentData2'
+                                        :file-list='fileList2'
                                         list-type="picture-card"
                                         :on-preview="handlePictureCardPreview2"
                                         :on-remove="handleRemove2"
@@ -483,12 +485,26 @@ export default {
                 sendWay: [],
                 money: '',
                 unitId: [],
-                expirationDate: ''
+                expirationDateName: '',
+                expirationDateStatus: false
             },
             // 信息表单选项
             brandIdoptions:[],
             categoryIdoptions:[],
-            sendWayoptions:[],
+            sendWayoptions:[
+                {
+                    id:'1',
+                    categoryName: '国内贸易'
+                },
+                {
+                    id:'2',
+                    categoryName: '保税区直供'
+                },
+                {
+                    id:'3',
+                    categoryName: '海外直邮'
+                }
+            ],
             unitIdoptions:[],
             itemImgs1:[
                 {
@@ -496,50 +512,16 @@ export default {
                 }
             ],
 
-            // 规格表单
-            standard: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
             // 商品规格
-            checked: true,
+            checked: false,
             // 规格值
+            uploadshow: false,
             skuList: [],
             showSkuArr: [],
             allList_0: [],
             allList_1: [],
             allList_2: [],
             skuProperty: [],
-            spec:[
-                {
-                    name: '蓝色',
-                    age: '',
-                    region: '',
-                    data: '',
-                    specmore: {
-                        id: '1',
-                        color: 'blue',
-                        size: 'xl'
-                    }
-                },
-                {
-                    name: '红色',
-                    age: '',
-                    region: '',
-                    data: '',
-                    specmore: {
-                        id: '2',
-                        color: 'blue',
-                        size: 'xl'
-                    }
-                }
-            ],
 
             // 属性表单
             property: [
@@ -550,16 +532,24 @@ export default {
             ],
 
             // 内容2
-
             // 商品选择包装类型
             nextform: {
                 typesname: [],
-                typesvalue: [],
+                typesvalue: [
+                    {
+                        id:''
+                    }
+                ],
                 setmoneny:[],
                 goodhot:'',
                 delnum: '1',
                 deduct: []
             },
+            itemImgs2:[
+                {
+                    imgUrl:''
+                }
+            ],
 
             // 包装类型
             typenameoptions:[],
@@ -567,11 +557,8 @@ export default {
 
             // 报价提成
             setmonenyoptions: [],
-            deductoptions:[],
+            deductoptions:[]
 
-            num: '',
-            // 规格数
-            shu: ['1']
         }
     },
     methods:{
@@ -609,19 +596,71 @@ export default {
             });
 
             if (this.fileList1.length >= this.itemImgs1.length){
-                for (var a = 0 ; a < this.fileList1.length - 1 ; a ++){
-                    let obj = {
-                        imgUrl:''
-                    }
+                for (var s = 0 ; s < this.fileList1.length - 1 ; s ++){
+                    let obj = [
+                        {
+                            imgUrl:''
+                        }
+                    ]
 
                     this.itemImgs1.push(obj)
                 }
             }
-
-            for (var i in this.fileList1){
-                this.itemImgs1[i].imgUrl = this.fileList1[i].data.url
+            for (var d in this.itemImgs1){
+                for (var g in this.fileList1){
+                    this.itemImgs1[d].imgUrl = this.fileList1[g].url
+                }
             }
 
+            var skuProperty = [
+                {
+                    id: '',
+                    skuPropertyName: '',
+                    itemSkuPropertyValueDTOS: [
+                        {
+                            skuPropertyValueName: ''
+                        }
+                    ]
+                }
+            ]
+
+            if (this.skuProperty.length >= skuProperty.length){
+                for (var v = 0 ; v < this.skuProperty.length - 1 ; v ++){
+                    let obj = {
+                        id: '',
+                        skuPropertyName: '',
+                        itemSkuPropertyValueDTOS: [
+                            {
+                                skuPropertyValueName: ''
+                            }
+                        ]
+                    }
+
+                    skuProperty.push(obj)
+                }
+            }
+
+            for (var t in skuProperty){
+                skuProperty[t].skuPropertyName = this.skuProperty[t].skuPropertyName
+                for (var c in skuProperty[t].itemSkuPropertyValueDTOS){
+                    skuProperty[t].itemSkuPropertyValueDTOS[c].skuPropertyValueName = this.skuProperty[t].itemSkuPropertyValueDTOS[c].skuPropertyValueName
+                }
+            }
+
+            for (var m in this.skuList){
+                for (var l in skuProperty){
+                    if (skuProperty[l].skuPropertyName == this.skuList[m].skuPropertyName){
+                        skuProperty[l].id = this.skuList[m].id
+                    }
+                }
+            }
+
+            if (this.form.expirationDateStatus == false){
+                this.form.expirationDateStatus = 0
+            } else {
+                this.form.expirationDateStatus = 1
+            }
+            // console.log(skuProperty)
             let obj = {
                 // 商品信息
                 itemType: this.form.itemType,
@@ -636,10 +675,10 @@ export default {
                 sendWay: this.form.sendWay,
                 money: this.form.money,
                 unitId: this.form.unitId,
-
-                expirationDate: this.form.expirationDate,
+                expirationDateStatus: this.form.expirationDateStatus,
+                expirationDateName: this.form.expirationDateName,
                 // 商品规格
-                skuProperty: '',
+                skuProperty: JSON.stringify(skuProperty),
                 // 商品属性
                 property: JSON.stringify(this.property),
                 // 商品图片
@@ -649,11 +688,12 @@ export default {
             }
 
             console.log(obj)
-            // api.postitemaddItemFirstStep(obj).then((response)=>{
-            //     alert(1)
-            // }).catch((error)=>{
-            //     console.log(error)
-            // })
+            // console.log(this.skuProperty)
+            api.postitemaddItemFirstStep(obj).then((response)=>{
+                // alert(1)
+            }).catch((error)=>{
+                console.log(error)
+            })
 
         },
         prev() {
@@ -665,31 +705,56 @@ export default {
                 this.editor1 = new WangEditor('#editor1')
                 this.editor1.create()
             })
+
         },
         submit() {
+            if (this.fileList2.length >= this.itemImgs2.length){
+                for (var s = 0 ; s < this.fileList2.length - 1 ; s ++){
+                    let obj = [
+                        {
+                            imgUrl:''
+                        }
+                    ]
+
+                    this.itemImgs2.push(obj)
+                }
+            }
+            for (var d in this.itemImgs2){
+                for (var g in this.fileList2){
+                    this.itemImgs2[d].imgUrl = this.fileList2[g].url
+                }
+            }
+
+            let arr = []
+
+            for (var r in this.nextform.typesvalue){
+                arr.push(this.nextform.typesvalue[r].id)
+            }
+
             let obj = {
                 typesname: this.nextform.typesname.toString(),
-                typesvalue: this.nextform.typesvalue.toString(),
+                typesvalue: arr.toString(),
                 setmoneny:this.nextform.setmoneny.toString(),
                 goodhot:this.nextform.setmoneny,
                 delnum: this.nextform.setmoneny,
                 deduct: this.nextform.deduct.toString(),
+                shareImg:JSON.stringify(this.itemImgs2),
                 sharetext:this.editor2.txt.text()
             }
 
             console.log(obj)
-            // api.postitemaddItemSecondStep(obj).then((response)=>{
-            //     alert(1)
-            // }).catch((error)=>{
-            //     console.log(error)
-            // })
+            api.postitemaddItemSecondStep(obj).then((response)=>{
+                // alert(1)
+            }).catch((error)=>{
+                console.log(error)
+            })
         },
         // 上传图片
         // 移除
         handleRemove(file, fileList) {
             // console.log(file, fileList);
-            for (var i in this.fileList2){
-                if (this.fileList1[i].data.url == file.response.data.url){
+            for (var i in this.fileList1){
+                if (this.fileList1[i].url == file.url){
 
                     this.fileList1.splice(i, 1)
                 }
@@ -702,14 +767,13 @@ export default {
         },
         // 成功回调
         handleAvatarSuccess(file, fileList) {
-            this.fileList1.push(file)
-            // console.log(this.fileList1)
+            this.fileList1.push(fileList.response.data)
         },
         // 分享图片
         handleRemove2(file, fileList) {
             // console.log(file, fileList);
             for (var i in this.fileList2){
-                if (this.fileList2[i].data.url == file.response.data.url){
+                if (this.fileList2[i].url == file.url){
 
                     this.fileList2.splice(i, 1)
                 }
@@ -720,25 +784,43 @@ export default {
             this.otherVisible = true;
         },
         handleAvatarSuccess2(file, fileList) {
-            this.fileList2.push(file)
-            // console.log(this.fileList2)
+            this.fileList2.push(fileList.response.data)
         },
         // 重置
         reset() {
 
         },
-        // 添加规格
+
+        // 第二页添加规格
         add() {
-            this.shu.push('1')
-        },
-        // 删除规格
-        delet(index){
-            if (this.shu.length != 1) {
-                this.shu.splice(index, 1)
+            let obj = {
+                id:''
             }
 
+            for (var e in this.typevalueoptions){
+                this.typevalueoptions[e].disabled = false
+            }
+
+            for (var i in this.nextform.typesvalue){
+                for (var j in this.typevalueoptions){
+                    if (this.nextform.typesvalue[i].id == this.typevalueoptions[j].id){
+
+                        this.typevalueoptions[j].disabled = true
+                    }
+                }
+            }
+
+            this.nextform.typesvalue.push(obj)
         },
-        // 添加属性
+        // 第二页删除规格
+        delet(index){
+            if (this.nextform.typesvalue.length != 1) {
+                this.nextform.typesvalue.splice(index, 1)
+            }
+            this.typevalueoptions[index].disabled = false
+        },
+
+        // 第一页添加属性
         pushAttr() {
             let obj = {
                 propertyName: '',
@@ -747,20 +829,20 @@ export default {
 
             this.property.push(obj)
         },
-        // 移除属性
+        // 第一页移除属性
         removeattr(data) {
             if (this.property.length > 1){
                 this.property.splice(data, 1)
             }
         },
-        // 分类样式
+        // 第一页分类样式
         option($event) {
             var type = $event.currentTarget
 
             $(type).siblings().removeClass('border').find('.jiao').removeClass('active')
             $(type).addClass('border').find('.jiao').addClass('active')
         },
-        // 添加规格
+        // 第一页添加规格
         addSpec(index) {
             let obj = {
                 skuPropertyValueName: '',
@@ -771,7 +853,7 @@ export default {
             // 添加规格的时候，循环添加的对象，如果有和当前已经有的对象相同熟悉。那么添加到当前已经有的对象后面。如果没有直接添
             this.skuProperty[index].itemSkuPropertyValueDTOS.push(obj)
         },
-        // 修改规格值触发框（去重）
+        // 第一页修改规格值触发框（去重）
         changeItemSkuDTOS(parentItem, parentIndex, item, index) {
             // 已经选择的规格值
             parentItem.itemSkuPropertyValueDTOS.forEach((res) => {
@@ -782,9 +864,9 @@ export default {
                     }
                 })
             })
-            console.log(parentItem, parentIndex, item, index, '修改规格')
+            // console.log(parentItem, parentIndex, item, index, '修改规格')
         },
-        // 修改规格值
+        // 第一页修改规格值
         changeSKUname(data, index) {
             if (index == 0) {
                 this.allList_0 = []
@@ -826,10 +908,10 @@ export default {
                 this.showSkuArr[i] = arr
             }
 
-            console.log(this.showSkuArr, 'sku总列表展示')
-            console.log(this.skuProperty, 'sku传递给后台数据')
+            // console.log(this.showSkuArr, 'sku总列表展示')
+            // console.log(this.skuProperty, 'sku传递给后台数据')
         },
-        // 修改规格名
+        // 第一页修改规格名
         changeSku(data, index) {
             data.itemSkuPropertyValueDTOS = [{
                 id: '',
@@ -838,7 +920,7 @@ export default {
             }]
             this.$set(data, 'itemSkuDTOS', [])
             api.getitemskuPropertylist({skuPropertyName: data.skuPropertyName}).then((res) => {
-                console.log(res.data.list[0].propertyValueList, '规格字列表')
+                // console.log(res.data.list[0].propertyValueList, '规格字列表')
                 res.data.list[0].propertyValueList.forEach(re => {
                     let obj = {
                         skuPropertyValueName: re.skuPropertyValueName,
@@ -850,17 +932,16 @@ export default {
                 })
             })
 
-            console.log(data, index, '修改规格名')
+            // console.log(data, index, '修改规格名')
         },
-        // 获取规格列表
+        // 第一页获取规格列表
         getSkuList() {
             api.getitemskuPropertylist().then((res) => {
                 this.skuList = res.data.list
-                console.log(this.skuList, "商品规格")
+                // console.log(this.skuList, "商品规格")
             })
         },
-
-        // 添加规格项目
+        // 第一页添加规格项目
         addSpecItem() {
             let obj = {
                 skuPropertyName: "",
@@ -875,6 +956,10 @@ export default {
 
             this.skuProperty.push(obj)
         },
+        changeupload() {
+            this.uploadshow = !this.uploadshow
+        },
+
         // 第一页
         // 获取商品品牌选项
         getbrandId() {
@@ -885,7 +970,7 @@ export default {
 
             api.getitemBrandlist(obj).then((response)=>{
                 // console.log(response)
-                this.brandIdoptions = response.data.itemVOs
+                this.brandIdoptions = response.data.list
             }).catch((error)=>{
                 console.log(error)
             })
@@ -894,20 +979,16 @@ export default {
         getcategoryId() {
             api.getcategorylist().then((response)=>{
                 // console.log(response)
-                this.categoryIdoptions = response.data.list
+                this.categoryIdoptions = response.data
 
             }).catch((error)=>{
                 console.log(error)
             })
         },
-        // 获取贸易类型选项
-        getsendWay() {
-
-        },
         // 获取单位选项
         getunitId() {
             api.getitemunitlist().then((response)=>{
-                this.unitIdoptions = response.data.itemUnitList
+                this.unitIdoptions = response.data.list
                 // console.log(response)
             }).catch((error)=>{
                 console.log(error)
@@ -932,7 +1013,7 @@ export default {
         gettypevalue() {
 
             api.getitemsupplyPropertyunitId(this.nextform.typesname.toString()).then((response)=>{
-                console.log(response)
+                // console.log(response)
                 this.typevalueoptions = response.data.itemSupplyPropertyVOs
             }).catch((error)=>{
                 console.log(error)
@@ -1076,7 +1157,7 @@ export default {
     display: none
 }
 .standard_p{
-    margin: -10px 0 30px 100px;
+    margin-left: 10px;
     color: #5f6264;
 }
 .updata{
@@ -1189,7 +1270,8 @@ export default {
 }
 .skuTable div {
     text-align: center;
-    line-height: 50px; // height: 50px
+    line-height: 50px;
+    height: 50px
 }
 .skuTable td {
     border: 1px solid #eee;

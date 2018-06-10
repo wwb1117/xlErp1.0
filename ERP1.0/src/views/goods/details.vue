@@ -48,7 +48,7 @@
                         <!-- 规格尺寸 -->
                         <li>
                             <span  style="line-height:33px;margin-left:40px">规格：</span>
-                            <p v-for='it in goods.spec' :key="it">{{it}}</p>
+                            <p v-for='(it, index) in allgoods.itemUnitVO.itemSupplyPropertyVOs' :key="index">{{it.supplyMsg}}</p>
                         </li>
                         <li>
                             <span  style="line-height:33px;margin-left:40px">尺寸：</span>
@@ -62,7 +62,7 @@
                                 </dd>
                                 <dd><span>贸易类型：</span>{{ goodconent.sendWayName }}</dd>
                                 <dd><span>商品条码：</span>{{ goodconent.barCode }}</dd>
-                                <dd><span>保质期：</span>{{ goodconent.expirationDate }} 个月</dd>
+                                <dd><span>保质期：</span>{{ goodconent.expirationDateName }}</dd>
                             </dl>
                             <dl style="margin-left:100px">
                                 <dd><span>品牌：</span>{{ goodconent.brandName }}</dd>
@@ -112,7 +112,9 @@ export default {
             },
             activeName: 'first',
 
-            goodconent:{}
+            goodconent:{},
+
+            allgoods:{}
         }
     },
     methods: {
@@ -134,6 +136,7 @@ export default {
         api.getitemitemId(id).then((response)=>{
             console.log(response)
             this.goodconent = response.data.item
+            this.allgoods = response.data
         }).catch((error)=>{
             console.log(error)
         })

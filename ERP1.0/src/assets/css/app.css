@@ -218,9 +218,9 @@ input[type="file"] {
     font-size: 12px
 }
 .share .el-upload--picture-card{
-    width: 78px;
-    height: 78px;
-    line-height: 78px;
+    width: 108px;
+    height: 108px;
+    line-height: 108px;
 }
 .other .el-tag{
     background: none;
