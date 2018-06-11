@@ -22,7 +22,8 @@
             title="新增用户"
             :visible.sync="adduser"
             width="30%"
-            append-to-body>
+            append-to-body
+            style="margin-right:10px">
             <div>
                 <span style="width:80px;text-align:center;display:inline-block">用户名</span>
                 <el-input v-model="addusertext" size='small' style="width:388px"></el-input>
@@ -182,7 +183,7 @@ export default {
 }
 .button_box{
     position: absolute;
-    right: 0px;
+    right: 10px;
     top:6px
 }
 .user_top{

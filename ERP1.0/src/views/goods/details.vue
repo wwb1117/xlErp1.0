@@ -48,7 +48,7 @@
                         <!-- 规格尺寸 -->
                         <li>
                             <span  style="line-height:33px;margin-left:40px">规格：</span>
-                            <p v-for='(it, index) in allgoods.itemUnitVO.itemSupplyPropertyVOs' :key="index">{{ it.supplyMsg }}</p>
+                            <!-- <p v-for='(it, index) in allgoods.itemUnitVO.itemSupplyPropertyVOs' :key="index">{{ it.supplyMsg }}</p> -->
                         </li>
                         <li>
                             <span  style="line-height:33px;margin-left:40px">尺寸：</span>
@@ -144,11 +144,9 @@ export default {
             galleryThumbs.controller.control = galleryTop;
         }
     },
-    // created() {
-    //     var id = this.$store.state.home.goodsmoreId
+    created() {
 
-    //     alert (id)
-    // },
+    },
     activated() {
         this.img()
         var id = this.$store.state.home.goodsmoreId
