@@ -22,7 +22,8 @@
             title="新增用户"
             :visible.sync="adduser"
             width="30%"
-            append-to-body>
+            append-to-body
+            style="margin-right:10px">
             <div>
                 <span style="width:80px;text-align:center;display:inline-block">用户名</span>
                 <el-input v-model="addusertext" size='small' style="width:388px"></el-input>
@@ -172,32 +173,32 @@ export default {
 }
 </script>
 <style scoped>
-/* 顶部 */
-.uesr_box{
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    border-bottom: 1px solid #e5e8e8;
-    z-index: 10
-}
-.button_box{
-    position: absolute;
-    right: 0px;
-    top:6px
-}
-.user_top{
-    height: 46px;
-    padding: 8px 0;
+    /* 顶部 */
+    .uesr_box{
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        border-bottom: 1px solid #e5e8e8;
+        z-index: 10
+    }
+    .button_box{
+        position: absolute;
+        right: 10px;
+        top:6px
+    }
+    .user_top{
+        height: 46px;
+        padding: 8px 0;
 
-    width: 100%;
-}
-.user_title{
-    height: 25px;
-    line-height: 25px;
-    margin-left: 20px;
-    font-size: 15px;
-    color: #5e6161
-}
+        width: 100%;
+    }
+    .user_title{
+        height: 25px;
+        line-height: 25px;
+        margin-left: 20px;
+        font-size: 15px;
+        color: #5e6161
+    }
 
 
 </style>
