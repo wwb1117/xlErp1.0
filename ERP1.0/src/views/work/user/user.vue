@@ -189,7 +189,6 @@ export default {
     .user_top{
         height: 46px;
         padding: 8px 0;
-
         width: 100%;
     }
     .user_title{

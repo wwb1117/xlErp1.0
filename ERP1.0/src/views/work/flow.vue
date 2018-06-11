@@ -150,6 +150,7 @@ export default {
     methods: {
         addflow() {
             this.addopen = true
+            this.value = ''
         },
         addtrue() {
             this.addopen = false
