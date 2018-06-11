@@ -25,7 +25,7 @@
             <div style="color: #E0E0DE; padding-top: 17px; text-align: center; cursor: pointer">
                 <img src="../../../static/img/login/adm.png" alt="头像">
                 <br>
-                <span>admin</span>
+                <span v-text="$store.state.home.userInfo.user.userName"></span>
                 <span :class="[popoverisShow ? 'el-icon-caret-top' : 'el-icon-caret-bottom']"></span>
             </div>
         </div>
