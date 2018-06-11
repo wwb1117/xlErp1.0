@@ -25,6 +25,7 @@ import './assets/css/font.css'
 import './assets/css/app.css'
 
 import myBase from './utils/base'
+import './utils/allEnumeration'
 import * as filters from './utils/filters'
 Vue.config.productionTip = false
 
