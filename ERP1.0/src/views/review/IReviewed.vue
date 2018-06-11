@@ -26,7 +26,7 @@
                     </el-date-picker>
 
                     <el-select style="margin-left: 20px" size="small" v-model="tableParam.auditStatus" placeholder="审核状态">
-                        <el-option v-for="key in $allEnumeration.auditStatus" :key="key" :label="$allEnumeration.auditStatus[key]" :value="key"> </el-option>
+                        <el-option v-for="(value, key) in $allEnumeration.auditStatus" :key="key" :label="value" :value="key"> </el-option>
                     </el-select>
 
                 </div>

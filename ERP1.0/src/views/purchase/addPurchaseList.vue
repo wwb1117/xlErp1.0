@@ -147,7 +147,6 @@
                         <el-form-item prop="orderTime" label="采购时间">
                             <el-date-picker
                             v-model="addFormData.orderTime"
-                            format="yyyy-MM-dd"
                             value-format="timestamp"
                             type="date"
                             placeholder="选择日期">
