@@ -99,10 +99,10 @@
                         label="生产日期">
                         </el-table-column>
                         <el-table-column
-                        prop="productData"
+                        prop="resReturnNum"
                         label="剩余可退数">
                             <template slot-scope="scope">
-                                <span>{{scope.row.storeNumber - scope.row.returnNumber}}</span>
+                                <span>{{ scope.row.resReturnNum = scope.row.storeNumber - scope.row.returnNumber}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -114,7 +114,7 @@
                                 </div>
                                 <div v-if="scope.row.itemSku !== ''">
                                     <el-tooltip class="item" effect="dark" :content="'不得大于' + (scope.row.storeNumber - scope.row.returnNumber)" placement="top">
-                                        <el-input @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.returnNumber"></el-input>
+                                        <el-input :limt="scope.row.storeNumber - scope.row.returnNumber" @change.native="unitTatalEvent(scope, $event)" @keyup.native="unitTatalEvent(scope, $event)" v-model="scope.row.returnNumber"></el-input>
                                     </el-tooltip>
                                 </div>
                             </template>
@@ -338,7 +338,7 @@ export default {
 
             return sums
         },
-        unitTatalEvent(data){
+        unitTatalEvent(data, $event){
             data.row.returnUnitPrice = data.row.returnUnitPrice.replace(/[^\d\.]/g, '')
             data.row.returnNumber = data.row.returnNumber.replace(/[^\d\.]/g, '')
             if (data.row.returnUnitPrice == '' || data.row.returnNumber == ''){
@@ -347,12 +347,16 @@ export default {
                 var price = parseFloat(data.row.returnUnitPrice)
                 var num = parseFloat(data.row.returnNumber)
 
-                if (num > (data.row.storeNumber - data.row.returnNumber)) {
-                    num = data.row.storeNumber - data.row.returnNumber
-                    data.row.returnNumber = num
-                }
+                if ($event) {
+                    var tha = $event.currentTarget
+                    var limitNum = parseFloat($(tha).attr('limt'))
 
+                    if (num > limitNum) {
+                        data.row.returnNumber = limitNum
+                    }
+                }
                 data.row.returnMoney = price * num
+
             }
 
         },
@@ -410,7 +414,7 @@ export default {
             arr.forEach((item, index) => {
                 var itemobj = this.myBase.deepCopy(item)
 
-                itemobj.returnNumber = "1"
+                itemobj.returnNumber = "0"
                 itemobj.returnUnitPrice = '0'
                 itemobj.returnMoney = "0"
 
