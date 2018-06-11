@@ -54,7 +54,7 @@
                     </el-table-column>
                     <el-table-column
                     prop="itemExp"
-                    label="保质期">
+                    label="保质期(月)">
                     </el-table-column>
                     <el-table-column
                     prop="productionDate"
@@ -73,7 +73,9 @@
                     label="本次入库数">
                         <template slot-scope="scope">
                             <div>
-                                <el-input size="small" @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currentStoreNumber"></el-input>
+                                <el-tooltip class="item" effect="dark" :content="'不得大于' + (scope.row.purchasingNumber - scope.row.storeNumber)" placement="top">
+                                    <el-input size="small" @change.native="unitTatalEvent(scope)" @keyup.native="unitTatalEvent(scope)" v-model="scope.row.currentStoreNumber"></el-input>
+                                </el-tooltip>
                             </div>
                         </template>
                     </el-table-column>
@@ -210,6 +212,14 @@ export default {
     methods:{
         unitTatalEvent (data){
             data.row.currentStoreNumber = data.row.currentStoreNumber.replace(/[^\d\.]/g, '')
+            var purchasingNumber = parseFloat(data.row.purchasingNumber)
+            var storeNumber = parseFloat(data.row.storeNumber)
+            var currentStoreNumber = parseFloat(data.row.currentStoreNumber)
+
+            if (currentStoreNumber > (purchasingNumber - storeNumber)) {
+                data.row.currentStoreNumber = purchasingNumber - storeNumber
+            }
+
         },
         rukuBtnEvent(){
             this.dialogVisible = true
@@ -237,6 +247,7 @@ export default {
                 purchaseOrderId: this.$store.state.home.currentModelId,
                 purchaseOrderNo: this.formData.purchaseOrderNo,
                 buyerId: this.formData.buyerId,
+                // buyerId: '1',
                 buyerName: this.formData.buyerName,
                 storeHouseId: this.formData.purchaseHouseId,
                 storeHouseName: this.formData.purchaseHouseName,

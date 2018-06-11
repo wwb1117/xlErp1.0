@@ -11,7 +11,7 @@
                         placeholder="请输入要查询的关键词"
                         prefix-icon="el-icon-search"
                         :style="{width: '378px'}"
-                        v-model="this.tableParam.serchText">
+                        v-model="tableParam.searchStr">
                     </el-input>
                     <el-button @click="getTableData" :style="{margin: '0 10px'}" type="primary" size="small">搜索</el-button>
                     <el-button @click="addPurchaseComEvent" v-perss="'添加采购单位'" :style="{float: 'right', marginRight: '20px', width: '90px', marginTop: '15px'}" type="primary" size="small">新增</el-button>
@@ -126,9 +126,8 @@ import api from 'api/purchase'
 export default {
     data(){
         return {
-            serchText: '',
             tableParam: {
-                serchText: '',
+                searchStr: '',
                 pageSize: 10,
                 pageNo: 1
             },

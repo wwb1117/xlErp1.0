@@ -11,6 +11,7 @@
                     作废记录
                     </div>
                     <span @click="isWrapShowEvent" class="el_icon el-icon-arrow-down"></span>
+
                 </div>
                 <div v-show="isWrapShow">
                     <div class="btn_wrap">

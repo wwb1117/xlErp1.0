@@ -310,7 +310,7 @@ export default {
         // 获取商品类目列表
         getItemList() {
             API.getItemAll().then(res => {
-                this.item_option = res.data.list
+                this.item_option = res.data
                 console.log(this.item_option, "sdadsada")
             })
         },

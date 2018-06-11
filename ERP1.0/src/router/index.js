@@ -10,7 +10,7 @@ import { Message } from 'element-ui'
 import main from '@/views/home/main'
 
 /**************************************************采购模块*********************************************/
-import purchaseList from '@/views/purchase/purchaseList'
+// import purchaseList from '@/views/purchase/purchaseList'
 import addPurchaseList from '@/views/purchase/addPurchaseList'
 import chooseGood from '@/views/purchase/chooseGood'
 import purchaseListDetail from '@/views/purchase/purchaseListDetail'
@@ -96,7 +96,7 @@ var router = new Router({
                 {name: "首页", path: '/main', component: main},
 
                 /*************************** 采购模块*************************************/
-                {name: "采购单", path: '/purchaseList', component: purchaseList},
+                {name: "采购单", path: '/purchaseList', component: () => import('@/views/purchase/purchaseList')},
                 {name: "新增采购单", path: '/addPurchaseList', component: addPurchaseList},
                 {name: "选择商品", path: '/chooseGood', component: chooseGood},
                 {name: "商品详情", path: '/purchaseListDetail/:tabtype', component: purchaseListDetail},

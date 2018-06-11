@@ -13,7 +13,7 @@
                         :style="{width: '378px'}"
                         v-model="tableParam.searchStr">
                     </el-input>
-                    <el-button :style="{margin: '0 30px 0 10px'}" type="primary" size="small">搜索</el-button>
+                    <el-button @click="getTableData" :style="{margin: '0 30px 0 10px'}" type="primary" size="small">搜索</el-button>
                     <el-date-picker
                         size="small"
                         v-model="searchTime"
@@ -26,7 +26,7 @@
                     </el-date-picker>
 
                     <el-select style="margin-left: 20px" size="small" v-model="tableParam.auditStatus" placeholder="审核状态">
-                        <el-option v-for="key in $allEnumeration.auditStatus" :key="key" :label="$allEnumeration.auditStatus[key]" :value="key"> </el-option>
+                        <el-option v-for="(value, key) in $allEnumeration.auditStatus" :key="key" :label="value" :value="key"> </el-option>
                     </el-select>
 
                 </div>
@@ -146,7 +146,6 @@ export default {
         },
         getTableData(){
             api.getILaunchedList(this.tableParam).then((res) => {
-                console.log(res)
                 this.tableData = res.data.list
                 this.totalPage = res.data.total
             })

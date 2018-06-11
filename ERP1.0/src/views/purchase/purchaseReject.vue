@@ -62,7 +62,7 @@
                         </el-form-item>
                         <br>
                         <el-form-item>
-                            <el-button style="width: 90px" type="primary" >确定</el-button>
+                            <el-button @click="supperSureBoxShow" style="width: 90px" type="primary" >确定</el-button>
                             <el-button @click="supperBoxShow" style="width: 90px">取消</el-button>
                             <el-button @click="resetBtnEvent" type="text" style="width: 40px; color: #636365">清空</el-button>
                         </el-form-item>
@@ -340,6 +340,12 @@ export default {
         supperBoxShow(){
             this.isSupperBoxShow = !this.isSupperBoxShow
         },
+        supperSureBoxShow () {
+            this.isSupperBoxShow = !this.isSupperBoxShow
+            this.getTableData().then(() => {
+                this.resetBtnEvent()
+            })
+        },
         purchaseAddEvent(){
             this.$router.push({
                 path: '/addPurchaseList'
@@ -363,7 +369,7 @@ export default {
             this.tableParam.endTime = Math.round(data[1] / 1000)
         },
         getTableData(){
-            api.getRejectListData(this.tableParam).then((response) => {
+            return api.getRejectListData(this.tableParam).then((response) => {
                 this.tableData = response.data.list
                 this.totalPage = response.data.total
             })

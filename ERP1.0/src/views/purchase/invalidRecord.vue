@@ -173,6 +173,11 @@ export default {
         selectChangeEvent(){
 
         },
+        resetBtnEvent () {
+            for (var key in this.tableParam) {
+                this.tableParam[key] = ""
+            }
+        },
         supperSureBoxShow () {
             this.isSupperBoxShow = !this.isSupperBoxShow
             this.getTableData().then(() => {
@@ -229,7 +234,7 @@ export default {
             }
         },
         getTableData(){
-            api.getInvalidRecordList(this.tableParam).then((response) => {
+            return api.getInvalidRecordList(this.tableParam).then((response) => {
                 this.totalPage = response.data.total
                 this.baseData = response.data.list
             })
