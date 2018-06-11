@@ -32,21 +32,21 @@ import { Message } from 'element-ui'
 
 
 /**************************************************仓储模块*********************************************/
-import inboundList from '@/views/depot/inboundList'
-import outboundList from '@/views/depot/outboundList'
-import repertoryList from '@/views/depot/repertoryList'
-import repertoryAllot from '@/views/depot/repertoryAllot'
-import repertoryCheck from '@/views/depot/repertoryCheck'
-import repertoryManage from '@/views/depot/repertoryManage'
-import addInbound from '@/views/depot/addInbound'
-import boundDetail from '@/views/depot/boundDetail'
-import inoutBound from '@/views/depot/inoutBound'
-import addAllot from '@/views/depot/addAllot'
-import allotDetail from '@/views/depot/allotDetail'
-import addRepertory from '@/views/depot/addRepertory'
-import editRepertory from '@/views/depot/editRepertory'
-import editBound from '@/views/depot/editBound'
-import editAllot from '@/views/depot/editAllot'
+// import inboundList from '@/views/depot/inboundList'
+// import outboundList from '@/views/depot/outboundList'
+// import repertoryList from '@/views/depot/repertoryList'
+// import repertoryAllot from '@/views/depot/repertoryAllot'
+// import repertoryCheck from '@/views/depot/repertoryCheck'
+// import repertoryManage from '@/views/depot/repertoryManage'
+// import addInbound from '@/views/depot/addInbound'
+// import boundDetail from '@/views/depot/boundDetail'
+// import inoutBound from '@/views/depot/inoutBound'
+// import addAllot from '@/views/depot/addAllot'
+// import allotDetail from '@/views/depot/allotDetail'
+// import addRepertory from '@/views/depot/addRepertory'
+// import editRepertory from '@/views/depot/editRepertory'
+// import editBound from '@/views/depot/editBound'
+// import editAllot from '@/views/depot/editAllot'
 
 /**************************************************审批模块*********************************************/
 // import waitReview from '@/views/review/waitReview'
@@ -116,21 +116,21 @@ var router = new Router({
                 {name: "编辑供应商", path: '/editPurchaseSupplier', component: () => import('@/views/purchase/editPurchaseSupplier')},
                 {name: "供应商详情", path: '/lookPurchaseSupplier', component: () => import('@/views/purchase/lookPurchaseSupplier')},
                 /*************************** 仓储模块*************************************/
-                {name: "入库列表", path: '/inboundList', component: inboundList},
-                {name: "出库列表", path: '/outboundList', component: outboundList},
-                {name: "库存列表", path: '/repertoryList', component: repertoryList},
-                {name: "库存调拨", path: '/repertoryAllot', component: repertoryAllot},
-                {name: "库存盘点", path: '/repertoryCheck', component: repertoryCheck},
-                {name: "仓库管理", path: '/repertoryManage', component: repertoryManage},
-                {name: "新增入库", path: '/addInbound', component: addInbound},
-                {name: "编辑出入库", path: '/editBound/:id', component: editBound},
-                {name: "出入库详情", path: '/boundDetail/:type/:id', component: boundDetail},
-                {name: "出入库明细", path: '/inoutBound', component: inoutBound},
-                {name: "新增调拨单", path: '/addAllot', component: addAllot},
-                {name: "调拨单详情", path: '/allotDetail/:id', component: allotDetail},
-                {name: "编辑调拨单", path: '/editAllot/:id', component: editAllot},
-                {name: "新增仓库", path: '/addRepertory', component: addRepertory},
-                {name: "编辑仓库", path: '/editRepertory/:type/:id', component: editRepertory},
+                {name: "入库列表", path: '/inboundList', component: () => import('@/views/depot/inboundList')},
+                {name: "出库列表", path: '/outboundList', component: () => import('@/views/depot/outboundList')},
+                {name: "库存列表", path: '/repertoryList', component: () => import('@/views/depot/repertoryList')},
+                {name: "库存调拨", path: '/repertoryAllot', component: () => import('@/views/depot/repertoryAllot')},
+                {name: "库存盘点", path: '/repertoryCheck', component: () => import('@/views/depot/repertoryCheck')},
+                {name: "仓库管理", path: '/repertoryManage', component: () => import('@/views/depot/repertoryManage')},
+                {name: "新增入库", path: '/addInbound', component: () => import('@/views/depot/addInbound')},
+                {name: "编辑出入库", path: '/editBound/:id', component: () => import('@/views/depot/editBound')},
+                {name: "出入库详情", path: '/boundDetail/:type/:id', component: () => import('@/views/depot/boundDetail')},
+                {name: "出入库明细", path: '/inoutBound', component: () => import('@/views/depot/inoutBound')},
+                {name: "新增调拨单", path: '/addAllot', component: () => import('@/views/depot/addAllot')},
+                {name: "调拨单详情", path: '/allotDetail/:id', component: () => import('@/views/depot/allotDetail')},
+                {name: "编辑调拨单", path: '/editAllot/:id', component: () => import('@/views/depot/editAllot')},
+                {name: "新增仓库", path: '/addRepertory', component: () => import('@/views/depot/addRepertory')},
+                {name: "编辑仓库", path: '/editRepertory/:type/:id', component: () => import('@/views/depot/editRepertory')},
 
 
                 /*************************** 审批模块*************************************/
