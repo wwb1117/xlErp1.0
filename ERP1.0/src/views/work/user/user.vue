@@ -173,24 +173,6 @@ export default {
 }
 </script>
 <style scoped>
-<<<<<<< HEAD
-/* 顶部 */
-.uesr_box{
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    border-bottom: 1px solid #e5e8e8;
-    z-index: 10
-}
-.button_box{
-    position: absolute;
-    right: 10px;
-    top:6px
-}
-.user_top{
-    height: 46px;
-    padding: 8px 0;
-=======
     /* 顶部 */
     .uesr_box{
         display: flex;
@@ -207,8 +189,6 @@ export default {
     .user_top{
         height: 46px;
         padding: 8px 0;
->>>>>>> ed348e08c5846fe88b36d946871782c9ad5557ab
-
         width: 100%;
     }
     .user_title{
