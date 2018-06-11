@@ -19,40 +19,29 @@
                     <div class="swiper_box">
                         <div class="swiper-container gallery-top">
                             <div class="swiper-wrapper">
-                                <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                <img v-for='(item, index) in imglist' :key='index' :src="item.imgUrl" alt="" class="swiper-slide">
                             </div>
                         </div>
                         <div class="small_box">
                             <div class="swiper-button-prev"></div>
                             <div class="swiper-container smallimg gallery-thumbs">
                                 <div class="swiper-wrapper" >
-                                    <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                    <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                    <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                    <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                    <img v-for='(item, index) in imglist' :key='index' :src="item.imgUrl" alt="" class="swiper-slide">
                                 </div>
                             </div>
                             <div class="swiper-button-next"></div>
                         </div>
-
                     </div>
                     <!-- 右侧详细内容 -->
                     <ul class="recommend">
                         <li class="list_title"><h2>{{ goodconent.title }}</h2></li>
                         <li class="list_recommend" style="margin-top:5px">{{ goodconent.description }}</li>
                         <li class="list_import"><i class="el-icon-warning" style="line-height:38px"></i> &nbsp; &nbsp;{{ goodconent.buyRemind }}</li>
-                        <li class="list_money"><span style="margin-left:40px">建议零售价：</span><span style="color:#fe7673;">￥</span> &nbsp;<h2 style="color:#fe7673;margin-top:12px">{{goods.money}}</h2></li>
+                        <li class="list_money"><span style="margin-left:40px">建议零售价：</span><span style="color:#fe7673;">￥</span> &nbsp;<h2 style="color:#fe7673;margin-top:12px">{{ goodconent.suggestedPrice }}</h2></li>
                         <!-- 规格尺寸 -->
-                        <li>
-                            <span  style="line-height:33px;margin-left:40px">规格：</span>
-                            <!-- <p v-for='(it, index) in allgoods.itemUnitVO.itemSupplyPropertyVOs' :key="index">{{ it.supplyMsg }}</p> -->
-                        </li>
-                        <li>
-                            <span  style="line-height:33px;margin-left:40px">尺寸：</span>
-                            <p v-for='it in goods.size' :key="it">{{it}}</p>
+                        <li v-for='(item, index) in skulist' :key='index'>
+                            <span  style="line-height:33px;margin-left:40px">{{ item.skuPropertyName }}：</span>
+                            <p v-for="(date, index) in item.propertyValueList" :key='index'>{{ date.skuPropertyValueName }}</p>
                         </li>
                         <li class="list_dl">
                             <dl>
@@ -68,7 +57,7 @@
                                 <dd><span>品牌：</span>{{ goodconent.brandName }}</dd>
                                 <dd><span>商品编码：</span>{{ goodconent.itemCode }}</dd>
                                 <!-- 计量单位 -->
-                                <dd><span>计量单位：</span>{{goods.unit}}</dd>
+                                <dd><span>计量单位：</span>{{goodconent.unit}}</dd>
                             </dl>
                         </li>
                     </ul>
@@ -76,7 +65,7 @@
                 <div class="more_img">
                     <el-tabs v-model="activeName" @tab-click="handleClick">
                         <el-tab-pane label="商品详情" name="first" style='font-size:16px'>
-                            <div>这是商品详情图</div>
+                            <div>{{ goodconent.sellingPoint }}</div>
                         </el-tab-pane>
                     </el-tabs>
                 </div>
@@ -95,26 +84,14 @@ import 'swiper/dist/css/swiper.min.css';
 export default {
     data() {
         return {
-            goods: {
-                name: '花王XL44纸尿裤 彩标新包装 原箱',
-                recommend: '日本销量第一鸷鸟哭加速度喀什发布艾斯比爱上发生部分阿江登记卡上吧俺不是简单三大块是科技奥斯卡爱好时刻把快递吧卡死卡就是把卡卡阿布卡刷包氨基酸爱上啊',
-                import: '签收时请开箱检查',
-                money: '403.5',
-                spec: ['四包装', '六包装'],
-                size: ['XLL', 'XL'],
-                item: '奶粉-羊奶粉',
-                brand: '贝因美',
-                types: '国内贸易',
-                num: 'P32435132',
-                code: '123456789',
-                unit: '罐',
-                time: '36'
-            },
+
             activeName: 'first',
 
             goodconent:{},
 
-            allgoods:{}
+            skulist:{},
+
+            imglist: []
         }
     },
     methods: {
@@ -154,7 +131,8 @@ export default {
         api.getitemitemId(id).then((response)=>{
             console.log(response)
             this.goodconent = response.data.item
-            this.allgoods = response.data
+            this.skulist = response.data.itemSkuPropertyList
+            this.imglist = response.data.itemImgs
         }).catch((error)=>{
             console.log(error)
         })
