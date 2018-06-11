@@ -22,8 +22,7 @@
             title="新增用户"
             :visible.sync="adduser"
             width="30%"
-            append-to-body
-            style="margin-right:10px">
+            append-to-body>
             <div>
                 <span style="width:80px;text-align:center;display:inline-block">用户名</span>
                 <el-input v-model="addusertext" size='small' style="width:388px"></el-input>
