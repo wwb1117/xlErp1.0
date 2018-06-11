@@ -27,14 +27,14 @@
                         </div>
                         <div class="small_box">
                             <div class="swiper-button-prev"></div>
-                                <div class="swiper-container smallimg gallery-thumbs">
-                                    <div class="swiper-wrapper" >
-                                        <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                        <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                        <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                        <img :src="goodconent.mainImg" alt="" class="swiper-slide">
-                                    </div>
+                            <div class="swiper-container smallimg gallery-thumbs">
+                                <div class="swiper-wrapper" >
+                                    <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                    <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                    <img :src="goodconent.mainImg" alt="" class="swiper-slide">
+                                    <img :src="goodconent.mainImg" alt="" class="swiper-slide">
                                 </div>
+                            </div>
                             <div class="swiper-button-next"></div>
                         </div>
 
@@ -165,114 +165,114 @@ export default {
 }
 </script>
 <style scoped>
-/* 轮播 */
-.swiper_box{
-    width: 418px;
-    height: 508px;
-}
-.small_box{
-    width: 418px;
-    height: 50px;
-    margin-top: 20px;
-    position: relative;
-}
-.smallimg{
-    width: 300px;
-    height: 50px;
-    margin-left:60px
-}
-.smallimg .swiper-slide{
-    width: 50px !important;
-    height: 50px
-}
-.gallery-top {
-    height: 418px;
-    width: 418px;
-}
-.gallery-thumbs .swiper-slide-active {
-    border: 1px solid blueviolet
-}
+    /* 轮播 */
+    .swiper_box{
+        width: 418px;
+        height: 508px;
+    }
+    .small_box{
+        width: 418px;
+        height: 50px;
+        margin-top: 20px;
+        position: relative;
+    }
+    .smallimg{
+        width: 300px;
+        height: 50px;
+        margin-left:60px
+    }
+    .smallimg .swiper-slide{
+        width: 50px !important;
+        height: 50px
+    }
+    .gallery-top {
+        height: 418px;
+        width: 418px;
+    }
+    .gallery-thumbs .swiper-slide-active {
+        border: 1px solid blueviolet
+    }
 
-/* 顶部 */
-.details_header{
-    height: 45px;
-    width: 100%;
-    padding: 0 30px;
-    display: flex;
-    justify-content: space-between
-}
-.details_conent{
-    padding:10px;
-    background: #f5f5f5;
-    border-top:1px solid #e6e9e9
-}
-.details_box{
-    border: 1px solid #e6e9eb;
-    color: #5e6161;
-    background: white;
-    padding: 50px;
-    overflow: auto
-}
-/* 内容 */
-.details_text{
-    display: flex;
+    /* 顶部 */
+    .details_header{
+        height: 45px;
+        width: 100%;
+        padding: 0 30px;
+        display: flex;
+        justify-content: space-between
+    }
+    .details_conent{
+        padding:10px;
+        background: #f5f5f5;
+        border-top:1px solid #e6e9e9
+    }
+    .details_box{
+        border: 1px solid #e6e9eb;
+        color: #5e6161;
+        background: white;
+        padding: 50px;
+        overflow: auto
+    }
+    /* 内容 */
+    .details_text{
+        display: flex;
 
-}
-.recommend{
-    margin-left: 50px;
-    margin-top: -40px
-}
-.recommend li{
-    display: flex;
-    margin-top: 20px
-}
-.recommend li p{
-    padding: 5px 18px;
-    border: 1px solid #e1e1e1;
-    margin-left: 20px
-}
-.list_title{
-    color: #525252;
-}
-.list_recommend{
-    width: 644px;
-    color: #888
-}
-.list_import{
-    width: 730px;
-    height: 38px;
-    border: 1px  dashed #fbba42;
-    background: #fffbef;
-    color: #fe7673;
-    line-height: 38px;
-    text-indent: 20px
-}
-.list_money{
-    width: 730px;
-    height: 67px;
-    background: #f8f8f8;
-    color:#888;
-    line-height: 67px
-}
-.list_dl{
-    width: 730px;
-    border-top: 1px solid #e7e7e7;
-    padding: 10px 40px;
-}
-.list_dl dl dd{
-    color: #888;
-    margin-top: 10px
-}
-.more_img{
-    margin-top: 40px
-}
-/* 底部 */
-.details_footer{
-    border-top:1px solid #e5e8e8;
-    padding: 12px 30px;
-    /* margin-top: -23px; */
-    background: white
-}
+    }
+    .recommend{
+        margin-left: 50px;
+        margin-top: -40px
+    }
+    .recommend li{
+        display: flex;
+        margin-top: 20px
+    }
+    .recommend li p{
+        padding: 5px 18px;
+        border: 1px solid #e1e1e1;
+        margin-left: 20px
+    }
+    .list_title{
+        color: #525252;
+    }
+    .list_recommend{
+        width: 644px;
+        color: #888
+    }
+    .list_import{
+        width: 730px;
+        height: 38px;
+        border: 1px  dashed #fbba42;
+        background: #fffbef;
+        color: #fe7673;
+        line-height: 38px;
+        text-indent: 20px
+    }
+    .list_money{
+        width: 730px;
+        height: 67px;
+        background: #f8f8f8;
+        color:#888;
+        line-height: 67px
+    }
+    .list_dl{
+        width: 730px;
+        border-top: 1px solid #e7e7e7;
+        padding: 10px 40px;
+    }
+    .list_dl dl dd{
+        color: #888;
+        margin-top: 10px
+    }
+    .more_img{
+        margin-top: 40px
+    }
+    /* 底部 */
+    .details_footer{
+        border-top:1px solid #e5e8e8;
+        padding: 12px 30px;
+        /* margin-top: -23px; */
+        background: white
+    }
 </style>
 
 
