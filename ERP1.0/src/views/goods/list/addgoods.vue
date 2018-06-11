@@ -886,19 +886,6 @@ export default {
             // 添加规格的时候，循环添加的对象，如果有和当前已经有的对象相同熟悉。那么添加到当前已经有的对象后面。如果没有直接添
             this.skuProperty[index].itemSkuPropertyValueDTOS.push(obj)
         },
-        // 第一页修改规格值触发框（去重）
-        // changeItemSkuDTOS(parentItem, parentIndex, item, index) {
-        //     // 已经选择的规格值
-        //     parentItem.itemSkuPropertyValueDTOS.forEach((res) => {
-        //         // 所有的规格值
-        //         parentItem.itemSkuDTOS.forEach((obj, i) => {
-        //             if (res.skuPropertyValueName == obj.skuPropertyValueName) {
-        //                 parentItem.itemSkuDTOS.splice(i, 1)
-        //             }
-        //         })
-        //     })
-        //     // console.log(parentItem, parentIndex, item, index, '修改规格')
-        // },
         // 第一页修改规格值
         changeSKUname(data, index) {
             data.itemSkuDTOS.forEach((obj) => {
