@@ -151,7 +151,6 @@
                     <!-- 商品规格 -->
                     <el-form-item class="standard">
                         <el-form label-width="100px">
-
                             <div>
                                 <!-- 商品规格 -->
                                 <el-form-item label="商品规格" required v-model="skuProperty">
@@ -171,7 +170,7 @@
                                                 </el-select>
                                                 <el-checkbox v-model="checked" style="margin-left:10px"  @change="changeupload">添加规格图片</el-checkbox>
                                             </el-form-item>
-                                        </div>
+                                         </div>
                                         <el-form-item label='规格值' style="margin-left:-10px;margin-top:5px" >
                                             <el-select @change="changeSKUname(item, index)" placeholder="请选择活动区域" size='small' v-for="(itemName, i) in item.itemSkuPropertyValueDTOS" :key='i' v-model="itemName.skuPropertyValueName" style="width:138px;margin-right:20px">
                                                 <el-option
@@ -897,8 +896,7 @@ export default {
                     if (res.skuPropertyValueName == obj.skuPropertyValueName) {
                         // parentItem.itemSkuDTOS.splice(i, 1)
                         obj.disabled = true
-                        console.log(obj, "ces ")
-
+                        // console.log(obj, "ces ")
                     }
                 })
             })
@@ -943,7 +941,7 @@ export default {
             }
 
             // console.log(this.showSkuArr, 'sku总列表展示')
-            console.log(this.skuProperty, 'sku传递给后台数据')
+            // console.log(this.skuProperty, 'sku传递给后台数据')
         },
         // 第一页修改规格名去重
         changeSku(data, index, skuList) {
@@ -962,7 +960,7 @@ export default {
             }]
             this.$set(data, 'itemSkuDTOS', [])
             api.getitemskuPropertylist({skuPropertyName: data.skuPropertyName}).then((res) => {
-                // console.log(res.data.list[0].propertyValueList, '规格字列表')
+                // console.log(res)
                 res.data.list[0].propertyValueList.forEach(re => {
                     let obj = {
                         skuPropertyValueName: re.skuPropertyValueName,
