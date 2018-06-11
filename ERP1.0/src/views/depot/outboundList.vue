@@ -121,6 +121,9 @@
                         prop="deliverTime"
                         label="出库时间"
                     >
+                        <template slot-scope="scope">
+                            <span>{{scope.row.deliverTime | time_m}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="buyerName"

@@ -160,24 +160,26 @@
 
                                         <div class="add_small_standard" >
                                             <el-form-item label="规格名" style="margin-left:-20px" >
-                                                <el-select v-model="item.skuPropertyName" @change="changeSku(item, index)" placeholder="请选择活动区域" size='small' style="width:138px">
+                                                <el-select v-model="item.skuPropertyName" @change="changeSku(item, index, skuList)" placeholder="请选择活动区域" size='small' style="width:138px">
                                                     <el-option
                                                         v-for="item2 in skuList"
                                                         :key="item2.id"
                                                         :label="item2.skuPropertyName"
-                                                        :value="item2.skuPropertyName">
+                                                        :value="item2.skuPropertyName"
+                                                        :disabled="item2.disabled">
                                                     </el-option>
                                                 </el-select>
                                                 <el-checkbox v-model="checked" style="margin-left:10px"  @change="changeupload">添加规格图片</el-checkbox>
                                             </el-form-item>
                                         </div>
                                         <el-form-item label='规格值' style="margin-left:-10px;margin-top:5px" >
-                                            <el-select @focus="changeItemSkuDTOS(item, index, itemName, i)" @change="changeSKUname(item, index)" placeholder="请选择活动区域" size='small' v-for="(itemName,i) in item.itemSkuPropertyValueDTOS" :key='i' v-model="itemName.skuPropertyValueName" style="width:138px;margin-right:20px">
+                                            <el-select @change="changeSKUname(item, index)" placeholder="请选择活动区域" size='small' v-for="(itemName,i) in item.itemSkuPropertyValueDTOS" :key='i' v-model="itemName.skuPropertyValueName" style="width:138px;margin-right:20px">
                                                 <el-option
                                                     v-for="item3 in item.itemSkuDTOS"
                                                     :key="item3.id"
                                                     :label="item3.skuPropertyValueName"
-                                                    :value="item3.skuPropertyValueName">
+                                                    :value="item3.skuPropertyValueName"
+                                                    :disabled="item3.disabled">
                                                 </el-option>
                                             </el-select>
                                             <el-button type='text' @click="addSpec(index)">添加规格值</el-button>
@@ -854,20 +856,41 @@ export default {
             this.skuProperty[index].itemSkuPropertyValueDTOS.push(obj)
         },
         // 第一页修改规格值触发框（去重）
-        changeItemSkuDTOS(parentItem, parentIndex, item, index) {
+        // changeItemSkuDTOS(parentItem, parentIndex, item, index) {
+        //     // 所有的规格值
+        //     parentItem.itemSkuDTOS.forEach((obj) => {
+        //         obj.disabled = false
+        //     })
+        //     // 已经选择的规格值
+        //     parentItem.itemSkuPropertyValueDTOS.forEach((res) => {
+        //         parentItem.itemSkuDTOS.forEach((obj, i) => {
+        //             if (res.skuPropertyValueName == obj.skuPropertyValueName) {
+        //                 // parentItem.itemSkuDTOS.splice(i, 1)
+        //                 // obj.disabled = true
+        //                 console.log(obj, "ces ")
+        //
+        //             }
+        //         })
+        //     })
+        //     console.log(parentItem, parentIndex, item, index, '修改规格')
+        // },
+        // 第一页修改规格值加去重
+        changeSKUname(data, index) {
+            // 所有的规格值
+            data.itemSkuDTOS.forEach((obj) => {
+                obj.disabled = false
+            })
             // 已经选择的规格值
-            parentItem.itemSkuPropertyValueDTOS.forEach((res) => {
-                // 所有的规格值
-                parentItem.itemSkuDTOS.forEach((obj, i) => {
+            data.itemSkuPropertyValueDTOS.forEach((res) => {
+                data.itemSkuDTOS.forEach((obj, i) => {
                     if (res.skuPropertyValueName == obj.skuPropertyValueName) {
-                        parentItem.itemSkuDTOS.splice(i, 1)
+                        // parentItem.itemSkuDTOS.splice(i, 1)
+                        obj.disabled = true
+                        console.log(obj, "ces ")
+
                     }
                 })
             })
-            // console.log(parentItem, parentIndex, item, index, '修改规格')
-        },
-        // 第一页修改规格值
-        changeSKUname(data, index) {
             if (index == 0) {
                 this.allList_0 = []
                 data.itemSkuPropertyValueDTOS.forEach((res, i) => {
@@ -909,10 +932,18 @@ export default {
             }
 
             // console.log(this.showSkuArr, 'sku总列表展示')
-            // console.log(this.skuProperty, 'sku传递给后台数据')
+            console.log(this.skuProperty, 'sku传递给后台数据')
         },
-        // 第一页修改规格名
-        changeSku(data, index) {
+        // 第一页修改规格名和去重
+        changeSku(data, index, skuList) {
+            this.skuList.forEach((res) => {
+                res.disabled = false
+            })
+            this.skuList.forEach((res) => {
+                if (res.skuPropertyName == data.skuPropertyName) {
+                    res.disabled = true
+                }
+            })
             data.itemSkuPropertyValueDTOS = [{
                 id: '',
                 skuImg: '',
