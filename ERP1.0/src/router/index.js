@@ -7,28 +7,28 @@ import { Message } from 'element-ui'
 
 /**********************************首页  ******************************* */
 
-// import main from '@/views/home/main'
+import main from '@/views/home/main'
 
 /**************************************************采购模块*********************************************/
-// import purchaseList from '@/views/purchase/purchaseList'
-// import addPurchaseList from '@/views/purchase/addPurchaseList'
-// import chooseGood from '@/views/purchase/chooseGood'
-// import purchaseListDetail from '@/views/purchase/purchaseListDetail'
-// import invalidRecord from '@/views/purchase/invalidRecord'
-// import importPurchase from '@/views/purchase/importPurchaseList'
-// import purchaseReject from '@/views/purchase/purchaseReject'
-// import lookPurchaseReject from '@/views/purchase/lookPurchaseReject'
-// import addPurchaseReject from '@/views/purchase/addPurchaseReject'
-// import chooseRelePurchaseList from '@/views/purchase/chooseRelePurchaseList'
-// import addPurchaseRejectSuccess from '@/views/purchase/addPurchaseRejectSuccess'
-// import purchaseCompany from '@/views/purchase/purchaseCompany'
-// import editPurchaseCompany from '@/views/purchase/editPurchaseCompany'
-// import addPurchaseCompany from '@/views/purchase/addPurchaseCompany'
-// import lookPurchaseCompany from '@/views/purchase/lookPurchaseCompany'
-// import purchaseSupplier from '@/views/purchase/purchaseSupplier'
-// import addPurchaseSupplier from '@/views/purchase/addPurchaseSupplier'
-// import editPurchaseSupplier from '@/views/purchase/editPurchaseSupplier'
-// import lookPurchaseSupplier from '@/views/purchase/lookPurchaseSupplier'
+import purchaseList from '@/views/purchase/purchaseList'
+import addPurchaseList from '@/views/purchase/addPurchaseList'
+import chooseGood from '@/views/purchase/chooseGood'
+import purchaseListDetail from '@/views/purchase/purchaseListDetail'
+import invalidRecord from '@/views/purchase/invalidRecord'
+import importPurchase from '@/views/purchase/importPurchaseList'
+import purchaseReject from '@/views/purchase/purchaseReject'
+import lookPurchaseReject from '@/views/purchase/lookPurchaseReject'
+import addPurchaseReject from '@/views/purchase/addPurchaseReject'
+import chooseRelePurchaseList from '@/views/purchase/chooseRelePurchaseList'
+import addPurchaseRejectSuccess from '@/views/purchase/addPurchaseRejectSuccess'
+import purchaseCompany from '@/views/purchase/purchaseCompany'
+import editPurchaseCompany from '@/views/purchase/editPurchaseCompany'
+import addPurchaseCompany from '@/views/purchase/addPurchaseCompany'
+import lookPurchaseCompany from '@/views/purchase/lookPurchaseCompany'
+import purchaseSupplier from '@/views/purchase/purchaseSupplier'
+import addPurchaseSupplier from '@/views/purchase/addPurchaseSupplier'
+import editPurchaseSupplier from '@/views/purchase/editPurchaseSupplier'
+import lookPurchaseSupplier from '@/views/purchase/lookPurchaseSupplier'
 
 
 /**************************************************仓储模块*********************************************/
@@ -49,13 +49,13 @@ import editBound from '@/views/depot/editBound'
 import editAllot from '@/views/depot/editAllot'
 
 /**************************************************审批模块*********************************************/
-// import waitReview from '@/views/review/waitReview'
-// import waitReviewRe from '@/views/review/waitReview_Re'
-// import lookWaitReview from '@/views/review/waitReview_look'
-// import IlaunchedDetail from '@/views/review/IlaunchedDetail'
-// import Ilaunched from '@/views/review/Ilaunched'
-// import IReviewed from '@/views/review/IReviewed'
-// import IReviewDetail from '@/views/review/IReviewDetail'
+import waitReview from '@/views/review/waitReview'
+import waitReviewRe from '@/views/review/waitReview_Re'
+import lookWaitReview from '@/views/review/waitReview_look'
+import IlaunchedDetail from '@/views/review/IlaunchedDetail'
+import Ilaunched from '@/views/review/Ilaunched'
+import IReviewed from '@/views/review/IReviewed'
+import IReviewDetail from '@/views/review/IReviewDetail'
 
 /**************************************************商品模块*********************************************/
 import goods from '@/views/goods/list/goods'
@@ -93,28 +93,28 @@ var router = new Router({
             name: 'home',
             component: home,
             children: [
-                {name: "首页", path: '/main', component: () => import('@/views/home/main')},
+                {name: "首页", path: '/main', component: main},
 
                 /*************************** 采购模块*************************************/
-                {name: "采购单", path: '/purchaseList', component: () => import('@/views/purchase/purchaseList')},
-                {name: "新增采购单", path: '/addPurchaseList', component: () => import('@/views/purchase/addPurchaseList')},
-                {name: "选择商品", path: '/chooseGood', component: () => import('@/views/purchase/chooseGood')},
-                {name: "商品详情", path: '/purchaseListDetail/:tabtype', component: () => import('@/views/purchase/purchaseListDetail')},
-                {name: "作废记录", path: '/invalidRecord', component: () => import('@/views/purchase/invalidRecord')},
-                {name: "导入采购单", path: '/importPurchase', component: () => import('@/views/purchase/importPurchaseList')},
-                {name: "采购退货", path: '/purchaseReject', component: () => import('@/views/purchase/purchaseReject')},
-                {name: "采购退货详情", path: '/lookPurchaseReject', component: () => import('@/views/purchase/lookPurchaseReject')},
-                {name: "新增退货单", path: '/addPurchaseReject', component: () => import('@/views/purchase/addPurchaseReject')},
-                {name: "选择关联采购单", path: '/chooseRelePurchaseList', component: () => import('@/views/purchase/chooseRelePurchaseList')},
-                {name: "已完成退货单", path: '/addPurchaseRejectSuccess', component: () => import('@/views/purchase/addPurchaseRejectSuccess')},
-                {name: "采购单位", path: '/purchaseCompany', component: () => import('@/views/purchase/purchaseCompany')},
-                {name: "新增采购单位", path: '/addPurchaseCompany', component: () => import('@/views/purchase/addPurchaseCompany')},
-                {name: "编辑采购单位", path: '/editPurchaseCompany', component: () => import('@/views/purchase/editPurchaseCompany')},
-                {name: "采购单位详情", path: '/lookPurchaseCompany', component: () => import('@/views/purchase/lookPurchaseCompany')},
-                {name: "供应商", path: '/purchaseSupplier', component: () => import('@/views/purchase/purchaseSupplier')},
-                {name: "新增供应商", path: '/addPurchaseSupplier', component: () => import('@/views/purchase/addPurchaseSupplier')},
-                {name: "编辑供应商", path: '/editPurchaseSupplier', component: () => import('@/views/purchase/editPurchaseSupplier')},
-                {name: "供应商详情", path: '/lookPurchaseSupplier', component: () => import('@/views/purchase/lookPurchaseSupplier')},
+                {name: "采购单", path: '/purchaseList', component: purchaseList},
+                {name: "新增采购单", path: '/addPurchaseList', component: addPurchaseList},
+                {name: "选择商品", path: '/chooseGood', component: chooseGood},
+                {name: "商品详情", path: '/purchaseListDetail/:tabtype', component: purchaseListDetail},
+                {name: "作废记录", path: '/invalidRecord', component: invalidRecord},
+                {name: "导入采购单", path: '/importPurchase', component: importPurchase},
+                {name: "采购退货", path: '/purchaseReject', component: purchaseReject},
+                {name: "采购退货详情", path: '/lookPurchaseReject', component: lookPurchaseReject},
+                {name: "新增退货单", path: '/addPurchaseReject', component: addPurchaseReject},
+                {name: "选择关联采购单", path: '/chooseRelePurchaseList', component: chooseRelePurchaseList},
+                {name: "已完成退货单", path: '/addPurchaseRejectSuccess', component: addPurchaseRejectSuccess},
+                {name: "采购单位", path: '/purchaseCompany', component: purchaseCompany},
+                {name: "新增采购单位", path: '/addPurchaseCompany', component: addPurchaseCompany},
+                {name: "编辑采购单位", path: '/editPurchaseCompany', component: editPurchaseCompany},
+                {name: "采购单位详情", path: '/lookPurchaseCompany', component: lookPurchaseCompany},
+                {name: "供应商", path: '/purchaseSupplier', component: purchaseSupplier},
+                {name: "新增供应商", path: '/addPurchaseSupplier', component: addPurchaseSupplier},
+                {name: "编辑供应商", path: '/editPurchaseSupplier', component: editPurchaseSupplier},
+                {name: "供应商详情", path: '/lookPurchaseSupplier', component: lookPurchaseSupplier},
                 /*************************** 仓储模块*************************************/
                 {name: "入库列表", path: '/inboundList', component: inboundList},
                 {name: "出库列表", path: '/outboundList', component: outboundList},
@@ -134,13 +134,13 @@ var router = new Router({
 
 
                 /*************************** 审批模块*************************************/
-                {name: "待我审批", path: '/waitReview', component: () => import('@/views/review/waitReview')},
-                {name: "待我审批-审批", path: '/waitReviewRe', component: () => import('@/views/review/waitReview_Re')},
-                {name: "待我审批-查看订单", path: '/lookWaitReviewRe', component: () => import('@/views/review/waitReview_look')},
-                {name: "待我审批-查看订单", path: '/IlaunchedDetail', component: () => import('@/views/purchase/purchaseList')},
-                {name: "我发起的", path: '/Ilaunched', component: () => import('@/views/review/Ilaunched')},
-                {name: "我已审批", path: '/IReviewed', component: () => import('@/views/review/IReviewed')},
-                {name: "我已审批详情", path: '/IReviewDetail', component: () => import('@/views/review/IReviewDetail')},
+                {name: "待我审批", path: '/waitReview', component: waitReview},
+                {name: "待我审批-审批", path: '/waitReviewRe', component: waitReviewRe},
+                {name: "待我审批-查看订单", path: '/lookWaitReviewRe', component: lookWaitReview},
+                {name: "待我审批-查看订单", path: '/IlaunchedDetail', component: IlaunchedDetail},
+                {name: "我发起的", path: '/Ilaunched', component: Ilaunched},
+                {name: "我已审批", path: '/IReviewed', component: IReviewed},
+                {name: "我已审批详情", path: '/IReviewDetail', component: IReviewDetail},
 
 
                 /*************************** 商品模块*************************************/
