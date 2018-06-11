@@ -173,11 +173,7 @@
                                             </el-form-item>
                                         </div>
                                         <el-form-item label='规格值' style="margin-left:-10px;margin-top:5px" >
-<<<<<<< HEAD
                                             <el-select @change="changeSKUname(item, index)" placeholder="请选择活动区域" size='small' v-for="(itemName, i) in item.itemSkuPropertyValueDTOS" :key='i' v-model="itemName.skuPropertyValueName" style="width:138px;margin-right:20px">
-=======
-                                            <el-select @change="changeSKUname(item, index)" placeholder="请选择活动区域" size='small' v-for="(itemName,i) in item.itemSkuPropertyValueDTOS" :key='i' v-model="itemName.skuPropertyValueName" style="width:138px;margin-right:20px">
->>>>>>> 081392c0d9af8ad0f4aeeb312ef87849cef9b6a9
                                                 <el-option
                                                     v-for="item3 in item.itemSkuDTOS"
                                                     :key="item3.id"
@@ -890,33 +886,8 @@ export default {
             // 添加规格的时候，循环添加的对象，如果有和当前已经有的对象相同熟悉。那么添加到当前已经有的对象后面。如果没有直接添
             this.skuProperty[index].itemSkuPropertyValueDTOS.push(obj)
         },
-<<<<<<< HEAD
         // 第一页修改规格值
         changeSKUname(data, index) {
-=======
-        // 第一页修改规格值触发框（去重）
-        // changeItemSkuDTOS(parentItem, parentIndex, item, index) {
-        //     // 所有的规格值
-        //     parentItem.itemSkuDTOS.forEach((obj) => {
-        //         obj.disabled = false
-        //     })
-        //     // 已经选择的规格值
-        //     parentItem.itemSkuPropertyValueDTOS.forEach((res) => {
-        //         parentItem.itemSkuDTOS.forEach((obj, i) => {
-        //             if (res.skuPropertyValueName == obj.skuPropertyValueName) {
-        //                 // parentItem.itemSkuDTOS.splice(i, 1)
-        //                 // obj.disabled = true
-        //                 console.log(obj, "ces ")
-        //
-        //             }
-        //         })
-        //     })
-        //     console.log(parentItem, parentIndex, item, index, '修改规格')
-        // },
-        // 第一页修改规格值加去重
-        changeSKUname(data, index) {
-            // 所有的规格值
->>>>>>> 081392c0d9af8ad0f4aeeb312ef87849cef9b6a9
             data.itemSkuDTOS.forEach((obj) => {
                 obj.disabled = false
             })
@@ -974,11 +945,7 @@ export default {
             // console.log(this.showSkuArr, 'sku总列表展示')
             console.log(this.skuProperty, 'sku传递给后台数据')
         },
-<<<<<<< HEAD
         // 第一页修改规格名去重
-=======
-        // 第一页修改规格名和去重
->>>>>>> 081392c0d9af8ad0f4aeeb312ef87849cef9b6a9
         changeSku(data, index, skuList) {
             this.skuList.forEach((res) => {
                 res.disabled = false
