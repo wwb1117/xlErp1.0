@@ -48,7 +48,7 @@
                         <!-- 规格尺寸 -->
                         <li>
                             <span  style="line-height:33px;margin-left:40px">规格：</span>
-                            <p v-for='(it, index) in allgoods.itemUnitVO.itemSupplyPropertyVOs' :key="index">{{it.supplyMsg}}</p>
+                            <p v-for='(it, index) in allgoods.itemUnitVO.itemSupplyPropertyVOs' :key="index">{{ it.supplyMsg }}</p>
                         </li>
                         <li>
                             <span  style="line-height:33px;margin-left:40px">尺寸：</span>
@@ -123,6 +123,25 @@ export default {
         },
         returnPrev() {
             this.$router.push('goodsList')
+        },
+        img() {
+            var galleryTop = new Swiper('.gallery-top', {
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
+                }
+            })
+            var galleryThumbs = new Swiper('.gallery-thumbs', {
+                spaceBetween: 10,
+                centeredSlides: true,
+                slidesPerView: 4,
+                touchRatio: 0.2,
+                slideToClickedSlide: true
+            })
+
+            galleryTop.controller.control = galleryThumbs;
+            galleryThumbs.controller.control = galleryTop;
         }
     },
     // created() {
@@ -131,6 +150,7 @@ export default {
     //     alert (id)
     // },
     activated() {
+        this.img()
         var id = this.$store.state.home.goodsmoreId
 
         api.getitemitemId(id).then((response)=>{
@@ -142,23 +162,7 @@ export default {
         })
     },
     mounted() {
-        var galleryTop = new Swiper('.gallery-top', {
-            spaceBetween: 10,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev'
-            }
-        })
-        var galleryThumbs = new Swiper('.gallery-thumbs', {
-            spaceBetween: 10,
-            centeredSlides: true,
-            slidesPerView: 4,
-            touchRatio: 0.2,
-            slideToClickedSlide: true
-        })
-
-        galleryTop.controller.control = galleryThumbs;
-        galleryThumbs.controller.control = galleryTop;
+        this.img()
     }
 }
 </script>

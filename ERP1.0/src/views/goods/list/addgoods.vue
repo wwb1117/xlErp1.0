@@ -14,13 +14,13 @@
                     <bar :step-texts="testText" :step-nums="stepNums" :current-step="currentStep"></bar>
                 </div>
                 <!-- 第一步 -->
-                <ul style='margin:0' v-if='conent1' >
+                <el-form style='margin:0' v-if='conent1' >
                     <!-- 商品title -->
-                    <li class="good_title">
-                        <p>商品类型</p>
-                    </li>
+                    <el-form-item class="good_title" >
+                        <p class="goodtitle_p">商品类型</p>
+                    </el-form-item>
                     <!-- 商品类型 -->
-                    <li class="good_type">
+                    <el-form-item class="good_type">
                         <el-button
                             plain
                             @click="option($event)"
@@ -52,39 +52,39 @@
                                 <em class="jiao"><i class="el-icon-check" style="position:absolute;bottom:-20px;right:0"></i></em>
                             </div>
                         </el-button>
-                    </li>
+                    </el-form-item>
                     <!-- 信息title -->
-                    <li class="good_title">
-                        <p>基本信息</p>
-                        <el-checkbox style="margin-left:30px" v-model="form.expirationDateStatus"><span style="font-size:10px">有无保质期</span></el-checkbox>
-                    </li>
+                    <el-form-item class="good_title">
+                        <p class="goodtitle_p">基本信息</p>
+                        <el-checkbox class="position" v-model="form.expirationDateStatus"><span style="font-size:10px">有无保质期</span></el-checkbox>
+                    </el-form-item>
                     <!-- 信息内容 -->
-                    <li class="msg_conent">
-                        <el-form ref="form" :model="form" label-width="100px">
-                            <el-form-item label="商品名称" required>
+                    <el-form-item class="msg_conent" >
+                        <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+                            <el-form-item label="商品名称" prop='title'  style="margin-bottom:25px">
                                 <el-input v-model="form.title" size="small" placeholder="长度<64" style="width:688px"></el-input>
                             </el-form-item>
-                            <el-form-item label="商品卖点" style="margin-bottom:35px">
+                            <el-form-item label="商品卖点" style="margin-bottom:25px">
                                 <el-input type="textarea" v-model="form.sellingPoint" size="small" placeholder="长度<300" rows='2'></el-input>
                             </el-form-item>
-                            <el-form-item label="购买提醒" style="margin-bottom:35px">
+                            <el-form-item label="购买提醒" style="margin-bottom:25px">
                                 <el-input type="textarea" v-model="form.buyRemind" size="small" placeholder="长度<300" rows='2'></el-input>
                             </el-form-item>
-                            <el-col :span='24'>
+                            <el-col :span='24'  style="margin-bottom:15px">
                                 <el-col :span='6'>
-                                    <el-form-item label="商品条码" required >
+                                    <el-form-item label="商品条码" prop='barCode' >
                                         <el-input v-model="form.barCode" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span='6' style="margin-left:40px">
-                                    <el-form-item label="商品编码" required >
+                                <el-col :span='6' style="margin-left:35px">
+                                    <el-form-item label="商品编码" prop='itemCode'>
                                         <el-input v-model="form.itemCode" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
-                            <el-col :span='24'>
+                            <el-col :span='24'  style="margin-bottom:15px">
                                 <el-col :span='6'>
-                                    <el-form-item label="商品品牌" required >
+                                    <el-form-item label="商品品牌" prop='brandId' >
                                         <el-select v-model="form.brandId" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in brandIdoptions"
@@ -94,8 +94,8 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span='6' style="margin-left:40px">
-                                    <el-form-item label="商品分类" required >
+                                <el-col :span='6' style="margin-left:35px">
+                                    <el-form-item label="商品分类" prop='categoryId' >
                                         <el-select v-model="form.categoryId" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in categoryIdoptions"
@@ -106,9 +106,9 @@
                                     </el-form-item>
                                 </el-col>
                             </el-col>
-                            <el-col :span='24'>
+                            <el-col :span='24'  style="margin-bottom:15px">
                                 <el-col :span='6'>
-                                    <el-form-item label="贸易类型" required >
+                                    <el-form-item label="贸易类型" prop='sendWay' >
                                         <el-select v-model="form.sendWay" placeholder="请选择"  size='small'>
                                             <el-option
                                                 v-for="item in sendWayoptions"
@@ -118,13 +118,13 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span='6' style="margin-left:40px">
+                                <el-col :span='6' style="margin-left:35px">
                                     <el-form-item label="建议零售价"  class="money">
                                         <el-input v-model="form.money" size="small" placeholder="长度<64" ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
-                            <el-col :span='24'>
+                            <el-col :span='24'  style="margin-bottom:15px">
                                 <el-col :span='6'>
                                     <el-form-item label="单位" >
                                         <el-select v-model="form.unitId" placeholder="请选择"  size='small'>
@@ -136,20 +136,20 @@
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span='6' style="margin-left:40px">
-                                    <el-form-item label="保质期" required >
+                                <el-col :span='6' style="margin-left:35px">
+                                    <el-form-item label="保质期" prop='expirationDateName' >
                                         <el-input v-model="form.expirationDateName" size="small" placeholder="长度<64" suffix="月"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-col>
                         </el-form>
-                    </li>
+                    </el-form-item>
                     <!-- 规格title -->
-                    <li class="good_title">
-                        <p>商品规格</p>
-                    </li>
+                    <el-form-item class="good_title">
+                        <p class="goodtitle_p">商品规格</p>
+                    </el-form-item>
                     <!-- 商品规格 -->
-                    <li class="standard">
+                    <el-form-item class="standard">
                         <el-form label-width="100px">
 
                             <div>
@@ -160,24 +160,26 @@
 
                                         <div class="add_small_standard" >
                                             <el-form-item label="规格名" style="margin-left:-20px" >
-                                                <el-select v-model="item.skuPropertyName" @change="changeSku(item, index)" placeholder="请选择活动区域" size='small' style="width:138px">
+                                                <el-select v-model="item.skuPropertyName" @change="changeSku(item, index, skuList)" placeholder="请选择活动区域" size='small' style="width:138px">
                                                     <el-option
                                                         v-for="item2 in skuList"
                                                         :key="item2.id"
                                                         :label="item2.skuPropertyName"
-                                                        :value="item2.skuPropertyName">
+                                                        :value="item2.skuPropertyName"
+                                                        :disabled="item2.disabled">
                                                     </el-option>
                                                 </el-select>
                                                 <el-checkbox v-model="checked" style="margin-left:10px"  @change="changeupload">添加规格图片</el-checkbox>
                                             </el-form-item>
                                         </div>
                                         <el-form-item label='规格值' style="margin-left:-10px;margin-top:5px" >
-                                            <el-select @focus="changeItemSkuDTOS(item, index, itemName, i)" @change="changeSKUname(item, index)" placeholder="请选择活动区域" size='small' v-for="(itemName,i) in item.itemSkuPropertyValueDTOS" :key='i' v-model="itemName.skuPropertyValueName" style="width:138px;margin-right:20px">
+                                            <el-select @change="changeSKUname(item, index)" placeholder="请选择活动区域" size='small' v-for="(itemName, i) in item.itemSkuPropertyValueDTOS" :key='i' v-model="itemName.skuPropertyValueName" style="width:138px;margin-right:20px">
                                                 <el-option
                                                     v-for="item3 in item.itemSkuDTOS"
                                                     :key="item3.id"
                                                     :label="item3.skuPropertyValueName"
-                                                    :value="item3.skuPropertyValueName">
+                                                    :value="item3.skuPropertyValueName"
+                                                    :disabled="item3.disabled">
                                                 </el-option>
                                             </el-select>
                                             <el-button type='text' @click="addSpec(index)">添加规格值</el-button>
@@ -231,14 +233,14 @@
                                 </el-form-item>
                             </div>
                         </el-form>
-                    </li>
+                    </el-form-item>
                     <!-- 商品属性title -->
-                    <li class="good_title">
-                        <p>商品属性</p>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>商品属性是对商品的补充说明，如材质、产地、储存方法等，最多添加50条</span>
-                    </li>
+                    <el-form-item class="good_title">
+                        <p class="goodtitle_p">商品属性</p>
+                        <span class="position" style="width:470px">商品属性是对商品的补充说明，如材质、产地、储存方法等，最多添加50条</span>
+                    </el-form-item>
                     <!-- 商品属性 -->
-                    <li class="good_attr">
+                    <el-form-item class="good_attr">
                         <div class="add_attr" >
                             <el-form ref="attr" label-width="100px" >
                                 <el-form-item label="商品规格">
@@ -257,14 +259,14 @@
                         <div class="add_button">
                             <el-button type="text" @click="pushAttr">添加属性</el-button>
                         </div>
-                    </li>
+                    </el-form-item>
                     <!-- 商品主图 -->
-                    <li class="good_title">
-                        <p>商品主图</p>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>主图大小不能超过1MB;尺寸：700*700px;最多5张</span>
-                    </li>
+                    <el-form-item class="good_title">
+                        <p class="goodtitle_p">商品主图</p>
+                        <span class="position" style="width:470px">主图大小不能超过1MB;尺寸：700*700px;最多5张</span>
+                    </el-form-item>
                     <!-- 图片上传 -->
-                    <li class="pic_up">
+                    <el-form-item class="pic_up">
                         <div class="updata_box">
                             <el-upload
                                 :action="upDateImgUrl"
@@ -281,18 +283,18 @@
                                 <img width="100%" :src="dialogImageUrl" alt="">
                             </el-dialog>
                         </div>
-                    </li>
+                    </el-form-item>
                     <!-- 商品详情title -->
-                    <li class="good_title">
-                        <p>商品详情</p>
-                    </li>
+                    <el-form-item class="good_title">
+                        <p class="goodtitle_p">商品详情</p>
+                    </el-form-item>
                     <!-- 富编辑器 -->
-                    <li>
+                    <el-form-item>
                         <div style="padding:10px;background:white">
                             <div id='editor1'></div>
                         </div>
-                    </li>
-                </ul>
+                    </el-form-item>
+                </el-form>
                 <!-- 第二步 -->
                 <ul style='margin:0' v-if='conent2'>
                     <!-- 供货设置title -->
@@ -436,6 +438,28 @@ export default {
     data () {
         return {
 
+            // 验证
+            rules: {
+                title: [
+                    { required: true, message: '请输入商品名称', trigger: 'blur' }
+                ],
+                barCode: [
+                    { required: true, message: '请输入商品条码', trigger: 'blur' }
+                ],
+                itemCode: [
+                    { required: true, message: '请输入商品编号', trigger: 'blur' }
+                ],
+                brandId: [
+                    { required: true, message: '请选择商品品牌', trigger: 'blur' }
+                ],
+                categoryId: [
+                    { required: true, message: '请选择商品分类', trigger: 'blur' }
+                ],
+                sendWay: [
+                    { required: true, message: '请选择贸易类型', trigger: 'blur' }
+                ]
+            },
+
             // 商品主图
             dialogImageUrl: '',
             dialogVisible: false,
@@ -564,137 +588,146 @@ export default {
     methods:{
         // 下一步保存数据请求接口
         next() {
-            this.currentStep = 2
-            this.conent1 = false
-            this.conent2 = true
-
-            this.$nextTick(() => {
-                this.editor2 = new WangEditor('#editor2')
-                this.editor2.create()
-            })
-            // 判断商品类型
-            var that = this
-
-            $(".goodbutton").each(function(i){
-                if ($(".goodbutton").eq(i).find('.jiao').hasClass('active')){
-                    if ($(".goodbutton").eq(i).find('p').text() == '实物类商品'){
-                        // alert(1)
-                        that.form.itemType = 1
-                        that.form.isPresent = 0
-                    }
-                    if ($(".goodbutton").eq(i).find('p').text() == '服务类商品'){
-                        // alert(2)
-                        that.form.itemType = 0
-                        that.form.isPresent = 0
-                    }
-                    if ($(".goodbutton").eq(i).find('p').text() == '赠品'){
-                        // alert(3)
-                        that.form.itemType = 1
-                        that.form.isPresent = 1
-                    }
-                }
-            });
-
-            if (this.fileList1.length >= this.itemImgs1.length){
-                for (var s = 0 ; s < this.fileList1.length - 1 ; s ++){
-                    let obj = [
-                        {
-                            imgUrl:''
-                        }
-                    ]
-
-                    this.itemImgs1.push(obj)
-                }
+            if (this.form.expirationDateStatus == true){
+                this.rules.expirationDateName = [
+                    { required: true, message: '请输入保质期限', trigger: 'blur' }
+                ]
             }
-            for (var d in this.itemImgs1){
-                for (var g in this.fileList1){
-                    this.itemImgs1[d].imgUrl = this.fileList1[g].url
-                }
-            }
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                    this.currentStep = 2
+                    this.conent1 = false
+                    this.conent2 = true
 
-            var skuProperty = [
-                {
-                    id: '',
-                    skuPropertyName: '',
-                    itemSkuPropertyValueDTOS: [
-                        {
-                            skuPropertyValueName: ''
-                        }
-                    ]
-                }
-            ]
+                    this.$nextTick(() => {
+                        this.editor2 = new WangEditor('#editor2')
+                        this.editor2.create()
+                    })
+                    // 判断商品类型
+                    var that = this
 
-            if (this.skuProperty.length >= skuProperty.length){
-                for (var v = 0 ; v < this.skuProperty.length - 1 ; v ++){
-                    let obj = {
-                        id: '',
-                        skuPropertyName: '',
-                        itemSkuPropertyValueDTOS: [
-                            {
-                                skuPropertyValueName: ''
+                    $(".goodbutton").each(function(i){
+                        if ($(".goodbutton").eq(i).find('.jiao').hasClass('active')){
+                            if ($(".goodbutton").eq(i).find('p').text() == '实物类商品'){
+                                // alert(1)
+                                that.form.itemType = 1
+                                that.form.isPresent = 0
                             }
-                        ]
+                            if ($(".goodbutton").eq(i).find('p').text() == '服务类商品'){
+                                // alert(2)
+                                that.form.itemType = 0
+                                that.form.isPresent = 0
+                            }
+                            if ($(".goodbutton").eq(i).find('p').text() == '赠品'){
+                                // alert(3)
+                                that.form.itemType = 1
+                                that.form.isPresent = 1
+                            }
+                        }
+                    });
+
+                    if (this.fileList1.length >= this.itemImgs1.length){
+                        for (var s = 0 ; s < this.fileList1.length - 1 ; s ++){
+                            let obj = [
+                                {
+                                    imgUrl:''
+                                }
+                            ]
+
+                            this.itemImgs1.push(obj)
+                        }
+                    }
+                    for (var d in this.itemImgs1){
+                        for (var g in this.fileList1){
+                            this.itemImgs1[d].imgUrl = this.fileList1[g].url
+                        }
                     }
 
-                    skuProperty.push(obj)
-                }
-            }
+                    var skuProperty = [
+                        {
+                            id: '',
+                            skuPropertyName: '',
+                            itemSkuPropertyValueDTOS: [
+                                {
+                                    skuPropertyValueName: ''
+                                }
+                            ]
+                        }
+                    ]
 
-            for (var t in skuProperty){
-                skuProperty[t].skuPropertyName = this.skuProperty[t].skuPropertyName
-                for (var c in skuProperty[t].itemSkuPropertyValueDTOS){
-                    skuProperty[t].itemSkuPropertyValueDTOS[c].skuPropertyValueName = this.skuProperty[t].itemSkuPropertyValueDTOS[c].skuPropertyValueName
-                }
-            }
+                    if (this.skuProperty.length >= skuProperty.length){
+                        for (var v = 0 ; v < this.skuProperty.length - 1 ; v ++){
+                            let obj = {
+                                id: '',
+                                skuPropertyName: '',
+                                itemSkuPropertyValueDTOS: [
+                                    {
+                                        skuPropertyValueName: ''
+                                    }
+                                ]
+                            }
 
-            for (var m in this.skuList){
-                for (var l in skuProperty){
-                    if (skuProperty[l].skuPropertyName == this.skuList[m].skuPropertyName){
-                        skuProperty[l].id = this.skuList[m].id
+                            skuProperty.push(obj)
+                        }
                     }
+
+                    for (var t in skuProperty){
+                        skuProperty[t].skuPropertyName = this.skuProperty[t].skuPropertyName
+                        for (var c in skuProperty[t].itemSkuPropertyValueDTOS){
+                            skuProperty[t].itemSkuPropertyValueDTOS[c].skuPropertyValueName = this.skuProperty[t].itemSkuPropertyValueDTOS[c].skuPropertyValueName
+                        }
+                    }
+
+                    for (var m in this.skuList){
+                        for (var l in skuProperty){
+                            if (skuProperty[l].skuPropertyName == this.skuList[m].skuPropertyName){
+                                skuProperty[l].id = this.skuList[m].id
+                            }
+                        }
+                    }
+
+                    if (this.form.expirationDateStatus == false){
+                        this.form.expirationDateStatus = 0
+                    } else {
+                        this.form.expirationDateStatus = 1
+                    }
+                    // console.log(skuProperty)
+                    let obj = {
+                        // 商品信息
+                        itemType: this.form.itemType,
+                        isPresent: this.form.isPresent,
+                        title: this.form.title,
+                        sellingPoint: this.form.sellingPoint,
+                        buyRemind: this.form.buyRemind,
+                        barCode: this.form.barCode,
+                        itemCode: this.form.itemCode,
+                        brandId: this.form.brandId,
+                        categoryId: this.form.categoryId,
+                        sendWay: this.form.sendWay,
+                        money: this.form.money,
+                        unitId: this.form.unitId,
+                        expirationDateStatus: this.form.expirationDateStatus,
+                        expirationDateName: this.form.expirationDateName,
+                        // 商品规格
+                        skuProperty: JSON.stringify(skuProperty),
+                        // 商品属性
+                        property: JSON.stringify(this.property),
+                        // 商品图片
+                        itemImgs: JSON.stringify(this.itemImgs1),
+                        // 商品描述
+                        description: this.editor1.txt.text()
+                    }
+
+                    console.log(obj)
+                    // console.log(this.skuProperty)
+                    api.postitemaddItemFirstStep(obj).then((response)=>{
+                        // alert(1)
+                    }).catch((error)=>{
+                        console.log(error)
+                    })
+
                 }
-            }
-
-            if (this.form.expirationDateStatus == false){
-                this.form.expirationDateStatus = 0
-            } else {
-                this.form.expirationDateStatus = 1
-            }
-            // console.log(skuProperty)
-            let obj = {
-                // 商品信息
-                itemType: this.form.itemType,
-                isPresent: this.form.isPresent,
-                title: this.form.title,
-                sellingPoint: this.form.sellingPoint,
-                buyRemind: this.form.buyRemind,
-                barCode: this.form.barCode,
-                itemCode: this.form.itemCode,
-                brandId: this.form.brandId,
-                categoryId: this.form.categoryId,
-                sendWay: this.form.sendWay,
-                money: this.form.money,
-                unitId: this.form.unitId,
-                expirationDateStatus: this.form.expirationDateStatus,
-                expirationDateName: this.form.expirationDateName,
-                // 商品规格
-                skuProperty: JSON.stringify(skuProperty),
-                // 商品属性
-                property: JSON.stringify(this.property),
-                // 商品图片
-                itemImgs: JSON.stringify(this.itemImgs1),
-                // 商品描述
-                description: this.editor1.txt.text()
-            }
-
-            console.log(obj)
-            // console.log(this.skuProperty)
-            api.postitemaddItemFirstStep(obj).then((response)=>{
-                // alert(1)
-            }).catch((error)=>{
-                console.log(error)
             })
-
         },
         prev() {
             this.currentStep = 1
@@ -788,7 +821,7 @@ export default {
         },
         // 重置
         reset() {
-
+            this.$refs['form'].resetFields();
         },
 
         // 第二页添加规格
@@ -854,20 +887,34 @@ export default {
             this.skuProperty[index].itemSkuPropertyValueDTOS.push(obj)
         },
         // 第一页修改规格值触发框（去重）
-        changeItemSkuDTOS(parentItem, parentIndex, item, index) {
+        // changeItemSkuDTOS(parentItem, parentIndex, item, index) {
+        //     // 已经选择的规格值
+        //     parentItem.itemSkuPropertyValueDTOS.forEach((res) => {
+        //         // 所有的规格值
+        //         parentItem.itemSkuDTOS.forEach((obj, i) => {
+        //             if (res.skuPropertyValueName == obj.skuPropertyValueName) {
+        //                 parentItem.itemSkuDTOS.splice(i, 1)
+        //             }
+        //         })
+        //     })
+        //     // console.log(parentItem, parentIndex, item, index, '修改规格')
+        // },
+        // 第一页修改规格值
+        changeSKUname(data, index) {
+            data.itemSkuDTOS.forEach((obj) => {
+                obj.disabled = false
+            })
             // 已经选择的规格值
-            parentItem.itemSkuPropertyValueDTOS.forEach((res) => {
-                // 所有的规格值
-                parentItem.itemSkuDTOS.forEach((obj, i) => {
+            data.itemSkuPropertyValueDTOS.forEach((res) => {
+                data.itemSkuDTOS.forEach((obj, i) => {
                     if (res.skuPropertyValueName == obj.skuPropertyValueName) {
-                        parentItem.itemSkuDTOS.splice(i, 1)
+                        // parentItem.itemSkuDTOS.splice(i, 1)
+                        obj.disabled = true
+                        console.log(obj, "ces ")
+
                     }
                 })
             })
-            // console.log(parentItem, parentIndex, item, index, '修改规格')
-        },
-        // 第一页修改规格值
-        changeSKUname(data, index) {
             if (index == 0) {
                 this.allList_0 = []
                 data.itemSkuPropertyValueDTOS.forEach((res, i) => {
@@ -911,8 +958,16 @@ export default {
             // console.log(this.showSkuArr, 'sku总列表展示')
             // console.log(this.skuProperty, 'sku传递给后台数据')
         },
-        // 第一页修改规格名
-        changeSku(data, index) {
+        // 第一页修改规格名去重
+        changeSku(data, index, skuList) {
+            this.skuList.forEach((res) => {
+                res.disabled = false
+            })
+            this.skuList.forEach((res) => {
+                if (res.skuPropertyName == data.skuPropertyName) {
+                    res.disabled = true
+                }
+            })
             data.itemSkuPropertyValueDTOS = [{
                 id: '',
                 skuImg: '',
@@ -1018,8 +1073,59 @@ export default {
             }).catch((error)=>{
                 console.log(error)
             })
+        },
+        clear() {
+            this.form = {
+                itemType: 1,
+                isPresent: 0,
+                title: '',
+                sellingPoint: '',
+                buyRemind: '',
+                barCode: '',
+                itemCode: '',
+                money: '',
+                expirationDateName: '',
+                expirationDateStatus: false
+            }
+            this.nextform = {
+                typesname: [],
+                typesvalue: [
+                    {
+                        id:''
+                    }
+                ],
+                setmoneny:[],
+                goodhot:'',
+                delnum: '1',
+                deduct: []
+            }
+            this.conent1 = true
+            this.conent2 = false
+            this.active = 1
+            this.currentStep = 1
+            this.property = [
+                {
+                    propertyName: '',
+                    propertyValue: ''
+                }
+            ]
+            this.skuProperty = []
+            this.fileList1 = []
+            this.fileList2 = []
+            this.checked = false
+            this.uploadshow = false
+            this.skuList = []
+            this.showSkuArr = []
+            this.allList_0 = []
+            this.allList_1 = []
+            this.allList_2 = []
+        },
+        get() {
+            this.getbrandId()
+            this.getcategoryId()
+            this.gettypename()
+            this.getunitId()
         }
-
 
     },
     components: {
@@ -1027,16 +1133,11 @@ export default {
         updata
     },
     created() {
-        this.currentStep = 1
-        this.conent1 = true
-        this.conent2 = false
-
+        this.get()
     },
     activated() {
-        this.getbrandId()
-        this.getcategoryId()
-        this.gettypename()
-        this.getunitId()
+        this.clear()
+        this.get()
     },
     mounted() {
         this.getSkuList()
@@ -1062,7 +1163,7 @@ export default {
   display: none
 }
 .active{
-    display: block
+    display: block;
 }
 .border{
     border: 1px solid #3ea0fc;
@@ -1078,12 +1179,18 @@ export default {
     height: 40px;
     line-height: 40px;
     color: #5f6264;
-    display: flex
+    display: flex;
+    margin: 0
 }
-.good_title>p{
-    text-indent: 10px;
-    font-weight: 600;
-    font-size: 15px
+.position{
+    position: absolute;
+    left: 100px;
+    top:0;
+    font-size: 12px
+}
+.goodtitle_p{
+    margin-left: 10px;
+    font-weight: 600
 }
 /* 面包屑 */
 .add_top{
@@ -1101,6 +1208,9 @@ export default {
 .conent_box{
     border: 1px solid #e6e9e9
 }
+.conent_box .el-form-item{
+    margin: 0
+}
 /* 步骤 */
 .step{
     padding: 20px 10px;
@@ -1111,7 +1221,6 @@ export default {
 
 /* 商品类型 */
 .good_type{
-    height: 100px;
     width: 100%;
     background: white;
     padding: 15px 20px;
@@ -1124,10 +1233,6 @@ export default {
 .msg_conent{
     background: white;
     padding: 10px 40px;
-    height: 480px
-}
-.msg_conent .el-form-item{
-    height: 40px;
 }
 .msg_conent .el-textarea{
     width: 688px;
@@ -1175,7 +1280,7 @@ export default {
     padding: 10px 40px;
 }
 .add_button{
-    margin:-20px 0 0 100px
+    margin:0 0 0 100px
 }
 /* 商品主图 */
 .pic_up{
