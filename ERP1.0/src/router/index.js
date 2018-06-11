@@ -49,13 +49,13 @@ import editBound from '@/views/depot/editBound'
 import editAllot from '@/views/depot/editAllot'
 
 /**************************************************审批模块*********************************************/
-import waitReview from '@/views/review/waitReview'
-import waitReviewRe from '@/views/review/waitReview_Re'
-import lookWaitReview from '@/views/review/waitReview_look'
-import IlaunchedDetail from '@/views/review/IlaunchedDetail'
-import Ilaunched from '@/views/review/Ilaunched'
-import IReviewed from '@/views/review/IReviewed'
-import IReviewDetail from '@/views/review/IReviewDetail'
+// import waitReview from '@/views/review/waitReview'
+// import waitReviewRe from '@/views/review/waitReview_Re'
+// import lookWaitReview from '@/views/review/waitReview_look'
+// import IlaunchedDetail from '@/views/review/IlaunchedDetail'
+// import Ilaunched from '@/views/review/Ilaunched'
+// import IReviewed from '@/views/review/IReviewed'
+// import IReviewDetail from '@/views/review/IReviewDetail'
 
 /**************************************************商品模块*********************************************/
 import goods from '@/views/goods/list/goods'
@@ -134,13 +134,13 @@ var router = new Router({
 
 
                 /*************************** 审批模块*************************************/
-                {name: "待我审批", path: '/waitReview', component: waitReview},
-                {name: "待我审批-审批", path: '/waitReviewRe', component: waitReviewRe},
-                {name: "待我审批-查看订单", path: '/lookWaitReviewRe', component: lookWaitReview},
-                {name: "待我审批-查看订单", path: '/IlaunchedDetail', component: IlaunchedDetail},
-                {name: "我发起的", path: '/Ilaunched', component: Ilaunched},
-                {name: "我已审批", path: '/IReviewed', component: IReviewed},
-                {name: "我已审批详情", path: '/IReviewDetail', component: IReviewDetail},
+                {name: "待我审批", path: '/waitReview', component: () => import('@/views/review/waitReview')},
+                {name: "待我审批-审批", path: '/waitReviewRe', component: () => import('@/views/review/waitReview_Re')},
+                {name: "待我审批-查看订单", path: '/lookWaitReviewRe', component: () => import('@/views/review/waitReview_look')},
+                {name: "待我审批-查看订单", path: '/IlaunchedDetail', component: () => import('@/views/purchase/purchaseList')},
+                {name: "我发起的", path: '/Ilaunched', component: () => import('@/views/review/Ilaunched')},
+                {name: "我已审批", path: '/IReviewed', component: () => import('@/views/review/IReviewed')},
+                {name: "我已审批详情", path: '/IReviewDetail', component: () => import('@/views/review/IReviewDetail')},
 
 
                 /*************************** 商品模块*************************************/
