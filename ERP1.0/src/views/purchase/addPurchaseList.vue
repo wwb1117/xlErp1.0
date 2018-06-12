@@ -211,7 +211,7 @@ export default {
                 creatorId: this.$store.state.home.userInfo.user.id,
                 purchaseOrderNo: "",
                 list: [],
-                orderTime: "",
+                orderTime: Date.parse(new Date()),
                 purchaseHouseId: "",
                 purchaseHouseName: "",
                 purchasingAgent: "",
@@ -488,7 +488,7 @@ export default {
         }
     },
     activated(){
-        this.addFormDataInit()
+        // this.addFormDataInit()
         this.getUserInfo()
         this.setGoodsTableData()
         this.getSupplierSelectData()
