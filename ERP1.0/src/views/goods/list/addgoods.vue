@@ -594,9 +594,9 @@ export default {
             }
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                    this.currentStep = 2
-                    this.conent1 = false
-                    this.conent2 = true
+                    // this.currentStep = 2
+                    // this.conent1 = false
+                    // this.conent2 = true
 
                     this.$nextTick(() => {
                         this.editor2 = new WangEditor('#editor2')
@@ -627,15 +627,15 @@ export default {
 
                     if (this.fileList1.length >= this.itemImgs1.length){
                         for (var s = 0 ; s < this.fileList1.length - 1 ; s ++){
-                            let obj = [
-                                {
-                                    imgUrl:''
-                                }
-                            ]
+                            let obj = {
+                                imgUrl:''
+                            }
+
 
                             this.itemImgs1.push(obj)
                         }
                     }
+
                     for (var d in this.itemImgs1){
                         for (var g in this.fileList1){
                             this.itemImgs1[d].imgUrl = this.fileList1[g].url
@@ -800,6 +800,7 @@ export default {
         // 成功回调
         handleAvatarSuccess(file, fileList) {
             this.fileList1.push(fileList.response.data)
+            // console.log(this.fileList1)
         },
         // 分享图片
         handleRemove2(file, fileList) {
@@ -820,6 +821,7 @@ export default {
         },
         // 重置
         reset() {
+            this.clear()
             this.$refs['form'].resetFields();
         },
 
