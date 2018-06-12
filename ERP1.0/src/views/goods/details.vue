@@ -7,10 +7,10 @@
                     <el-breadcrumb-item>商品详情</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
-            <div style="margin-top:7px">
+            <!-- <div style="margin-top:7px">
                 <el-button size='small'>删除</el-button>
                 <el-button type="primary" size='small'>修改</el-button>
-            </div>
+            </div> -->
         </header>
         <section class="details_conent">
             <div class="details_box" :style="{height: $store.state.home.modelContentHeight-23 + 'px'}">
@@ -91,7 +91,10 @@ export default {
 
             skulist:{},
 
-            imglist: []
+            imglist: [],
+
+            galleryTop:'',
+            galleryThumbs:''
         }
     },
     methods: {
@@ -102,43 +105,53 @@ export default {
             this.$router.push('goodsList')
         },
         img() {
-            var galleryTop = new Swiper('.gallery-top', {
+            this.galleryTop = new Swiper('.gallery-top', {
                 spaceBetween: 10,
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev'
-                }
+                },
+                observer:true,
+                observerParent:true
             })
-            var galleryThumbs = new Swiper('.gallery-thumbs', {
+            this.galleryThumbs = new Swiper('.gallery-thumbs', {
                 spaceBetween: 10,
                 centeredSlides: true,
                 slidesPerView: 4,
                 touchRatio: 0.2,
-                slideToClickedSlide: true
+                slideToClickedSlide: true,
+                observer:true,
+                observerParent:true
             })
 
-            galleryTop.controller.control = galleryThumbs;
-            galleryThumbs.controller.control = galleryTop;
+            this.galleryTop.controller.control = this.galleryThumbs
+            this.galleryThumbs.controller.control = this.galleryTop
+
+        },
+        get() {
+            var id = this.$store.state.home.goodsmoreId
+
+            api.getitemitemId(id).then((response)=>{
+                console.log(response)
+                this.goodconent = response.data.item
+                this.skulist = response.data.itemSkuPropertyList
+                this.imglist = response.data.itemImgs
+            }).catch((error)=>{
+                console.log(error)
+            })
         }
     },
     created() {
-
+        this.get()
     },
     activated() {
+        this.get()
         this.img()
-        var id = this.$store.state.home.goodsmoreId
 
-        api.getitemitemId(id).then((response)=>{
-            console.log(response)
-            this.goodconent = response.data.item
-            this.skulist = response.data.itemSkuPropertyList
-            this.imglist = response.data.itemImgs
-        }).catch((error)=>{
-            console.log(error)
-        })
     },
     mounted() {
         this.img()
+
     }
 }
 </script>

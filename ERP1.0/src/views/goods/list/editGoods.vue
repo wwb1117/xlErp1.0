@@ -627,11 +627,9 @@ export default {
 
                     if (this.fileList1.length >= this.itemImgs1.length){
                         for (var s = 0 ; s < this.fileList1.length - 1 ; s ++){
-                            let obj = [
-                                {
-                                    imgUrl:''
-                                }
-                            ]
+                            let obj = {
+                                imgUrl:''
+                            }
 
                             this.itemImgs1.push(obj)
                         }
