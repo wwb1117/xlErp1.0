@@ -92,8 +92,16 @@
                             label="保质期">
                             </el-table-column>
                             <el-table-column
-                            prop="productionDate"
+                            prop="productionDate "
                             label="生产日期">
+                                <template slot-scope="scope">
+                                    <el-date-picker
+                                    v-model="scope.row.productionDate"
+                                    value-format="timestamp"
+                                    type="date"
+                                    placeholder="选择日期">
+                            </el-date-picker>
+                                </template>
                             </el-table-column>
                             <el-table-column
                             prop="purchaseNum"
@@ -197,7 +205,7 @@ export default {
                 title: '',
                 SKU: '',
                 expirationDate: '',
-                productData: '',
+                productionDate: '',
                 purchaseNum: '',
                 unit: '',
                 unitPrice: '',

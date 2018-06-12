@@ -9,7 +9,7 @@
                   今日简报
               </div>
               <ul class="main_jianbao_ul">
-                  <li><span class="num">61802</span><br><span class="text">商品总数</span></li>
+                  <li><span class="num">618,020.00</span><br><span class="text">出库金额</span></li>
                   <li :style="{borderLeft: '1px solid #E4E7ED', borderRight: '1px solid #E4E7ED'}"><span class="num">120,000.00</span><br><span class="text">库存金额</span></li>
                   <li><span class="num">78,000.00</span><br><span class="text">本周采购</span></li>
               </ul>
